@@ -31,7 +31,7 @@ export class AuthService {
   }
 
   async obtenerPerfil(uid: string): Promise<Usuario | null> {
-
+    
     const { data, error } =
       await this.supabaseService.client
         .from('usuarios')
@@ -58,5 +58,41 @@ export class AuthService {
 
     this.usuarioActual = null;
   }
+
+
+  async registrarCliente(datos: {
+    apellido: string;
+    nombre: string;
+    dni: string;
+    email: string;
+    password: string;
+  }) {
+
+    // 1. Crear usuario en Supabase Auth
+    const { data, error } =
+      await this.supabaseService.client.auth.signUp({
+        email: datos.email,
+        password: datos.password,
+        options: {
+          data: {
+            apellido: datos.apellido,
+            nombre: datos.nombre,
+            dni: datos.dni
+          }
+        }
+      });
+
+    if (error) {
+      throw error;
+    }
+
+    // Verificar que Supabase haya creado el usuario
+    if (!data.user) {
+      throw new Error('No se pudo crear el usuario.');
+    }
+
+    return data;
+  }
+
 
 }

@@ -1,0 +1,451 @@
+
+/* =========================================
+   FONDO GENERAL
+   ========================================= */
+
+.registro-content {
+  --background:
+    radial-gradient(
+      circle at 15% 10%,
+      rgba(255, 212, 133, 0.22),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      #3a170b 0%,
+      #6b3219 42%,
+      #b86f3f 72%,
+      #f5dcc0 100%
+    );
+
+  --color: #fff1dc;
+}
+
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+ion-header {
+  background: #3a170b;
+}
+
+ion-toolbar {
+  --background: #3a170b;
+  --color: #ffd485;
+  --border-color: transparent;
+}
+
+ion-title {
+  color: #ffd485;
+  font-weight: 600;
+}
+
+ion-back-button {
+  --color: #ffd485;
+}
+
+
+/* =========================================
+   CONTENEDOR
+   ========================================= */
+
+.registro-container {
+  width: 100%;
+  max-width: 480px;
+
+  margin: 0 auto;
+
+  padding: 32px 24px 40px;
+}
+
+
+/* =========================================
+   ENCABEZADO
+   ========================================= */
+
+.registro-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.registro-header h1 {
+  margin: 0 0 10px;
+
+  color: #ffe0a3;
+
+  font-size: 30px;
+  font-weight: 700;
+
+  letter-spacing: 0.3px;
+}
+
+.registro-header p {
+  margin: 0 auto;
+
+  max-width: 370px;
+
+  color: #f9e6ce;
+
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+
+/* =========================================
+   FORMULARIO
+   ========================================= */
+
+.registro-form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+
+
+
+/* =========================================
+   CAMPOS
+   ========================================= */
+
+.campo {
+  width: 100%;
+  min-height: 68px;
+
+  /* Fondo REAL del contenedor */
+  background: #fff3df;
+
+  border: 2px solid #c0784d;
+  border-radius: 12px;
+
+  padding: 6px 14px;
+  margin-bottom: 18px;
+
+  box-sizing: border-box;
+
+  box-shadow:
+    0 3px 8px rgba(58, 23, 11, 0.20);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+/* =========================================
+   CAMPO SELECCIONADO
+   ========================================= */
+
+.campo:focus-within {
+  background: #fff8ed;
+
+  border-color: #d49a5d;
+
+  box-shadow:
+    0 3px 10px rgba(58, 23, 11, 0.22);
+}
+
+
+/* =========================================
+   INPUTS
+   ========================================= */
+
+ion-input {
+  --background: transparent;
+
+  --color: #35170b;
+
+  --placeholder-color: #805238;
+
+  --highlight-color-focused: #b86f3f;
+
+  font-size: 16px;
+  font-weight: 500;
+}
+
+
+/* =========================================
+   LABEL
+   ========================================= */
+
+ion-input::part(label) {
+  color: #4d200f;
+
+  font-size: 14px;
+  font-weight: 700;
+}
+
+
+/* =========================================
+   TEXTO Y PLACEHOLDER
+   ========================================= */
+
+ion-input::part(native) {
+  color: #35170b;
+
+  font-size: 16px;
+  font-weight: 500;
+}
+
+
+/* Placeholder del input */
+
+ion-input::part(native)::placeholder {
+  color: #805238;
+  opacity: 1;
+}
+
+
+
+/* =========================================
+   MENSAJE DE ERROR
+   ========================================= */
+
+.mensaje-error {
+  padding: 12px 14px;
+
+  border-radius: 10px;
+
+  background: rgba(180, 55, 40, 0.18);
+
+  border: 1px solid rgba(180, 55, 40, 0.35);
+
+  color: #ffe0d8;
+
+  font-size: 14px;
+
+  text-align: center;
+}
+
+.mensaje-error-campo {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 4px 6px;
+
+  color: #ffb4ab;
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 500;
+
+  text-align: left;
+}
+
+.mensaje-error-campo span {
+  display: block;
+}
+
+
+/* =========================================
+   BOTÓN
+   ========================================= */
+
+.btn-registrar {
+  margin-top: 8px;
+
+  --background: #ffd485;
+  --background-hover: #ffe0a3;
+  --background-activated: #e9b95e;
+
+  --color: #4d200f;
+
+  --border-radius: 12px;
+
+  height: 50px;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  text-transform: none;
+
+  box-shadow:
+    0 5px 15px rgba(58, 23, 11, 0.25);
+}
+
+.btn-registrar:disabled {
+  opacity: 0.6;
+}
+
+
+/* =========================================
+   LINK LOGIN
+   ========================================= */
+
+.texto-login {
+  margin: 8px 0 0;
+
+  text-align: center;
+
+  color: #4d200f;
+
+  font-size: 14px;
+}
+
+.texto-login span {
+  color: #3a170b;
+
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.texto-login span:hover {
+  text-decoration: underline;
+}
+
+/* =========================================
+   MODAL - REGISTRO EXITOSO
+   ========================================= */
+
+ion-modal.success-modal {
+  --width: 90%;
+  --max-width: 420px;
+
+  --height: auto;
+  --max-height: 80%;
+
+  --border-radius: 18px;
+  --box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+
+  /* Fondo real del modal */
+  --background: #2b2421;
+}
+
+/* Contenedor interno */
+
+ion-modal.success-modal .modal-wrapper {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 30px 24px;
+
+  text-align: center;
+
+  background: #2b2421;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 18px;
+}
+
+
+/* =========================================
+   ICONO
+   ========================================= */
+
+ion-modal.success-modal .icon-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-bottom: 16px;
+}
+
+ion-modal.success-modal .icon-container ion-icon {
+  font-size: 68px;
+
+  color: #d97962;
+}
+
+
+/* =========================================
+   TITULO
+   ========================================= */
+
+ion-modal.success-modal h2 {
+  margin: 0 0 12px;
+
+  font-size: 23px;
+  font-weight: 700;
+
+  color: #f5eee9;
+}
+
+
+/* =========================================
+   TEXTO PRINCIPAL
+   ========================================= */
+
+ion-modal.success-modal p {
+  margin: 0;
+
+  font-size: 15px;
+  line-height: 1.5;
+
+  color: #d2c6c0;
+}
+
+ion-modal.success-modal p strong {
+  color: #f0ddd5;
+  font-weight: 600;
+}
+
+
+/* =========================================
+   SEPARADOR
+   ========================================= */
+
+ion-modal.success-modal .divider {
+  height: 1px;
+
+  margin: 20px 0;
+
+  background: rgba(255, 255, 255, 0.10);
+}
+
+
+/* =========================================
+   TEXTO SECUNDARIO
+   ========================================= */
+
+ion-modal.success-modal .sub-text {
+  margin-bottom: 22px;
+
+  font-size: 13px;
+  line-height: 1.45;
+
+  color: #aa9d96;
+}
+
+
+/* =========================================
+   BOTON
+   ========================================= */
+
+ion-modal.success-modal ion-button {
+  --background: #3aa04c;
+  --background-hover: #30742e;
+  --background-activated: #15783b;
+
+  --color: #ffffff;
+
+  --border-radius: 10px;
+
+  --box-shadow: none;
+
+  margin-top: 6px;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* =========================================
+   PANTALLAS PEQUEÑAS
+   ========================================= */
+
+@media (max-width: 380px) {
+
+  .registro-container {
+    padding: 28px 18px 35px;
+  }
+
+  .registro-header h1 {
+    font-size: 26px;
+  }
+
+  .registro-header p {
+    font-size: 14px;
+  }
+}
+
+
