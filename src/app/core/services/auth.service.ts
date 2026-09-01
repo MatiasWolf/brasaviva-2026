@@ -68,6 +68,8 @@ export class AuthService {
     password: string;
   }) {
 
+    console.log('AUTH 1: antes de signUp');
+
     // 1. Crear usuario en Supabase Auth
     const { data, error } =
       await this.supabaseService.client.auth.signUp({
@@ -82,15 +84,21 @@ export class AuthService {
         }
       });
 
+    console.log('AUTH 2: signUp terminó');
+    console.log('AUTH data:', data);
+    console.log('AUTH error:', error);
+
+
     if (error) {
       throw error;
     }
+
 
     // Verificar que Supabase haya creado el usuario
     if (!data.user) {
       throw new Error('No se pudo crear el usuario.');
     }
-
+    console.log('AUTH 3: voy a retornar');
     return data;
   }
 

@@ -264,7 +264,7 @@
       >
         {{ enviando ? 'Registrando...' : 'Crear cuenta' }}
       </ion-button>
-
+    
 
       <!-- Login -->
       <p class="texto-login">
@@ -276,7 +276,10 @@
 
   </div>
 
-  <ion-modal [isOpen]="isModalOpen" backdropDismiss="false" class="success-modal">
+
+</ion-content>
+
+<ion-modal [isOpen]="isModalOpen" backdropDismiss="false" class="success-modal">
     <ng-template>
       <div class="modal-wrapper">
         <div class="icon-container">
@@ -296,7 +299,8 @@
       <ion-button
         expand="block"
         shape="round"
-        (click)="irAlLogin()"
+      /* ACA TENGO QUE REDIRIGIR AL HOME DEL CLIENTE */
+        (click)="irAlLogin()" 
       >
         Entrar como invitado
       </ion-button>
@@ -304,7 +308,5 @@
     </div>
   </ng-template>
 </ion-modal>
-
-</ion-content>
 
 

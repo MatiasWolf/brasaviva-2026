@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -49,7 +49,8 @@ export class RegistroClientePage {
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {
     addIcons({
       'checkmark-circle': checkmarkCircle
@@ -89,7 +90,7 @@ export class RegistroClientePage {
         '',
         [
           Validators.required,
-          Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
+          Validators.pattern(/^[^\s@]+@[^\s@]+\.com$/),
           Validators.maxLength(100)
         ]
       ],
@@ -120,60 +121,52 @@ export class RegistroClientePage {
 
   async registrarCliente() {
 
-    this.mensajeError = '';
+  this.mensajeError = '';
 
-    // Validar formulario
-    if (this.registroForm.invalid) {
+  // Validar formulario
+  if (this.registroForm.invalid) {
+    this.registroForm.markAllAsTouched();
+    this.mensajeError = 'Completá correctamente todos los campos.';
+    return;
+  }
 
-      this.registroForm.markAllAsTouched();
+  // Obtener valores
+  const {
+    apellido,
+    nombre,
+    dni,
+    email,
+    password
+  } = this.registroForm.value;
 
-      this.mensajeError =
-        'Completá correctamente todos los campos.';
+  this.enviando = true;
 
-      return;
-    }
+  try {
 
-    // Obtener valores
-    const {
+    await this.auth.registrarCliente({
       apellido,
       nombre,
       dni,
       email,
       password
-    } = this.registroForm.value;
+    });
 
-    this.enviando = true;
+    this.isModalOpen = true;
+    this.cdr.detectChanges();
 
-    try {
 
-      // Registrar usuario mediante AuthService
-      await this.auth.registrarCliente({
-        apellido,
-        nombre,
-        dni,
-        email,
-        password
-      });
+  } catch (error: any) {
 
-      // Si el registro fue exitoso
-      this.isModalOpen = true;
-      
+    console.error('REGISTRO ERROR:', error);
 
-    } catch (error: any) {
+    this.mensajeError =
+      this.obtenerMensajeError(error);
 
-      console.error(
-        'Error durante el registro:',
-        error
-      );
+  } finally {
 
-      this.mensajeError =
-        this.obtenerMensajeError(error);
-
-    } finally {
-
-      this.enviando = false;
-    }
+    this.enviando = false;
   }
+}
 
   private passwordsIguales(
     control: AbstractControl
