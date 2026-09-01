@@ -26,4 +26,11 @@ export const routes: Routes = [
     redirectTo: 'splash-estatica',
     pathMatch: 'full',
   },
+  {
+  path: 'registro/cliente-anonimo',
+      loadComponent: () =>
+        import('./pages/registro/cliente-anonimo/registro.page')
+          .then(m => m.RegistroPage)
+    },
+
 ];
