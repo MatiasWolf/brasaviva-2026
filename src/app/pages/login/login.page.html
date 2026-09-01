@@ -1,0 +1,98 @@
+<ion-content [fullscreen]="true" class="login-bg">
+  <div class="login-container">
+
+    <div class="header-section">
+      <div class="icon-stage">
+        <div class="glow-core"></div>
+        <div class="icon-badge">
+          <ion-icon name="restaurant-outline"></ion-icon>
+        </div>
+      </div>
+      <h1 class="brand-title">Brasa Viva</h1>
+      <p class="subtitle">Acceso al Sistema</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="form-section">
+      <ion-item class="custom-input" lines="none">
+        <ion-input
+          type="email"
+          formControlName="email"
+          placeholder="Correo Electrónico"
+          autocomplete="email"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item class="custom-input" lines="none">
+        <ion-input
+          type="password"
+          formControlName="password"
+          placeholder="Contraseña"
+          autocomplete="current-password"
+        ></ion-input>
+      </ion-item>
+    </form>
+
+    <ion-button
+      expand="block"
+      fill="clear"
+      class="register-link-button"
+      (click)="irARegistroCliente()"
+    >
+      Crear Cuenta
+    </ion-button>
+
+    <div class="fast-login-section">
+      <p class="divider-text">Acceso Rápido</p>
+
+      <ion-grid class="fast-grid">
+        <ion-row>
+          @for (perfil of perfilesRapidos(); track perfil.id; let i = $index) {
+            <ion-col size="6" size-md="4">
+              <ion-item
+                class="toggle-item"
+                lines="none"
+                [color]="perfilSeleccionadoIndex() === i ? 'primary' : 'medium'"
+              >
+                <ion-icon [name]="getIconoPorRol(perfil.rol_nombre)" slot="start"></ion-icon>
+
+                <ion-label class="toggle-label">
+                  {{ perfil.rol_nombre | titlecase }}
+                </ion-label>
+
+                <ion-toggle
+                  slot="end"
+                  [checked]="perfilSeleccionadoIndex() === i"
+                  (ionChange)="cargarPerfil(i, perfil)"
+                ></ion-toggle>
+              </ion-item>
+            </ion-col>
+          } @empty {
+            <ion-col size="12">
+              <p class="info-text">Cargando perfiles...</p>
+            </ion-col>
+          }
+        </ion-row>
+      </ion-grid>
+    </div>
+
+    <div class="swipe-container">
+      @if (!isLoading()) {
+        <div class="swipe-text">Desliza para Ingresar</div>
+      } @else {
+        <app-spinner-logo></app-spinner-logo>
+      }
+
+      <ion-range
+        min="0"
+        max="100"
+        [ngModel]="sliderValue()"
+        (ngModelChange)="sliderValue.set($event)"
+        [ngModelOptions]="{ standalone: true }"
+        (ionChange)="onSwipeChange($event)"
+        [disabled]="isLoading()"
+        class="custom-range"
+      ></ion-range>
+    </div>
+
+  </div>
+</ion-content>
