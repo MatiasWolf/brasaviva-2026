@@ -1,298 +1,335 @@
-
 /* =========================================
-   FONDO GENERAL
-   ========================================= */
+FONDO GENERAL
+========================================= */
 
 .registro-content {
-  --background:
-    radial-gradient(
-      circle at 15% 10%,
-      rgba(255, 212, 133, 0.22),
-      transparent 30%
-    ),
-    linear-gradient(
-      180deg,
-      #3a170b 0%,
-      #6b3219 42%,
-      #b86f3f 72%,
-      #f5dcc0 100%
-    );
+--background:
+radial-gradient(
+circle at 15% 10%,
+rgba(255, 212, 133, 0.22),
+transparent 30%
+),
+linear-gradient(
+180deg,
+#3a170b 0%,
+#6b3219 42%,
+#b86f3f 72%,
+#f5dcc0 100%
+);
 
-  --color: #fff1dc;
+--color: #fff1dc;
 }
 
-
 /* =========================================
-   HEADER
-   ========================================= */
+HEADER
+========================================= */
 
 ion-header {
-  background: #3a170b;
+background: #3a170b;
 }
 
 ion-toolbar {
-  --background: #3a170b;
-  --color: #ffd485;
-  --border-color: transparent;
+--background: #3a170b;
+--color: #ffd485;
+--border-color: transparent;
 }
 
 ion-title {
-  color: #ffd485;
-  font-weight: 600;
+color: #ffd485;
+font-weight: 600;
 }
 
 ion-back-button {
-  --color: #ffd485;
+--color: #ffd485;
 }
 
-
 /* =========================================
-   CONTENEDOR
-   ========================================= */
+CONTENEDOR
+========================================= */
 
 .registro-container {
-  width: 100%;
-  max-width: 480px;
-
-  margin: 0 auto;
-
-  padding: 32px 24px 40px;
+width: 100%;
+max-width: 480px;
+margin: 0 auto;
+padding: 28px 24px 40px;
+box-sizing: border-box;
 }
 
-
 /* =========================================
-   ENCABEZADO
-   ========================================= */
+ENCABEZADO
+========================================= */
 
 .registro-header {
-  text-align: center;
-  margin-bottom: 28px;
+text-align: center;
+margin-bottom: 24px;
+}
+
+.registro-header .icon-stage {
+position: relative;
+width: 65px;
+height: 65px;
+margin: 0 auto 12px;
+}
+
+.registro-header .glow-core {
+position: absolute;
+inset: 10px;
+border-radius: 32px;
+
+background:
+radial-gradient(
+circle,
+rgba(255, 222, 186, 0.7),
+rgba(255, 222, 186, 0)
+);
+
+filter: blur(10px);
+
+animation: glow 2.2s ease-in-out infinite;
+}
+
+.registro-header .icon-badge {
+position: relative;
+
+width: 65px;
+height: 65px;
+
+display: grid;
+place-items: center;
+
+border-radius: 20px;
+
+background: rgba(255, 248, 241, 0.12);
+border: 1px solid rgba(255, 248, 241, 0.24);
+
+backdrop-filter: blur(8px);
+
+animation: floatIcon 2.2s ease-in-out infinite;
+}
+
+.registro-header .icon-badge ion-icon {
+font-size: 2rem;
+color: #fff8f1;
 }
 
 .registro-header h1 {
-  margin: 0 0 10px;
+margin: 0 0 10px;
 
-  color: #ffe0a3;
+color: #ffe0a3;
 
-  font-size: 30px;
-  font-weight: 700;
+font-size: 30px;
+font-weight: 700;
 
-  letter-spacing: 0.3px;
+letter-spacing: 0.3px;
 }
 
 .registro-header p {
-  margin: 0 auto;
+margin: 0 auto;
 
-  max-width: 370px;
+max-width: 370px;
 
-  color: #f9e6ce;
+color: #f9e6ce;
 
-  font-size: 15px;
-  line-height: 1.5;
+font-size: 15px;
+line-height: 1.5;
 }
 
-
 /* =========================================
-   FORMULARIO
-   ========================================= */
+FORMULARIO
+========================================= */
 
 .registro-form {
-  display: flex;
-  flex-direction: column;
-
-  gap: 14px;
+display: flex;
+flex-direction: column;
+gap: 0;
 }
 
-
-
-
 /* =========================================
-   CAMPOS
-   ========================================= */
+CAMPOS
+========================================= */
 
 .campo {
-  width: 100%;
-  min-height: 68px;
+width: 100%;
+min-height: 68px;
 
-  /* Fondo REAL del contenedor */
-  background: #fff3df;
+background: #fff3df;
 
-  border: 2px solid #c0784d;
-  border-radius: 12px;
+border: 2px solid #c0784d;
+border-radius: 12px;
 
-  padding: 6px 14px;
-  margin-bottom: 18px;
+padding: 6px 14px;
 
-  box-sizing: border-box;
+margin-bottom: 14px;
 
-  box-shadow:
-    0 3px 8px rgba(58, 23, 11, 0.20);
+box-sizing: border-box;
 
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+box-shadow:
+0 3px 8px rgba(58, 23, 11, 0.20);
+
+transition:
+border-color 0.2s ease,
+background 0.2s ease,
+box-shadow 0.2s ease;
 }
 
-
 /* =========================================
-   CAMPO SELECCIONADO
-   ========================================= */
+CAMPO SELECCIONADO
+========================================= */
 
 .campo:focus-within {
-  background: #fff8ed;
+background: #fff8ed;
 
-  border-color: #d49a5d;
+border-color: #d49a5d;
 
-  box-shadow:
-    0 3px 10px rgba(58, 23, 11, 0.22);
+box-shadow:
+0 3px 10px rgba(58, 23, 11, 0.22);
 }
 
-
 /* =========================================
-   INPUTS
-   ========================================= */
+INPUTS
+========================================= */
 
 ion-input {
-  --background: transparent;
+--background: transparent;
+--color: #35170b;
+--placeholder-color: #805238;
+--highlight-color-focused: #b86f3f;
 
-  --color: #35170b;
-
-  --placeholder-color: #805238;
-
-  --highlight-color-focused: #b86f3f;
-
-  font-size: 16px;
-  font-weight: 500;
+font-size: 16px;
+font-weight: 500;
 }
 
-
 /* =========================================
-   LABEL
-   ========================================= */
+LABEL
+========================================= */
 
 ion-input::part(label) {
-  color: #4d200f;
+color: #4d200f;
 
-  font-size: 14px;
-  font-weight: 700;
+font-size: 14px;
+font-weight: 700;
 }
 
-
 /* =========================================
-   TEXTO Y PLACEHOLDER
-   ========================================= */
+TEXTO DEL INPUT
+========================================= */
 
 ion-input::part(native) {
-  color: #35170b;
+color: #35170b;
 
-  font-size: 16px;
-  font-weight: 500;
+font-size: 16px;
+font-weight: 500;
 }
-
-
-/* Placeholder del input */
-
-ion-input::part(native)::placeholder {
-  color: #805238;
-  opacity: 1;
-}
-
-
 
 /* =========================================
-   MENSAJE DE ERROR
-   ========================================= */
+PLACEHOLDER
+========================================= */
+
+ion-input::part(native)::placeholder {
+color: #805238;
+opacity: 1;
+}
+
+/* =========================================
+MENSAJES DE ERROR
+========================================= */
 
 .mensaje-error {
-  padding: 12px 14px;
+padding: 12px 14px;
 
-  border-radius: 10px;
+margin: 4px 0 14px;
 
-  background: rgba(180, 55, 40, 0.18);
+border-radius: 10px;
 
-  border: 1px solid rgba(180, 55, 40, 0.35);
+background: rgba(180, 55, 40, 0.18);
 
-  color: #ffe0d8;
+border: 1px solid rgba(180, 55, 40, 0.35);
 
-  font-size: 14px;
+color: #ffe0d8;
 
-  text-align: center;
+font-size: 14px;
+
+text-align: center;
 }
 
 .mensaje-error-campo {
-  display: block;
-  width: 100%;
-  margin-top: 6px;
-  padding: 4px 6px;
+display: block;
 
-  color: #ffb4ab;
-  font-size: 12px;
-  line-height: 1.4;
-  font-weight: 500;
+width: 100%;
 
-  text-align: left;
+margin-top: 6px;
+
+padding: 4px 6px;
+
+color: #ffb4ab;
+
+font-size: 12px;
+
+line-height: 1.4;
+
+font-weight: 500;
+
+text-align: left;
 }
 
 .mensaje-error-campo span {
-  display: block;
+display: block;
 }
 
-
 /* =========================================
-   BOTÓN
-   ========================================= */
+BOTÓN REGISTRAR
+========================================= */
 
 .btn-registrar {
-  margin-top: 8px;
+margin-top: 4px;
 
-  --background: #ffd485;
-  --background-hover: #ffe0a3;
-  --background-activated: #e9b95e;
+--background: #ffd485;
+--background-hover: #ffe0a3;
+--background-activated: #e9b95e;
 
-  --color: #4d200f;
+--color: #4d200f;
 
-  --border-radius: 12px;
+--border-radius: 12px;
 
-  height: 50px;
+height: 50px;
 
-  font-size: 16px;
-  font-weight: 700;
+font-size: 16px;
+font-weight: 700;
 
-  text-transform: none;
+text-transform: none;
 
-  box-shadow:
-    0 5px 15px rgba(58, 23, 11, 0.25);
+box-shadow:
+0 5px 15px rgba(58, 23, 11, 0.25);
 }
 
 .btn-registrar:disabled {
-  opacity: 0.6;
+opacity: 0.6;
 }
 
-
 /* =========================================
-   LINK LOGIN
-   ========================================= */
+LINK LOGIN
+========================================= */
 
 .texto-login {
-  margin: 8px 0 0;
+margin: 14px 0 0;
 
-  text-align: center;
+text-align: center;
 
-  color: #4d200f;
+color: #4d200f;
 
-  font-size: 14px;
+font-size: 14px;
 }
 
 .texto-login span {
-  color: #3a170b;
+color: #3a170b;
 
-  font-weight: 700;
+font-weight: 700;
 
-  cursor: pointer;
+cursor: pointer;
 }
 
 .texto-login span:hover {
-  text-decoration: underline;
+text-decoration: underline;
 }
 
 /* =========================================
@@ -300,17 +337,18 @@ ion-input::part(native)::placeholder {
    ========================================= */
 
 ion-modal.success-modal {
-  --width: 90%;
-  --max-width: 420px;
+  --width: 94%;
+  --max-width: 460px;
 
   --height: auto;
-  --max-height: 80%;
+  --max-height: 85%;
 
-  --border-radius: 18px;
-  --box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  --border-radius: 20px;
 
-  /* Fondo real del modal */
-  --background: #2b2421;
+  --box-shadow:
+    0 15px 40px rgba(58, 23, 11, 0.35);
+
+  --background: #fff3df;
 }
 
 /* Contenedor interno */
@@ -319,13 +357,19 @@ ion-modal.success-modal .modal-wrapper {
   width: 100%;
   box-sizing: border-box;
 
-  padding: 30px 24px;
+  padding: 36px 28px;
 
   text-align: center;
 
-  background: #2b2421;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 18px;
+  background:
+    linear-gradient(
+      180deg,
+      #fff8ed 0%,
+      #fff3df 100%
+    );
+
+  border: 2px solid #c0784d;
+  border-radius: 20px;
 }
 
 
@@ -344,7 +388,12 @@ ion-modal.success-modal .icon-container {
 ion-modal.success-modal .icon-container ion-icon {
   font-size: 68px;
 
-  color: #d97962;
+  color: #d49a5d;
+
+  filter:
+    drop-shadow(
+      0 3px 5px rgba(58, 23, 11, 0.18)
+    );
 }
 
 
@@ -355,10 +404,12 @@ ion-modal.success-modal .icon-container ion-icon {
 ion-modal.success-modal h2 {
   margin: 0 0 12px;
 
-  font-size: 23px;
+  color: #4d200f;
+
+  font-size: 24px;
   font-weight: 700;
 
-  color: #f5eee9;
+  letter-spacing: 0.2px;
 }
 
 
@@ -369,15 +420,15 @@ ion-modal.success-modal h2 {
 ion-modal.success-modal p {
   margin: 0;
 
+  color: #805238;
+
   font-size: 15px;
   line-height: 1.5;
-
-  color: #d2c6c0;
 }
 
 ion-modal.success-modal p strong {
-  color: #f0ddd5;
-  font-weight: 600;
+  color: #4d200f;
+  font-weight: 700;
 }
 
 
@@ -388,9 +439,9 @@ ion-modal.success-modal p strong {
 ion-modal.success-modal .divider {
   height: 1px;
 
-  margin: 20px 0;
+  margin: 22px 0;
 
-  background: rgba(255, 255, 255, 0.10);
+  background: #d9b18d;
 }
 
 
@@ -401,33 +452,39 @@ ion-modal.success-modal .divider {
 ion-modal.success-modal .sub-text {
   margin-bottom: 22px;
 
-  font-size: 13px;
-  line-height: 1.45;
+  color: #8c6048;
 
-  color: #aa9d96;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 
 /* =========================================
-   BOTON
+   BOTÓN
    ========================================= */
 
 ion-modal.success-modal ion-button {
-  --background: #3aa04c;
-  --background-hover: #30742e;
-  --background-activated: #15783b;
+  --background: #ffd485;
+  --background-hover: #ffe0a3;
+  --background-activated: #e9b95e;
 
-  --color: #ffffff;
+  --color: #4d200f;
 
-  --border-radius: 10px;
+  --border-radius: 12px;
 
-  --box-shadow: none;
+  --box-shadow:
+    0 5px 12px rgba(58, 23, 11, 0.20);
 
   margin-top: 6px;
 
-  font-size: 14px;
-  font-weight: 600;
+  height: 48px;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  text-transform: none;
 }
+
 
 /* =========================================
    PANTALLAS PEQUEÑAS
@@ -435,17 +492,19 @@ ion-modal.success-modal ion-button {
 
 @media (max-width: 380px) {
 
-  .registro-container {
-    padding: 28px 18px 35px;
+  ion-modal.success-modal .modal-wrapper {
+    padding: 28px 20px;
   }
 
-  .registro-header h1 {
-    font-size: 26px;
+  ion-modal.success-modal .icon-container ion-icon {
+    font-size: 60px;
   }
 
-  .registro-header p {
+  ion-modal.success-modal h2 {
+    font-size: 22px;
+  }
+
+  ion-modal.success-modal p {
     font-size: 14px;
   }
 }
-
-

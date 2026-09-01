@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonInput, IonTitle, IonToolbar, IonIcon, IonModal } from '@ionic/angular';
 import { AuthService } from '../../core/services/auth.service';
 import { addIcons } from 'ionicons';
-import { checkmarkCircle } from 'ionicons/icons';
+import { checkmarkCircle, personAddOutline } from 'ionicons/icons';
 
 
 
@@ -53,7 +53,8 @@ export class RegistroClientePage {
     private cdr: ChangeDetectorRef
   ) {
     addIcons({
-      'checkmark-circle': checkmarkCircle
+      'checkmark-circle': checkmarkCircle,
+      'person-add-outline': personAddOutline
     });
 
     this.registroForm = this.fb.group(

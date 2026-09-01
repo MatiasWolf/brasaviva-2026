@@ -1,312 +1,339 @@
-
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/login"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>Registro de cliente</ion-title>
+
+<ion-title>Registro de cliente</ion-title>
+
+
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="registro-content">
   <div class="registro-container">
 
-    <div class="registro-header">
-      <h1>Crear cuenta</h1>
 
-      <p>
-        Registrate para disfrutar de todas las opciones
-        disponibles en nuestro restaurante.
-      </p>
+<!-- ENCABEZADO -->
+<div class="registro-header">
+  <div class="icon-stage">
+    <div class="glow-core"></div>
+
+    <div class="icon-badge">
+      <ion-icon name="person-add-outline"></ion-icon>
+    </div>
+  </div>
+
+  <h1>Crear cuenta</h1>
+
+  <p>
+    Registrate para disfrutar de todas las opciones
+    disponibles en nuestro restaurante.
+  </p>
+</div>
+
+
+<!-- FORMULARIO -->
+<form
+    [formGroup]="registroForm"
+    (ngSubmit)="registrarCliente()"
+    class="registro-form"
+  >
+
+    <!-- APELLIDO -->
+    <div class="campo">
+      <ion-input
+        formControlName="apellido"
+        type="text"
+        label="Apellido"
+        labelPlacement="stacked"
+        placeholder="Ingresá tu apellido"
+        (ionFocus)="mensajeError = ''"
+      ></ion-input>
+
+      @if (
+        registroForm.get('apellido')?.dirty &&
+        registroForm.get('apellido')?.invalid
+      ) {
+        <div class="mensaje-error-campo">
+
+          @if (registroForm.get('apellido')?.hasError('required')) {
+            <span>El apellido es obligatorio.</span>
+          }
+
+          @if (registroForm.get('apellido')?.hasError('minlength')) {
+            <span>El apellido debe tener al menos 3 caracteres.</span>
+          }
+
+          @if (registroForm.get('apellido')?.hasError('maxlength')) {
+            <span>El apellido no puede superar los 50 caracteres.</span>
+          }
+
+          @if (registroForm.get('apellido')?.hasError('pattern')) {
+            <span>El apellido solo puede contener letras y espacios.</span>
+          }
+
+        </div>
+      }
     </div>
 
-    <form
-      [formGroup]="registroForm"
-      (ngSubmit)="registrarCliente()"
-      class="registro-form"
-    >
 
-      <!-- Apellido -->
-      <div class="campo">
-        <ion-input
-          formControlName="apellido"
-          type="text"
-          label="Apellido"
-          labelPlacement="stacked"
-          placeholder="Ingresá tu apellido"
-          (ionFocus)="mensajeError = ''"
-        ></ion-input>
+    <!-- NOMBRE -->
+    <div class="campo">
+      <ion-input
+        formControlName="nombre"
+        type="text"
+        label="Nombre"
+        labelPlacement="stacked"
+        placeholder="Ingresá tu nombre"
+        (ionFocus)="mensajeError = ''"
+      ></ion-input>
 
-        @if (
-          registroForm.get('apellido')?.dirty &&
-          registroForm.get('apellido')?.invalid
-        ) {
-          <div class="mensaje-error-campo">
+      @if (
+        registroForm.get('nombre')?.dirty &&
+        registroForm.get('nombre')?.invalid
+      ) {
+        <div class="mensaje-error-campo">
 
-            @if (registroForm.get('apellido')?.hasError('required')) {
-              <span>El apellido es obligatorio.</span>
-            }
+          @if (registroForm.get('nombre')?.hasError('required')) {
+            <span>El nombre es obligatorio.</span>
+          }
 
-            @if (registroForm.get('apellido')?.hasError('minlength')) {
-              <span>El apellido debe tener al menos 3 caracteres.</span>
-            }
+          @if (registroForm.get('nombre')?.hasError('minlength')) {
+            <span>El nombre debe tener al menos 3 caracteres.</span>
+          }
 
-            @if (registroForm.get('apellido')?.hasError('maxlength')) {
-              <span>El apellido no puede superar los 50 caracteres.</span>
-            }
+          @if (registroForm.get('nombre')?.hasError('maxlength')) {
+            <span>El nombre no puede superar los 50 caracteres.</span>
+          }
 
-            @if (registroForm.get('apellido')?.hasError('pattern')) {
-              <span>El apellido solo puede contener letras y espacios.</span>
-            }
+          @if (registroForm.get('nombre')?.hasError('pattern')) {
+            <span>El nombre solo puede contener letras y espacios.</span>
+          }
 
-          </div>
-        }
-      </div>
+        </div>
+      }
+    </div>
 
 
-      <!-- Nombre -->
-      <div class="campo">
-        <ion-input
-          formControlName="nombre"
-          type="text"
-          label="Nombre"
-          labelPlacement="stacked"
-          placeholder="Ingresá tu nombre"
-          (ionFocus)="mensajeError = ''"
-        ></ion-input>
+    <!-- DNI -->
+    <div class="campo">
+      <ion-input
+        formControlName="dni"
+        type="text"
+        inputmode="numeric"
+        label="Número de documento"
+        labelPlacement="stacked"
+        placeholder="Ingresá tu DNI"
+        (ionFocus)="mensajeError = ''"
+      ></ion-input>
 
-        @if (
-          registroForm.get('nombre')?.dirty &&
-          registroForm.get('nombre')?.invalid
-        ) {
-          <div class="mensaje-error-campo">
+      @if (
+        registroForm.get('dni')?.dirty &&
+        registroForm.get('dni')?.invalid
+      ) {
+        <div class="mensaje-error-campo">
 
-            @if (registroForm.get('nombre')?.hasError('required')) {
-              <span>El nombre es obligatorio.</span>
-            }
+          @if (registroForm.get('dni')?.hasError('required')) {
+            <span>El DNI es obligatorio.</span>
+          }
 
-            @if (registroForm.get('nombre')?.hasError('minlength')) {
-              <span>El nombre debe tener al menos 3 caracteres.</span>
-            }
+          @if (registroForm.get('dni')?.hasError('pattern')) {
+            <span>El DNI debe contener entre 7 y 8 números.</span>
+          }
 
-            @if (registroForm.get('nombre')?.hasError('maxlength')) {
-              <span>El nombre no puede superar los 50 caracteres.</span>
-            }
-
-            @if (registroForm.get('nombre')?.hasError('pattern')) {
-              <span>El nombre solo puede contener letras y espacios.</span>
-            }
-
-          </div>
-        }
-      </div>
+        </div>
+      }
+    </div>
 
 
-      <!-- DNI -->
-      <div class="campo">
-        <ion-input
-          formControlName="dni"
-          type="text"
-          inputmode="numeric"
-          label="Número de documento"
-          labelPlacement="stacked"
-          placeholder="Ingresá tu DNI"
-          (ionFocus)="mensajeError = ''"
-        ></ion-input>
+    <!-- EMAIL -->
+    <div class="campo">
+      <ion-input
+        formControlName="email"
+        type="email"
+        label="Correo electrónico"
+        labelPlacement="stacked"
+        placeholder="ejemplo@correo.com"
+        (ionFocus)="mensajeError = ''"
+      ></ion-input>
 
-        @if (
-          registroForm.get('dni')?.dirty &&
-          registroForm.get('dni')?.invalid
-        ) {
-          <div class="mensaje-error-campo">
+      @if (
+        registroForm.get('email')?.dirty &&
+        registroForm.get('email')?.invalid
+      ) {
+        <div class="mensaje-error-campo">
 
-            @if (registroForm.get('dni')?.hasError('required')) {
-              <span>El DNI es obligatorio.</span>
-            }
+          @if (registroForm.get('email')?.hasError('required')) {
+            <span>El correo electrónico es obligatorio.</span>
+          }
 
-            @if (registroForm.get('dni')?.hasError('pattern')) {
-              <span>El DNI debe contener entre 7 y 8 números.</span>
-            }
+          @if (registroForm.get('email')?.hasError('pattern')) {
+            <span>Ingresá un correo electrónico válido.</span>
+          }
 
-          </div>
-        }
-      </div>
+          @if (registroForm.get('email')?.hasError('maxlength')) {
+            <span>El correo no puede superar los 100 caracteres.</span>
+          }
 
-
-      <!-- Email -->
-      <div class="campo">
-        <ion-input
-          formControlName="email"
-          type="email"
-          label="Correo electrónico"
-          labelPlacement="stacked"
-          placeholder="ejemplo@correo.com"
-          (ionFocus)="mensajeError = ''"
-        ></ion-input>
-
-        @if (
-          registroForm.get('email')?.dirty &&
-          registroForm.get('email')?.invalid
-        ) {
-          <div class="mensaje-error-campo">
-
-            @if (registroForm.get('email')?.hasError('required')) {
-              <span>El correo electrónico es obligatorio.</span>
-            }
-
-            @if (registroForm.get('email')?.hasError('pattern')) {
-              <span>Ingresá un correo electrónico válido.</span>
-            }
-
-            @if (registroForm.get('email')?.hasError('maxlength')) {
-              <span>El correo no puede superar los 100 caracteres.</span>
-            }
-
-          </div>
-        }
-      </div>
+        </div>
+      }
+    </div>
 
 
-      <!-- Contraseña -->
-      <div class="campo">
-        <ion-input
-          formControlName="password"
-          type="password"
-          label="Contraseña"
-          labelPlacement="stacked"
-          placeholder="Mínimo 6 caracteres"
-          (ionFocus)="mensajeError = ''"
-        ></ion-input>
+    <!-- CONTRASEÑA -->
+    <div class="campo">
+      <ion-input
+        formControlName="password"
+        type="password"
+        label="Contraseña"
+        labelPlacement="stacked"
+        placeholder="Mínimo 6 caracteres"
+        (ionFocus)="mensajeError = ''"
+      ></ion-input>
 
-        @if (
-          registroForm.get('password')?.dirty &&
-          registroForm.get('password')?.invalid
-        ) {
-          <div class="mensaje-error-campo">
+      @if (
+        registroForm.get('password')?.dirty &&
+        registroForm.get('password')?.invalid
+      ) {
+        <div class="mensaje-error-campo">
 
-            @if (registroForm.get('password')?.hasError('required')) {
-              <span>La contraseña es obligatoria.</span>
-            }
+          @if (registroForm.get('password')?.hasError('required')) {
+            <span>La contraseña es obligatoria.</span>
+          }
 
-            @if (registroForm.get('password')?.hasError('minlength')) {
-              <span>La contraseña debe tener al menos 6 caracteres.</span>
-            }
+          @if (registroForm.get('password')?.hasError('minlength')) {
+            <span>La contraseña debe tener al menos 6 caracteres.</span>
+          }
 
-            @if (registroForm.get('password')?.hasError('maxlength')) {
-              <span>La contraseña no puede superar los 50 caracteres.</span>
-            }
+          @if (registroForm.get('password')?.hasError('maxlength')) {
+            <span>La contraseña no puede superar los 50 caracteres.</span>
+          }
 
-          </div>
-        }
-      </div>
-
-
-      <!-- Confirmar contraseña -->
-      <div class="campo">
-        <ion-input
-          formControlName="confirmPassword"
-          type="password"
-          label="Confirmar contraseña"
-          labelPlacement="stacked"
-          placeholder="Repetí tu contraseña"
-          (ionFocus)="mensajeError = ''"
-        ></ion-input>
-
-        @if (
-          registroForm.get('confirmPassword')?.dirty &&
-          registroForm.get('confirmPassword')?.invalid
-        ) {
-          <div class="mensaje-error-campo">
-
-            @if (registroForm.get('confirmPassword')?.hasError('required')) {
-              <span>Confirmá tu contraseña.</span>
-            }
-
-            @if (registroForm.get('confirmPassword')?.hasError('minlength')) {
-              <span>La contraseña debe tener al menos 6 caracteres.</span>
-            }
-
-            @if (registroForm.get('confirmPassword')?.hasError('maxlength')) {
-              <span>La contraseña no puede superar los 50 caracteres.</span>
-            }
-
-          </div>
-        }
-
-        <!-- Las contraseñas no coinciden -->
-        @if (
-          registroForm.get('confirmPassword')?.touched &&
-          registroForm.get('confirmPassword')?.valid &&
-          registroForm.hasError('passwordsNoCoinciden')
-        ) {
-          <div class="mensaje-error-campo">
-            <span>Las contraseñas no coinciden.</span>
-          </div>
-        }
-      </div>
+        </div>
+      }
+    </div>
 
 
-      <!-- Mensaje de error del registro -->
-      @if (mensajeError) {
-        <div class="mensaje-error">
-          {{ mensajeError }}
+    <!-- CONFIRMAR CONTRASEÑA -->
+    <div class="campo">
+      <ion-input
+        formControlName="confirmPassword"
+        type="password"
+        label="Confirmar contraseña"
+        labelPlacement="stacked"
+        placeholder="Repetí tu contraseña"
+        (ionFocus)="mensajeError = ''"
+      ></ion-input>
+
+      @if (
+        registroForm.get('confirmPassword')?.dirty &&
+        registroForm.get('confirmPassword')?.invalid
+      ) {
+        <div class="mensaje-error-campo">
+
+          @if (registroForm.get('confirmPassword')?.hasError('required')) {
+            <span>Confirmá tu contraseña.</span>
+          }
+
+          @if (registroForm.get('confirmPassword')?.hasError('minlength')) {
+            <span>La contraseña debe tener al menos 6 caracteres.</span>
+          }
+
+          @if (registroForm.get('confirmPassword')?.hasError('maxlength')) {
+            <span>La contraseña no puede superar los 50 caracteres.</span>
+          }
+
         </div>
       }
 
+      @if (
+        registroForm.get('confirmPassword')?.touched &&
+        registroForm.get('confirmPassword')?.valid &&
+        registroForm.hasError('passwordsNoCoinciden')
+      ) {
+        <div class="mensaje-error-campo">
+          <span>Las contraseñas no coinciden.</span>
+        </div>
+      }
+    </div>
 
-      <!-- Botón -->
-      <ion-button
-        expand="block"
-        type="submit"
-        class="btn-registrar"
-        [disabled]="enviando"
-      >
-        {{ enviando ? 'Registrando...' : 'Crear cuenta' }}
-      </ion-button>
-    
 
-      <!-- Login -->
-      <p class="texto-login">
-        ¿Ya tenés una cuenta?
-        <span (click)="irAlLogin()">Iniciar sesión</span>
-      </p>
+    <!-- ERROR GENERAL -->
+    @if (mensajeError) {
+      <div class="mensaje-error">
+        {{ mensajeError }}
+      </div>
+    }
+
+
+    <!-- BOTÓN REGISTRAR -->
+    <ion-button
+      expand="block"
+      type="submit"
+      class="btn-registrar"
+      [disabled]="enviando"
+    >
+      {{ enviando ? 'Registrando...' : 'Crear cuenta' }}
+    </ion-button>
+
+
+    <!-- LOGIN -->
+    <p class="texto-login">
+      ¿Ya tenés una cuenta?
+      <span (click)="irAlLogin()">Iniciar sesión</span>
+    </p>
 
     </form>
 
+
   </div>
-
-
 </ion-content>
 
-<ion-modal [isOpen]="isModalOpen" backdropDismiss="false" class="success-modal">
+<!-- MODAL REGISTRO EXITOSO -->
+
+<ion-modal
+  [isOpen]="isModalOpen"
+  backdropDismiss="false"
+  class="success-modal"
+
+  >
+
     <ng-template>
-      <div class="modal-wrapper">
-        <div class="icon-container">
-          <ion-icon name="checkmark-circle" color="success"></ion-icon>
-        </div>
-        
-        <h2>¡Registro Exitoso!</h2>
-        <p>Tu cuenta ha sido creada correctamente y se encuentra <strong>pendiente de aprobación</strong> por los administradores.</p>
-        
-        <div class="divider"></div>
+
+
+    <div class="modal-wrapper">
+
+      <div class="icon-container">
+        <ion-icon name="checkmark-circle"></ion-icon>
+      </div>
+
+      <h2>¡Registro exitoso!</h2>
+
+      <p>
+        Tu cuenta fue creada correctamente y se encuentra
+        <strong>pendiente de aprobación</strong>
+        por los administradores.
+      </p>
+
+      <div class="divider"></div>
 
       <p class="sub-text">
         Mientras tanto, podés explorar la aplicación
-        accediendo como invitado.
+        ingresando como invitado.
       </p>
 
       <ion-button
         expand="block"
         shape="round"
-      /* ACA TENGO QUE REDIRIGIR AL HOME DEL CLIENTE */
-        (click)="irAlLogin()" 
+        (click)="irAlLogin()"
       >
         Entrar como invitado
       </ion-button>
 
     </div>
+
+
   </ng-template>
 </ion-modal>
-
-
