@@ -71,30 +71,30 @@ ionic serve
 
 ### Primera fecha (puntos 1 al 22)
 
-| # | Funcionalidad | Estado | Responsable |
-|---|---|---|---|
-| 1 | Agregar empleado | ⬜ Pendiente | _(completar)_ |
-| 2 | Agregar nuevo plato | ⬜ Pendiente | _(completar)_ |
-| 3 | Agregar nueva bebida | ⬜ Pendiente | _(completar)_ |
-| 4 | Agregar nueva mesa | ⬜ Pendiente | _(completar)_ |
-| 5 | Crear cliente registrado | ⬜ Pendiente | _(completar)_ |
-| 6 | Verificar ingreso de cliente | ⬜ Pendiente | _(completar)_ |
-| 7 | Rechazar cliente | ⬜ Pendiente | _(completar)_ |
-| 8 | Aceptar cliente | ⬜ Pendiente | _(completar)_ |
-| 9 | Ingreso como cliente anónimo | ⬜ Pendiente | _(completar)_ |
-| 10 | Metre asigna mesa | ⬜ Pendiente | _(completar)_ |
-| 11 | Ver menú + consulta al mozo | ⬜ Pendiente | _(completar)_ |
-| 12 | Cliente realiza pedido | ⬜ Pendiente | _(completar)_ |
-| 13 | Mozo rechaza pedido | ⬜ Pendiente | _(completar)_ |
-| 14 | Mozo confirma pedido | ⬜ Pendiente | _(completar)_ |
-| 15 | Cliente accede a juegos (descuentos) | ⬜ Pendiente | _(completar)_ |
-| 16 | Cocina recibe pedidos | ⬜ Pendiente | _(completar)_ |
-| 17 | Bar recibe pedidos | ⬜ Pendiente | _(completar)_ |
-| 18 | Aviso de pedido completo | ⬜ Pendiente | _(completar)_ |
-| 19 | Mozo entrega pedido | ⬜ Pendiente | _(completar)_ |
-| 20 | Encuesta de satisfacción | ⬜ Pendiente | _(completar)_ |
-| 21 | Cliente pide la cuenta | ⬜ Pendiente | _(completar)_ |
-| 22 | Confirmación de pago y liberación de mesa | ⬜ Pendiente | _(completar)_ |
+| # | Funcionalidad | Responsable | Est. (días) | Inicio | Fin | Branch | Estado |
+|---|---|---|---|---|---|---|---|
+| 1 | Agregar empleado | Wolf, Matías | 2 | 01-09 | 03-09 | | ⬜ Pendiente |
+| 2 | Agregar nuevo plato | Moyano, Martín | 2 | 01-09 | 03-09 | `feature/agregar-plato` | 🟨 En progreso |
+| 3 | Agregar nueva bebida | Moyano, Martín | 1 | 04-09 | 05-09 | | ⬜ Pendiente |
+| 4 | Agregar nueva mesa | Wolf, Matías | 2 | 04-09 | 06-09 | | ⬜ Pendiente |
+| 5 | Crear cliente registrado | Miguel, Luján | 2 | 01-09 | 03-09 | `feature/registro-cliente` | 🟨 En progreso |
+| 6 | Verificar ingreso de cliente | Wolf, Matías | 1,5 | 07-09 | 08-09 | | ⬜ Pendiente |
+| 7 | Rechazar cliente | Wolf, Matías | 2 | 09-09 | 11-09 | | ⬜ Pendiente |
+| 8 | Aceptar cliente | Wolf, Matías | 1 | 11-09 | 12-09 | | ⬜ Pendiente |
+| 9 | Ingreso como cliente anónimo | Miguel, Luján | 2 | 04-09 | 06-09 | `feature/registro-cliente-anonimo` | 🟨 En progreso |
+| 10 | Metre asigna mesa | Miguel, Luján | 1,5 | 07-09 | 08-09 | | ⬜ Pendiente |
+| 11 | Ver menú + consulta al mozo | Miguel, Luján | 3 | 08-09 | 11-09 | | ⬜ Pendiente |
+| 12 | Cliente realiza pedido | Torrez, Maximiliano | 3 | 08-09 | 11-09 | | ⬜ Pendiente |
+| 13 | Mozo rechaza pedido | Torrez, Maximiliano | 1 | 12-09 | 13-09 | | ⬜ Pendiente |
+| 14 | Mozo confirma pedido | Torrez, Maximiliano | 1,5 | 14-09 | 15-09 | | ⬜ Pendiente |
+| 15 | Cliente accede a juegos (descuentos) | Miguel, Luján | 4 | 12-09 | 16-09 | | ⬜ Pendiente |
+| 16 | Cocina recibe pedidos | Moyano, Martín | 1,5 | 08-09 | 09-09 | | ⬜ Pendiente |
+| 17 | Bar recibe pedidos | Moyano, Martín | 1 | 13-09 | 13-09 | | ⬜ Pendiente |
+| 18 | Aviso de pedido completo | Moyano, Martín | 1 | 14-09 | 15-09 | | ⬜ Pendiente |
+| 19 | Mozo entrega pedido | Torrez, Maximiliano | 1 | 16-09 | 17-09 | | ⬜ Pendiente |
+| 20 | Encuesta de satisfacción | Torrez, Maximiliano | 2,5 | 18-09 | 20-09 | | ⬜ Pendiente |
+| 21 | Cliente pide la cuenta | Torrez, Maximiliano | 2 | 21-09 | 23-09 | | ⬜ Pendiente |
+| 22 | Confirmación de pago y liberación de mesa | Torrez, Maximiliano | 1,5 | 24-09 | 25-09 | | ⬜ Pendiente |
 
 **Leyenda:** ⬜ Pendiente · 🟨 En progreso · ✅ Completo
 

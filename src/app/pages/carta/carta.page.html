@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Carta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="carta-content">
+  <div class="carta-container">
+
+    @if (cargando) {
+      <div class="estado-carga">
+        <ion-spinner name="crescent"></ion-spinner>
+        <span>Cargando la carta...</span>
+      </div>
+    } @else if (mensajeError) {
+      <div class="mensaje-error">
+        {{ mensajeError }}
+      </div>
+    } @else if (platos.length === 0) {
+      <div class="carta-vacia">
+        <span>Todavía no hay platos cargados en la carta.</span>
+      </div>
+    } @else {
+
+      <div class="platos-lista">
+
+        @for (plato of platos; track plato.id) {
+
+          <div class="plato-card">
+
+            <div class="plato-fotos">
+              <img [src]="plato.foto_url" [alt]="plato.nombre" />
+              <img [src]="plato.foto2_url" [alt]="plato.nombre" />
+              <img [src]="plato.foto3_url" [alt]="plato.nombre" />
+            </div>
+
+            <div class="plato-info">
+              <h2>{{ plato.nombre }}</h2>
+              <p class="plato-descripcion">{{ plato.descripcion }}</p>
+
+              <div class="plato-detalles">
+                <span class="plato-tiempo">
+                  {{ plato.tiempo_preparacion }} min
+                </span>
+                <span class="plato-precio">
+                  ${{ plato.precio }}
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+    }
+
+  </div>
+</ion-content>
