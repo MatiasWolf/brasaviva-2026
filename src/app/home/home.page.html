@@ -1,20 +1,61 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content [fullscreen]="true" class="home-bg">
+  @if (cargando()) {
+    <div class="loader">
+      <app-spinner-logo [size]="48"></app-spinner-logo>
+      <p>Cargando tu menú...</p>
+    </div>
+  } @else {
+    <div class="home-container">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+      <header class="home-header">
+        <div class="header-texts">
+          <p class="eyebrow">Brasa Viva</p>
+          <h1>{{ saludo() }}</h1>
+          <span class="rol-chip">
+            <ion-icon name="person-circle-outline"></ion-icon>
+            {{ rolNombreLegible() | titlecase }}
+          </span>
+        </div>
+        <ion-button
+          fill="clear"
+          class="logout-btn"
+          (click)="cerrarSesion()"
+          aria-label="Cerrar sesión"
+        >
+          <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+        </ion-button>
+      </header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+      @if (esCliente()) {
+        <div class="estadia-demo">
+          <p class="demo-tag">Modo demo · estado de la estadía</p>
+          <ion-segment
+            scrollable
+            [value]="estadiaEstado()"
+            (ionChange)="cambiarEstadia($event)"
+          >
+            @for (estado of estadiaEstados; track estado.valor) {
+              <ion-segment-button [value]="estado.valor">
+                <ion-label>{{ estado.etiqueta }}</ion-label>
+              </ion-segment-button>
+            }
+          </ion-segment>
+        </div>
+      }
+
+      <section class="menu-grid">
+        @for (boton of botonesVisibles(); track boton.id) {
+          <button type="button" class="menu-card" (click)="ejecutar(boton)">
+            <span class="menu-card__icon">
+              <ion-icon [name]="boton.icono"></ion-icon>
+            </span>
+            <span class="menu-card__title">{{ boton.titulo }}</span>
+          </button>
+        } @empty {
+          <p class="sin-botones">No hay acciones disponibles en este momento.</p>
+        }
+      </section>
+
+    </div>
+  }
 </ion-content>

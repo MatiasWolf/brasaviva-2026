@@ -1,0 +1,24 @@
+<ion-content [fullscreen]="true" class="splash-estatica" (click)="saltar()">
+  <div class="splash-shell">
+    <section class="brand-stack">
+      <div class="icon-stage">
+        <div class="glow-core"></div>
+        <div class="icon-badge">
+          <ion-icon name="restaurant-outline"></ion-icon>
+        </div>
+      </div>
+
+      <p class="eyebrow">Trabajo Final Integrador</p>
+      <h1>Brasa Viva</h1>
+      <p class="nombreGrupo">{{ nombreGrupo }}</p>
+
+      <div class="integrantes-container">
+        @for (nombre of integrantes; track nombre) {
+          <p class="signature">{{ nombre }}</p>
+        }
+      </div>
+    </section>
+
+    <p class="hint">Tocá para continuar</p>
+  </div>
+</ion-content>
