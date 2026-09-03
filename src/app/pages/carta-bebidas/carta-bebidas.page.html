@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Carta de bebidas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="carta-content">
+  <div class="carta-container">
+
+    @if (cargando) {
+      <div class="estado-carga">
+        <ion-spinner name="crescent"></ion-spinner>
+        <span>Cargando la carta...</span>
+      </div>
+    } @else if (mensajeError) {
+      <div class="mensaje-error">
+        {{ mensajeError }}
+      </div>
+    } @else if (bebidas.length === 0) {
+      <div class="carta-vacia">
+        <span>Todavía no hay bebidas cargadas en la carta.</span>
+      </div>
+    } @else {
+
+      <div class="bebidas-lista">
+
+        @for (bebida of bebidas; track bebida.id) {
+
+          <div class="bebida-card">
+
+            <div class="bebida-fotos">
+              <img [src]="bebida.foto_url" [alt]="bebida.nombre" />
+              <img [src]="bebida.foto2_url" [alt]="bebida.nombre" />
+              <img [src]="bebida.foto3_url" [alt]="bebida.nombre" />
+            </div>
+
+            <div class="bebida-info">
+              <h2>{{ bebida.nombre }}</h2>
+              <p class="bebida-descripcion">{{ bebida.descripcion }}</p>
+
+              <div class="bebida-detalles">
+                <span class="bebida-tiempo">
+                  {{ bebida.tiempo_preparacion }} min
+                </span>
+                <span class="bebida-precio">
+                  ${{ bebida.precio }}
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+    }
+
+  </div>
+</ion-content>
