@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -57,6 +57,8 @@ interface FotoSlot {
   ]
 })
 export class AgregarPlatoPage {
+
+  @ViewChild(IonModal) modalExito?: IonModal;
 
   platoForm: FormGroup;
 
@@ -214,9 +216,10 @@ export class AgregarPlatoPage {
     }
   }
 
-  irALaCarta() {
+  async irALaCarta() {
+    await this.modalExito?.dismiss();
     this.isModalOpen = false;
-    this.router.navigate(['/carta']);
+    await this.router.navigate(['/carta']);
   }
 
 }
