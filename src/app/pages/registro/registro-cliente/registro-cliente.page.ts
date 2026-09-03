@@ -10,9 +10,10 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonInput, IonTitle, IonToolbar, IonIcon, IonModal } from '@ionic/angular';
-import { AuthService } from '../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { CameraService } from '../../../core/services/camera.service';
 import { addIcons } from 'ionicons';
-import { checkmarkCircle, personAddOutline } from 'ionicons/icons';
+import { checkmarkCircle, personAddOutline, cameraOutline} from 'ionicons/icons';
 
 
 
@@ -46,15 +47,19 @@ export class RegistroClientePage {
 
   isModalOpen = false;
 
+  fotoPreview: string | null = null;
+
   constructor(
     private fb: FormBuilder,
     private auth: AuthService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private cameraService: CameraService
   ) {
     addIcons({
       'checkmark-circle': checkmarkCircle,
-      'person-add-outline': personAddOutline
+      'person-add-outline': personAddOutline,
+      'camera-outline': cameraOutline
     });
 
     this.registroForm = this.fb.group(
@@ -131,6 +136,11 @@ export class RegistroClientePage {
     return;
   }
 
+  if (!this.fotoPreview) { 
+    this.mensajeError = 'Debés agregar una foto de perfil.'; 
+    return; 
+  }
+
   // Obtener valores
   const {
     apellido,
@@ -149,7 +159,8 @@ export class RegistroClientePage {
       nombre,
       dni,
       email,
-      password
+      password,
+      foto: this.fotoPreview!
     });
 
     this.isModalOpen = true;
@@ -224,6 +235,30 @@ export class RegistroClientePage {
     this.router.navigate(
       ['/login']
     );
+  }
+
+  ingresarComoInvitado() {
+    this.isModalOpen = false; this.cdr.detectChanges();
+    this.router.navigate(
+      ['/login']
+    );
+  }
+
+  async tomarFoto() {
+    this.mensajeError = '';
+
+    try {
+      const foto = await this.cameraService.tomarFoto();
+
+      this.fotoPreview = foto.webPath ?? null;
+
+      this.cdr.detectChanges();
+
+    } catch (error) {
+      console.error('Error al tomar la foto:', error);
+      this.mensajeError =
+        'No se pudo obtener la foto. Intentá nuevamente.';
+    }
   }
 
 }

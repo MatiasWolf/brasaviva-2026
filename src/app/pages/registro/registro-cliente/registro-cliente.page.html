@@ -33,6 +33,43 @@
   </p>
 </div>
 
+<!-- FOTO DE PERFIL -->
+<div class="foto-section">
+
+  <button
+    type="button"
+    class="foto-button"
+    (click)="tomarFoto()"
+  >
+
+    @if (fotoPreview) {
+
+      <img
+        [src]="fotoPreview"
+        alt="Foto de perfil"
+        class="foto-preview"
+      />
+
+      <div class="foto-check">
+        <ion-icon name="checkmark-circle"></ion-icon>
+      </div>
+
+    } @else {
+
+      <ion-icon name="camera-outline"></ion-icon>
+
+      <span>Tomar foto</span>
+
+    }
+
+  </button>
+
+  <p class="foto-hint">
+    Esta foto será utilizada para tu perfil.
+  </p>
+
+</div>
+
 
 <!-- FORMULARIO -->
 <form
@@ -327,7 +364,7 @@
       <ion-button
         expand="block"
         shape="round"
-        (click)="irAlLogin()"
+        (click)="ingresarComoInvitado()"
       >
         Entrar como invitado
       </ion-button>

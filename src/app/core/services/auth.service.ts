@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
+import { StorageService } from './storage.service';
 import { Usuario } from '../models/usuario.model';
 import { PerfilRapido } from '../models/perfil-rapido.model';
 import { ROLES_CLIENTE } from '../models/boton-menu.model';
@@ -16,6 +17,9 @@ export class AuthError extends Error {
 })
 export class AuthService {
   private supabaseService = inject(SupabaseService);
+  private storageService = inject(StorageService);
+
+
 
   usuarioActual: Usuario | null = null;
 
@@ -118,8 +122,11 @@ export class AuthService {
     dni: string;
     email: string;
     password: string;
+    foto: string;
   }) {
-    console.log('AUTH 1: antes de signUp');
+    if (!datos.foto) { 
+      throw new Error('La foto de perfil es obligatoria.'); 
+    }
 
     // 1. Crear usuario en Supabase Auth
     const { data, error } =
@@ -135,10 +142,6 @@ export class AuthService {
         },
       });
 
-    console.log('AUTH 2: signUp terminó');
-    console.log('AUTH data:', data);
-    console.log('AUTH error:', error);
-
     if (error) {
       throw error;
     }
@@ -148,8 +151,24 @@ export class AuthService {
       throw new Error('No se pudo crear el usuario.');
     }
 
-    console.log('AUTH 3: voy a retornar');
+    // 2. Subir la foto de perfil
+    const fotoUrl = await this.storageService.subirFoto(
+      data.user.id,
+      datos.foto
+    );
 
+    // 3. Guardar la URL de la foto en public.usuarios
+    const { error: errorFoto } = await this.supabaseService.client
+      .from('usuarios')
+      .update({
+        foto_url: fotoUrl
+      })
+      .eq('id', data.user.id);
+
+    if (errorFoto) {
+      console.error('Error al guardar foto_url:', errorFoto);
+      throw errorFoto;
+    }
     return data;
   }
 
