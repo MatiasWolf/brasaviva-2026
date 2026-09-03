@@ -1,0 +1,120 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text="Volver"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Empleados</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="irAAlta()" aria-label="Agregar empleado">
+        <ion-icon slot="icon-only" name="person-add-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="empleados-content">
+  <div class="empleados-container">
+
+    @if (cargando()) {
+      <div class="loader">
+        <app-spinner-logo [size]="48"></app-spinner-logo>
+        <p>Cargando empleados...</p>
+      </div>
+    } @else {
+
+      <ion-searchbar
+        class="buscador"
+        placeholder="Buscar por nombre, correo o rol"
+        [debounce]="200"
+        (ionInput)="filtrar($event)"
+      ></ion-searchbar>
+
+      @if (error()) {
+        <div class="mensaje-error">
+          {{ error() }}
+          <button type="button" (click)="cargar()">Reintentar</button>
+        </div>
+      }
+
+      @if (!error() && listaFiltrada().length === 0) {
+        <div class="vacio">
+          <ion-icon name="people-outline"></ion-icon>
+          <p>
+            @if (lista().length === 0) {
+              Todavía no hay empleados cargados.
+            } @else {
+              No hay empleados que coincidan con la búsqueda.
+            }
+          </p>
+          <ion-button fill="outline" (click)="irAAlta()">
+            Agregar empleado
+          </ion-button>
+        </div>
+      }
+
+      <div class="lista">
+        @for (empleado of itemsVisibles(); track empleado.id) {
+          <article class="empleado-card">
+            <div class="avatar">
+              @if (empleado.foto_url) {
+                <img [src]="empleado.foto_url" [alt]="empleado.nombre" />
+              } @else {
+                <ion-icon name="people-outline"></ion-icon>
+              }
+            </div>
+
+            <div class="datos">
+              <h2>{{ empleado.apellido }}, {{ empleado.nombre }}</h2>
+              <p class="correo">{{ empleado.correo }}</p>
+              <div class="chips">
+                <span class="chip chip--rol">{{ rolLegible(empleado) | titlecase }}</span>
+                <span class="chip chip--estado" [attr.data-estado]="empleado.estado">
+                  {{ empleado.estado | titlecase }}
+                </span>
+              </div>
+            </div>
+
+            <div class="acciones">
+              <ion-button
+                fill="clear"
+                size="small"
+                (click)="editar(empleado)"
+                aria-label="Editar empleado"
+              >
+                <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+              </ion-button>
+              <ion-button
+                fill="clear"
+                size="small"
+                color="danger"
+                (click)="confirmarEliminar(empleado)"
+                aria-label="Eliminar empleado"
+              >
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </article>
+        }
+      </div>
+
+      <ion-infinite-scroll
+        [disabled]="!hayMas()"
+        (ionInfinite)="cargarMas($event)"
+      >
+        <ion-infinite-scroll-content
+          loadingSpinner="dots"
+          loadingText="Cargando más empleados..."
+        ></ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+
+      @if (!hayMas() && listaFiltrada().length > 0) {
+        <p class="fin-lista">
+          {{ listaFiltrada().length }}
+          {{ listaFiltrada().length === 1 ? 'empleado' : 'empleados' }} en total
+        </p>
+      }
+
+    }
+
+  </div>
+</ion-content>

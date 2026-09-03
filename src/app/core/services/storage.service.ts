@@ -18,11 +18,9 @@ export class StorageService {
     webPath: string
   ): Promise<string> {
 
-    // Convertir la imagen a Blob
     const response = await fetch(webPath);
     const blob = await response.blob();
 
-    // Nombre único para la foto
     const nombreArchivo = `${userId}.jpg`;
 
     const { error } = await this.supabaseService.client.storage
@@ -37,7 +35,6 @@ export class StorageService {
       throw error;
     }
 
-    // Obtener URL pública
     const { data } = this.supabaseService.client.storage
       .from(this.bucket)
       .getPublicUrl(nombreArchivo);

@@ -1,0 +1,175 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/empleados" text="Volver"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Editar empleado</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="empleado-content">
+  <div class="empleado-container">
+
+    @if (cargando()) {
+      <div class="loader">
+        <app-spinner-logo [size]="48"></app-spinner-logo>
+        <p>Cargando datos...</p>
+      </div>
+    } @else if (!empleado()) {
+      <div class="mensaje-error">{{ mensajeError() || 'No se encontró el empleado.' }}</div>
+    } @else {
+
+      <div class="empleado-header">
+        <div class="avatar">
+          @if (empleado()?.foto_url) {
+            <img [src]="empleado()?.foto_url" [alt]="empleado()?.nombre" />
+          } @else {
+            <ion-icon name="create-outline"></ion-icon>
+          }
+        </div>
+        <h1>{{ empleado()?.apellido }}, {{ empleado()?.nombre }}</h1>
+        <p>{{ empleado()?.correo }}</p>
+      </div>
+
+      <form [formGroup]="editarForm" (ngSubmit)="guardar()" class="empleado-form">
+
+        <!-- APELLIDO -->
+        <div class="campo">
+          <ion-input
+            formControlName="apellido"
+            type="text"
+            label="Apellido"
+            labelPlacement="stacked"
+            (ionFocus)="mensajeError.set('')"
+          ></ion-input>
+          @if (editarForm.get('apellido')?.dirty && editarForm.get('apellido')?.invalid) {
+            <div class="mensaje-error-campo">
+              <span>Ingresá un apellido válido (solo letras, mín. 2).</span>
+            </div>
+          }
+        </div>
+
+        <!-- NOMBRE -->
+        <div class="campo">
+          <ion-input
+            formControlName="nombre"
+            type="text"
+            label="Nombre"
+            labelPlacement="stacked"
+            (ionFocus)="mensajeError.set('')"
+          ></ion-input>
+          @if (editarForm.get('nombre')?.dirty && editarForm.get('nombre')?.invalid) {
+            <div class="mensaje-error-campo">
+              <span>Ingresá un nombre válido (solo letras, mín. 2).</span>
+            </div>
+          }
+        </div>
+
+        <!-- DNI -->
+        <div class="campo">
+          <ion-input
+            formControlName="dni"
+            type="text"
+            inputmode="numeric"
+            label="Número de documento"
+            labelPlacement="stacked"
+            (ionFocus)="mensajeError.set('')"
+          ></ion-input>
+          @if (editarForm.get('dni')?.dirty && editarForm.get('dni')?.invalid) {
+            <div class="mensaje-error-campo">
+              <span>El DNI debe contener entre 7 y 8 números.</span>
+            </div>
+          }
+        </div>
+
+        <!-- CUIL -->
+        <div class="campo">
+          <ion-input
+            formControlName="cuil"
+            type="text"
+            inputmode="numeric"
+            label="CUIL"
+            labelPlacement="stacked"
+            (ionFocus)="mensajeError.set('')"
+          ></ion-input>
+          @if (
+            editarForm.get('cuil')?.dirty &&
+            (editarForm.get('cuil')?.invalid ||
+              editarForm.hasError('cuilNoCoincideDni'))
+          ) {
+            <div class="mensaje-error-campo">
+              @if (editarForm.get('cuil')?.invalid) {
+                <span>El CUIL debe contener 11 números, sin guiones.</span>
+              } @else if (editarForm.hasError('cuilNoCoincideDni')) {
+                <span>El CUIL no se corresponde con el DNI ingresado.</span>
+              }
+            </div>
+          }
+        </div>
+
+        <!-- ROL -->
+        <div class="campo">
+          <ion-select
+            formControlName="rol_id"
+            label="Rol / puesto"
+            labelPlacement="stacked"
+            interface="popover"
+            [interfaceOptions]="{ cssClass: 'select-brasa-popover' }"
+          >
+            @for (rol of roles(); track rol.id) {
+              <ion-select-option [value]="rol.id">
+                {{ rol.nombre | titlecase }}
+              </ion-select-option>
+            }
+          </ion-select>
+        </div>
+
+        <!-- ESTADO -->
+        <div class="campo">
+          <ion-select
+            formControlName="estado"
+            label="Estado de la cuenta"
+            labelPlacement="stacked"
+            interface="popover"
+            [interfaceOptions]="{ cssClass: 'select-brasa-popover' }"
+          >
+            @for (estado of estados; track estado) {
+              <ion-select-option [value]="estado">
+                {{ estado | titlecase }}
+              </ion-select-option>
+            }
+          </ion-select>
+          <p class="ayuda-campo">
+            "Rechazado" bloquea el ingreso del empleado.
+          </p>
+        </div>
+
+        <p class="ayuda-campo">
+          El correo y la contraseña no se editan desde acá.
+        </p>
+
+        <button type="submit" class="submit-oculto" aria-hidden="true" tabindex="-1"></button>
+      </form>
+
+    }
+
+  </div>
+</ion-content>
+
+@if (empleado()) {
+  <ion-footer class="empleado-footer">
+    @if (mensajeError()) {
+      <div class="mensaje-error">{{ mensajeError() }}</div>
+    }
+
+    <ion-button
+      expand="block"
+      type="button"
+      class="btn-guardar"
+      [disabled]="guardando()"
+      (click)="guardar()"
+    >
+      {{ guardando() ? 'Guardando...' : 'Guardar cambios' }}
+    </ion-button>
+  </ion-footer>
+}
