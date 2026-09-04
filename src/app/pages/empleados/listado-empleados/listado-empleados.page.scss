@@ -1,0 +1,228 @@
+/* Listado de empleados — paleta "brasa" consistente con el home. */
+
+.empleados-content {
+  --background:
+    radial-gradient(circle at 15% 0%, rgba(246, 193, 133, 0.16), transparent 22%),
+    linear-gradient(180deg, #130905 0%, #3a1710 100%);
+  --color: #ffd485;
+}
+
+ion-header {
+  background: #130905;
+}
+
+ion-toolbar {
+  --background: #130905;
+  --color: #ffd485;
+  --border-color: transparent;
+}
+
+ion-title {
+  color: #ffd485;
+  font-weight: 600;
+}
+
+ion-back-button,
+ion-toolbar ion-buttons ion-button {
+  --color: #ffd485;
+}
+
+.empleados-container {
+  min-height: 100%;
+  padding: 16px 16px calc(24px + var(--ion-safe-area-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.fin-lista {
+  margin: 2px 0 0;
+  text-align: center;
+  font-size: 0.76rem;
+  color: rgba(255, 208, 160, 0.7);
+}
+
+ion-infinite-scroll-content {
+  --color: #ffd0a0;
+  min-height: 44px;
+}
+
+.loader {
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: #ffd485;
+
+  p {
+    margin: 0;
+    color: rgba(255, 248, 241, 0.74);
+  }
+}
+
+.buscador {
+  --background: #fff3df;
+  --color: #35170b;
+  --placeholder-color: #805238;
+  --icon-color: #805238;
+  --border-radius: 12px;
+  padding: 0;
+  box-shadow: 0 3px 8px rgba(19, 9, 5, 0.25);
+}
+
+.mensaje-error {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(180, 55, 40, 0.18);
+  border: 1px solid rgba(180, 55, 40, 0.35);
+  color: #ffe0d8;
+  font-size: 14px;
+  text-align: center;
+
+  button {
+    margin-top: 8px;
+    background: transparent;
+    border: 1px solid rgba(255, 224, 216, 0.6);
+    border-radius: 8px;
+    color: #ffe0d8;
+    padding: 4px 12px;
+    font-weight: 600;
+  }
+}
+
+.vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 40px 16px;
+  text-align: center;
+  color: #dfa070;
+
+  ion-icon {
+    font-size: 2.6rem;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.empleado-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 2px solid #802323;
+  background: linear-gradient(160deg, #5e1f1f 0%, #431717 100%);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+}
+
+.avatar {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 248, 241, 0.1);
+  border: 1px solid rgba(255, 248, 241, 0.2);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  ion-icon {
+    font-size: 1.6rem;
+    color: #fff8f1;
+  }
+}
+
+.datos {
+  flex: 1;
+  min-width: 0;
+
+  h2 {
+    margin: 0;
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: #ffe9cf;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .correo {
+    margin: 2px 0 6px;
+    font-size: 0.78rem;
+    color: rgba(255, 248, 241, 0.66);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.chip--rol {
+  background: rgba(255, 170, 85, 0.16);
+  border: 1px solid rgba(255, 170, 85, 0.4);
+  color: #ffd0a0;
+}
+
+.chip--estado {
+  border: 1px solid transparent;
+}
+
+.chip--estado[data-estado='aprobado'] {
+  background: rgba(72, 160, 90, 0.2);
+  border-color: rgba(72, 160, 90, 0.5);
+  color: #b7e6c2;
+}
+
+.chip--estado[data-estado='pendiente'] {
+  background: rgba(226, 170, 60, 0.2);
+  border-color: rgba(226, 170, 60, 0.5);
+  color: #f2d9a8;
+}
+
+.chip--estado[data-estado='rechazado'] {
+  background: rgba(180, 55, 40, 0.22);
+  border-color: rgba(180, 55, 40, 0.5);
+  color: #ffc7bd;
+}
+
+.acciones {
+  display: flex;
+  flex-direction: column;
+
+  ion-button {
+    --padding-start: 6px;
+    --padding-end: 6px;
+    margin: 0;
+    font-size: 1.15rem;
+  }
+}

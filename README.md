@@ -73,11 +73,11 @@ ionic serve
 
 | # | Funcionalidad | Responsable | Est. (días) | Inicio | Fin | Estado |
 |---|---|---|---|---|---|---|
-| 1 | Agregar empleado | Wolf, Matías | 2 | 01-09 | 03-09 | ⬜ Pendiente |
-| 2 | Agregar nuevo plato | Moyano, Martín | 2 | 01-09 | 03-09 | ⬜ Pendiente |
-| 3 | Agregar nueva bebida | Moyano, Martín | 1 | 04-09 | 05-09 | ⬜ Pendiente |
+| 1 | Agregar empleado | Wolf, Matías | 2 | 01-09 | 03-09 | ✅ Completo |
+| 2 | Agregar nuevo plato | Moyano, Martín | 2 | 01-09 | 03-09 | 🟨 En progreso |
+| 3 | Agregar nueva bebida | Moyano, Martín | 1 | 04-09 | 05-09 | 🟨 En progreso |
 | 4 | Agregar nueva mesa | Wolf, Matías | 2 | 04-09 | 06-09 | ⬜ Pendiente |
-| 5 | Crear cliente registrado | Miguel, Luján | 2 | 01-09 | 03-09 | ⬜ Pendiente |
+| 5 | Crear cliente registrado | Miguel, Luján | 2 | 01-09 | 03-09 | ✅ Completo |
 | 6 | Verificar ingreso de cliente | Wolf, Matías | 1,5 | 07-09 | 08-09 | ⬜ Pendiente |
 | 7 | Rechazar cliente | Wolf, Matías | 2 | 09-09 | 11-09 | ⬜ Pendiente |
 | 8 | Aceptar cliente | Wolf, Matías | 1 | 11-09 | 12-09 | ⬜ Pendiente |

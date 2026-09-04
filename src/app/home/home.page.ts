@@ -110,7 +110,6 @@ export class HomePage implements OnInit {
     return nombre ? `Hola, ${nombre}` : 'Bienvenido';
   });
 
-  /** Empleados: todos sus botones. Clientes: sólo los de la fase actual + los fijos. */
   readonly botonesVisibles = computed(() => {
     if (!this.esCliente()) {
       return this.botones();
@@ -192,8 +191,11 @@ export class HomePage implements OnInit {
     this.estadiaEstado.set((event.detail as { value: EstadiaEstado }).value);
   }
 
-  // Solo demo por ahora, no hace nada real.
-  ejecutar(boton: BotonMenu): void {
+  async ejecutar(boton: BotonMenu): Promise<void> {
+    if (boton.ruta) {
+      await this.router.navigateByUrl(boton.ruta);
+      return;
+    }
     console.log('Acción del menú:', boton.clave);
   }
 

@@ -128,7 +128,6 @@ export class AuthService {
       throw new Error('La foto de perfil es obligatoria.'); 
     }
 
-    // 1. Crear usuario en Supabase Auth
     const { data, error } =
       await this.supabaseService.client.auth.signUp({
         email: datos.email,
@@ -146,18 +145,15 @@ export class AuthService {
       throw error;
     }
 
-    // Verificar que Supabase haya creado el usuario
     if (!data.user) {
       throw new Error('No se pudo crear el usuario.');
     }
 
-    // 2. Subir la foto de perfil
     const fotoUrl = await this.storageService.subirFoto(
       data.user.id,
       datos.foto
     );
 
-    // 3. Guardar la URL de la foto en public.usuarios
     const { error: errorFoto } = await this.supabaseService.client
       .from('usuarios')
       .update({

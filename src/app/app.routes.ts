@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { rolGuard } from './core/guards/rol.guard';
 
 export const routes: Routes = [
   {
@@ -43,6 +44,30 @@ export const routes: Routes = [
             .then(m => m.RegistroPage)
       }
     ]
+  },
+  {
+    path: 'empleados',
+    loadComponent: () =>
+      import(
+        './pages/empleados/listado-empleados/listado-empleados.page'
+      ).then((m) => m.ListadoEmpleadosPage),
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor'])],
+  },
+  {
+    path: 'empleados/nuevo',
+    loadComponent: () =>
+      import('./pages/empleados/alta-empleado/alta-empleado.page').then(
+        (m) => m.AltaEmpleadoPage
+      ),
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor'])],
+  },
+  {
+    path: 'empleados/:id/editar',
+    loadComponent: () =>
+      import('./pages/empleados/editar-empleado/editar-empleado.page').then(
+        (m) => m.EditarEmpleadoPage
+      ),
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor'])],
   },
   {
     path: '',

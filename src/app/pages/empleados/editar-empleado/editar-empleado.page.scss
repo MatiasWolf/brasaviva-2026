@@ -1,0 +1,246 @@
+/* Editar empleado — mismo lenguaje visual que el alta. */
+
+.empleado-content {
+  --background:
+    radial-gradient(circle at 20% 20%, rgba(246, 193, 133, 0.2), transparent 18%),
+    linear-gradient(180deg, #130905 0%, #4d200f 54%, #f5dcc0 100%);
+  --color: #fff1dc;
+}
+
+ion-header {
+  background: #130905;
+}
+
+ion-toolbar {
+  --background: #130905;
+  --color: #ffd485;
+  --border-color: transparent;
+}
+
+ion-title {
+  color: #ffd485;
+  font-weight: 600;
+}
+
+ion-back-button {
+  --color: #ffd485;
+}
+
+.empleado-container {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 24px 24px;
+  box-sizing: border-box;
+}
+
+.empleado-footer {
+  background: #130905;
+  padding: 10px 16px calc(10px + var(--ion-safe-area-bottom, 0px));
+
+  &::before {
+    display: none;
+  }
+
+  .mensaje-error {
+    margin: 0 0 8px;
+  }
+}
+
+.submit-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loader {
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: #ffd485;
+
+  p {
+    margin: 0;
+    color: rgba(255, 248, 241, 0.74);
+  }
+}
+
+.empleado-header {
+  text-align: center;
+  margin-bottom: 22px;
+
+  .avatar {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 10px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 248, 241, 0.12);
+    border: 2px solid #ffd485;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    ion-icon {
+      font-size: 1.8rem;
+      color: #fff8f1;
+    }
+  }
+
+  h1 {
+    margin: 0 0 4px;
+    color: #ffd485;
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0;
+    color: #f9e6ce;
+    font-size: 14px;
+  }
+}
+
+.empleado-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.campo {
+  width: 100%;
+  min-height: 68px;
+  background: #fff3df;
+  border: 2px solid #c0784d;
+  border-radius: 12px;
+  padding: 6px 14px;
+  margin-bottom: 14px;
+  box-sizing: border-box;
+  box-shadow: 0 3px 8px rgba(19, 9, 5, 0.25);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.campo:focus-within {
+  background: #fff8ed;
+  border-color: #ffaa55;
+  box-shadow: 0 3px 10px rgba(19, 9, 5, 0.28);
+}
+
+ion-input,
+ion-select {
+  --background: transparent;
+  --color: #35170b;
+  --placeholder-color: #805238;
+  --highlight-color-focused: #ffaa55;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+ion-input::part(label),
+ion-select::part(label) {
+  color: #4d200f;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+ion-select {
+  width: 100%;
+  min-height: 44px;
+  --padding-start: 0;
+  color: #35170b;
+}
+
+ion-select::part(text) {
+  color: #35170b;
+  font-weight: 600;
+}
+
+ion-select::part(placeholder) {
+  color: #805238;
+  opacity: 1;
+}
+
+ion-select::part(icon) {
+  color: #805238;
+  opacity: 1;
+}
+
+ion-input::part(native) {
+  color: #35170b;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.ayuda-campo {
+  margin: 6px 2px 14px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #f2d9a8;
+}
+
+.mensaje-error {
+  padding: 12px 14px;
+  margin: 4px 0 14px;
+  border-radius: 10px;
+  background: rgba(180, 55, 40, 0.18);
+  border: 1px solid rgba(180, 55, 40, 0.35);
+  color: #ffe0d8;
+  font-size: 14px;
+  text-align: center;
+}
+
+.mensaje-error-campo {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 4px 6px;
+  color: #b43728;
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 600;
+  text-align: left;
+
+  span {
+    display: block;
+  }
+}
+
+.btn-guardar {
+  margin: 0;
+  --background: #ffd485;
+  --background-hover: #ffe0a3;
+  --background-activated: #e9b95e;
+  --color: #4d200f;
+  --border-radius: 12px;
+  height: 50px;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: none;
+  box-shadow: 0 5px 15px rgba(19, 9, 5, 0.3);
+}
+
+.btn-guardar:disabled {
+  opacity: 0.6;
+}
+
+@media (max-width: 380px) {
+  .empleado-container {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+}

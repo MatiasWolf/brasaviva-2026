@@ -36,6 +36,7 @@ import {
 import { AuthError, AuthService } from '../../core/services/auth.service';
 import { PerfilRapido } from '../../core/models/perfil-rapido.model';
 import { SpinnerLogoComponent } from '../../shared/components/spinner-logo/spinner-logo.component';
+import { BrandLogoComponent } from '../../shared/components/brand-logo/brand-logo.component';
 
 @Component({
   selector: 'app-login',
@@ -57,6 +58,7 @@ import { SpinnerLogoComponent } from '../../shared/components/spinner-logo/spinn
     IonLabel,
     IonRange,
     SpinnerLogoComponent,
+    BrandLogoComponent,
   ],
 })
 export class LoginPage implements OnInit {
