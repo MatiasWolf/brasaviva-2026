@@ -75,7 +75,7 @@ ionic serve
 |---|---|---|---|---|---|---|---|
 | 1 | Agregar empleado | Wolf, Matías | 2 | 01-09 | 03-09 | | ⬜ Pendiente |
 | 2 | Agregar nuevo plato | Moyano, Martín | 2 | 01-09 | 03-09 | `feature/agregar-plato` | 🟨 En progreso |
-| 3 | Agregar nueva bebida | Moyano, Martín | 1 | 04-09 | 05-09 | | ⬜ Pendiente |
+| 3 | Agregar nueva bebida | Moyano, Martín | 1 | 03-09 | 05-09 | `feature/agregar-bebida` | 🟨 En progreso |
 | 4 | Agregar nueva mesa | Wolf, Matías | 2 | 04-09 | 06-09 | | ⬜ Pendiente |
 | 5 | Crear cliente registrado | Miguel, Luján | 2 | 01-09 | 03-09 | `feature/registro-cliente` | 🟨 En progreso |
 | 6 | Verificar ingreso de cliente | Wolf, Matías | 1,5 | 07-09 | 08-09 | | ⬜ Pendiente |
