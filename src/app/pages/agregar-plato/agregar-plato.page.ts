@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, ChangeDetectorRef, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -77,13 +77,13 @@ export class AgregarPlatoPage {
 
   isModalOpen = false;
 
-  constructor(
-    private fb: FormBuilder,
-    private platoService: PlatoService,
-    private router: Router,
-    private cdr: ChangeDetectorRef,
-    private toastController: ToastController
-  ) {
+  private readonly fb = inject(FormBuilder);
+  private readonly platoService = inject(PlatoService);
+  private readonly router = inject(Router);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly toastController = inject(ToastController);
+
+  constructor() {
     addIcons({
       'checkmark-circle': checkmarkCircle,
       'restaurant-outline': restaurantOutline,

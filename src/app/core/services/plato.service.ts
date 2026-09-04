@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { Plato } from '../models/plato.model';
 
@@ -11,7 +11,7 @@ const CATEGORIA_PLATO = 1;
 })
 export class PlatoService {
 
-  constructor(private supabaseService: SupabaseService) {}
+  private readonly supabaseService = inject(SupabaseService);
 
   async crearPlato(
     datos: {

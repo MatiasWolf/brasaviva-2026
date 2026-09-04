@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   IonBackButton,
@@ -43,10 +43,10 @@ export class CartaPage implements OnInit {
   /** Índice de la fotografía visible para cada plato. */
   fotoActual: Record<string, number> = {};
 
-  constructor(
-    private platoService: PlatoService,
-    private cdr: ChangeDetectorRef
-  ) {
+  private readonly platoService = inject(PlatoService);
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  constructor() {
     addIcons({
       'chevron-back-outline': chevronBackOutline,
       'chevron-forward-outline': chevronForwardOutline,
