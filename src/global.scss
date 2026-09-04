@@ -31,3 +31,35 @@
  * El trabajo final NO admite el modo oscuro, por eso no se importa
  * ninguna paleta oscura de Ionic.
  */
+
+/* Estilo compartido del popover de seleccion (viene del punto 1) */
+.select-brasa-popover {
+  --width: 260px;
+  --background: #fff3df;
+  --color: #35170b;
+
+  &::part(content) {
+    border: 2px solid #c0784d;
+    border-radius: 12px;
+  }
+
+  ion-list {
+    background: #fff3df;
+    padding: 4px 0;
+  }
+
+  ion-item {
+    --background: #fff3df;
+    --background-hover: #ffe6c9;
+    --background-focused: #ffe6c9;
+    --background-activated: #ffdcb8;
+    --color: #35170b;
+    --min-height: 46px;
+    font-weight: 600;
+  }
+
+  ion-radio {
+    --color: #a06a45;
+    --color-checked: #b5551f;
+  }
+}
