@@ -32,63 +32,61 @@
     <!-- FOTOS -->
     <div class="fotos-seccion">
 
-      <span class="fotos-label">Fotos de la bebida (3)</span>
+      <div class="fotos-encabezado">
+        <span class="fotos-label">Fotos de la bebida</span>
+        <span class="fotos-contador">{{ fotosCargadas }} de 3 cargadas</span>
+      </div>
 
-      <div class="fotos-grid">
+      @for (foto of fotos; track $index) {
 
-        @for (foto of fotos; track $index) {
-          <div class="foto-slot">
+        <div class="foto-bloque">
+
+          <span class="foto-numero">Fotografía {{ $index + 1 }}</span>
+
+          <div class="foto-contenedor">
 
             @if (foto.previewUrl) {
-
-              <div class="foto-preview">
-                <img [src]="foto.previewUrl" alt="Foto de la bebida" />
-
-                <button
-                  type="button"
-                  class="btn-quitar"
-                  (click)="quitarFoto($index)"
-                >
-                  <ion-icon name="close-circle"></ion-icon>
-                </button>
-              </div>
-
+              <img [src]="foto.previewUrl" [alt]="'Fotografía ' + ($index + 1) + ' de la bebida'" />
             } @else {
-
               <div class="foto-vacia">
-
-                <label class="btn-foto">
-                  <ion-icon name="camera-outline"></ion-icon>
-                  <span>Cámara</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    (change)="seleccionarFoto($index, $event)"
-                  />
-                </label>
-
-                <label class="btn-foto">
-                  <ion-icon name="images-outline"></ion-icon>
-                  <span>Galería</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    (change)="seleccionarFoto($index, $event)"
-                  />
-                </label>
-
+                <ion-icon name="wine-outline"></ion-icon>
+                <span>Todavía no elegiste esta fotografía</span>
               </div>
             }
 
           </div>
-        }
 
-      </div>
+          <div class="foto-acciones">
+
+            <label class="btn-foto">
+              <ion-icon name="camera-outline"></ion-icon>
+              <span>{{ foto.previewUrl ? 'Sacar otra foto' : 'Sacar foto' }}</span>
+              <input
+                type="file"
+                accept="image/*"
+                capture="environment"
+                (change)="seleccionarFoto($index, $event)"
+              />
+            </label>
+
+            <label class="btn-foto">
+              <ion-icon [name]="foto.previewUrl ? 'repeat-outline' : 'images-outline'"></ion-icon>
+              <span>{{ foto.previewUrl ? 'Elegir otra imagen' : 'Elegir de la galería' }}</span>
+              <input
+                type="file"
+                accept="image/*"
+                (change)="seleccionarFoto($index, $event)"
+              />
+            </label>
+
+          </div>
+
+        </div>
+      }
 
       @if (faltanFotos) {
         <div class="mensaje-error-campo">
-          <span>Cargá las tres fotos de la bebida.</span>
+          <span>Cargá las tres fotografías de la bebida.</span>
         </div>
       }
 
@@ -194,7 +192,7 @@
               bebidaForm.get('tiempoElaboracion')?.hasError('min') ||
               bebidaForm.get('tiempoElaboracion')?.hasError('max')
             ) {
-              <span>Ingresá un tiempo válido en minutos (1 a 240).</span>
+              <span>Ingresá un tiempo válido en minutos (de 1 a 240).</span>
             }
 
           </div>
@@ -248,12 +246,22 @@
         class="btn-guardar"
         [disabled]="enviando"
       >
-        {{ enviando ? 'Guardando...' : 'Agregar a la carta' }}
+        {{ enviando ? 'Guardando la bebida...' : 'Agregar a la carta' }}
       </ion-button>
 
     </form>
 
   </div>
+
+  <!-- ESPERA: indicador visual con el logo -->
+  @if (enviando) {
+    <div class="capa-espera">
+      <div class="espera-caja">
+        <app-spinner-logo [size]="52"></app-spinner-logo>
+        <span>Guardando la bebida...</span>
+      </div>
+    </div>
+  }
 </ion-content>
 
 <!-- MODAL BEBIDA AGREGADA -->

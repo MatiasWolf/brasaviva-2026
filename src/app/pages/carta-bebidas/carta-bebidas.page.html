@@ -13,7 +13,7 @@
 
     @if (cargando) {
       <div class="estado-carga">
-        <ion-spinner name="crescent"></ion-spinner>
+        <app-spinner-logo [size]="54"></app-spinner-logo>
         <span>Cargando la carta...</span>
       </div>
     } @else if (mensajeError) {
@@ -22,6 +22,7 @@
       </div>
     } @else if (bebidas.length === 0) {
       <div class="carta-vacia">
+        <ion-icon name="wine-outline"></ion-icon>
         <span>Todavía no hay bebidas cargadas en la carta.</span>
       </div>
     } @else {
@@ -32,10 +33,49 @@
 
           <div class="bebida-card">
 
-            <div class="bebida-fotos">
-              <img [src]="bebida.foto_url" [alt]="bebida.nombre" />
-              <img [src]="bebida.foto2_url" [alt]="bebida.nombre" />
-              <img [src]="bebida.foto3_url" [alt]="bebida.nombre" />
+            <!-- Una sola fotografía por vez, sin recortes ni partes de otras -->
+            <div class="bebida-foto">
+
+              @if (fotoVisible(bebida); as foto) {
+                <img [src]="foto" [alt]="bebida.nombre" />
+              } @else {
+                <div class="foto-faltante">
+                  <ion-icon name="wine-outline"></ion-icon>
+                  <span>Sin fotografía cargada</span>
+                </div>
+              }
+
+              @if (fotosDe(bebida).length > 1) {
+
+                <button
+                  type="button"
+                  class="nav-foto nav-izquierda"
+                  aria-label="Ver la fotografía anterior"
+                  (click)="fotoAnterior(bebida)"
+                >
+                  <ion-icon name="chevron-back-outline"></ion-icon>
+                </button>
+
+                <button
+                  type="button"
+                  class="nav-foto nav-derecha"
+                  aria-label="Ver la fotografía siguiente"
+                  (click)="fotoSiguiente(bebida)"
+                >
+                  <ion-icon name="chevron-forward-outline"></ion-icon>
+                </button>
+
+                <div class="puntos">
+                  @for (foto of fotosDe(bebida); track $index) {
+                    <span
+                      class="punto"
+                      [class.punto-activo]="$index === indiceDe(bebida)"
+                    ></span>
+                  }
+                </div>
+
+              }
+
             </div>
 
             <div class="bebida-info">
@@ -44,7 +84,7 @@
 
               <div class="bebida-detalles">
                 <span class="bebida-tiempo">
-                  {{ bebida.tiempo_preparacion }} min
+                  {{ bebida.tiempo_preparacion }} minutos
                 </span>
                 <span class="bebida-precio">
                   ${{ bebida.precio }}

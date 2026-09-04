@@ -149,87 +149,69 @@ FOTOS
 ========================================= */
 
 .fotos-seccion {
-margin-bottom: 20px;
+margin-bottom: 22px;
+}
+
+.fotos-encabezado {
+display: flex;
+align-items: baseline;
+justify-content: space-between;
+
+margin-bottom: 12px;
 }
 
 .fotos-label {
-display: block;
-
-margin-bottom: 10px;
-
 color: #ffe0a3;
 
-font-size: 14px;
+font-size: 15px;
 font-weight: 700;
 }
 
-.fotos-grid {
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-gap: 10px;
+.fotos-contador {
+color: #f9e6ce;
+
+font-size: 13px;
+font-weight: 600;
 }
 
-.foto-slot {
-aspect-ratio: 1 / 1;
+/* Cada fotografía vive en su propio contenedor, con buen tamaño y
+   sin que se vean partes de las otras. */
 
-border-radius: 14px;
-overflow: hidden;
-}
+.foto-bloque {
+margin-bottom: 16px;
 
-.foto-vacia {
-width: 100%;
-height: 100%;
-
-display: flex;
-flex-direction: column;
-align-items: stretch;
-justify-content: center;
-gap: 6px;
-
-padding: 8px;
-box-sizing: border-box;
+padding: 12px;
 
 background: rgba(255, 248, 241, 0.10);
-border: 2px dashed rgba(255, 222, 186, 0.45);
-border-radius: 14px;
+border: 1px solid rgba(255, 222, 186, 0.30);
+border-radius: 16px;
 }
 
-.btn-foto {
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-gap: 2px;
+.foto-numero {
+display: block;
 
-padding: 6px 4px;
+margin-bottom: 8px;
 
-border-radius: 10px;
+color: #ffe0a3;
 
-background: rgba(255, 248, 241, 0.14);
-
-color: #fff8f1;
-font-size: 11px;
-font-weight: 600;
-
-cursor: pointer;
+font-size: 13px;
+font-weight: 700;
 }
 
-.btn-foto ion-icon {
-font-size: 18px;
-}
-
-.btn-foto input {
-display: none;
-}
-
-.foto-preview {
-position: relative;
-
+.foto-contenedor {
 width: 100%;
-height: 100%;
+aspect-ratio: 4 / 3;
+
+display: grid;
+place-items: center;
+
+overflow: hidden;
+
+background: #4d200f;
+border-radius: 12px;
 }
 
-.foto-preview img {
+.foto-contenedor img {
 width: 100%;
 height: 100%;
 
@@ -239,29 +221,64 @@ object-position: center;
 display: block;
 }
 
-.btn-quitar {
-position: absolute;
-top: 4px;
-right: 4px;
+.foto-vacia {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 8px;
 
-width: 24px;
-height: 24px;
+padding: 0 18px;
 
+text-align: center;
+
+color: #f9e6ce;
+font-size: 13px;
+font-weight: 600;
+}
+
+.foto-vacia ion-icon {
+font-size: 38px;
+color: #ffd485;
+}
+
+.foto-acciones {
 display: grid;
-place-items: center;
+grid-template-columns: 1fr 1fr;
+gap: 8px;
 
-border: none;
-border-radius: 50%;
+margin-top: 10px;
+}
 
-background: rgba(58, 23, 11, 0.75);
+.btn-foto {
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 6px;
 
-padding: 0;
+min-height: 42px;
+padding: 8px 10px;
+
+border-radius: 10px;
+
+background: #ffd485;
+
+color: #4d200f;
+font-size: 13px;
+font-weight: 700;
+text-align: center;
+line-height: 1.2;
+
 cursor: pointer;
 }
 
-.btn-quitar ion-icon {
+.btn-foto ion-icon {
 font-size: 18px;
-color: #ffd485;
+flex-shrink: 0;
+}
+
+.btn-foto input {
+display: none;
 }
 
 /* =========================================
@@ -425,7 +442,45 @@ box-shadow:
 }
 
 .btn-guardar:disabled {
-opacity: 0.6;
+opacity: 0.85;
+}
+
+/* =========================================
+CAPA DE ESPERA
+========================================= */
+
+.capa-espera {
+position: fixed;
+inset: 0;
+
+display: grid;
+place-items: center;
+
+background: rgba(58, 23, 11, 0.82);
+
+z-index: 20;
+}
+
+.espera-caja {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 14px;
+
+padding: 28px 34px;
+
+background: rgba(77, 32, 15, 0.95);
+border: 2px solid #c0784d;
+border-radius: 18px;
+
+box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.espera-caja span {
+color: #ffe0a3;
+
+font-size: 15px;
+font-weight: 700;
 }
 
 /* =========================================
