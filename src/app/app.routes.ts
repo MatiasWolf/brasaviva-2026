@@ -83,6 +83,21 @@ export const routes: Routes = [
       import('./pages/carta/carta.page').then((m) => m.CartaPage),
   },
   {
+    path: 'agregar-bebida',
+    loadComponent: () =>
+      import('./pages/agregar-bebida/agregar-bebida.page').then(
+        (m) => m.AgregarBebidaPage
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'carta-bebidas',
+    loadComponent: () =>
+      import('./pages/carta-bebidas/carta-bebidas.page').then(
+        (m) => m.CartaBebidasPage
+      ),
+  },
+  {
     path: '',
     redirectTo: 'splash-estatica',
     pathMatch: 'full',
