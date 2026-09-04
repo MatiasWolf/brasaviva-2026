@@ -1,13 +1,40 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>menu-productos</ion-title>
+    <ion-title>Test de Conexión Menú</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">menu-productos</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <!-- 1. Estado de carga -->
+  @if (pedidoService.cargandoProductos()) {
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Conectando con Supabase...</p>
+  } @else {
+    <!-- 2. Lista de productos traídos -->
+    <ion-list>
+      @for (producto of pedidoService.productos(); track producto.id) {
+        <ion-item>
+          <ion-label>
+            <h2>{{ producto.nombre }}</h2>
+            <p>${{ producto.precio }} | Tiempos: {{ producto.tiempo_preparacion }} min</p>
+          </ion-label>
+          
+          <!-- Botones mínimos para probar el pedido local -->
+          <ion-button slot="end" fill="clear" color="danger" (click)="pedidoService.restarDelPedido(producto.id)">-</ion-button>
+          <ion-badge slot="end">{{ obtenerCantidad(producto.id) }}</ion-badge>
+          <ion-button slot="end" fill="clear" color="success" (click)="pedidoService.agregarAlPedido(producto)">+</ion-button>
+        </ion-item>
+      } @empty {
+        <ion-item>
+          <ion-label>No se encontraron productos en la tabla. Verificá que estén disponibles.</ion-label>
+        </ion-item>
+      }
+    </ion-list>
+
+    <!-- 3. Footer de totales provisional -->
+    <div class="ion-margin-top" style="border-top: 1px solid #ccc; padding-top: 10px;">
+      <h3>Total Acumulado: ${{ pedidoService.importeTotal() }}</h3>
+      <h3>Demora Máxima: {{ pedidoService.tiempoEstimadoTotal() }} min</h3>
+    </div>
+  }
 </ion-content>
