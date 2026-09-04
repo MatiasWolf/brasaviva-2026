@@ -1,13 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { IonIcon } from '@ionic/angular';
-import { addIcons } from 'ionicons';
-import { restaurantOutline } from 'ionicons/icons';
+import { BrandLogoComponent } from '../brand-logo/brand-logo.component';
 
 @Component({
   selector: 'app-spinner-logo',
+  standalone: true,
   template: `
-    <div class="spinner-logo" [style.--spinner-size.px]="size">
-      <ion-icon name="restaurant-outline"></ion-icon>
+    <div class="spinner-logo">
+      <app-brand-logo variant="mono" [size]="size" [spin]="true" />
     </div>
   `,
   styles: [
@@ -18,27 +17,11 @@ import { restaurantOutline } from 'ionicons/icons';
         justify-content: center;
         width: 100%;
       }
-
-      ion-icon {
-        font-size: var(--spinner-size, 32px);
-        color: #ffd485;
-        animation: spinner-logo-spin 1.2s linear infinite;
-      }
-
-      @keyframes spinner-logo-spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
     `,
   ],
-  imports: [IonIcon],
+  imports: [BrandLogoComponent],
 })
 export class SpinnerLogoComponent {
-  /** Tamaño del ícono en píxeles. */
+  /** Tamaño del logo en píxeles. */
   @Input() size = 32;
-
-  constructor() {
-    addIcons({ restaurantOutline });
-  }
 }

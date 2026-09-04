@@ -29,14 +29,14 @@ import { flameOutline } from 'ionicons/icons';
       [class.brand-logo--spin]="spin()"
       [style.--brand-logo-size.px]="size()"
     >
-      @if (falló()) {
+      @if (fallo()) {
         <ion-icon name="flame-outline" aria-hidden="true"></ion-icon>
       } @else {
         <img
           [src]="src()"
           alt="Brasa Viva"
           decoding="async"
-          (error)="falló.set(true)"
+          (error)="fallo.set(true)"
         />
       }
     </span>
@@ -85,7 +85,7 @@ export class BrandLogoComponent {
   /** Anima el logo girando (para pantallas de carga). */
   readonly spin = input(false);
 
-  protected readonly falló = signal(false);
+  protected readonly fallo = signal(false);
 
   protected readonly src = computed(() =>
     this.variant() === 'mono'

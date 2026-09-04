@@ -1,4 +1,11 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  computed,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {
@@ -56,7 +63,9 @@ export class ListadoEmpleadosPage implements OnInit {
   private readonly alertCtrl = inject(AlertController);
   private readonly toastCtrl = inject(ToastController);
 
-  private readonly porTanda = 6;
+  private readonly porTanda = 8;
+
+  private readonly content = viewChild(IonContent);
 
   readonly lista = signal<Usuario[]>([]);
   readonly cargando = signal(true);
@@ -108,16 +117,41 @@ export class ListadoEmpleadosPage implements OnInit {
     } finally {
       this.cargando.set(false);
     }
+    void this.rellenarSiNoHayScroll();
   }
 
   filtrar(event: CustomEvent): void {
     this.filtro.set((event.detail as { value?: string }).value ?? '');
     this.visibles.set(this.porTanda);
+    void this.rellenarSiNoHayScroll();
   }
 
   cargarMas(event: InfiniteScrollCustomEvent): void {
     this.visibles.update((n) => n + this.porTanda);
     void event.target.complete();
+  }
+
+  /**
+   * Si la lista no llega a ocupar la pantalla, `ion-infinite-scroll` nunca se
+   * dispara. En ese caso vamos cargando tandas hasta que haya scroll real o no
+   * queden más empleados.
+   */
+  private async rellenarSiNoHayScroll(): Promise<void> {
+    if (!this.hayMas()) {
+      return;
+    }
+    // esperar a que Angular pinte las tarjetas nuevas
+    await new Promise((resolve) => setTimeout(resolve));
+
+    const content = this.content();
+    if (!content) {
+      return;
+    }
+    const el = await content.getScrollElement();
+    if (el.scrollHeight <= el.clientHeight && this.hayMas()) {
+      this.visibles.update((n) => n + this.porTanda);
+      await this.rellenarSiNoHayScroll();
+    }
   }
 
   rolLegible(empleado: Usuario): string {

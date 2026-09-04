@@ -1,14 +1,14 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { IonContent, IonIcon } from '@ionic/angular';
-import { addIcons } from 'ionicons';
-import { restaurantOutline } from 'ionicons/icons';
+import { IonContent } from '@ionic/angular';
+
+import { BrandLogoComponent } from '../../shared/components/brand-logo/brand-logo.component';
 
 @Component({
   selector: 'app-splash-estatica',
   templateUrl: 'splash-estatica.page.html',
   styleUrls: ['splash-estatica.page.scss'],
-  imports: [IonContent, IonIcon],
+  imports: [IonContent, BrandLogoComponent],
 })
 export class SplashEstaticaPage implements OnInit, OnDestroy {
   readonly nombreGrupo = 'Grupo Brasa Viva';
@@ -22,10 +22,6 @@ export class SplashEstaticaPage implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private timeoutId?: ReturnType<typeof setTimeout>;
   private navegado = false;
-
-  constructor() {
-    addIcons({ restaurantOutline });
-  }
 
   ngOnInit(): void {
     this.timeoutId = setTimeout(() => this.continuar(), 1800);
