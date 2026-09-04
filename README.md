@@ -29,6 +29,9 @@ Repositorio: `brasaviva-2026`
 
 ## 🚀 Puesta en marcha
 
+> **Requisito:** Node.js **22.22.3+** o **24.15.0+** (Angular CLI 22 no arranca con
+> versiones anteriores). Verificar con `node -v` antes de instalar.
+
 ```bash
 # Clonar el repositorio
 git clone https://github.com/MatiasWolf/brasaviva-2026.git
@@ -37,22 +40,37 @@ cd brasaviva-2026
 # Instalar dependencias
 npm install
 
-# Variables de entorno (Supabase)
-# Crear un archivo de entorno (ej: src/environments/environment.ts) con:
-# supabaseUrl: 'TU_URL_DE_SUPABASE'
-# supabaseKey: 'TU_ANON_KEY'
-
 # Levantar en modo desarrollo
 ionic serve
 ```
+
+Las credenciales de Supabase ya están versionadas en `src/environments/environment.ts`
+(desarrollo) y `src/environments/environment.prod.ts` (producción), así que no hay que
+crear ningún archivo extra.
 
 ---
 
 ## 📁 Estructura del proyecto
 
 ```
-(completar a medida que se defina la arquitectura de carpetas)
+src/
+├── app/
+│   ├── core/
+│   │   ├── models/       # interfaces de dominio (Plato, Bebida, ...)
+│   │   └── services/     # acceso a Supabase (auth, tablas, storage)
+│   ├── shared/
+│   │   └── components/   # componentes reutilizables (spinner-logo, ...)
+│   ├── home/             # menú principal según el rol
+│   ├── pages/            # una carpeta por punto funcional
+│   ├── app.routes.ts     # cada punto agrega acá su ruta
+│   └── app.component.ts
+├── assets/               # íconos, splash e imágenes
+├── environments/         # environment.ts (dev) y environment.prod.ts
+└── global.scss           # estilos globales
 ```
+
+> Cada punto funcional se desarrolla en su propia rama y crea su carpeta dentro
+> de `src/app/pages/`. Lo que sea común a varios puntos va en `core/` o `shared/`.
 
 ---
 
@@ -74,8 +92,8 @@ ionic serve
 | # | Funcionalidad | Responsable | Est. (días) | Inicio | Fin | Estado |
 |---|---|---|---|---|---|---|
 | 1 | Agregar empleado | Wolf, Matías | 2 | 01-09 | 03-09 | ✅ Completo |
-| 2 | Agregar nuevo plato | Moyano, Martín | 2 | 01-09 | 03-09 | 🟨 En progreso |
-| 3 | Agregar nueva bebida | Moyano, Martín | 1 | 04-09 | 05-09 | 🟨 En progreso |
+| 2 | Agregar nuevo plato | Moyano, Martín | 2 | 01-09 | 03-09 | ✅ Completo |
+| 3 | Agregar nueva bebida | Moyano, Martín | 1 | 03-09 | 03-09 | 🟨 En progreso |
 | 4 | Agregar nueva mesa | Wolf, Matías | 2 | 04-09 | 06-09 | ⬜ Pendiente |
 | 5 | Crear cliente registrado | Miguel, Luján | 2 | 01-09 | 03-09 | ✅ Completo |
 | 6 | Verificar ingreso de cliente | Wolf, Matías | 1,5 | 07-09 | 08-09 | ⬜ Pendiente |
@@ -97,6 +115,54 @@ ionic serve
 | 22 | Confirmar pago y liberar mesa | Torrez, Maximiliano | 1,5 | 24-09 | 25-09 | ⬜ Pendiente |
 
 **Leyenda:** ⬜ Pendiente · 🟨 En progreso · ✅ Completo
+
+### Ramas en curso
+
+| # | Punto | Rama |
+|---|---|---|
+| 1 | Agregar empleado | `feature/agregar-empleado` |
+| 2 | Agregar nuevo plato | `feature/agregar-plato` |
+| 3 | Agregar nueva bebida | `feature/agregar-bebida` |
+| 5 | Crear cliente registrado | `feature/registro-cliente` |
+| 9 | Ingreso como cliente anónimo | `feature/registro-cliente-anonimo` |
+
+---
+
+## 🧑‍💻 Notas para el equipo
+
+**Modelo de datos de la carta (puntos 2 y 3, ya aplicado en Supabase)**
+
+- Platos y bebidas viven en la **misma tabla `productos`**; se diferencian por
+  `categoria_id` según la tabla `categorias` → `1 = plato`, `2 = bebida`.
+- Se agregaron las columnas `foto2_url` y `foto3_url` (cada producto guarda tres fotos).
+- Las fotos se suben al bucket público **`productos-fotos`**.
+- Ya están hechos los `grant` y las políticas de RLS para el rol `authenticated`,
+  así que no hace falta correr nada en Supabase para levantar el proyecto.
+
+**Cómo probar los puntos 2 y 3**
+
+| Rama | Rutas | Perfil rápido |
+|---|---|---|
+| `feature/agregar-plato` | `/agregar-plato` · `/carta` | `cocinero@brasa.com` |
+| `feature/agregar-bebida` | `/agregar-bebida` · `/carta-bebidas` | `cantinero@brasa.com` |
+
+**Convenciones a respetar**
+
+- **No hay modo oscuro:** el enunciado no lo admite, no importar paletas `dark`
+  en `global.scss` (hoy sigue importado `dark.system.css`, hay que sacarlo).
+- Toda espera se muestra con `<app-spinner-logo>` (`src/app/shared/components/spinner-logo/`).
+- Los errores se informan con mensaje en pantalla + toast + vibración, nunca con `alert()`.
+- El proyecto es **zoneless**: después de un `await` hay que llamar a
+  `ChangeDetectorRef.detectChanges()` o la vista no se actualiza.
+- Inyección de dependencias con `inject()`, no por constructor (lo exige el lint).
+
+**Al unificar las ramas**
+
+- `src/app/app.routes.ts` va a dar conflicto siempre: todas las ramas agregan rutas
+  en el mismo lugar. Se resuelve conservando los bloques de ambos lados.
+- `PlatoService` y `BebidaService` son iguales salvo la categoría: conviene unificarlos
+  en un único `ProductoService` cuando se arme el menú completo (punto 11), y fusionar
+  `/carta` con `/carta-bebidas` en una sola pantalla.
 
 ---
 

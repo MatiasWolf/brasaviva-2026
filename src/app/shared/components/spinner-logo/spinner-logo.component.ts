@@ -22,6 +22,5 @@ import { BrandLogoComponent } from '../brand-logo/brand-logo.component';
   imports: [BrandLogoComponent],
 })
 export class SpinnerLogoComponent {
-  /** Tamaño del logo en píxeles. */
   @Input() size = 32;
 }

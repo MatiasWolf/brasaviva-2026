@@ -1,0 +1,104 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Carta de platos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="carta-content">
+  <div class="carta-container">
+
+    @if (cargando) {
+      <div class="estado-carga">
+        <app-spinner-logo [size]="54"></app-spinner-logo>
+        <span>Cargando la carta...</span>
+      </div>
+    } @else if (mensajeError) {
+      <div class="mensaje-error">
+        {{ mensajeError }}
+      </div>
+    } @else if (platos.length === 0) {
+      <div class="carta-vacia">
+        <ion-icon name="restaurant-outline"></ion-icon>
+        <span>Todavía no hay platos cargados en la carta.</span>
+      </div>
+    } @else {
+
+      <div class="platos-lista">
+
+        @for (plato of platos; track plato.id) {
+
+          <div class="plato-card">
+
+            <!-- Una sola fotografía por vez, sin recortes ni partes de otras -->
+            <div class="plato-foto">
+
+              @if (fotoVisible(plato); as foto) {
+                <img [src]="foto" [alt]="plato.nombre" />
+              } @else {
+                <div class="foto-faltante">
+                  <ion-icon name="restaurant-outline"></ion-icon>
+                  <span>Sin fotografía cargada</span>
+                </div>
+              }
+
+              @if (fotosDe(plato).length > 1) {
+
+                <button
+                  type="button"
+                  class="nav-foto nav-izquierda"
+                  aria-label="Ver la fotografía anterior"
+                  (click)="fotoAnterior(plato)"
+                >
+                  <ion-icon name="chevron-back-outline"></ion-icon>
+                </button>
+
+                <button
+                  type="button"
+                  class="nav-foto nav-derecha"
+                  aria-label="Ver la fotografía siguiente"
+                  (click)="fotoSiguiente(plato)"
+                >
+                  <ion-icon name="chevron-forward-outline"></ion-icon>
+                </button>
+
+                <div class="puntos">
+                  @for (foto of fotosDe(plato); track $index) {
+                    <span
+                      class="punto"
+                      [class.punto-activo]="$index === indiceDe(plato)"
+                    ></span>
+                  }
+                </div>
+
+              }
+
+            </div>
+
+            <div class="plato-info">
+              <h2>{{ plato.nombre }}</h2>
+              <p class="plato-descripcion">{{ plato.descripcion }}</p>
+
+              <div class="plato-detalles">
+                <span class="plato-tiempo">
+                  {{ plato.tiempo_preparacion }} minutos
+                </span>
+                <span class="plato-precio">
+                  ${{ plato.precio }}
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+    }
+
+  </div>
+</ion-content>

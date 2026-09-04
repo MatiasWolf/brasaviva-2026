@@ -70,6 +70,19 @@ export const routes: Routes = [
     canActivate: [authGuard, rolGuard(['dueño', 'supervisor'])],
   },
   {
+    path: 'agregar-plato',
+    loadComponent: () =>
+      import('./pages/agregar-plato/agregar-plato.page').then(
+        (m) => m.AgregarPlatoPage
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'carta',
+    loadComponent: () =>
+      import('./pages/carta/carta.page').then((m) => m.CartaPage),
+  },
+  {
     path: '',
     redirectTo: 'splash-estatica',
     pathMatch: 'full',
