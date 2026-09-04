@@ -32,63 +32,61 @@
     <!-- FOTOS -->
     <div class="fotos-seccion">
 
-      <span class="fotos-label">Fotos del plato (3)</span>
+      <div class="fotos-encabezado">
+        <span class="fotos-label">Fotos del plato</span>
+        <span class="fotos-contador">{{ fotosCargadas }} de 3 cargadas</span>
+      </div>
 
-      <div class="fotos-grid">
+      @for (foto of fotos; track $index) {
 
-        @for (foto of fotos; track $index) {
-          <div class="foto-slot">
+        <div class="foto-bloque">
+
+          <span class="foto-numero">Fotografía {{ $index + 1 }}</span>
+
+          <div class="foto-contenedor">
 
             @if (foto.previewUrl) {
-
-              <div class="foto-preview">
-                <img [src]="foto.previewUrl" alt="Foto del plato" />
-
-                <button
-                  type="button"
-                  class="btn-quitar"
-                  (click)="quitarFoto($index)"
-                >
-                  <ion-icon name="close-circle"></ion-icon>
-                </button>
-              </div>
-
+              <img [src]="foto.previewUrl" [alt]="'Fotografía ' + ($index + 1) + ' del plato'" />
             } @else {
-
               <div class="foto-vacia">
-
-                <label class="btn-foto">
-                  <ion-icon name="camera-outline"></ion-icon>
-                  <span>Cámara</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    capture="environment"
-                    (change)="seleccionarFoto($index, $event)"
-                  />
-                </label>
-
-                <label class="btn-foto">
-                  <ion-icon name="images-outline"></ion-icon>
-                  <span>Galería</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    (change)="seleccionarFoto($index, $event)"
-                  />
-                </label>
-
+                <ion-icon name="restaurant-outline"></ion-icon>
+                <span>Todavía no elegiste esta fotografía</span>
               </div>
             }
 
           </div>
-        }
 
-      </div>
+          <div class="foto-acciones">
+
+            <label class="btn-foto">
+              <ion-icon name="camera-outline"></ion-icon>
+              <span>{{ foto.previewUrl ? 'Sacar otra foto' : 'Sacar foto' }}</span>
+              <input
+                type="file"
+                accept="image/*"
+                capture="environment"
+                (change)="seleccionarFoto($index, $event)"
+              />
+            </label>
+
+            <label class="btn-foto">
+              <ion-icon [name]="foto.previewUrl ? 'repeat-outline' : 'images-outline'"></ion-icon>
+              <span>{{ foto.previewUrl ? 'Elegir otra imagen' : 'Elegir de la galería' }}</span>
+              <input
+                type="file"
+                accept="image/*"
+                (change)="seleccionarFoto($index, $event)"
+              />
+            </label>
+
+          </div>
+
+        </div>
+      }
 
       @if (faltanFotos) {
         <div class="mensaje-error-campo">
-          <span>Cargá las tres fotos del plato.</span>
+          <span>Cargá las tres fotografías del plato.</span>
         </div>
       }
 
@@ -175,7 +173,7 @@
           inputmode="numeric"
           label="Tiempo de elaboración (minutos)"
           labelPlacement="stacked"
-          placeholder="Ej: 20"
+          placeholder="Ej: 5"
           (ionFocus)="mensajeError = ''"
         ></ion-input>
 
@@ -194,7 +192,7 @@
               platoForm.get('tiempoElaboracion')?.hasError('min') ||
               platoForm.get('tiempoElaboracion')?.hasError('max')
             ) {
-              <span>Ingresá un tiempo válido en minutos (1 a 240).</span>
+              <span>Ingresá un tiempo válido en minutos (de 1 a 240).</span>
             }
 
           </div>
@@ -248,12 +246,22 @@
         class="btn-guardar"
         [disabled]="enviando"
       >
-        {{ enviando ? 'Guardando...' : 'Agregar a la carta' }}
+        {{ enviando ? 'Guardando el plato...' : 'Agregar a la carta' }}
       </ion-button>
 
     </form>
 
   </div>
+
+  <!-- ESPERA: indicador visual con el logo -->
+  @if (enviando) {
+    <div class="capa-espera">
+      <div class="espera-caja">
+        <app-spinner-logo [size]="52"></app-spinner-logo>
+        <span>Guardando el plato...</span>
+      </div>
+    </div>
+  }
 </ion-content>
 
 <!-- MODAL PLATO AGREGADO -->

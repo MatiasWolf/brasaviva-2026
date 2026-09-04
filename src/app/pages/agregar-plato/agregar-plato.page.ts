@@ -18,16 +18,18 @@ import {
   IonTitle,
   IonToolbar,
   IonIcon,
-  IonModal
+  IonModal,
+  ToastController
 } from '@ionic/angular';
 import { PlatoService } from '../../core/services/plato.service';
+import { SpinnerLogoComponent } from '../../shared/components/spinner-logo/spinner-logo.component';
 import { addIcons } from 'ionicons';
 import {
   checkmarkCircle,
   restaurantOutline,
   cameraOutline,
   imagesOutline,
-  closeCircle
+  repeatOutline
 } from 'ionicons/icons';
 
 interface FotoSlot {
@@ -53,7 +55,8 @@ interface FotoSlot {
     IonTextarea,
     IonButton,
     IonModal,
-    IonIcon
+    IonIcon,
+    SpinnerLogoComponent
   ]
 })
 export class AgregarPlatoPage {
@@ -78,14 +81,15 @@ export class AgregarPlatoPage {
     private fb: FormBuilder,
     private platoService: PlatoService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private toastController: ToastController
   ) {
     addIcons({
       'checkmark-circle': checkmarkCircle,
       'restaurant-outline': restaurantOutline,
       'camera-outline': cameraOutline,
       'images-outline': imagesOutline,
-      'close-circle': closeCircle
+      'repeat-outline': repeatOutline
     });
 
     this.platoForm = this.fb.group({
@@ -137,6 +141,12 @@ export class AgregarPlatoPage {
       return;
     }
 
+    if (!archivo.type.startsWith('image/')) {
+      this.mostrarError('El archivo elegido no es una imagen.');
+      input.value = '';
+      return;
+    }
+
     if (this.fotos[indice].previewUrl) {
       URL.revokeObjectURL(this.fotos[indice].previewUrl!);
     }
@@ -151,17 +161,12 @@ export class AgregarPlatoPage {
     input.value = '';
   }
 
-  quitarFoto(indice: number) {
-
-    if (this.fotos[indice].previewUrl) {
-      URL.revokeObjectURL(this.fotos[indice].previewUrl!);
-    }
-
-    this.fotos[indice] = { archivo: null, previewUrl: null };
-  }
-
   get faltanFotos(): boolean {
     return this.fotos.some(foto => !foto.archivo);
+  }
+
+  get fotosCargadas(): number {
+    return this.fotos.filter(foto => foto.archivo).length;
   }
 
   async guardarPlato() {
@@ -170,12 +175,12 @@ export class AgregarPlatoPage {
 
     if (this.platoForm.invalid) {
       this.platoForm.markAllAsTouched();
-      this.mensajeError = 'Completá correctamente todos los campos.';
+      await this.mostrarError('Completá correctamente todos los campos.');
       return;
     }
 
     if (this.faltanFotos) {
-      this.mensajeError = 'Debés cargar las tres fotos del plato.';
+      await this.mostrarError('Debés cargar las tres fotos del plato.');
       return;
     }
 
@@ -206,8 +211,9 @@ export class AgregarPlatoPage {
 
       console.error('AGREGAR PLATO ERROR:', error);
 
-      this.mensajeError =
-        error?.message || 'No se pudo guardar el plato. Intentá nuevamente.';
+      await this.mostrarError(
+        this.traducirError(error)
+      );
 
     } finally {
 
@@ -220,6 +226,52 @@ export class AgregarPlatoPage {
     await this.modalExito?.dismiss();
     this.isModalOpen = false;
     await this.router.navigate(['/carta']);
+  }
+
+  /** Muestra el error en pantalla, con un aviso flotante y vibración. */
+  private async mostrarError(mensaje: string): Promise<void> {
+
+    this.mensajeError = mensaje;
+    this.vibrar();
+    this.cdr.detectChanges();
+
+    const aviso = await this.toastController.create({
+      message: mensaje,
+      duration: 3000,
+      position: 'top',
+      color: 'danger'
+    });
+
+    await aviso.present();
+  }
+
+  private vibrar(): void {
+    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+      navigator.vibrate([180, 80, 180]);
+    }
+  }
+
+  private traducirError(error: any): string {
+
+    const mensaje = (error?.message ?? '').toLowerCase();
+
+    if (mensaje.includes('bucket not found')) {
+      return 'No se encontró el depósito de imágenes. Avisá al administrador.';
+    }
+
+    if (mensaje.includes('row-level security') || mensaje.includes('permission denied')) {
+      return 'Tu usuario no tiene permisos para cargar platos.';
+    }
+
+    if (mensaje.includes('duplicate') || mensaje.includes('already exists')) {
+      return 'Ya existe un plato con ese nombre en la carta.';
+    }
+
+    if (mensaje.includes('network') || mensaje.includes('fetch')) {
+      return 'Sin conexión. Revisá tu internet e intentá de nuevo.';
+    }
+
+    return 'No se pudo guardar el plato. Intentá nuevamente.';
   }
 
 }
