@@ -75,7 +75,7 @@ export const routes: Routes = [
       import('./pages/agregar-plato/agregar-plato.page').then(
         (m) => m.AgregarPlatoPage
       ),
-    canActivate: [authGuard],
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor', 'cocinero'])],
   },
   {
     path: 'carta',
@@ -88,7 +88,7 @@ export const routes: Routes = [
       import('./pages/agregar-bebida/agregar-bebida.page').then(
         (m) => m.AgregarBebidaPage
       ),
-    canActivate: [authGuard],
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor', 'cantinero'])],
   },
   {
     path: 'carta-bebidas',

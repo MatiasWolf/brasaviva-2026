@@ -99,7 +99,7 @@ src/
 | 6 | Verificar ingreso de cliente | Wolf, Matías | 1,5 | 07-09 | 08-09 | ⬜ Pendiente |
 | 7 | Rechazar cliente | Wolf, Matías | 2 | 09-09 | 11-09 | ⬜ Pendiente |
 | 8 | Aceptar cliente | Wolf, Matías | 1 | 11-09 | 12-09 | ⬜ Pendiente |
-| 9 | Ingreso cliente anónimo | Miguel, Luján | 2 | 04-09 | 06-09 | ⬜ Pendiente |
+| 9 | Ingreso cliente anónimo | Miguel, Luján | 2 | 04-09 | 06-09 | ✅ Completo |
 | 10 | Metre asigna mesa | Miguel, Luján | 1,5 | 07-09 | 08-09 | ⬜ Pendiente |
 | 11 | Ver menú + consulta al mozo | Miguel, Luján | 3 | 08-09 | 11-09 | ⬜ Pendiente |
 | 12 | Cliente realiza pedido | Torrez, Maximiliano | 3 | aprox. 08-09 | 11-09 | ⬜ Pendiente |

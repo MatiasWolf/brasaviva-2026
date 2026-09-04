@@ -14,8 +14,6 @@ import { AuthService } from '../../../core/services/auth.service';
 import { CameraService } from '../../../core/services/camera.service';
 import { addIcons } from 'ionicons';
 import { checkmarkCircle, personAddOutline, cameraOutline} from 'ionicons/icons';
-import { AnonymousSessionService } from '../../../core/services/anonymous-session.service';
-import { StorageService } from '../../../core/services/storage.service';
 
 
 
@@ -56,9 +54,7 @@ export class RegistroClientePage {
     private auth: AuthService,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private cameraService: CameraService,
-    private anonymousSessionService: AnonymousSessionService,
-    private storageService: StorageService
+    private cameraService: CameraService
   ) {
     addIcons({
       'checkmark-circle': checkmarkCircle,
@@ -167,6 +163,13 @@ export class RegistroClientePage {
       foto: this.fotoPreview!
     });
 
+    // El alta puede dejar una sesión activa (signUp inicia sesión sola).
+    // La cerramos: hasta que no lo aprueben, no puede entrar a la app.
+    // Si falla el signOut no bloqueamos el éxito: la cuenta ya se creó.
+    await this.auth.logout().catch((error) =>
+      console.error('No se pudo cerrar la sesión tras el registro:', error),
+    );
+
     this.isModalOpen = true;
     this.cdr.detectChanges();
 
@@ -235,50 +238,10 @@ export class RegistroClientePage {
   }
 
   irAlLogin() {
-
+    this.isModalOpen = false;
     this.router.navigate(
       ['/login']
     );
-  }
-
-  async ingresarComoInvitado(): Promise<void> {
-    if (!this.fotoPreview) {
-      this.mensajeError = 'No se encontró la foto de perfil.';
-      return;
-    }
-
-    const { nombre, apellido } = this.registroForm.value;
-
-    try {
-      // Cerrar la sesión del usuario registrado
-      await this.auth.logout();
-
-      // Crear la sesión anónima con los mismos datos
-      const sesion = await this.anonymousSessionService.crearSesion(
-        nombre,
-        apellido
-      );
-
-      // Subir la foto para la sesión anónima
-      const fotoUrl = await this.storageService.subirFoto(
-        sesion.id,
-        this.fotoPreview
-      );
-
-      // Asociar la foto a la sesión
-      await this.anonymousSessionService.actualizarFoto(fotoUrl);
-
-      // Cerrar el modal y entrar al Home
-      this.isModalOpen = false;
-      this.cdr.detectChanges();
-
-      await this.router.navigate(['/home']);
-
-    } catch (error) {
-      console.error('Error al ingresar como invitado:', error);
-      this.mensajeError =
-        'No se pudo iniciar la sesión como invitado.';
-    }
   }
 
   async tomarFoto() {

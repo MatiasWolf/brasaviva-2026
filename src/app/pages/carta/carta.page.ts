@@ -1,7 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import {
   IonBackButton,
+  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
@@ -13,7 +15,7 @@ import { PlatoService } from '../../core/services/plato.service';
 import { Plato } from '../../core/models/plato.model';
 import { SpinnerLogoComponent } from '../../shared/components/spinner-logo/spinner-logo.component';
 import { addIcons } from 'ionicons';
-import { chevronBackOutline, chevronForwardOutline, restaurantOutline } from 'ionicons/icons';
+import { addOutline, chevronBackOutline, chevronForwardOutline, restaurantOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-carta',
@@ -26,6 +28,7 @@ import { chevronBackOutline, chevronForwardOutline, restaurantOutline } from 'io
     IonToolbar,
     IonTitle,
     IonButtons,
+    IonButton,
     IonBackButton,
     IonContent,
     IonIcon,
@@ -45,13 +48,19 @@ export class CartaPage implements OnInit {
 
   private readonly platoService = inject(PlatoService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly router = inject(Router);
 
   constructor() {
     addIcons({
+      'add-outline': addOutline,
       'chevron-back-outline': chevronBackOutline,
       'chevron-forward-outline': chevronForwardOutline,
       'restaurant-outline': restaurantOutline
     });
+  }
+
+  irAAgregar(): void {
+    this.router.navigate(['/agregar-plato']);
   }
 
   async ngOnInit() {
