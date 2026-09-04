@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { Bebida } from '../models/bebida.model';
 
@@ -11,7 +11,7 @@ const CATEGORIA_BEBIDA = 2;
 })
 export class BebidaService {
 
-  constructor(private supabaseService: SupabaseService) {}
+  private readonly supabaseService = inject(SupabaseService);
 
   async crearBebida(
     datos: {

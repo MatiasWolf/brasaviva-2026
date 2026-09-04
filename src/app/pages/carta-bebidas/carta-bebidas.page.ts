@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   IonBackButton,
@@ -43,10 +43,10 @@ export class CartaBebidasPage implements OnInit {
   /** Índice de la fotografía visible para cada bebida. */
   fotoActual: Record<string, number> = {};
 
-  constructor(
-    private bebidaService: BebidaService,
-    private cdr: ChangeDetectorRef
-  ) {
+  private readonly bebidaService = inject(BebidaService);
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  constructor() {
     addIcons({
       'chevron-back-outline': chevronBackOutline,
       'chevron-forward-outline': chevronForwardOutline,
