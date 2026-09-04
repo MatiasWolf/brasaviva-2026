@@ -1,5 +1,7 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
+import { AnonymousSessionService } from '../core/services/anonymous-session.service';
+import { SesionAnonima } from '../core/models/sesion-anonima.model';
 import { Router } from '@angular/router';
 import {
   IonButton,
@@ -67,8 +69,10 @@ export class HomePage implements OnInit {
   private readonly auth = inject(AuthService);
   private readonly menu = inject(MenuService);
   private readonly router = inject(Router);
+  private readonly anonymousSession = inject(AnonymousSessionService);
 
   readonly usuario = signal<Usuario | null>(null);
+  readonly sesionAnonima = signal<SesionAnonima | null>(null);
   readonly cargando = signal(true);
   readonly estadiaEstado = signal<EstadiaEstado>('sin_estadia');
 
@@ -76,16 +80,33 @@ export class HomePage implements OnInit {
 
   private readonly botones = signal<BotonMenu[]>([]);
 
-  readonly rolNombreLegible = computed(() =>
-    (this.usuario()?.roles?.nombre ?? '').replace(/_/g, ' '),
-  );
+  readonly rolNombreLegible = computed(() => {
+    const usuario = this.usuario();
+    const anonimo = this.sesionAnonima();
 
-  readonly esCliente = computed(() =>
-    ROLES_CLIENTE.includes(this.usuario()?.roles?.nombre ?? ''),
-  );
+    if (usuario) {
+      return (usuario.roles?.nombre ?? '').replace(/_/g, ' ');
+    }
+
+    if (anonimo) {
+      return 'cliente anónimo';
+    }
+
+    return '';
+  });
+
+  readonly esCliente = computed(() => {
+    const rol = this.usuario()?.roles?.nombre
+      ?? (this.sesionAnonima() ? 'cliente_anonimo' : '');
+
+    return ROLES_CLIENTE.includes(rol);
+  });
 
   readonly saludo = computed(() => {
-    const nombre = this.usuario()?.nombre;
+    const nombre =
+      this.usuario()?.nombre
+      ?? this.sesionAnonima()?.nombre;
+
     return nombre ? `Hola, ${nombre}` : 'Bienvenido';
   });
 
@@ -131,16 +152,40 @@ export class HomePage implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    // Primero buscamos un usuario registrado
     const usuario = await this.auth.cargarUsuarioActual();
-    this.usuario.set(usuario);
 
-    if (!usuario) {
-      await this.router.navigate(['/login'], { replaceUrl: true });
+    if (usuario) {
+      this.usuario.set(usuario);
+
+      this.botones.set(
+        await this.menu.getBotonesPorRol(usuario.rol_id)
+      );
+
+      this.cargando.set(false);
       return;
     }
 
-    this.botones.set(await this.menu.getBotonesPorRol(usuario.rol_id));
-    this.cargando.set(false);
+    // Si no hay usuario registrado, buscamos sesión anónima
+    const sesionAnonima =
+      await this.anonymousSession.obtenerSesion();
+
+    if (sesionAnonima) {
+      this.sesionAnonima.set(sesionAnonima);
+      this.estadiaEstado.set(sesionAnonima.estado);
+
+      this.botones.set(
+        await this.menu.getBotonesPorRol(sesionAnonima.rol_id)
+      );
+
+      this.cargando.set(false);
+      return;
+    }
+
+    // No hay ningún tipo de sesión
+    await this.router.navigate(['/login'], {
+      replaceUrl: true
+    });
   }
 
   cambiarEstadia(event: CustomEvent): void {
@@ -153,7 +198,14 @@ export class HomePage implements OnInit {
   }
 
   async cerrarSesion(): Promise<void> {
-    await this.auth.logout();
-    await this.router.navigate(['/login'], { replaceUrl: true });
+    if (this.sesionAnonima()) {
+      await this.anonymousSession.cerrarSesion();
+    } else {
+      await this.auth.logout();
+    }
+
+    await this.router.navigate(['/login'], {
+      replaceUrl: true
+    });
   }
 }

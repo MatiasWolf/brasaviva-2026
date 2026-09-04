@@ -159,8 +159,13 @@ export class LoginPage implements OnInit {
   }
 
   irARegistroCliente(): void {
-    this.router.navigate(['/registro-cliente']);
+    this.router.navigate(['/registro/registro-cliente']);
   }
+
+  irARegistroAnonimo(): void {
+    this.router.navigate(['/registro/cliente-anonimo']);
+  }
+
 
   private vibrarError(): void {
     if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {

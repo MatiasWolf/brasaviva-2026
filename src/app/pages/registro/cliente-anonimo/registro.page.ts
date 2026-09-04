@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AnonymousSessionService } from '../../../core/services/anonymous-session.service';
 import {
   FormBuilder,
   FormGroup,
@@ -7,6 +8,7 @@ import {
   Validators
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { StorageService } from '../../../core/services/storage.service';
 
 import {
   IonBackButton,
@@ -25,6 +27,8 @@ import {
   cameraOutline,
   checkmarkCircle
 } from 'ionicons/icons';
+
+import { CameraService } from '../../../core/services/camera.service';
 
 @Component({
   selector: 'app-registro',
@@ -53,7 +57,11 @@ export class RegistroPage {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private cameraService: CameraService,
+    private cdr: ChangeDetectorRef,
+    private anonymousSessionService: AnonymousSessionService,
+    private storageService: StorageService
   ) {
 
     addIcons({
@@ -84,39 +92,69 @@ export class RegistroPage {
     });
   }
 
-  tomarFoto(): void {
-    /*
-     * Por ahora dejamos preparada la acción.
-     *
-     * En el próximo paso conectaremos la cámara
-     * real del teléfono mediante Capacitor.
-     */
+  async tomarFoto(): Promise<void> {
+    try {
 
-    console.log('Tomar fotografía');
+      const foto = await this.cameraService.tomarFoto();
+
+      console.log('Foto obtenida:', foto);
+
+      this.fotoPreview = foto.webPath ?? null;
+
+      console.log('Preview:', this.fotoPreview);
+
+      this.cdr.detectChanges();
+
+    } catch (error) {
+      console.error('Error al tomar la foto:', error);
+
+    }
   }
 
-  continuar(): void {
-
+  async continuar(): Promise<void> {
     if (this.registroForm.invalid) {
       this.registroForm.markAllAsTouched();
       return;
     }
 
-    console.log('Cliente anónimo:', {
-      nombre: this.registroForm.value.nombre,
-      apellido: this.registroForm.value.apellido,
-      foto: this.fotoPreview
-    });
+    if (!this.fotoPreview) {
+      console.error('El usuario debe agregar una foto.');
+      return;
+    }
 
-    /*
-     * Todavía no navegamos.
-     *
-     * Primero vamos a conectar:
-     * 1. Cámara
-     * 2. Guardado de foto
-     * 3. Registro del cliente anónimo
-     * 4. Navegación al inicio
-     */
+    const { nombre, apellido } = this.registroForm.value;
+
+    try {
+      // 1. Crear sesión anónima
+      console.log('Creando sesión anónima...');
+
+      const sesion = await this.anonymousSessionService.crearSesion(
+        nombre,
+        apellido
+      );
+
+      console.log('Sesión creada:', sesion);
+
+      // 2. Subir foto usando el UUID de la sesión
+      console.log('Subiendo foto...');
+
+      const fotoUrl = await this.storageService.subirFoto(
+        sesion.id,
+        this.fotoPreview
+      );
+
+      console.log('Foto subida:', fotoUrl);
+
+      // 3. Guardar la URL real de Storage en la sesión
+      await this.anonymousSessionService.actualizarFoto(fotoUrl);
+
+      console.log('Foto asociada a la sesión correctamente.');
+
+      this.router.navigate(['/home']);
+
+    } catch (error) {
+      console.error('Error durante el registro del invitado:', error);
+    }
   }
 
   volverAlLogin(): void {

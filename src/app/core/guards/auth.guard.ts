@@ -1,11 +1,29 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+
 import { AuthService } from '../services/auth.service';
+import { AnonymousSessionService } from '../services/anonymous-session.service';
 
 export const authGuard: CanActivateFn = async () => {
+
   const auth = inject(AuthService);
+  const anonymousSession = inject(AnonymousSessionService);
   const router = inject(Router);
 
+  // Primero verificamos si hay usuario registrado
   const haySesion = await auth.getSesionActiva();
-  return haySesion ? true : router.createUrlTree(['/login']);
+
+  if (haySesion) {
+    return true;
+  }
+
+  // Si no hay usuario registrado, verificamos sesión anónima
+  const sesionAnonima = await anonymousSession.obtenerSesion();
+
+  if (sesionAnonima) {
+    return true;
+  }
+
+  // No hay ningún tipo de sesión
+  return router.createUrlTree(['/login']);
 };

@@ -28,18 +28,21 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   {
-    path: 'registro-cliente',
-    loadComponent: () =>
-      import('./pages/registro/registro-cliente/registro-cliente.page').then(
-      (m) => m.RegistroClientePage
-    ),
-  },
-  {
-    path: 'registro/cliente-anonimo',
-    loadComponent: () =>
-      import('./pages/registro/cliente-anonimo/registro.page').then(
-        (m) => m.RegistroPage
-      ),
+    path: 'registro',
+    children: [
+      {
+        path: 'registro-cliente',
+        loadComponent: () =>
+          import('./pages/registro/registro-cliente/registro-cliente.page')
+            .then(m => m.RegistroClientePage)
+      },
+      {
+        path: 'cliente-anonimo',
+        loadComponent: () =>
+          import('./pages/registro/cliente-anonimo/registro.page')
+            .then(m => m.RegistroPage)
+      }
+    ]
   },
   {
     path: '',
