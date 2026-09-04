@@ -10,20 +10,17 @@ export const authGuard: CanActivateFn = async () => {
   const anonymousSession = inject(AnonymousSessionService);
   const router = inject(Router);
 
-  // Primero verificamos si hay usuario registrado
   const haySesion = await auth.getSesionActiva();
 
   if (haySesion) {
     return true;
   }
 
-  // Si no hay usuario registrado, verificamos sesión anónima
   const sesionAnonima = await anonymousSession.obtenerSesion();
 
   if (sesionAnonima) {
     return true;
   }
 
-  // No hay ningún tipo de sesión
   return router.createUrlTree(['/login']);
 };
