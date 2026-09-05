@@ -1,0 +1,28 @@
+<ion-modal
+  [isOpen]="abierto()"
+  (didPresent)="iniciar()"
+  (willDismiss)="detener()"
+  (didDismiss)="cerrado.emit()"
+  class="dni-scanner-modal"
+>
+  <ng-template>
+    <div class="scanner-wrapper">
+      <button type="button" class="cerrar" (click)="cerrar()" aria-label="Cerrar">
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+
+      <div class="video-container">
+        <video #video autoplay muted playsinline></video>
+        <div class="marco-guia"></div>
+      </div>
+
+      @if (mensajeError()) {
+        <p class="mensaje-error">{{ mensajeError() }}</p>
+      } @else {
+        <p class="instrucciones">
+          Enfocá el código de barras del dorso del DNI dentro del marco.
+        </p>
+      }
+    </div>
+  </ng-template>
+</ion-modal>

@@ -1,6 +1,6 @@
-/* Alta de empleado — mismo lenguaje visual que el registro de cliente. */
+/* Alta de mesa — mismo lenguaje visual que el resto de las altas. */
 
-.empleado-content {
+.mesa-content {
   --background:
     radial-gradient(circle at 20% 20%, rgba(246, 193, 133, 0.2), transparent 18%),
     linear-gradient(180deg, #130905 0%, #4d200f 54%, #f5dcc0 100%);
@@ -26,7 +26,7 @@ ion-back-button {
   --color: #ffd485;
 }
 
-.empleado-container {
+.mesa-container {
   width: 100%;
   max-width: 480px;
   margin: 0 auto;
@@ -34,134 +34,52 @@ ion-back-button {
   box-sizing: border-box;
 }
 
-.empleado-footer {
-  background: #130905;
-  padding: 10px 16px calc(10px + var(--ion-safe-area-bottom, 0px));
-
-  &::before {
-    display: none;
-  }
-}
-
-.empleado-footer .mensaje-error {
-  margin: 0 0 8px;
-}
-
-.submit-oculto {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  border: 0;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.empleado-header {
-  text-align: center;
-  margin-bottom: 24px;
-}
-
-.empleado-header .icon-stage {
-  position: relative;
-  width: 65px;
-  height: 65px;
-  margin: 0 auto 12px;
-}
-
-.empleado-header .glow-core {
-  position: absolute;
-  inset: 10px;
-  border-radius: 32px;
-  background: radial-gradient(
-    circle,
-    rgba(255, 222, 186, 0.7),
-    rgba(255, 222, 186, 0)
-  );
-  filter: blur(10px);
-  animation: glow 2.2s ease-in-out infinite;
-}
-
-.empleado-header .icon-badge {
-  position: relative;
-  width: 65px;
-  height: 65px;
-  display: grid;
-  place-items: center;
-  border-radius: 20px;
-  background: rgba(255, 248, 241, 0.12);
-  border: 1px solid rgba(255, 248, 241, 0.24);
-  backdrop-filter: blur(8px);
-  animation: floatIcon 2.2s ease-in-out infinite;
-}
-
-.empleado-header .icon-badge ion-icon {
-  font-size: 2rem;
-  color: #fff8f1;
-}
-
-.empleado-header h1 {
-  margin: 0 0 10px;
-  color: #ffd485;
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  text-shadow: 2px 2px 4px rgba(74, 26, 26, 0.6);
-}
-
-.empleado-header p {
-  margin: 0 auto;
-  max-width: 370px;
-  color: #f9e6ce;
-  font-size: 15px;
-  line-height: 1.5;
-}
-
-/* FOTO */
-/* FOTO + ESCANEAR DNI: en fila, para ganar espacio vertical. */
-.acciones-rapidas {
+/* FOTO: contenedor individual, grande y centrado (no es un avatar circular). */
+.foto-section {
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 22px;
-  margin: 5px 0 10px;
+  flex-direction: column;
+  align-items: center;
+  margin: 4px 0 24px;
 }
 
 .foto-button {
   position: relative;
-  width: 104px;
-  height: 104px;
-  flex-shrink: 0;
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 4 / 3;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 10px;
   padding: 0;
+  margin: 0 auto;
   border: 2px dashed rgba(255, 212, 133, 0.65);
-  border-radius: 50%;
+  border-radius: 20px;
   background: rgba(19, 9, 5, 0.35);
   color: #ffd485;
   cursor: pointer;
+  overflow: hidden;
   transition:
     transform 0.2s ease,
     background 0.2s ease,
     border-color 0.2s ease;
 
   ion-icon {
-    font-size: 2.2rem;
+    font-size: 2.6rem;
     color: #ffd485;
   }
 
   span {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: #ffd485;
+    padding: 0 12px;
+    text-align: center;
   }
 
   &:active {
-    transform: scale(0.96);
+    transform: scale(0.98);
   }
 
   &:hover {
@@ -171,20 +89,20 @@ ion-back-button {
 }
 
 .foto-preview {
-  width: 100px;
-  height: 100px;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 50%;
-  border: 3px solid #ffd485;
   display: block;
 }
 
 .foto-check {
   position: absolute;
-  right: -2px;
-  bottom: -2px;
-  width: 30px;
-  height: 30px;
+  right: 10px;
+  bottom: 10px;
+  width: 34px;
+  height: 34px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -198,28 +116,15 @@ ion-back-button {
   }
 }
 
-/* ESCANEAR DNI: mismo círculo que la foto, pareja visual */
-.btn-escanear-dni {
-  ion-icon {
-    font-size: 1.9rem;
-  }
-
-  span {
-    font-size: 0.72rem;
-    line-height: 1.15;
-    padding: 0 6px;
-  }
-}
-
-.acciones-hint {
-  margin: 0 0 18px;
+.foto-hint {
+  margin: 10px 0 0;
   text-align: center;
-  color: #f9e6ce;
-  font-size: 12px;
-  line-height: 1.4;
+  font-size: 0.78rem;
+  color: #fff1dc;
 }
 
-.empleado-form {
+/* FORMULARIO */
+.mesa-form {
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -245,6 +150,36 @@ ion-back-button {
   background: #fff8ed;
   border-color: #ffaa55;
   box-shadow: 0 3px 10px rgba(19, 9, 5, 0.28);
+}
+
+.campo--info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 56px;
+}
+
+.campo-label {
+  color: #4d200f;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.chip-vacia {
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: rgba(72, 160, 90, 0.18);
+  border: 1px solid rgba(72, 160, 90, 0.5);
+  color: #2f6b40;
+}
+
+.ayuda-campo {
+  margin: -6px 2px 14px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #fff1dc;
 }
 
 ion-input,
@@ -292,11 +227,7 @@ ion-input::part(native) {
   font-weight: 500;
 }
 
-ion-input::part(native)::placeholder {
-  color: #805238;
-  opacity: 1;
-}
-
+/* MENSAJES DE ERROR */
 .mensaje-error {
   padding: 12px 14px;
   margin: 4px 0 14px;
@@ -324,6 +255,26 @@ ion-input::part(native)::placeholder {
   }
 }
 
+/* BARRA FIJA: el botón siempre queda visible entero. */
+.mesa-footer {
+  background: #130905;
+  padding: 10px 16px calc(10px + var(--ion-safe-area-bottom, 0px));
+
+  &::before {
+    display: none;
+  }
+}
+
+.submit-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .btn-guardar {
   margin: 0;
   --background: #ffd485;
@@ -342,11 +293,12 @@ ion-input::part(native)::placeholder {
   opacity: 0.6;
 }
 
+/* MODAL ÉXITO */
 ion-modal.success-modal {
   --width: 94%;
   --max-width: 460px;
   --height: auto;
-  --max-height: 85%;
+  --max-height: 90%;
   --border-radius: 20px;
   --box-shadow: 0 15px 40px rgba(19, 9, 5, 0.35);
   --background: #fff3df;
@@ -360,6 +312,8 @@ ion-modal.success-modal .modal-wrapper {
   background: linear-gradient(180deg, #fff8ed 0%, #fff3df 100%);
   border: 2px solid #c0784d;
   border-radius: 20px;
+  overflow-y: auto;
+  max-height: 80vh;
 }
 
 ion-modal.success-modal .icon-container {
@@ -394,6 +348,18 @@ ion-modal.success-modal p {
   }
 }
 
+.qr-imagen {
+  display: block;
+  width: 100%;
+  max-width: 220px;
+  margin: 18px auto 0;
+  border-radius: 12px;
+  border: 2px solid #c0784d;
+  background: #fff;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
 ion-modal.success-modal .divider {
   height: 1px;
   margin: 22px 0;
@@ -414,30 +380,8 @@ ion-modal.success-modal ion-button {
   text-transform: none;
 }
 
-@keyframes floatIcon {
-  0%,
-  100% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-8px) scale(1.03);
-  }
-}
-
-@keyframes glow {
-  0%,
-  100% {
-    opacity: 0.55;
-    transform: scale(0.94);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.08);
-  }
-}
-
 @media (max-width: 380px) {
-  .empleado-container {
+  .mesa-container {
     padding-left: 18px;
     padding-right: 18px;
   }

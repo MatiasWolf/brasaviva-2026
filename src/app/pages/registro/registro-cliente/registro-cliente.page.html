@@ -1,37 +1,14 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/login"></ion-back-button>
+      <ion-back-button defaultHref="/login" text="Volver"></ion-back-button>
     </ion-buttons>
-
-
-<ion-title>Registro de cliente</ion-title>
-
-
+    <ion-title>Registro de cliente</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="registro-content">
   <div class="registro-container">
-
-
-<!-- ENCABEZADO -->
-<div class="registro-header">
-  <div class="icon-stage">
-    <div class="glow-core"></div>
-
-    <div class="icon-badge">
-      <ion-icon name="person-add-outline"></ion-icon>
-    </div>
-  </div>
-
-  <h1>Crear cuenta</h1>
-
-  <p>
-    Registrate para disfrutar de todas las opciones
-    disponibles en nuestro restaurante.
-  </p>
-</div>
 
 <!-- FOTO DE PERFIL -->
 <div class="foto-section">
@@ -63,13 +40,17 @@
     }
 
   </button>
-
-  <p class="foto-hint">
-    Esta foto será utilizada para tu perfil.
-  </p>
-
 </div>
 
+
+<!-- ESCANEAR DNI -->
+<button type="button" class="btn-escanear-dni" (click)="escanearDni()">
+  <ion-icon name="scan-outline"></ion-icon>
+  Escanear DNI
+</button>
+<p class="escanear-dni-hint">
+  Completa apellido, nombre y DNI leyendo el código de barras del dorso.
+</p>
 
 <!-- FORMULARIO -->
 <form
@@ -357,16 +338,16 @@
       <div class="divider"></div>
 
       <p class="sub-text">
-        Mientras tanto, podés explorar la aplicación
-        ingresando como invitado.
+        Te vamos a avisar por correo apenas un administrador revise tu
+        cuenta. Hasta entonces no vas a poder iniciar sesión.
       </p>
 
       <ion-button
         expand="block"
         shape="round"
-        (click)="ingresarComoInvitado()"
+        (click)="irAlLogin()"
       >
-        Entrar como invitado
+        Ir al login
       </ion-button>
 
     </div>
@@ -374,3 +355,10 @@
 
   </ng-template>
 </ion-modal>
+
+<!-- ESCANEO DE DNI -->
+<app-dni-scanner
+  [abierto]="mostrandoScanner"
+  (escaneado)="onDniEscaneado($event)"
+  (cerrado)="mostrandoScanner = false"
+></app-dni-scanner>

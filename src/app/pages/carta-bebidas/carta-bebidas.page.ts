@@ -1,19 +1,22 @@
-import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import {
   IonBackButton,
+  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonIcon
+  IonIcon,
+  ViewWillEnter
 } from '@ionic/angular';
 import { BebidaService } from '../../core/services/bebida.service';
 import { Bebida } from '../../core/models/bebida.model';
 import { SpinnerLogoComponent } from '../../shared/components/spinner-logo/spinner-logo.component';
 import { addIcons } from 'ionicons';
-import { chevronBackOutline, chevronForwardOutline, wineOutline } from 'ionicons/icons';
+import { addOutline, chevronBackOutline, chevronForwardOutline, wineOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-carta-bebidas',
@@ -26,13 +29,14 @@ import { chevronBackOutline, chevronForwardOutline, wineOutline } from 'ionicons
     IonToolbar,
     IonTitle,
     IonButtons,
+    IonButton,
     IonBackButton,
     IonContent,
     IonIcon,
     SpinnerLogoComponent
   ]
 })
-export class CartaBebidasPage implements OnInit {
+export class CartaBebidasPage implements ViewWillEnter {
 
   bebidas: Bebida[] = [];
 
@@ -45,16 +49,22 @@ export class CartaBebidasPage implements OnInit {
 
   private readonly bebidaService = inject(BebidaService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly router = inject(Router);
 
   constructor() {
     addIcons({
+      'add-outline': addOutline,
       'chevron-back-outline': chevronBackOutline,
       'chevron-forward-outline': chevronForwardOutline,
       'wine-outline': wineOutline
     });
   }
 
-  async ngOnInit() {
+  irAAgregar(): void {
+    this.router.navigate(['/agregar-bebida']);
+  }
+
+  async ionViewWillEnter() {
     await this.cargarBebidas();
   }
 

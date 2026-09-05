@@ -75,7 +75,7 @@ export const routes: Routes = [
       import('./pages/agregar-plato/agregar-plato.page').then(
         (m) => m.AgregarPlatoPage
       ),
-    canActivate: [authGuard],
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor', 'cocinero'])],
   },
   {
     path: 'carta',
@@ -88,7 +88,7 @@ export const routes: Routes = [
       import('./pages/agregar-bebida/agregar-bebida.page').then(
         (m) => m.AgregarBebidaPage
       ),
-    canActivate: [authGuard],
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor', 'cantinero'])],
   },
   {
     path: 'carta-bebidas',
@@ -108,6 +108,22 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/lista-espera/lista-espera/lista-espera.page')
         .then(m => m.ListaEsperaPage),
+  },
+  {
+    path: 'mesas',
+    loadComponent: () =>
+      import('./pages/mesas/listado-mesas/listado-mesas.page').then(
+        (m) => m.ListadoMesasPage
+      ),
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor'])],
+  },
+  {
+    path: 'mesas/nueva',
+    loadComponent: () =>
+      import('./pages/mesas/agregar-mesa/agregar-mesa.page').then(
+        (m) => m.AgregarMesaPage
+      ),
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor'])],
   },
   {
     path: '',

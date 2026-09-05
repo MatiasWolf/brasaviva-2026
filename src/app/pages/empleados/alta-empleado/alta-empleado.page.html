@@ -9,7 +9,7 @@
 
 <ion-content class="empleado-content">
   <div class="empleado-container">
-    <div class="foto-section">
+    <div class="acciones-rapidas">
       <button type="button" class="foto-button" (click)="tomarFoto()">
         @if (fotoPreview()) {
           <img [src]="fotoPreview()" alt="Foto del empleado" class="foto-preview" />
@@ -20,6 +20,11 @@
           <ion-icon name="camera-outline"></ion-icon>
           <span>Tomar foto</span>
         }
+      </button>
+
+      <button type="button" class="foto-button btn-escanear-dni" (click)="escanearDni()">
+        <ion-icon name="scan-outline"></ion-icon>
+        <span>Escanear DNI</span>
       </button>
     </div>
 
@@ -287,3 +292,10 @@
     </div>
   </ng-template>
 </ion-modal>
+
+<!-- ESCANEO DE DNI -->
+<app-dni-scanner
+  [abierto]="mostrandoScanner()"
+  (escaneado)="onDniEscaneado($event)"
+  (cerrado)="mostrandoScanner.set(false)"
+></app-dni-scanner>

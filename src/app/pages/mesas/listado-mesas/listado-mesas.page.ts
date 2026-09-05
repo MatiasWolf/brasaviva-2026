@@ -8,7 +8,6 @@ import {
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {
-  AlertController,
   InfiniteScrollCustomEvent,
   IonBackButton,
   IonButton,
@@ -18,6 +17,7 @@ import {
   IonIcon,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
+  IonModal,
   IonSearchbar,
   IonTitle,
   IonToolbar,
@@ -26,20 +26,21 @@ import {
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import {
-  createOutline,
-  personAddOutline,
+  addOutline,
+  closeOutline,
+  gridOutline,
   peopleOutline,
-  trashOutline,
+  qrCodeOutline,
 } from 'ionicons/icons';
 
-import { EmpleadosService } from '../../../core/services/empleados.service';
-import { Usuario } from '../../../core/models/usuario.model';
+import { MesaService } from '../../../core/services/mesa.service';
+import { DisponibilidadMesa, Mesa } from '../../../core/models/mesa.model';
 import { SpinnerLogoComponent } from '../../../shared/components/spinner-logo/spinner-logo.component';
 
 @Component({
-  selector: 'app-listado-empleados',
-  templateUrl: './listado-empleados.page.html',
-  styleUrls: ['./listado-empleados.page.scss'],
+  selector: 'app-listado-mesas',
+  templateUrl: './listado-mesas.page.html',
+  styleUrls: ['./listado-mesas.page.scss'],
   standalone: true,
   imports: [
     CommonModule,
@@ -53,35 +54,34 @@ import { SpinnerLogoComponent } from '../../../shared/components/spinner-logo/sp
     IonIcon,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
+    IonModal,
     IonSearchbar,
     SpinnerLogoComponent,
   ],
 })
-export class ListadoEmpleadosPage implements ViewWillEnter {
-  private readonly empleados = inject(EmpleadosService);
+export class ListadoMesasPage implements ViewWillEnter {
+  private readonly mesaService = inject(MesaService);
   private readonly router = inject(Router);
-  private readonly alertCtrl = inject(AlertController);
   private readonly toastCtrl = inject(ToastController);
 
   private readonly porTanda = 8;
-
   private readonly content = viewChild(IonContent);
 
-  readonly lista = signal<Usuario[]>([]);
+  readonly lista = signal<Mesa[]>([]);
   readonly cargando = signal(true);
   readonly error = signal('');
   readonly filtro = signal('');
   readonly visibles = signal(this.porTanda);
+  readonly actualizando = signal<string | null>(null);
+  readonly mesaQr = signal<Mesa | null>(null);
 
   readonly listaFiltrada = computed(() => {
     const q = this.filtro().trim().toLowerCase();
     if (!q) {
       return this.lista();
     }
-    return this.lista().filter((e) =>
-      `${e.nombre} ${e.apellido} ${e.correo} ${e.roles?.nombre ?? ''}`
-        .toLowerCase()
-        .includes(q),
+    return this.lista().filter((m) =>
+      `${m.numero} ${m.tipo} ${m.disponibilidad}`.toLowerCase().includes(q),
     );
   });
 
@@ -95,10 +95,11 @@ export class ListadoEmpleadosPage implements ViewWillEnter {
 
   constructor() {
     addIcons({
+      'add-outline': addOutline,
+      'grid-outline': gridOutline,
       'people-outline': peopleOutline,
-      'person-add-outline': personAddOutline,
-      'create-outline': createOutline,
-      'trash-outline': trashOutline,
+      'qr-code-outline': qrCodeOutline,
+      'close-outline': closeOutline,
     });
   }
 
@@ -111,9 +112,9 @@ export class ListadoEmpleadosPage implements ViewWillEnter {
     this.error.set('');
     this.visibles.set(this.porTanda);
     try {
-      this.lista.set(await this.empleados.listarEmpleados());
+      this.lista.set(await this.mesaService.listarMesas());
     } catch {
-      this.error.set('No se pudo cargar el listado de empleados.');
+      this.error.set('No se pudo cargar el listado de mesas.');
     } finally {
       this.cargando.set(false);
     }
@@ -131,16 +132,10 @@ export class ListadoEmpleadosPage implements ViewWillEnter {
     void event.target.complete();
   }
 
-  /**
-   * Si la lista no llega a ocupar la pantalla, `ion-infinite-scroll` nunca se
-   * dispara. En ese caso vamos cargando tandas hasta que haya scroll real o no
-   * queden más empleados.
-   */
   private async rellenarSiNoHayScroll(): Promise<void> {
     if (!this.hayMas()) {
       return;
     }
-    // esperar a que Angular pinte las tarjetas nuevas
     await new Promise((resolve) => setTimeout(resolve));
 
     const content = this.content();
@@ -154,46 +149,39 @@ export class ListadoEmpleadosPage implements ViewWillEnter {
     }
   }
 
-  rolLegible(empleado: Usuario): string {
-    return (empleado.roles?.nombre ?? '').replace(/_/g, ' ');
+  tipoLegible(mesa: Mesa): string {
+    return mesa.tipo.replace(/_/g, ' ');
   }
 
   irAAlta(): void {
-    this.router.navigate(['/empleados/nuevo']);
+    this.router.navigate(['/mesas/nueva']);
   }
 
-  editar(empleado: Usuario): void {
-    this.router.navigate(['/empleados', empleado.id, 'editar']);
+  verQr(mesa: Mesa): void {
+    this.mesaQr.set(mesa);
   }
 
-  async confirmarEliminar(empleado: Usuario): Promise<void> {
-    const alert = await this.alertCtrl.create({
-      header: 'Eliminar empleado',
-      message: `¿Seguro que querés eliminar a ${empleado.nombre} ${empleado.apellido}? Esta acción no se puede deshacer.`,
-      buttons: [
-        { text: 'Cancelar', role: 'cancel' },
-        {
-          text: 'Eliminar',
-          role: 'destructive',
-          handler: () => {
-            void this.eliminar(empleado);
-          },
-        },
-      ],
-    });
-    await alert.present();
+  cerrarQr(): void {
+    this.mesaQr.set(null);
   }
 
-  private async eliminar(empleado: Usuario): Promise<void> {
+  async alternarDisponibilidad(mesa: Mesa): Promise<void> {
+    const nueva: DisponibilidadMesa =
+      mesa.disponibilidad === 'vacia' ? 'ocupada' : 'vacia';
+
+    this.actualizando.set(mesa.id);
     try {
-      await this.empleados.eliminarEmpleado(empleado.id);
-      this.lista.update((actual) => actual.filter((e) => e.id !== empleado.id));
-      await this.mostrarToast('Empleado eliminado.', 'success');
+      await this.mesaService.actualizarDisponibilidad(mesa.id, nueva);
+      this.lista.update((actual) =>
+        actual.map((m) => (m.id === mesa.id ? { ...m, disponibilidad: nueva } : m)),
+      );
     } catch (err) {
       await this.mostrarToast(
-        (err as Error)?.message ?? 'No se pudo eliminar el empleado.',
+        (err as Error)?.message ?? 'No se pudo actualizar la disponibilidad.',
         'danger',
       );
+    } finally {
+      this.actualizando.set(null);
     }
   }
 

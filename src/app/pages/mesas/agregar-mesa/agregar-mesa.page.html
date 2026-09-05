@@ -1,0 +1,163 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/mesas" text="Volver"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Nueva mesa</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="mesa-content">
+  <div class="mesa-container">
+
+    <!-- FOTO: contenedor individual, grande y centrado -->
+    <div class="foto-section">
+      <button type="button" class="foto-button" (click)="tomarFoto()">
+        @if (fotoPreview()) {
+          <img [src]="fotoPreview()" alt="Foto de la mesa" class="foto-preview" />
+          <div class="foto-check">
+            <ion-icon name="checkmark-circle"></ion-icon>
+          </div>
+        } @else {
+          <ion-icon name="camera-outline"></ion-icon>
+          <span>Tomar foto de la mesa</span>
+        }
+      </button>
+      <p class="foto-hint">La foto es obligatoria.</p>
+    </div>
+
+    <form [formGroup]="mesaForm" (ngSubmit)="guardar()" class="mesa-form">
+
+      <!-- NÚMERO -->
+      <div class="campo">
+        <ion-input
+          formControlName="numero"
+          type="text"
+          inputmode="numeric"
+          label="Número de mesa"
+          labelPlacement="stacked"
+          placeholder="Ej: 12"
+          (ionFocus)="mensajeError.set('')"
+        ></ion-input>
+
+        @if (mesaForm.get('numero')?.dirty && mesaForm.get('numero')?.invalid) {
+          <div class="mensaje-error-campo">
+            @if (mesaForm.get('numero')?.hasError('required')) {
+              <span>El número de mesa es obligatorio.</span>
+            }
+            @if (mesaForm.get('numero')?.hasError('pattern')) {
+              <span>Ingresá un número entero mayor a cero (hasta 4 cifras).</span>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- COMENSALES -->
+      <div class="campo">
+        <ion-input
+          formControlName="comensales"
+          type="text"
+          inputmode="numeric"
+          label="Cantidad de comensales"
+          labelPlacement="stacked"
+          placeholder="Ej: 4"
+          (ionFocus)="mensajeError.set('')"
+        ></ion-input>
+
+        @if (mesaForm.get('comensales')?.dirty && mesaForm.get('comensales')?.invalid) {
+          <div class="mensaje-error-campo">
+            @if (mesaForm.get('comensales')?.hasError('required')) {
+              <span>La cantidad de comensales es obligatoria.</span>
+            }
+            @if (
+              mesaForm.get('comensales')?.hasError('pattern') ||
+              mesaForm.get('comensales')?.hasError('min') ||
+              mesaForm.get('comensales')?.hasError('max')
+            ) {
+              <span>Ingresá un número entero entre 1 y 30.</span>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- TIPO -->
+      <div class="campo">
+        <ion-select
+          formControlName="tipo"
+          label="Tipo de mesa"
+          labelPlacement="stacked"
+          placeholder="Seleccioná un tipo"
+          interface="popover"
+          [interfaceOptions]="{ cssClass: 'select-brasa-popover' }"
+        >
+          @for (tipo of tipos; track tipo.valor) {
+            <ion-select-option [value]="tipo.valor">
+              {{ tipo.etiqueta }}
+            </ion-select-option>
+          }
+        </ion-select>
+
+        @if (mesaForm.get('tipo')?.dirty && mesaForm.get('tipo')?.hasError('required')) {
+          <div class="mensaje-error-campo">
+            <span>Elegí el tipo de mesa.</span>
+          </div>
+        }
+      </div>
+
+      <!-- DISPONIBILIDAD (informativa, no editable en el alta) -->
+      <div class="campo campo--info">
+        <span class="campo-label">Disponibilidad</span>
+        <span class="chip-vacia">Vacía</span>
+      </div>
+      <p class="ayuda-campo">
+        Toda mesa nueva arranca "Vacía". Después la podés cambiar desde el listado.
+      </p>
+
+      <button type="submit" class="submit-oculto" aria-hidden="true" tabindex="-1"></button>
+    </form>
+
+  </div>
+</ion-content>
+
+<ion-footer class="mesa-footer">
+  @if (mensajeError()) {
+    <div class="mensaje-error">{{ mensajeError() }}</div>
+  }
+
+  <ion-button
+    expand="block"
+    type="button"
+    class="btn-guardar"
+    [disabled]="enviando()"
+    (click)="guardar()"
+  >
+    {{ enviando() ? 'Creando mesa...' : 'Crear mesa' }}
+  </ion-button>
+</ion-footer>
+
+<!-- MODAL ALTA EXITOSA -->
+<ion-modal [isOpen]="modalExito()" backdropDismiss="false" class="success-modal">
+  <ng-template>
+    <div class="modal-wrapper">
+      <div class="icon-container">
+        <ion-icon name="checkmark-circle"></ion-icon>
+      </div>
+
+      <h2>¡Mesa creada!</h2>
+      <p>
+        La mesa <strong>{{ mesaCreada()?.numero }}</strong> ya figura en el listado,
+        junto con su código QR.
+      </p>
+
+      @if (mesaCreada()?.qr_url) {
+        <img [src]="mesaCreada()?.qr_url" alt="Código QR de la mesa" class="qr-imagen" />
+      }
+
+      <div class="divider"></div>
+
+      <ion-button expand="block" shape="round" (click)="irAlListado()">
+        Volver al listado
+      </ion-button>
+    </div>
+  </ng-template>
+</ion-modal>

@@ -1,19 +1,22 @@
-import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import {
   IonBackButton,
+  IonButton,
   IonButtons,
   IonContent,
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonIcon
+  IonIcon,
+  ViewWillEnter
 } from '@ionic/angular';
 import { PlatoService } from '../../core/services/plato.service';
 import { Plato } from '../../core/models/plato.model';
 import { SpinnerLogoComponent } from '../../shared/components/spinner-logo/spinner-logo.component';
 import { addIcons } from 'ionicons';
-import { chevronBackOutline, chevronForwardOutline, restaurantOutline } from 'ionicons/icons';
+import { addOutline, chevronBackOutline, chevronForwardOutline, restaurantOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-carta',
@@ -26,13 +29,14 @@ import { chevronBackOutline, chevronForwardOutline, restaurantOutline } from 'io
     IonToolbar,
     IonTitle,
     IonButtons,
+    IonButton,
     IonBackButton,
     IonContent,
     IonIcon,
     SpinnerLogoComponent
   ]
 })
-export class CartaPage implements OnInit {
+export class CartaPage implements ViewWillEnter {
 
   platos: Plato[] = [];
 
@@ -45,16 +49,22 @@ export class CartaPage implements OnInit {
 
   private readonly platoService = inject(PlatoService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly router = inject(Router);
 
   constructor() {
     addIcons({
+      'add-outline': addOutline,
       'chevron-back-outline': chevronBackOutline,
       'chevron-forward-outline': chevronForwardOutline,
       'restaurant-outline': restaurantOutline
     });
   }
 
-  async ngOnInit() {
+  irAAgregar(): void {
+    this.router.navigate(['/agregar-plato']);
+  }
+
+  async ionViewWillEnter() {
     await this.cargarPlatos();
   }
 
