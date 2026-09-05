@@ -1,6 +1,7 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AnonymousSessionService } from '../../../core/services/anonymous-session.service';
+import { AuthService } from '../../../core/services/auth.service';
 import {
   FormBuilder,
   FormGroup,
@@ -61,7 +62,8 @@ export class RegistroPage {
     private cameraService: CameraService,
     private cdr: ChangeDetectorRef,
     private anonymousSessionService: AnonymousSessionService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private authService: AuthService
   ) {
 
     addIcons({
@@ -124,40 +126,48 @@ export class RegistroPage {
 
     const { nombre, apellido } = this.registroForm.value;
 
+  
     try {
-      // 1. Crear sesión anónima
-      console.log('Creando sesión anónima...');
+    // Si este dispositivo tenía una sesión registrada,
+    // la cerramos solamente en este dispositivo.
+    await this.authService.logoutLocal();
 
-      const sesion = await this.anonymousSessionService.crearSesion(
-        nombre,
-        apellido
-      );
+    // 1. Crear sesión anónima
+    console.log('Creando sesión anónima...');
 
-      console.log('Sesión creada:', sesion);
+    const sesion = await this.anonymousSessionService.crearSesion(
+      nombre,
+      apellido
+    );
 
-      // 2. Subir foto usando el UUID de la sesión
-      console.log('Subiendo foto...');
+    console.log('Sesión creada:', sesion);
 
-      const fotoUrl = await this.storageService.subirFoto(
-        sesion.id,
-        this.fotoPreview
-      );
+    // 2. Subir foto usando el UUID de la sesión
+    console.log('Subiendo foto...');
 
-      console.log('Foto subida:', fotoUrl);
+    const fotoUrl = await this.storageService.subirFoto(
+      sesion.id,
+      this.fotoPreview
+    );
 
-      // 3. Guardar la URL real de Storage en la sesión
-      await this.anonymousSessionService.actualizarFoto(fotoUrl);
+    console.log('Foto subida:', fotoUrl);
 
-      console.log('Foto asociada a la sesión correctamente.');
+    // 3. Guardar la URL real de Storage en la sesión
+    await this.anonymousSessionService.actualizarFoto(fotoUrl);
 
-      this.router.navigate(['/home']);
+    console.log('Foto asociada a la sesión correctamente.');
+
+    await this.router.navigate(['/home']);
 
     } catch (error) {
       console.error('Error durante el registro del invitado:', error);
     }
   }
 
+
+
   volverAlLogin(): void {
     this.router.navigate(['/login']);
   }
+
 }

@@ -116,6 +116,22 @@ export class AuthService {
     this.usuarioActual = null;
   }
 
+ 
+  async logoutLocal(): Promise<void> {
+    const { error } =
+      await this.supabaseService.client.auth.signOut({
+        scope: 'local'
+      });
+
+    if (error) {
+      throw error;
+    }
+
+    this.usuarioActual = null;
+  }
+
+
+
   async registrarCliente(datos: {
     apellido: string;
     nombre: string;
