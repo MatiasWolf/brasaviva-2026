@@ -118,17 +118,21 @@ ion-back-button {
 }
 
 /* FOTO */
-.foto-section {
+/* FOTO + ESCANEAR DNI: en fila, para ganar espacio vertical. */
+.acciones-rapidas {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 5px 0 20px;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 22px;
+  margin: 5px 0 10px;
 }
 
 .foto-button {
   position: relative;
-  width: 110px;
-  height: 110px;
+  width: 104px;
+  height: 104px;
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -167,8 +171,8 @@ ion-back-button {
 }
 
 .foto-preview {
-  width: 106px;
-  height: 106px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
   border-radius: 50%;
   border: 3px solid #ffd485;
@@ -194,12 +198,25 @@ ion-back-button {
   }
 }
 
-.foto-hint {
-  margin: 8px 0 0;
+/* ESCANEAR DNI: mismo círculo que la foto, pareja visual */
+.btn-escanear-dni {
+  ion-icon {
+    font-size: 1.9rem;
+  }
+
+  span {
+    font-size: 0.72rem;
+    line-height: 1.15;
+    padding: 0 6px;
+  }
+}
+
+.acciones-hint {
+  margin: 0 0 18px;
   text-align: center;
-  font-size: 0.78rem;
-  color: #fff1dc;
-  line-height: 1.3;
+  color: #f9e6ce;
+  font-size: 12px;
+  line-height: 1.4;
 }
 
 .empleado-form {

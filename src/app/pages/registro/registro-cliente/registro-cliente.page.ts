@@ -13,7 +13,9 @@ import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonInput, 
 import { AuthService } from '../../../core/services/auth.service';
 import { CameraService } from '../../../core/services/camera.service';
 import { addIcons } from 'ionicons';
-import { checkmarkCircle, personAddOutline, cameraOutline} from 'ionicons/icons';
+import { checkmarkCircle, personAddOutline, cameraOutline, scanOutline} from 'ionicons/icons';
+import { DniScannerComponent } from '../../../shared/components/dni-scanner/dni-scanner.component';
+import { DatosDni } from '../../../core/models/dni.model';
 
 
 
@@ -34,7 +36,8 @@ import { checkmarkCircle, personAddOutline, cameraOutline} from 'ionicons/icons'
     IonInput,
     IonButton,
     IonModal,
-    IonIcon
+    IonIcon,
+    DniScannerComponent
 ]
 })
 export class RegistroClientePage {
@@ -46,6 +49,8 @@ export class RegistroClientePage {
   mensajeError = '';
 
   isModalOpen = false;
+
+  mostrandoScanner = false;
 
   fotoPreview: string | null = null;
 
@@ -59,7 +64,8 @@ export class RegistroClientePage {
     addIcons({
       'checkmark-circle': checkmarkCircle,
       'person-add-outline': personAddOutline,
-      'camera-outline': cameraOutline
+      'camera-outline': cameraOutline,
+      'scan-outline': scanOutline
     });
 
     this.registroForm = this.fb.group(
@@ -242,6 +248,26 @@ export class RegistroClientePage {
     this.router.navigate(
       ['/login']
     );
+  }
+
+  escanearDni(): void {
+    this.mensajeError = '';
+    this.mostrandoScanner = true;
+  }
+
+  onDniEscaneado(datos: DatosDni): void {
+    this.mostrandoScanner = false;
+
+    this.registroForm.patchValue({
+      apellido: datos.apellido,
+      nombre: datos.nombre,
+      dni: datos.dni
+    });
+    this.registroForm.get('apellido')?.markAsDirty();
+    this.registroForm.get('nombre')?.markAsDirty();
+    this.registroForm.get('dni')?.markAsDirty();
+
+    this.cdr.detectChanges();
   }
 
   async tomarFoto() {

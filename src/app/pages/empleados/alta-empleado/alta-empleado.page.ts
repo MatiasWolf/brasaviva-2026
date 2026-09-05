@@ -25,12 +25,14 @@ import {
   IonToolbar,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { cameraOutline, checkmarkCircle, personAddOutline } from 'ionicons/icons';
+import { cameraOutline, checkmarkCircle, personAddOutline, scanOutline } from 'ionicons/icons';
 
 import { EmpleadosService } from '../../../core/services/empleados.service';
 import { CameraService } from '../../../core/services/camera.service';
 import { Rol } from '../../../core/models/rol.model';
 import { cuilCoherenteConDni } from '../../../core/validators/cuil.validator';
+import { DniScannerComponent } from '../../../shared/components/dni-scanner/dni-scanner.component';
+import { DatosDni } from '../../../core/models/dni.model';
 
 @Component({
   selector: 'app-alta-empleado',
@@ -53,6 +55,7 @@ import { cuilCoherenteConDni } from '../../../core/validators/cuil.validator';
     IonButton,
     IonModal,
     IonIcon,
+    DniScannerComponent,
   ],
 })
 export class AltaEmpleadoPage implements OnInit {
@@ -68,12 +71,14 @@ export class AltaEmpleadoPage implements OnInit {
   readonly enviando = signal(false);
   readonly mensajeError = signal('');
   readonly modalExito = signal(false);
+  readonly mostrandoScanner = signal(false);
 
   constructor() {
     addIcons({
       'person-add-outline': personAddOutline,
       'camera-outline': cameraOutline,
       'checkmark-circle': checkmarkCircle,
+      'scan-outline': scanOutline,
     });
 
     this.altaForm = this.fb.group(
@@ -123,6 +128,29 @@ export class AltaEmpleadoPage implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.roles.set(await this.empleados.getRolesAsignables());
+  }
+
+  escanearDni(): void {
+    this.mensajeError.set('');
+    this.mostrandoScanner.set(true);
+  }
+
+  onDniEscaneado(datos: DatosDni): void {
+    this.mostrandoScanner.set(false);
+
+    const cambios: Record<string, string> = {
+      apellido: datos.apellido,
+      nombre: datos.nombre,
+      dni: datos.dni,
+    };
+    if (datos.cuil) {
+      cambios['cuil'] = datos.cuil;
+    }
+
+    this.altaForm.patchValue(cambios);
+    Object.keys(cambios).forEach((campo) =>
+      this.altaForm.get(campo)?.markAsDirty(),
+    );
   }
 
   async tomarFoto(): Promise<void> {
