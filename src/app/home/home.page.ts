@@ -211,7 +211,4 @@ export class HomePage implements OnInit {
     });
   }
 
-  irAListaEspera(): void {
-    this.router.navigate(['/lista-espera']);
-  }
 }

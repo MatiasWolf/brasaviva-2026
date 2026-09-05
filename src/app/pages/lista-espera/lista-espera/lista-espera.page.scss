@@ -1,0 +1,418 @@
+.lista-espera-bg {
+  --background:
+    radial-gradient(
+      circle at 15% 0%,
+      rgba(246, 193, 133, 0.16),
+      transparent 22%
+    ),
+    linear-gradient(
+      180deg,
+      #130905 0%,
+      #3a1710 100%
+    );
+
+  --color: #ffd485;
+}
+
+
+/* =========================================
+   HEADER
+   ========================================= */
+
+.lista-espera-header {
+  ion-toolbar {
+    --background: rgba(19, 9, 5);
+    --color: #ffd485;
+    --border-color: rgba(255, 170, 85, 0.2);
+  }
+
+  ion-title {
+    margin: 0 0 8px;
+    font-size: 1.5rem;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #ffd485;
+  }
+}
+
+
+/* =========================================
+   CONTENEDOR
+   ========================================= */
+
+.lista-espera-container {
+  min-height: 100%;
+  padding: 20px 16px 32px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+
+/* =========================================
+   ENCABEZADO
+   ========================================= */
+
+.welcome-section {
+  text-align: center;
+  padding: 8px 8px 0;
+
+  h1 {
+    margin: 4px 0 8px;
+
+    font-size: 1.9rem;
+
+    font-family:
+      Georgia,
+      'Times New Roman',
+      serif;
+
+    color: #ffd485;
+  }
+
+  p {
+    margin: 0;
+
+    color: rgba(255, 248, 241, 0.74);
+
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+}
+
+
+/* =========================================
+   BUSCADOR
+   ========================================= */
+
+ion-searchbar {
+  --background: rgba(19, 9, 5, 0.5);
+  --color: #fff8f1;
+  --placeholder-color: rgba(255, 248, 241, 0.55);
+  --icon-color: #ffaa55;
+
+  --border-radius: 14px;
+
+  padding: 0;
+
+  border: 1px solid rgba(255, 170, 85, 0.25);
+}
+
+
+/* =========================================
+   FILTROS
+   ========================================= */
+
+.filtros {
+  display: flex;
+  gap: 8px;
+
+  width: 100%;
+
+  overflow-x: auto;
+
+  padding: 2px 0 6px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  ion-chip {
+    flex-shrink: 0;
+
+    --background: rgba(255, 170, 85, 0.08);
+    --color: #dfa070;
+
+    border: 1px solid rgba(255, 170, 85, 0.3);
+
+    font-size: 0.78rem;
+    font-weight: 600;
+
+    &.activo {
+      --background: rgba(255, 170, 85, 0.16);
+      --color: #ffd485;
+
+      border-color: #ffaa55;
+    }
+  }
+}
+
+
+/* =========================================
+   LISTA
+   ========================================= */
+
+.lista-clientes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+/* =========================================
+   CARD CLIENTE
+   ========================================= */
+
+.cliente-card {
+  margin: 0;
+
+  background:
+    linear-gradient(
+      160deg,
+      #5e1f1f 0%,
+      #431717 100%
+    );
+
+  border: 2px solid #802323;
+
+  border-radius: 18px;
+
+  color: #ffd485;
+
+  box-shadow:
+    0 6px 14px rgba(0, 0, 0, 0.35);
+}
+
+.cliente-card ion-card-content {
+  padding: 16px;
+}
+
+
+/* =========================================
+   LAYOUT DE LA CARD
+========================================= */
+
+.cliente-layout {
+    display: flex;
+    align-items: center;
+
+    gap: 16px;
+
+    width: 100%;
+    }
+
+
+/* =========================================
+   FOTO
+   ========================================= */
+
+.foto-container {
+  flex-shrink: 0;
+
+  ion-avatar {
+    width: 100px;
+    height: 100px;
+
+    display: grid;
+    place-items: center;
+
+    background: rgba(255, 248, 241, 0.1);
+
+    border: 2px solid #ffd485;
+
+    overflow: hidden;
+
+    ion-icon {
+      font-size: 2.8rem;
+      color: #fff8f1;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+}
+
+
+/* =========================================
+   DATOS DEL CLIENTE
+   ========================================= */
+
+.datos-cliente {
+  flex: 1;
+  min-width: 0;
+
+  h2 {
+    margin: 0 0 9px;
+
+    color: #ffd485;
+
+    font-size: 1.1rem;
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  p {
+    margin: 5px 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    color: #dfa070;
+
+    font-size: 0.82rem;
+
+    line-height: 1.2;
+
+    ion-icon {
+      flex-shrink: 0;
+
+      font-size: 1rem;
+
+      color: #ffaa55;
+    }
+  }
+}
+
+/* =========================================
+   TIEMPO DE ESPERA
+   ========================================= */
+
+.tiempo-espera {
+  color: #ffd485 !important;
+  font-weight: 600;
+
+  ion-icon {
+    color: #ffd485 !important;
+  }
+}
+
+
+  /* =========================================
+   ACCIONES
+   ========================================= */
+
+.acciones {
+  display: flex;
+
+  flex-direction: row;
+
+  gap: 10px;
+
+  width: 100%;
+
+  margin-top: 16px;
+
+  ion-button {
+    flex: 1;
+
+    height: 44px;
+
+    margin: 0;
+
+    --border-radius: 12px;
+
+    font-size: 0.78rem;
+    font-weight: 600;
+
+    text-transform: none;
+
+    --box-shadow:
+      0 5px 12px rgba(0, 0, 0, 0.25);
+  }
+
+  /* ASIGNAR */
+
+  ion-button:first-child {
+    --background: #ffd485;
+    --background-activated: #e9b95e;
+    --color: #4d200f;
+  }
+
+  /* SE FUE */
+
+  ion-button:last-child {
+    --background: #802323;
+    --background-activated: #6b1d1d;
+    --color: #fff8f1;
+  }
+}
+
+
+/* =========================================
+   SIN CLIENTES
+   ========================================= */
+
+.sin-clientes {
+  text-align: center;
+
+  padding: 30px 20px;
+
+  ion-icon {
+    font-size: 3rem;
+
+    color: #ffaa55;
+
+    margin-bottom: 12px;
+  }
+
+  h2 {
+    margin: 0 0 8px;
+
+    color: #ffd485;
+
+    font-family:
+      Georgia,
+      'Times New Roman',
+      serif;
+
+    font-size: 1.2rem;
+  }
+
+  p {
+    margin: 0;
+
+    color: #dfa070;
+
+    font-size: 0.85rem;
+
+    line-height: 1.4;
+  }
+}
+
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 430px) {
+
+  .cliente-card ion-card-content {
+    padding: 14px;
+  }
+
+  .cliente-layout {
+    gap: 12px;
+  }
+
+  .foto-container ion-avatar {
+    width: 90px;
+    height: 90px;
+  }
+
+  .datos-cliente h2 {
+    font-size: 1rem;
+  }
+
+  .datos-cliente p {
+    font-size: 0.76rem;
+  }
+
+  .acciones {
+    gap: 8px;
+
+    ion-button {
+      height: 42px;
+      font-size: 0.72rem;
+    }
+  }
+}
