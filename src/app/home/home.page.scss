@@ -161,3 +161,19 @@
   color: #dfa070;
   padding: 24px 0;
 }
+
+
+.demo-qr {
+  width: 100%;
+  margin: 0 0 8px;
+
+  ion-button {
+    --background: #e86a28;
+    --color: #fff8f1;
+    --border-radius: 16px;
+    height: 50px;
+
+    font-weight: 600;
+    text-transform: none;
+  }
+}

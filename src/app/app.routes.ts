@@ -98,6 +98,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'lista-espera',
+    loadComponent: () =>
+      import('./pages/lista-espera/lista-espera.page').then(
+        (m) => m.ListaEsperaPage
+      ),
+  },
+  {
     path: '',
     redirectTo: 'splash-estatica',
     pathMatch: 'full',

@@ -210,4 +210,8 @@ export class HomePage implements OnInit {
       replaceUrl: true
     });
   }
+
+  irAListaEspera(): void {
+    this.router.navigate(['/lista-espera']);
+  }
 }
