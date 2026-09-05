@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {
@@ -9,7 +9,8 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonIcon
+  IonIcon,
+  ViewWillEnter
 } from '@ionic/angular';
 import { BebidaService } from '../../core/services/bebida.service';
 import { Bebida } from '../../core/models/bebida.model';
@@ -35,7 +36,7 @@ import { addOutline, chevronBackOutline, chevronForwardOutline, wineOutline } fr
     SpinnerLogoComponent
   ]
 })
-export class CartaBebidasPage implements OnInit {
+export class CartaBebidasPage implements ViewWillEnter {
 
   bebidas: Bebida[] = [];
 
@@ -63,7 +64,7 @@ export class CartaBebidasPage implements OnInit {
     this.router.navigate(['/agregar-bebida']);
   }
 
-  async ngOnInit() {
+  async ionViewWillEnter() {
     await this.cargarBebidas();
   }
 

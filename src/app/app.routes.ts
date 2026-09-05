@@ -98,6 +98,22 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'mesas',
+    loadComponent: () =>
+      import('./pages/mesas/listado-mesas/listado-mesas.page').then(
+        (m) => m.ListadoMesasPage
+      ),
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor'])],
+  },
+  {
+    path: 'mesas/nueva',
+    loadComponent: () =>
+      import('./pages/mesas/agregar-mesa/agregar-mesa.page').then(
+        (m) => m.AgregarMesaPage
+      ),
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor'])],
+  },
+  {
     path: '',
     redirectTo: 'splash-estatica',
     pathMatch: 'full',

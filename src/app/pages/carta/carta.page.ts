@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
+import { Component, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {
@@ -9,7 +9,8 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonIcon
+  IonIcon,
+  ViewWillEnter
 } from '@ionic/angular';
 import { PlatoService } from '../../core/services/plato.service';
 import { Plato } from '../../core/models/plato.model';
@@ -35,7 +36,7 @@ import { addOutline, chevronBackOutline, chevronForwardOutline, restaurantOutlin
     SpinnerLogoComponent
   ]
 })
-export class CartaPage implements OnInit {
+export class CartaPage implements ViewWillEnter {
 
   platos: Plato[] = [];
 
@@ -63,7 +64,7 @@ export class CartaPage implements OnInit {
     this.router.navigate(['/agregar-plato']);
   }
 
-  async ngOnInit() {
+  async ionViewWillEnter() {
     await this.cargarPlatos();
   }
 

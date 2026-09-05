@@ -94,12 +94,12 @@ src/
 | 1 | Agregar empleado | Wolf, Matías | 2 | 01-09 | 03-09 | ✅ Completo |
 | 2 | Agregar nuevo plato | Moyano, Martín | 2 | 01-09 | 03-09 | ✅ Completo |
 | 3 | Agregar nueva bebida | Moyano, Martín | 1 | 03-09 | 03-09 | ✅ Completo |
-| 4 | Agregar nueva mesa | Wolf, Matías | 2 | 04-09 | 06-09 | ⬜ Pendiente |
+| 4 | Agregar nueva mesa | Wolf, Matías | 2 | 04-09 | 06-09 | ✅ Completo |
 | 5 | Crear cliente registrado | Miguel, Luján | 2 | 01-09 | 03-09 | ✅ Completo |
 | 6 | Verificar ingreso de cliente | Wolf, Matías | 1,5 | 07-09 | 08-09 | ⬜ Pendiente |
 | 7 | Rechazar cliente | Wolf, Matías | 2 | 09-09 | 11-09 | ⬜ Pendiente |
 | 8 | Aceptar cliente | Wolf, Matías | 1 | 11-09 | 12-09 | ⬜ Pendiente |
-| 9 | Ingreso cliente anónimo | Miguel, Luján | 2 | 04-09 | 06-09 | ✅ Completo |
+| 9 | Ingreso cliente anónimo | Miguel, Luján | 1 | 02-09 | 03-09 | ✅ Completo |
 | 10 | Metre asigna mesa | Miguel, Luján | 1,5 | 07-09 | 08-09 | ⬜ Pendiente |
 | 11 | Ver menú + consulta al mozo | Miguel, Luján | 3 | 08-09 | 11-09 | ⬜ Pendiente |
 | 12 | Cliente realiza pedido | Torrez, Maximiliano | 3 | aprox. 08-09 | 11-09 | ⬜ Pendiente |
@@ -123,46 +123,9 @@ src/
 | 1 | Agregar empleado | `feature/agregar-empleado` |
 | 2 | Agregar nuevo plato | `feature/agregar-plato` |
 | 3 | Agregar nueva bebida | `feature/agregar-bebida` |
+| 4 | Agregar nueva mesa | `integracion/primera-fecha` |
 | 5 | Crear cliente registrado | `feature/registro-cliente` |
 | 9 | Ingreso como cliente anónimo | `feature/registro-cliente-anonimo` |
-
----
-
-## 🧑‍💻 Notas para el equipo
-
-**Modelo de datos de la carta (puntos 2 y 3, ya aplicado en Supabase)**
-
-- Platos y bebidas viven en la **misma tabla `productos`**; se diferencian por
-  `categoria_id` según la tabla `categorias` → `1 = plato`, `2 = bebida`.
-- Se agregaron las columnas `foto2_url` y `foto3_url` (cada producto guarda tres fotos).
-- Las fotos se suben al bucket público **`productos-fotos`**.
-- Ya están hechos los `grant` y las políticas de RLS para el rol `authenticated`,
-  así que no hace falta correr nada en Supabase para levantar el proyecto.
-
-**Cómo probar los puntos 2 y 3**
-
-| Rama | Rutas | Perfil rápido |
-|---|---|---|
-| `feature/agregar-plato` | `/agregar-plato` · `/carta` | `cocinero@brasa.com` |
-| `feature/agregar-bebida` | `/agregar-bebida` · `/carta-bebidas` | `cantinero@brasa.com` |
-
-**Convenciones a respetar**
-
-- **No hay modo oscuro:** el enunciado no lo admite, no importar paletas `dark`
-  en `global.scss` (hoy sigue importado `dark.system.css`, hay que sacarlo).
-- Toda espera se muestra con `<app-spinner-logo>` (`src/app/shared/components/spinner-logo/`).
-- Los errores se informan con mensaje en pantalla + toast + vibración, nunca con `alert()`.
-- El proyecto es **zoneless**: después de un `await` hay que llamar a
-  `ChangeDetectorRef.detectChanges()` o la vista no se actualiza.
-- Inyección de dependencias con `inject()`, no por constructor (lo exige el lint).
-
-**Al unificar las ramas**
-
-- `src/app/app.routes.ts` va a dar conflicto siempre: todas las ramas agregan rutas
-  en el mismo lugar. Se resuelve conservando los bloques de ambos lados.
-- `PlatoService` y `BebidaService` son iguales salvo la categoría: conviene unificarlos
-  en un único `ProductoService` cuando se arme el menú completo (punto 11), y fusionar
-  `/carta` con `/carta-bebidas` en una sola pantalla.
 
 ---
 
