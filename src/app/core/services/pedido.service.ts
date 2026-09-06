@@ -1,10 +1,10 @@
-import { computed, inject, Service, signal } from '@angular/core';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { ItemCarrito, Producto } from '../models/pedido.models';
-import { environment } from '../../../environments/environment';
 import { SupabaseService } from './supabase.service';
 
-@Service()
+@Injectable({
+    providedIn: 'root' 
+})
 export class PedidoService {
     private supabaseService = inject(SupabaseService);
 
@@ -107,6 +107,24 @@ export class PedidoService {
         console.error('Error al cargar la carta desde Supabase:', err);
         } finally {
         this.cargandoProductos.set(false);
+        }
+    }
+
+    // Método provisional para que compile la interfaz visual
+    async enviarPedidoAConfirmar(ocupacionMesaId: number) {
+        try {
+        console.log('Enviando pedido para la ocupación de mesa:', ocupacionMesaId);
+        console.log('Detalle del pedido:', this.pedido());
+        console.log('Total a cobrar:', this.importeTotal());
+        console.log('Tiempo estimado total:', this.tiempoEstimadoTotal());
+
+        // Por ahora, solo simulamos el éxito vaciando el pedido local
+        this.vaciarPedido();
+        
+        return { ok: true };
+        } catch (err) {
+        console.error('Error al procesar el pedido:', err);
+        return { ok: false, error: err };
         }
     }
 }
