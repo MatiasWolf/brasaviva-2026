@@ -51,7 +51,7 @@ export const routes: Routes = [
       import(
         './pages/empleados/listado-empleados/listado-empleados.page'
       ).then((m) => m.ListadoEmpleadosPage),
-    canActivate: [authGuard, rolGuard(['dueño', 'supervisor'])],
+    canActivate: [authGuard, rolGuard(['metre'])],
   },
   {
     path: 'empleados/nuevo',
@@ -108,6 +108,7 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/lista-espera/lista-espera/lista-espera.page')
         .then(m => m.ListaEsperaPage),
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor', 'metre'])],
   },
   {
     path: 'mesas',

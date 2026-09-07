@@ -3,7 +3,10 @@ import { SupabaseService } from './supabase.service';
 import { StorageService } from './storage.service';
 import { Usuario } from '../models/usuario.model';
 import { PerfilRapido } from '../models/perfil-rapido.model';
-import { ROLES_CLIENTE } from '../models/boton-menu.model';
+import {
+  ROLES_CLIENTE,
+  EstadiaEstado
+} from '../models/boton-menu.model';
 
 export class AuthError extends Error {
   constructor(message: string) {
@@ -105,7 +108,55 @@ export class AuthService {
     return (data ?? []) as PerfilRapido[];
   }
 
+  async actualizarEstadoEstadia(
+    estado: EstadiaEstado
+  ): Promise<void> {
+    if (!this.usuarioActual) {
+      throw new Error(
+        'No hay un usuario registrado activo.'
+      );
+    }
+
+    const { error } =
+      await this.supabaseService.client
+        .from('usuarios')
+        .update({
+          estado_estadia: estado
+        })
+        .eq('id', this.usuarioActual.id);
+
+    if (error) {
+      throw error;
+    }
+
+    this.usuarioActual = {
+      ...this.usuarioActual,
+      estado_estadia: estado
+    };
+  }
+
   async logout(): Promise<void> {
+    if (
+      this.usuarioActual &&
+      this.usuarioActual.roles?.nombre === 'cliente_registrado'
+    ) {
+      const { error: errorEstadia } =
+        await this.supabaseService.client
+          .from('usuarios')
+          .update({
+            estado_estadia: 'sin_estadia'
+          })
+          .eq('id', this.usuarioActual.id);
+
+      if (errorEstadia) {
+        console.error(
+          'Error al resetear estado de estadía:',
+          errorEstadia
+        );
+        throw errorEstadia;
+      }
+    }
+
     const { error } =
       await this.supabaseService.client.auth.signOut();
 

@@ -35,7 +35,6 @@ export class AnonymousSessionService {
     if (error) {
       throw error;
     }
-
     localStorage.setItem(this.STORAGE_KEY, data.id);
 
     return data as SesionAnonima;
@@ -46,13 +45,10 @@ export class AnonymousSessionService {
   }
 
   async obtenerSesion(): Promise<SesionAnonima | null> {
-
     const id = this.obtenerIdSesion();
-
     if (!id) {
       return null;
     }
-
     const { data, error } = await this.supabase.client
       .from('sesiones_anonimas')
       .select('*')
@@ -62,7 +58,6 @@ export class AnonymousSessionService {
     if (error) {
       return null;
     }
-
     return data as SesionAnonima;
   }
 
@@ -89,13 +84,10 @@ export class AnonymousSessionService {
   async actualizarEstado(
     estado: EstadiaEstado
   ): Promise<void> {
-
     const id = this.obtenerIdSesion();
-
     if (!id) {
       throw new Error('No existe una sesión anónima activa');
     }
-
     const { error } = await this.supabase.client
       .from('sesiones_anonimas')
       .update({
@@ -103,32 +95,70 @@ export class AnonymousSessionService {
         updated_at: new Date().toISOString()
       })
       .eq('id', id);
-
     if (error) {
       throw error;
     }
   }
 
+
   async cerrarSesion(): Promise<void> {
     const id = this.obtenerIdSesion();
 
-    if (id) {
-      try {
-        await this.storageService.eliminarFoto(id);
+    if (!id) {
+      return;
+    }
 
-        const { error } = await this.supabase.client
+    try {
+
+      // Verificamos si el cliente todavía está
+      // esperando en la lista de espera.
+      const { data, error: errorLista } =
+        await this.supabase.client
+          .from('lista_espera')
+          .select('id')
+          .eq('sesion_anonima_id', id)
+          .eq('estado', 'esperando')
+          .maybeSingle();
+
+      if (errorLista) {
+        throw errorLista;
+      }
+
+      // Si todavía está esperando:
+      // NO borrar sesión
+      // NO borrar foto
+      // SOLO cerrar sesión localmente.
+      if (data) {
+        localStorage.removeItem(this.STORAGE_KEY);
+        return;
+      }
+
+      // Si no está en lista de espera,
+      // podemos eliminar sus datos.
+      await this.storageService.eliminarFoto(id);
+
+      const { error } =
+        await this.supabase.client
           .from('sesiones_anonimas')
           .delete()
           .eq('id', id);
 
-        if (error) {
-          throw error;
-        }
-      } catch (error) {
-        console.error('Error al cerrar sesión anónima:', error);
+      if (error) {
+        throw error;
       }
-    }
 
-    localStorage.removeItem(this.STORAGE_KEY);
+    } catch (error) {
+
+      console.error(
+        'Error al cerrar sesión anónima:',
+        error
+      );
+
+    } finally {
+
+      // En todos los casos se elimina la sesión
+      // del dispositivo.
+      localStorage.removeItem(this.STORAGE_KEY);
+    }
   }
 }

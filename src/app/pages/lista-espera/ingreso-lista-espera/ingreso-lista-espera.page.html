@@ -1,76 +1,31 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Lista de espera</ion-title>
+
+    <ion-button
+      slot="end"
+      fill="clear"
+      class="logout-btn"
+      (click)="cerrarSesion()"
+      aria-label="Cerrar sesión"
+    >
+      <ion-icon
+        slot="icon-only"
+        name="log-out-outline">
+      </ion-icon>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
+
 
 <ion-content class="lista-espera-bg">
 
   <div class="lista-espera-container">
 
-    <!-- Encabezado -->
-    <div class="welcome-section">
-      <h1>¡Bienvenido!</h1>
-
-      <p>
-        Completá los datos para ingresar a la lista de espera.
-      </p>
-    </div>
-
-
-    <!-- Cantidad de comensales -->
-    <section class="section">
-
-      <h2>¿Cuántos comensales son?</h2>
-
-      <div class="people-selector">
-
-        <ion-button
-          fill="clear"
-          class="counter-button"
-          (click)="decrementarComensales()"
-          [disabled]="cantidadComensales() <= 1">
-
-          <ion-icon name="remove-outline"></ion-icon>
-
-        </ion-button>
-
-
-        <div class="people-count">
-
-          <span>
-            {{ cantidadComensales() }}
-          </span>
-
-          <small>
-            {{ cantidadComensales() === 1 ? 'comensal' : 'comensales' }}
-          </small>
-
-        </div>
-
-
-        <ion-button
-          fill="clear"
-          class="counter-button"
-          (click)="incrementarComensales()">
-
-          <ion-icon name="add-outline"></ion-icon>
-
-        </ion-button>
-
-      </div>
-
-    </section>
-
-
     <!-- Tipo de mesa -->
     <section class="section">
 
-      <h2>Elegí el tipo de mesa</h2>
-
-      <p class="section-description">
-        Seleccioná la opción que mejor se adapte a tu grupo.
-      </p>
+      <h1>Elegí el tipo de mesa</h1>
 
 
       <div class="table-options">
@@ -90,10 +45,6 @@
           <div class="option-info">
 
             <strong>Estándar</strong>
-
-            <span>
-              Mesa tradicional
-            </span>
 
           </div>
 
@@ -120,10 +71,6 @@
 
             <strong>VIP</strong>
 
-            <span>
-              Experiencia especial
-            </span>
-
           </div>
 
           <ion-icon
@@ -142,16 +89,12 @@
           (click)="seleccionarMesa('movilidad_reducida')">
 
           <div class="option-icon">
-            <ion-icon name="accessibility-outline"></ion-icon>
+            <ion-icon name="accessibility"></ion-icon>
           </div>
 
           <div class="option-info">
 
             <strong>Movilidad reducida</strong>
-
-            <span>
-              Espacio accesible
-            </span>
 
           </div>
 
@@ -164,6 +107,50 @@
 
 
       </div>
+
+    </section>
+    <!-- Cantidad de comensales -->
+    <section class="section">
+
+      <h1>¿Cuántos comensales son?</h1>
+
+      <div class="people-selector">
+
+        <ion-button
+          fill="clear"
+          class="counter-button"
+          (click)="decrementarComensales()"
+          [disabled]="cantidadComensales() <= 1">
+
+          <ion-icon name="remove-outline"></ion-icon>
+
+        </ion-button>
+
+
+        <div class="people-count">
+
+          <span>
+            {{ cantidadComensales() }}
+          </span>
+
+        </div>
+
+
+        <ion-button
+          fill="clear"
+          class="counter-button"
+          (click)="incrementarComensales()">
+
+          <ion-icon name="add-outline"></ion-icon>
+
+        </ion-button>
+
+      </div>
+      @if (mensajeError()) {
+        <div class="error-message">
+          {{ mensajeError() }}
+        </div>
+      }
 
     </section>
 

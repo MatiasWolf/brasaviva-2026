@@ -116,6 +116,7 @@ export class HomePage implements OnInit {
     }
 
     const estado = this.estadiaEstado();
+   
     return this.botones().filter(
       (boton) => boton.contexto === 'siempre' || boton.contexto === estado,
     );
@@ -151,40 +152,59 @@ export class HomePage implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    // Primero buscamos un usuario registrado
     const usuario = await this.auth.cargarUsuarioActual();
-
     if (usuario) {
       this.usuario.set(usuario);
-
+      if (usuario.roles?.nombre === 'cliente_registrado') {
+        const estado = usuario.estado_estadia ?? 'sin_estadia';
+        this.estadiaEstado.set(estado);
+      }
       this.botones.set(
         await this.menu.getBotonesPorRol(usuario.rol_id)
       );
-
       this.cargando.set(false);
       return;
     }
-
-    // Si no hay usuario registrado, buscamos sesión anónima
     const sesionAnonima =
       await this.anonymousSession.obtenerSesion();
-
     if (sesionAnonima) {
       this.sesionAnonima.set(sesionAnonima);
       this.estadiaEstado.set(sesionAnonima.estado);
-
       this.botones.set(
         await this.menu.getBotonesPorRol(sesionAnonima.rol_id)
       );
-
       this.cargando.set(false);
       return;
     }
-
-    // No hay ningún tipo de sesión
     await this.router.navigate(['/login'], {
       replaceUrl: true
     });
+  }
+
+  // Actualiza el estado de estadía del usuario o sesión anónima y navega a la página de inicio
+  async ionViewWillEnter(): Promise<void> {
+    const usuario = await this.auth.cargarUsuarioActual();
+    if (usuario) {
+      this.usuario.set(usuario);
+      if (usuario.roles?.nombre === 'cliente_registrado') {
+        this.estadiaEstado.set(
+          usuario.estado_estadia ?? 'sin_estadia'
+        );
+      }
+      this.botones.set(
+        await this.menu.getBotonesPorRol(usuario.rol_id)
+      );
+      return;
+    }
+    const sesionAnonima =
+      await this.anonymousSession.obtenerSesion();
+    if (sesionAnonima) {
+      this.sesionAnonima.set(sesionAnonima);
+      this.estadiaEstado.set(sesionAnonima.estado);
+      this.botones.set(
+        await this.menu.getBotonesPorRol(sesionAnonima.rol_id)
+      );
+    }
   }
 
   cambiarEstadia(event: CustomEvent): void {
@@ -205,7 +225,6 @@ export class HomePage implements OnInit {
     } else {
       await this.auth.logout();
     }
-
     await this.router.navigate(['/login'], {
       replaceUrl: true
     });

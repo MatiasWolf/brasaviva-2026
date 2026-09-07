@@ -63,3 +63,93 @@
     --color-checked: #b5551f;
   }
 }
+
+/* =========================================
+   ALERTA CANCELAR CLIENTE - BRASA VIVA
+   ========================================= */
+
+.alert-cancelar-cliente {
+  --width: 90%;
+  --max-width: 430px;
+  --min-height: 300px;
+
+  --background: #2b1712;
+  --color: #fff4e6;
+  --button-color: #f5c16c;
+  --border-radius: 22px;
+}
+
+/* Contenedor interno */
+.alert-cancelar-cliente .alert-wrapper {
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  background: #2b1712;
+  border: 1px solid #6d3328;
+  border-radius: 22px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+  padding: 20px;
+}
+
+/* Título */
+.alert-cancelar-cliente .alert-title {
+  color: #f5c16c;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/* Mensaje */
+.alert-cancelar-cliente .alert-message {
+  color: #fff4e6;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  text-align: center;
+
+  padding: 10px 15px;
+  margin: 10px 0;
+}
+
+/* Botones */
+.alert-cancelar-cliente .alert-button-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+
+  padding: 15px 0 5px;
+  margin-top: auto;
+}
+
+/* Botón general */
+.alert-cancelar-cliente .alert-button {
+  flex: 0 0 120px;
+  min-width: 120px;
+  min-height: 48px;
+
+  margin: 0;
+  border-radius: 12px;
+
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Cancelar */
+.alert-cancelar-cliente .alert-button:not(.alert-button-role-destructive) {
+  background: #fff4e6;
+  color: #2b1712;
+}
+
+/* Confirmar */
+.alert-cancelar-cliente .alert-button-role-destructive {
+  background: #f5c16c;
+  color: #b71c1c;
+  font-weight: 700;
+}
+

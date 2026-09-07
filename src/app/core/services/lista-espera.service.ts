@@ -28,7 +28,7 @@ export class ListaEsperaService {
           .insert({
             usuario_id: usuario.id,
             sesion_anonima_id: null,
-            nombre: usuario.nombre,
+            nombre: `${usuario.nombre} ${usuario.apellido}`.trim(),
             foto_url: usuario.foto_url,
             cantidad_personas: cantidadPersonas,
             tipo_mesa: tipoMesa,
@@ -62,7 +62,7 @@ export class ListaEsperaService {
         .insert({
           usuario_id: null,
           sesion_anonima_id: sesion.id,
-          nombre: sesion.nombre,
+          nombre: `${sesion.nombre} ${sesion.apellido}`.trim(),
           foto_url: sesion.foto_url,
           cantidad_personas: cantidadPersonas,
           tipo_mesa: tipoMesa,

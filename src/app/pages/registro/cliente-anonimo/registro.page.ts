@@ -99,11 +99,7 @@ export class RegistroPage {
 
       const foto = await this.cameraService.tomarFoto();
 
-      console.log('Foto obtenida:', foto);
-
       this.fotoPreview = foto.webPath ?? null;
-
-      console.log('Preview:', this.fotoPreview);
 
       this.cdr.detectChanges();
 
@@ -120,7 +116,6 @@ export class RegistroPage {
     }
 
     if (!this.fotoPreview) {
-      console.error('El usuario debe agregar una foto.');
       return;
     }
 
@@ -133,29 +128,19 @@ export class RegistroPage {
     await this.authService.logoutLocal();
 
     // 1. Crear sesión anónima
-    console.log('Creando sesión anónima...');
-
     const sesion = await this.anonymousSessionService.crearSesion(
       nombre,
       apellido
     );
 
-    console.log('Sesión creada:', sesion);
-
     // 2. Subir foto usando el UUID de la sesión
-    console.log('Subiendo foto...');
-
     const fotoUrl = await this.storageService.subirFoto(
       sesion.id,
       this.fotoPreview
     );
 
-    console.log('Foto subida:', fotoUrl);
-
     // 3. Guardar la URL real de Storage en la sesión
     await this.anonymousSessionService.actualizarFoto(fotoUrl);
-
-    console.log('Foto asociada a la sesión correctamente.');
 
     await this.router.navigate(['/home']);
 
