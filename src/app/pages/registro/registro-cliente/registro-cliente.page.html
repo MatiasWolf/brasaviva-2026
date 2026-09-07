@@ -313,45 +313,49 @@
 
 <ion-modal
   [isOpen]="isModalOpen"
-  backdropDismiss="false"
-  class="success-modal"
+  (didDismiss)="isModalOpen = false"
+  cssClass="success-modal"
+>
+  <ng-template>
 
-  >
+    <div class="success-container">
 
-    <ng-template>
-
-
-    <div class="modal-wrapper">
-
-      <div class="icon-container">
+      <div class="success-icono">
         <ion-icon name="checkmark-circle"></ion-icon>
       </div>
 
-      <h2>¡Registro exitoso!</h2>
+      <div class="success-titulo">
+        <h2>¡Registro exitoso!</h2>
+        <p>
+          Tu registro como cliente invitado se realizó correctamente.
+        </p>
+      </div>
 
-      <p>
-        Tu cuenta fue creada correctamente y se encuentra
-        <strong>pendiente de aprobación</strong>
-        por los administradores.
-      </p>
+      <div class="success-info">
+        <ion-icon name="checkmark-circle"></ion-icon>
 
-      <div class="divider"></div>
+        <p>
+          <div class="success-info">
+  <ion-icon name="checkmark-circle"></ion-icon>
 
-      <p class="sub-text">
-        Te vamos a avisar por correo apenas un administrador revise tu
-        cuenta. Hasta entonces no vas a poder iniciar sesión.
-      </p>
+  <p>
+    Tu cuenta quedó pendiente de aprobación.
+    Te avisaremos cuando esté habilitada para ingresar a Brasa Viva.
+  </p>
+</div>
+       
+      </div>
 
-      <ion-button
-        expand="block"
-        shape="round"
-        (click)="irAlLogin()"
-      >
-        Ir al login
-      </ion-button>
+      <div class="success-acciones">
+        <ion-button
+          (click)="irAlLogin()"
+          class="btn-aceptar-success"
+          expand="block">
+          Continuar
+        </ion-button>
+      </div>
 
     </div>
-
 
   </ng-template>
 </ion-modal>

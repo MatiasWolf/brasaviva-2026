@@ -380,194 +380,267 @@ ion-input::part(native)::placeholder {
 }
 
 
+
 /* =========================================
-   MODAL - REGISTRO EXITOSO
-========================================= */
+   MODAL REGISTRO EXITOSO
+   BRASA VIVA
+   ========================================= */
 
 ion-modal.success-modal {
-  --width: 94%;
-  --max-width: 460px;
 
-  --height: auto;
-  --max-height: 85%;
+  --width: 60%;
+  --height: 80%;
 
-  --border-radius: 20px;
+  --max-width: 600px;
+  --min-width: 420px;
+
+  --max-height: 650px;
+  --min-height: 430px;
+
+  --border-radius: 28px;
+
+  --background: transparent;
 
   --box-shadow:
-    0 15px 40px rgba(19, 9, 5, 0.35);
-
-  --background: #fff3df;
+    0 15px 45px rgba(0, 0, 0, 0.55);
 }
 
 
 /* =========================================
-   CONTENEDOR INTERNO DEL MODAL
-========================================= */
+   CONTENEDOR
+   ========================================= */
 
-ion-modal.success-modal .modal-wrapper {
+.success-container {
+
   width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: space-between;
+
+  background: #2b1712;
+
+  border: 1px solid #6d3328;
+
+  border-radius: 28px;
+
+  box-shadow:
+    0 15px 45px rgba(0, 0, 0, 0.55);
+
+  padding: 45px 50px;
 
   box-sizing: border-box;
+}
 
-  padding: 36px 28px;
+
+/* =========================================
+   ICONO
+   ========================================= */
+
+.success-icono {
+
+  width: 100px;
+  height: 100px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(245, 193, 108, 0.12);
+
+  border: 2px solid #f5c16c;
+
+  border-radius: 50%;
+
+  flex-shrink: 0;
+}
+
+.success-icono ion-icon {
+
+  font-size: 65px;
+
+  color: #f5c16c;
+}
+
+
+/* =========================================
+   TÍTULO
+   ========================================= */
+
+.success-titulo {
 
   text-align: center;
 
-  background:
-    linear-gradient(
-      180deg,
-      #fff8ed 0%,
-      #fff3df 100%
-    );
-
-  border: 2px solid #c0784d;
-
-  border-radius: 20px;
+  margin-bottom: 15px;
 }
 
+.success-titulo h2 {
 
-/* =========================================
-   ICONO DEL MODAL
-========================================= */
+  margin: 0 0 8px;
 
-ion-modal.success-modal .icon-container {
-  display: flex;
+  color: #f5c16c;
 
-  justify-content: center;
-  align-items: center;
+  font-size: 1.8rem;
 
-  margin-bottom: 16px;
-}
-
-ion-modal.success-modal .icon-container ion-icon {
-  font-size: 68px;
-
-  color: #d49a5d;
-
-  filter:
-    drop-shadow(
-      0 3px 5px rgba(19, 9, 5, 0.18)
-    );
-}
-
-
-/* =========================================
-   TITULO DEL MODAL
-========================================= */
-
-ion-modal.success-modal h2 {
-  margin: 0 0 12px;
-
-  color: #4d200f;
-
-  font-size: 24px;
   font-weight: 700;
-
-  letter-spacing: 0.2px;
 }
 
+.success-titulo p {
 
-/* =========================================
-   TEXTO PRINCIPAL
-========================================= */
-
-ion-modal.success-modal p {
   margin: 0;
 
-  color: #805238;
+  color: #fff4e6;
 
-  font-size: 15px;
+  font-size: 1rem;
+
   line-height: 1.5;
-}
 
-ion-modal.success-modal p strong {
-  color: #4d200f;
-
-  font-weight: 700;
+  opacity: 0.85;
 }
 
 
 /* =========================================
-   SEPARADOR
-========================================= */
+   INFORMACIÓN DEL REGISTRO
+   ========================================= */
 
-ion-modal.success-modal .divider {
-  height: 1px;
+.success-info {
 
-  margin: 22px 0;
+  width: 100%;
 
-  background: #d9b18d;
-}
+  display: flex;
 
+  flex-direction: column;
 
-/* =========================================
-   TEXTO SECUNDARIO
-========================================= */
+  align-items: center;
 
-ion-modal.success-modal .sub-text {
+  justify-content: center;
+
+  text-align: center;
+
+  background: #3a1e17;
+
+  border: 1px solid #6d3328;
+
+  border-radius: 18px;
+
+  padding: 25px 20px;
+
   margin-bottom: 22px;
 
-  color: #8c6048;
+  box-sizing: border-box;
+}
 
-  font-size: 13px;
+.success-info ion-icon {
+
+  font-size: 32px;
+
+  color: #f5c16c;
+
+  margin-bottom: 10px;
+}
+
+.success-info p {
+
+  margin: 0;
+
+  color: #fff4e6;
+
+  font-size: 0.95rem;
+
   line-height: 1.5;
+
+  opacity: 0.85;
 }
 
 
 /* =========================================
-   BOTÓN DEL MODAL
-========================================= */
+   BOTÓN
+   ========================================= */
 
-ion-modal.success-modal ion-button {
-  --background: #ffd485;
-  --background-hover: #ffe0a3;
-  --background-activated: #e9b95e;
+.success-acciones {
 
-  --color: #4d200f;
+  width: 100%;
 
-  --border-radius: 12px;
+  margin-top: 25px;
+}
 
-  --box-shadow:
-    0 5px 12px rgba(19, 9, 5, 0.20);
+.btn-aceptar-success {
 
-  margin-top: 6px;
+  width: 100%;
 
-  height: 48px;
+  height: 60px;
 
-  font-size: 15px;
+  --background: #f5c16c;
+
+  --background-hover: #ffd58a;
+
+  --background-activated: #e5ad55;
+
+  --color: #2b1712;
+
+  --border-radius: 14px;
+
+  font-size: 1rem;
+
   font-weight: 700;
 
   text-transform: none;
 }
 
+.btn-aceptar-success ion-icon {
+
+  font-size: 22px;
+}
+
 
 /* =========================================
-   ANIMACIONES
-========================================= */
+   RESPONSIVE
+   ========================================= */
 
-@keyframes floatIcon {
-  0%,
-  100% {
-    transform: translateY(0) scale(1);
+@media (max-width: 600px) {
+
+  ion-modal.success-modal {
+
+    --width: 94%;
+
+    --height: auto;
+
+    --min-width: 0;
+
+    --min-height: 0;
+
+    --max-height: 85%;
   }
 
-  50% {
-    transform: translateY(-8px) scale(1.03);
+  .success-container {
+
+    padding: 35px 25px;
+
+    min-height: 430px;
+  }
+
+  .success-icono {
+
+    width: 85px;
+    height: 85px;
+  }
+
+  .success-icono ion-icon {
+
+    font-size: 55px;
+  }
+
+  .success-titulo h2 {
+
+    font-size: 1.6rem;
   }
 }
 
-@keyframes glow {
-  0%,
-  100% {
-    opacity: 0.55;
-    transform: scale(0.94);
-  }
 
-  50% {
-    opacity: 1;
-    transform: scale(1.08);
-  }
-}
 
 
 /* =========================================

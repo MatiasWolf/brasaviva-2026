@@ -61,26 +61,28 @@ export class AnonymousSessionService {
     return data as SesionAnonima;
   }
 
-  async actualizarFoto(fotoUrl: string): Promise<void> {
+  async actualizarFoto(fotoUrl: string): Promise<SesionAnonima> {
     const id = this.obtenerIdSesion();
-
     if (!id) {
-      throw new Error('No existe una sesión anónima activa');
+      throw new Error(
+        'No existe una sesión anónima activa'
+      );
     }
-
-    const { error } = await this.supabase.client
-      .from('sesiones_anonimas')
-      .update({
-        foto_url: fotoUrl,
-        updated_at: new Date().toISOString()
-      })
-      .eq('id', id);
-
+    const { data, error } =
+      await this.supabase.client
+        .from('sesiones_anonimas')
+        .update({
+          foto_url: fotoUrl,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id)
+        .select()
+        .single();
     if (error) {
       throw error;
     }
+    return data as SesionAnonima;
   }
-
   async actualizarEstado(
     estado: EstadiaEstado
   ): Promise<void> {

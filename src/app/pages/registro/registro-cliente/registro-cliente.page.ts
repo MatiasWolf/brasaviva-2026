@@ -31,11 +31,11 @@ import { DatosDni } from '../../../core/models/dni.model';
     IonToolbar,
     IonTitle,
     IonButtons,
+    IonModal,
     IonBackButton,
     IonContent,
     IonInput,
     IonButton,
-    IonModal,
     IonIcon,
     DniScannerComponent
 ]
@@ -133,65 +133,65 @@ export class RegistroClientePage {
 
   async registrarCliente() {
 
-  this.mensajeError = '';
+    this.mensajeError = '';
 
-  // Validar formulario
-  if (this.registroForm.invalid) {
-    this.registroForm.markAllAsTouched();
-    this.mensajeError = 'Completá correctamente todos los campos.';
-    return;
-  }
+    // Validar formulario
+    if (this.registroForm.invalid) {
+      this.registroForm.markAllAsTouched();
+      this.mensajeError = 'Completá correctamente todos los campos.';
+      return;
+    }
 
-  if (!this.fotoPreview) { 
-    this.mensajeError = 'Debés agregar una foto de perfil.'; 
-    return; 
-  }
+    if (!this.fotoPreview) { 
+      this.mensajeError = 'Debés agregar una foto de perfil.'; 
+      return; 
+    }
 
-  // Obtener valores
-  const {
-    apellido,
-    nombre,
-    dni,
-    email,
-    password
-  } = this.registroForm.value;
-
-  this.enviando = true;
-
-  try {
-
-    await this.auth.registrarCliente({
+    // Obtener valores
+    const {
       apellido,
       nombre,
       dni,
       email,
-      password,
-      foto: this.fotoPreview!
-    });
+      password
+    } = this.registroForm.value;
 
-    // El alta puede dejar una sesión activa (signUp inicia sesión sola).
-    // La cerramos: hasta que no lo aprueben, no puede entrar a la app.
-    // Si falla el signOut no bloqueamos el éxito: la cuenta ya se creó.
-    await this.auth.logout().catch((error) =>
-      console.error('No se pudo cerrar la sesión tras el registro:', error),
-    );
+    this.enviando = true;
 
-    this.isModalOpen = true;
-    this.cdr.detectChanges();
+    try {
+
+      await this.auth.registrarCliente({
+        apellido,
+        nombre,
+        dni,
+        email,
+        password,
+        foto: this.fotoPreview!
+      });
+
+      // El alta puede dejar una sesión activa (signUp inicia sesión sola).
+      // La cerramos: hasta que no lo aprueben, no puede entrar a la app.
+      // Si falla el signOut no bloqueamos el éxito: la cuenta ya se creó.
+      await this.auth.logout().catch((error) =>
+        console.error('No se pudo cerrar la sesión tras el registro:', error),
+      );
+
+      this.isModalOpen = true;
+      this.cdr.detectChanges();
 
 
-  } catch (error: any) {
+    } catch (error: any) {
 
-    console.error('REGISTRO ERROR:', error);
+      console.error('REGISTRO ERROR:', error);
 
-    this.mensajeError =
-      this.obtenerMensajeError(error);
+      this.mensajeError =
+        this.obtenerMensajeError(error);
 
-  } finally {
+    } finally {
 
-    this.enviando = false;
+      this.enviando = false;
+    }
   }
-}
 
   private passwordsIguales(
     control: AbstractControl
