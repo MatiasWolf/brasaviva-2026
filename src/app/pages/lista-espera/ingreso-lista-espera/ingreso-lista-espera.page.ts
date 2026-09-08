@@ -12,6 +12,8 @@ import {
   IonIcon,
   IonTitle,
   IonToolbar,
+  IonModal
+
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import {
@@ -38,6 +40,7 @@ type TipoMesa = 'estandar' | 'vip' | 'movilidad_reducida';
     IonToolbar,
     IonButton,
     IonIcon,
+    IonModal,
   ],
 })
 export class IngresoListaEsperaPage {
@@ -49,6 +52,7 @@ export class IngresoListaEsperaPage {
   readonly cantidadComensales = signal(1);
   readonly tipoMesa = signal<TipoMesa | null>(null);
   readonly maxComensales = signal(0);
+  readonly mostrarModalExito = signal(false);
 
   mensajeError = signal('');
 
@@ -149,9 +153,7 @@ export class IngresoListaEsperaPage {
         );
       }
 
-      await this.router.navigate(['/home'], {
-        replaceUrl: true
-      });
+      this.mostrarModalExito.set(true);
 
     } catch (error) {
       console.error(
@@ -161,6 +163,15 @@ export class IngresoListaEsperaPage {
     }
   }
 
+  cerrarModalExito(): void {
+    this.mostrarModalExito.set(false);
+  }
+
+  async modalExitoCerrado(): Promise<void> {
+    await this.router.navigate(['/home'], {
+      replaceUrl: true
+    });
+  }
     
   async cerrarSesion(): Promise<void> {
     if (this.anonymousSession.obtenerIdSesion()) {

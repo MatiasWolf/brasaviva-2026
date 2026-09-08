@@ -3,6 +3,7 @@ import { TitleCasePipe } from '@angular/common';
 import { AnonymousSessionService } from '../core/services/anonymous-session.service';
 import { SesionAnonima } from '../core/models/sesion-anonima.model';
 import { Router } from '@angular/router';
+import { QrScannerComponent } from '../shared/components/qr-scanner/qr-scanner.component';
 import {
   IonButton,
   IonContent,
@@ -63,6 +64,7 @@ import { SpinnerLogoComponent } from '../shared/components/spinner-logo/spinner-
     IonSegmentButton,
     IonLabel,
     SpinnerLogoComponent,
+    QrScannerComponent,
   ],
 })
 export class HomePage implements OnInit {
@@ -75,6 +77,9 @@ export class HomePage implements OnInit {
   readonly sesionAnonima = signal<SesionAnonima | null>(null);
   readonly cargando = signal(true);
   readonly estadiaEstado = signal<EstadiaEstado>('sin_estadia');
+  readonly mostrandoQrScanner = signal(false);
+  readonly procesandoQr = signal(false);
+  private rutaPendienteQr: string | null = null;
 
   readonly estadiaEstados = ESTADIA_ESTADOS;
 
@@ -183,6 +188,7 @@ export class HomePage implements OnInit {
 
   // Actualiza el estado de estadía del usuario o sesión anónima y navega a la página de inicio
   async ionViewWillEnter(): Promise<void> {
+    this.procesandoQr.set(false);
     const usuario = await this.auth.cargarUsuarioActual();
     if (usuario) {
       this.usuario.set(usuario);
@@ -212,11 +218,35 @@ export class HomePage implements OnInit {
   }
 
   async ejecutar(boton: BotonMenu): Promise<void> {
+    if (boton.clave === 'escanear-qr-ingreso') {
+      this.mostrandoQrScanner.set(true);
+      return;
+    }
     if (boton.ruta) {
       await this.router.navigateByUrl(boton.ruta);
       return;
     }
     console.log('Acción del menú:', boton.clave);
+  }
+
+  onQrEscaneado(texto: string): void {
+    if (texto === 'BRASA_VIVA_INGRESO') {
+      this.rutaPendienteQr = '/ingreso-lista-espera';
+      this.procesandoQr.set(true);
+    }
+
+    this.mostrandoQrScanner.set(false);
+  }
+
+  cerrarQrScanner(): void {
+    this.mostrandoQrScanner.set(false);
+
+    if (this.rutaPendienteQr) {
+      const ruta = this.rutaPendienteQr;
+      this.rutaPendienteQr = null;
+
+      this.router.navigate([ruta]);
+    }
   }
 
   async cerrarSesion(): Promise<void> {

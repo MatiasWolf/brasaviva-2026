@@ -175,3 +175,40 @@
   </div>
 
 </ion-content>
+
+<ion-modal
+  [isOpen]="mostrarModalExito()"
+  cssClass="modal-ingreso-exitoso"
+  (didDismiss)="modalExitoCerrado()"
+>
+  <ng-template>
+    <div class="ingreso-exito-container">
+
+      <div class="ingreso-exito-icono">
+        <ion-icon name="checkmark-circle"></ion-icon>
+      </div>
+
+      <div class="ingreso-exito-titulo">
+        <h2>¡Ingreso confirmado!</h2>
+      </div>
+
+      <div class="ingreso-exito-info">
+        <p>
+          Te agregamos correctamente a la lista de espera.
+          Te avisaremos cuando haya una mesa disponible.
+        </p>
+      </div>
+
+      <div class="ingreso-exito-acciones">
+        <ion-button
+          expand="block"
+          class="btn-ingreso-exito"
+          (click)="cerrarModalExito()"
+        >
+          Continuar
+        </ion-button>
+      </div>
+
+    </div>
+  </ng-template>
+</ion-modal>
