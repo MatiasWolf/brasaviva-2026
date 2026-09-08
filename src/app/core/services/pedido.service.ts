@@ -100,7 +100,6 @@ export class PedidoService {
 
         if (error) throw error;
         
-        // Guardamos los productos en la Signal
         this.productos.set(data || []);
         
         } catch (err) {
@@ -118,7 +117,7 @@ export class PedidoService {
         console.log('Total a cobrar:', this.importeTotal());
         console.log('Tiempo estimado total:', this.tiempoEstimadoTotal());
 
-        // Por ahora, solo simulamos el éxito vaciando el pedido local
+        // Por ahora solo simula el éxito vaciando el pedido 
         this.vaciarPedido();
         
         return { ok: true };

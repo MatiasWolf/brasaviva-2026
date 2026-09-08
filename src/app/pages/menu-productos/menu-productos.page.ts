@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonSpinner, IonIcon, IonFooter, IonList, IonSegment, IonSegmentButton, IonLabel } from '@ionic/angular';
 import { PedidoService } from '../../core/services/pedido.service';
-import { addIcons } from 'ionicons'; // <-- Importar addIcons
+import { addIcons } from 'ionicons'; 
 import { addCircle, arrowBackOutline, arrowForwardOutline, removeCircle, restaurantOutline, wineOutline } from 'ionicons/icons'; // <-- Importar íconos específicos
 import { TarjetaProductoComponent } from '../../shared/components/tarjeta-producto/tarjeta-producto.component';
 
@@ -19,16 +19,15 @@ export class MenuProductosPage implements OnInit {
 
   public pedidoService = inject(PedidoService);
 
-  // CONTROL DE PESTAÑAS: 1 para Platos, 2 para Bebidas (Alineado a IDs estándar de tu BD)
+  // CONTROL DE PESTAÑAS: 1 para Platos, 2 para Bebidas 
   public categoriaActiva = signal<number>(1);
 
-  // FILTRADO REACTIVO EN TIEMPO REAL: No ensucia el servicio y mantiene las cards en memoria
+  // Filtrado de productos por categoría
   public productosFiltrados = computed(() => {
     return this.pedidoService.productos().filter(p => p.categoria_id === this.categoriaActiva());
   });
 
   constructor() {
-    // Registrar los íconos globalmente para este componente
     addIcons({ addCircle, removeCircle, arrowBackOutline, arrowForwardOutline, 
               restaurantOutline, wineOutline });
   }

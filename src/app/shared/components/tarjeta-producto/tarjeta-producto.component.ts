@@ -21,7 +21,7 @@ export class TarjetaProductoComponent  implements OnInit {
   alAgregar = output<Producto>();
   alRestar = output<number>();
 
-  // Signal LOCAL: controla de forma reactiva e independiente la foto activa de esta tarjeta
+  // Signal LOCAL: controla la foto activa de la tarjeta
   public fotoActivaIndex = signal<number>(0);
 
   constructor() {

@@ -5,12 +5,12 @@ $borde-oscuro: #802323;
 :host {
   display: block;
   width: 100%;
-  height: auto; // Se adapta estrictamente al contenido interno de la card
+  height: auto; 
 }
 
 .tarjeta-individual {
   margin: 0 !important;
-  height: auto; // Liberamos el alto rígido para eliminar el vacío gigante
+  height: auto; 
   border-radius: 18px;
   border: 2px solid $borde-oscuro;
   background: linear-gradient(160deg, #411616 0%, #250a0a 100%);
@@ -22,8 +22,8 @@ $borde-oscuro: #802323;
     height: auto;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; // Alineación compacta consecutiva hacia arriba
-    gap: 14px; // Espaciado orgánico controlado entre secciones
+    justify-content: flex-start; 
+    gap: 14px;
   }
 }
 
@@ -32,7 +32,7 @@ $borde-oscuro: #802323;
   align-items: center;
   justify-content: space-between;
   background: rgba(19, 9, 5, 0.4);
-  padding: 10px 8px; // Un poquito más de margen arriba y abajo para contener el visor alto
+  padding: 10px 8px; 
   border-radius: 14px;
   border: 1px solid rgba(255, 170, 85, 0.25);
   width: 100%;
@@ -51,7 +51,6 @@ $borde-oscuro: #802323;
     }
   }
 
-  // MODIFICADO: Visor central agrandado para destacar la foto del producto al máximo
   .visor-imagen {
     position: relative;
     display: flex;
@@ -59,8 +58,8 @@ $borde-oscuro: #802323;
     align-items: center;
     justify-content: center;
     flex: 1;
-    max-width: 220px; // Aumentado de 180px para darle mayor ancho a la imagen
-    height: 180px;    // Aumentado de 150px para ganar impacto visual vertical
+    max-width: 220px; 
+    height: 180px;   
     background: rgba(255, 248, 241, 0.06);
     border-radius: 12px;
     overflow: hidden;
@@ -104,19 +103,18 @@ $borde-oscuro: #802323;
     line-height: 1.2;
   }
 
-  // MODIFICADO: Indicador de tiempo más grande y legible
   .tiempo-elaboracion {
     display: inline-flex;
     align-items: center;
-    gap: 8px; // Más separación interna con el ícono
-    font-size: 0.92rem; // Aumentado de 0.8rem
+    gap: 8px; 
+    font-size: 0.92rem; 
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: #dfa070;
     font-weight: 600;
 
     ion-icon {
-      font-size: 1.1rem; // Aumentado de 0.95rem
+      font-size: 1.1rem; 
       color: $color-secundario;
     }
   }
@@ -137,32 +135,29 @@ $borde-oscuro: #802323;
   border-top: 1px solid rgba(255, 212, 133, 0.12);
   margin-top: 4px;
 
-  // MODIFICADO: Precio con mayor impacto visual
   .precio {
-    font-size: 1.55rem; // Aumentado de 1.3rem
-    font-weight: 800; // Extra-negrita para destacar el valor
+    font-size: 1.55rem; 
+    font-weight: 800; 
     font-family: Georgia, serif;
     color: $color-secundario;
   }
 
-  // MODIFICADO: Área del carrito más ancha y espaciada
   .acciones-carrito {
     display: flex;
     align-items: center;
-    gap: 20px; // Aumentado de 14px para dar aire entre los botones y el número
+    gap: 20px; 
     background: rgba(19, 9, 5, 0.5);
     border-radius: 999px;
-    padding: 4px 8px; // Un poco más de margen interno para contener los botones grandes
+    padding: 4px 8px; 
     border: 1px solid rgba(255, 170, 85, 0.35);
 
-    // MODIFICADO: Botones de acción agrandados para mejor usabilidad táctil
     ion-button {
       --color: #{$color-primario};
       --padding-start: 0;
       --padding-end: 0;
       margin: 0;
-      height: 42px; // Aumentado de 36px
-      width: 42px;  // Aumentado de 36px
+      height: 42px; 
+      width: 42px; 
       display: flex;
       align-items: center;
       justify-content: center;
@@ -172,12 +167,12 @@ $borde-oscuro: #802323;
       }
 
       ion-icon {
-        font-size: 1.85rem; // Aumentado de 1.6rem (Los círculos + y - se ven más imponentes)
+        font-size: 1.85rem;
       }
     }
 
     ion-badge {
-      font-size: 1.05rem; // Subido sutilmente de 0.95rem para acompañar la escala
+      font-size: 1.05rem; 
       font-weight: bold;
       --background: transparent;
       color: #fff8f1;
