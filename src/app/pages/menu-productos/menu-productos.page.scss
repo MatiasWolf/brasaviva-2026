@@ -1,0 +1,121 @@
+// Paleta del grupo
+$color-primario: #ffd485;
+$color-secundario: #ffaa55;
+$color-texto-suave: rgba(255, 248, 241, 0.74);
+$borde-oscuro: #802323;
+
+ion-content {
+  &.home-bg {
+    --background: radial-gradient(circle at 15% 0%, rgba(246, 193, 133, 0.16), transparent 22%),
+                  linear-gradient(180deg, #130905 0%, #3a1710 100%);
+    --color: #{$color-primario};
+  }
+
+  &.home-container {
+    &::part(scroll) {
+      padding: 16px 16px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px; 
+    }
+  }
+}
+
+app-tarjeta-producto {
+  display: block;
+  width: 100%;
+  height: auto; 
+  flex-shrink: 0;
+}
+
+.loader {
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: $color-primario;
+
+  p {
+    margin: 0;
+    color: $color-texto-suave;
+  }
+}
+
+.sin-botones {
+  text-align: center;
+  color: #dfa070;
+  padding: 24px 0;
+}
+
+ion-footer {
+  ion-toolbar {
+    --background: linear-gradient(180deg, #250f0a 0%, #130905 100%);
+    --border-style: none;
+    border-top: 2px solid $borde-oscuro;
+    padding: 12px 16px;
+  }
+
+  p {
+    margin: 4px 0;
+    font-size: 0.95rem;
+    color: #dfa070;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    &:nth-of-type(2) {
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: $color-primario;
+      margin-bottom: 12px;
+      border-top: 1px solid rgba(255, 212, 133, 0.15);
+      padding-top: 8px;
+    }
+  }
+
+  ion-button {
+    --background: linear-gradient(160deg, #802323 0%, #4a1111 100%);
+    --color: #fff8f1;
+    --border-radius: 12px;
+    --border-color: #{$color-secundario};
+    --border-style: solid;
+    --border-width: 1px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+    width: 100%;
+  }
+}
+
+ion-segment {
+  --background: rgba(19, 9, 5, 0.4);
+  border-top: 1px solid rgba(255, 170, 85, 0.15);
+  border-bottom: 1px solid rgba(255, 170, 85, 0.15);
+  border-left: none;
+  border-right: none;
+  border-radius: 0; 
+  margin: 0; 
+  width: 100%;
+  max-height: 40px; 
+}
+
+ion-segment-button {
+  --background-checked: linear-gradient(160deg, #802323 0%, #4a1111 100%);
+  --color: #dfa070;
+  --color-checked: #ffd485;
+  --indicator-color: transparent;
+  padding: 0;
+  height: 38px;
+
+  &::part(indicator-background) {
+    background: transparent;
+  }
+
+  ion-icon {
+    font-size: 1.45rem;
+    margin: 0;
+  }
+}

@@ -127,9 +127,18 @@ export const routes: Routes = [
     canActivate: [authGuard, rolGuard(['dueño', 'supervisor'])],
   },
   {
+  path: 'menu-productos',
+  loadComponent: () =>
+    import('./pages/menu-productos/menu-productos.page').then(
+      (m) => m.MenuProductosPage
+    ),
+  },
+  {
     path: '',
     redirectTo: 'splash-estatica',
     pathMatch: 'full',
   },
+  
 
 ];
+

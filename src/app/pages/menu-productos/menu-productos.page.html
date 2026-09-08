@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-toolbar class="home-bg">
+    <ion-title>Menú de Productos</ion-title>
+  </ion-toolbar>
+  
+  <!-- BARRA DE PESTAÑAS -->
+  <ion-toolbar class="home-bg" style="--padding-top: 0; --padding-bottom: 0;">
+  <ion-segment [value]="categoriaActiva()" (ionChange)="cambiarCategoria($event)" mode="md">
+      <ion-segment-button [value]="1">
+        <ion-icon name="restaurant-outline"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button [value]="2">
+        <ion-icon name="wine-outline"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="home-bg home-container">
+  
+  <!-- SPINNER DE CARGA -->
+  @if (pedidoService.cargandoProductos()) {
+    <div class="loader">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p>Cargando la carta...</p>
+    </div>
+  } @else {
+    
+    <!-- LISTADO DE PRODUCTOS UTILIZANDO LA SIGNAL COMPUTADA FILTRADA -->
+    <ion-list lines="none" style="background: transparent; margin: 0; padding: 0;">
+      @for (prod of productosFiltrados(); track prod.id) {
+        <app-tarjeta-producto 
+          [producto]="prod"
+          [cantidadEnCarrito]="obtenerCantidad(prod.id)"
+          (alAgregar)="pedidoService.agregarAlPedido($event)"
+          (alRestar)="pedidoService.restarDelPedido($event)">
+        </app-tarjeta-producto>
+      } @empty {
+        <div class="sin-botones">
+          <p>No hay productos en esta categoría por el momento.</p>
+        </div>
+      }
+    </ion-list>
+    
+  }
+
+</ion-content>
+
+<!-- FOOTER DEL CARRITO -->
+@if (pedidoService.cantidadTotalItems() > 0) {
+  <ion-footer class="home-bg" style="border-top: 2px solid #802323; padding: 12px 16px;">
+    <div style="display: flex; flex-direction: column; gap: 8px;">
+      
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="color: rgba(255, 248, 241, 0.75); font-size: 0.9rem;">Tiempo de preparación estimado:</span>
+        <span style="color: #ffaa55; font-weight: bold; font-size: 1.1rem;">
+          {{ pedidoService.tiempoEstimadoTotal() }} min
+        </span>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span style="color: #ffd485; font-family: Georgia, serif; font-size: 1.2rem; font-weight: bold;">Total a pagar:</span>
+        <span style="color: #ffd485; font-family: Georgia, serif; font-size: 1.5rem; font-weight: 800;">
+          ${{ pedidoService.importeTotal() }}
+        </span>
+      </div>
+
+      <ion-button expand="block" style="--background: #802323; --color: #ffd485; font-weight: bold;" 
+                  (click)="pedidoService.enviarPedidoAConfirmar(1)">
+        Terminar Pedido
+      </ion-button>
+      
+    </div>
+  </ion-footer>
+}
