@@ -3,6 +3,7 @@ import { TitleCasePipe } from '@angular/common';
 import { AnonymousSessionService } from '../core/services/anonymous-session.service';
 import { SesionAnonima } from '../core/models/sesion-anonima.model';
 import { Router } from '@angular/router';
+import { QrScannerComponent } from '../shared/components/qr-scanner/qr-scanner.component';
 import {
   IonButton,
   IonContent,
@@ -63,6 +64,7 @@ import { SpinnerLogoComponent } from '../shared/components/spinner-logo/spinner-
     IonSegmentButton,
     IonLabel,
     SpinnerLogoComponent,
+    QrScannerComponent,
   ],
 })
 export class HomePage implements OnInit {
@@ -75,6 +77,9 @@ export class HomePage implements OnInit {
   readonly sesionAnonima = signal<SesionAnonima | null>(null);
   readonly cargando = signal(true);
   readonly estadiaEstado = signal<EstadiaEstado>('sin_estadia');
+  readonly mostrandoQrScanner = signal(false);
+  readonly procesandoQr = signal(false);
+  private rutaPendienteQr: string | null = null;
 
   readonly estadiaEstados = ESTADIA_ESTADOS;
 
@@ -116,6 +121,7 @@ export class HomePage implements OnInit {
     }
 
     const estado = this.estadiaEstado();
+   
     return this.botones().filter(
       (boton) => boton.contexto === 'siempre' || boton.contexto === estado,
     );
@@ -151,40 +157,60 @@ export class HomePage implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    // Primero buscamos un usuario registrado
     const usuario = await this.auth.cargarUsuarioActual();
-
     if (usuario) {
       this.usuario.set(usuario);
-
+      if (usuario.roles?.nombre === 'cliente_registrado') {
+        const estado = usuario.estado_estadia ?? 'sin_estadia';
+        this.estadiaEstado.set(estado);
+      }
       this.botones.set(
         await this.menu.getBotonesPorRol(usuario.rol_id)
       );
-
       this.cargando.set(false);
       return;
     }
-
-    // Si no hay usuario registrado, buscamos sesión anónima
     const sesionAnonima =
       await this.anonymousSession.obtenerSesion();
-
     if (sesionAnonima) {
       this.sesionAnonima.set(sesionAnonima);
       this.estadiaEstado.set(sesionAnonima.estado);
-
       this.botones.set(
         await this.menu.getBotonesPorRol(sesionAnonima.rol_id)
       );
-
       this.cargando.set(false);
       return;
     }
-
-    // No hay ningún tipo de sesión
     await this.router.navigate(['/login'], {
       replaceUrl: true
     });
+  }
+
+  // Actualiza el estado de estadía del usuario o sesión anónima y navega a la página de inicio
+  async ionViewWillEnter(): Promise<void> {
+    this.procesandoQr.set(false);
+    const usuario = await this.auth.cargarUsuarioActual();
+    if (usuario) {
+      this.usuario.set(usuario);
+      if (usuario.roles?.nombre === 'cliente_registrado') {
+        this.estadiaEstado.set(
+          usuario.estado_estadia ?? 'sin_estadia'
+        );
+      }
+      this.botones.set(
+        await this.menu.getBotonesPorRol(usuario.rol_id)
+      );
+      return;
+    }
+    const sesionAnonima =
+      await this.anonymousSession.obtenerSesion();
+    if (sesionAnonima) {
+      this.sesionAnonima.set(sesionAnonima);
+      this.estadiaEstado.set(sesionAnonima.estado);
+      this.botones.set(
+        await this.menu.getBotonesPorRol(sesionAnonima.rol_id)
+      );
+    }
   }
 
   cambiarEstadia(event: CustomEvent): void {
@@ -192,11 +218,35 @@ export class HomePage implements OnInit {
   }
 
   async ejecutar(boton: BotonMenu): Promise<void> {
+    if (boton.clave === 'escanear-qr-ingreso') {
+      this.mostrandoQrScanner.set(true);
+      return;
+    }
     if (boton.ruta) {
       await this.router.navigateByUrl(boton.ruta);
       return;
     }
     console.log('Acción del menú:', boton.clave);
+  }
+
+  onQrEscaneado(texto: string): void {
+    if (texto === 'BRASA_VIVA_INGRESO') {
+      this.rutaPendienteQr = '/ingreso-lista-espera';
+      this.procesandoQr.set(true);
+    }
+
+    this.mostrandoQrScanner.set(false);
+  }
+
+  cerrarQrScanner(): void {
+    this.mostrandoQrScanner.set(false);
+
+    if (this.rutaPendienteQr) {
+      const ruta = this.rutaPendienteQr;
+      this.rutaPendienteQr = null;
+
+      this.router.navigate([ruta]);
+    }
   }
 
   async cerrarSesion(): Promise<void> {
@@ -205,9 +255,9 @@ export class HomePage implements OnInit {
     } else {
       await this.auth.logout();
     }
-
     await this.router.navigate(['/login'], {
       replaceUrl: true
     });
   }
+
 }

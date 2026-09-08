@@ -1,0 +1,214 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Lista de espera</ion-title>
+
+    <ion-button
+      slot="end"
+      fill="clear"
+      class="logout-btn"
+      (click)="cerrarSesion()"
+      aria-label="Cerrar sesión"
+    >
+      <ion-icon
+        slot="icon-only"
+        name="log-out-outline">
+      </ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="lista-espera-bg">
+
+  <div class="lista-espera-container">
+
+    <!-- Tipo de mesa -->
+    <section class="section">
+
+      <h1>Elegí el tipo de mesa</h1>
+
+
+      <div class="table-options">
+
+
+        <!-- Mesa estándar -->
+        <button
+          type="button"
+          class="table-option"
+          [class.selected]="tipoMesa() === 'estandar'"
+          (click)="seleccionarMesa('estandar')">
+
+          <div class="option-icon">
+            <ion-icon name="restaurant-outline"></ion-icon>
+          </div>
+
+          <div class="option-info">
+
+            <strong>Estándar</strong>
+
+          </div>
+
+          <ion-icon
+            class="check-icon"
+            name="checkmark-circle">
+          </ion-icon>
+
+        </button>
+
+
+        <!-- Mesa VIP -->
+        <button
+          type="button"
+          class="table-option"
+          [class.selected]="tipoMesa() === 'vip'"
+          (click)="seleccionarMesa('vip')">
+
+          <div class="option-icon">
+            <ion-icon name="star-outline"></ion-icon>
+          </div>
+
+          <div class="option-info">
+
+            <strong>VIP</strong>
+
+          </div>
+
+          <ion-icon
+            class="check-icon"
+            name="checkmark-circle">
+          </ion-icon>
+
+        </button>
+
+
+        <!-- Movilidad reducida -->
+        <button
+          type="button"
+          class="table-option"
+          [class.selected]="tipoMesa() === 'movilidad_reducida'"
+          (click)="seleccionarMesa('movilidad_reducida')">
+
+          <div class="option-icon">
+            <ion-icon name="accessibility"></ion-icon>
+          </div>
+
+          <div class="option-info">
+
+            <strong>Movilidad reducida</strong>
+
+          </div>
+
+          <ion-icon
+            class="check-icon"
+            name="checkmark-circle">
+          </ion-icon>
+
+        </button>
+
+
+      </div>
+
+    </section>
+    <!-- Cantidad de comensales -->
+    <section class="section">
+
+      <h1>¿Cuántos comensales son?</h1>
+
+      <div class="people-selector">
+
+        <ion-button
+          fill="clear"
+          class="counter-button"
+          (click)="decrementarComensales()"
+          [disabled]="cantidadComensales() <= 1">
+
+          <ion-icon name="remove-outline"></ion-icon>
+
+        </ion-button>
+
+
+        <div class="people-count">
+
+          <span>
+            {{ cantidadComensales() }}
+          </span>
+
+        </div>
+
+
+        <ion-button
+          fill="clear"
+          class="counter-button"
+          (click)="incrementarComensales()">
+
+          <ion-icon name="add-outline"></ion-icon>
+
+        </ion-button>
+
+      </div>
+      @if (mensajeError()) {
+        <div class="error-message">
+          {{ mensajeError() }}
+        </div>
+      }
+
+    </section>
+
+
+    <!-- Confirmar -->
+    <ion-button
+      expand="block"
+      class="confirm-button"
+      [disabled]="!puedeConfirmar()"
+      (click)="confirmarIngreso()">
+
+      <ion-icon
+        slot="start"
+        name="checkmark-circle-outline">
+      </ion-icon>
+
+      Confirmar y entrar a la lista
+
+    </ion-button>
+
+
+  </div>
+
+</ion-content>
+
+<ion-modal
+  [isOpen]="mostrarModalExito()"
+  cssClass="modal-ingreso-exitoso"
+  (didDismiss)="modalExitoCerrado()"
+>
+  <ng-template>
+    <div class="ingreso-exito-container">
+
+      <div class="ingreso-exito-icono">
+        <ion-icon name="checkmark-circle"></ion-icon>
+      </div>
+
+      <div class="ingreso-exito-titulo">
+        <h2>¡Ingreso confirmado!</h2>
+      </div>
+
+      <div class="ingreso-exito-info">
+        <p>
+          Te agregamos correctamente a la lista de espera.
+          Te avisaremos cuando haya una mesa disponible.
+        </p>
+      </div>
+
+      <div class="ingreso-exito-acciones">
+        <ion-button
+          expand="block"
+          class="btn-ingreso-exito"
+          (click)="cerrarModalExito()"
+        >
+          Continuar
+        </ion-button>
+      </div>
+
+    </div>
+  </ng-template>
+</ion-modal>

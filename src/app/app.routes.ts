@@ -35,15 +35,15 @@ export const routes: Routes = [
         path: 'registro-cliente',
         loadComponent: () =>
           import('./pages/registro/registro-cliente/registro-cliente.page')
-            .then(m => m.RegistroClientePage)
+            .then((m) => m.RegistroClientePage),
       },
       {
         path: 'cliente-anonimo',
         loadComponent: () =>
           import('./pages/registro/cliente-anonimo/registro.page')
-            .then(m => m.RegistroPage)
-      }
-    ]
+            .then((m) => m.RegistroPage),
+      },
+    ],
   },
   {
     path: 'empleados',
@@ -98,6 +98,19 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'ingreso-lista-espera',
+    loadComponent: () =>
+      import('./pages/lista-espera/ingreso-lista-espera/ingreso-lista-espera.page')
+        .then(m => m.IngresoListaEsperaPage),
+  },
+  {
+    path: 'lista-espera',
+    loadComponent: () =>
+      import('./pages/lista-espera/lista-espera/lista-espera.page')
+        .then(m => m.ListaEsperaPage),
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor', 'metre'])],
+  },
+  {
     path: 'mesas',
     loadComponent: () =>
       import('./pages/mesas/listado-mesas/listado-mesas.page').then(
@@ -118,4 +131,5 @@ export const routes: Routes = [
     redirectTo: 'splash-estatica',
     pathMatch: 'full',
   },
+
 ];

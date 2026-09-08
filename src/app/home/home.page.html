@@ -40,6 +40,9 @@
               </ion-segment-button>
             }
           </ion-segment>
+          <p>
+            Estado actual: <strong>{{ estadiaEstado() }}</strong>
+          </p>
         </div>
       }
 
@@ -58,4 +61,18 @@
 
     </div>
   }
+
 </ion-content>
+
+
+@if (procesandoQr()) {
+  <div class="qr-transition">
+    <app-spinner-logo [size]="48"></app-spinner-logo>
+    <p>Ingresando...</p>
+  </div>
+}
+<app-qr-scanner
+  [abierto]="mostrandoQrScanner()"
+  (escaneado)="onQrEscaneado($event)"
+  (cerrado)="cerrarQrScanner()">
+</app-qr-scanner>
