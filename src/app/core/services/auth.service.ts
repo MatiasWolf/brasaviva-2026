@@ -94,7 +94,7 @@ export class AuthService {
     const { data, error } =
       await this.supabaseService.client
         .from('perfiles_rapidos')
-        .select('id, rol_nombre, correo, clave, orden')
+        .select('id, rol_nombre, correo, clave, orden, imagen_url')
         .order('orden');
 
     if (error) {

@@ -10,16 +10,11 @@ import {
 import { Router } from '@angular/router';
 import {
   IonButton,
-  IonCol,
   IonContent,
-  IonGrid,
   IonIcon,
   IonInput,
   IonItem,
-  IonLabel,
   IonRange,
-  IonRow,
-  IonToggle,
   ToastController,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
@@ -51,11 +46,6 @@ import { BrandLogoComponent } from '../../shared/components/brand-logo/brand-log
     IonInput,
     IonItem,
     IonIcon,
-    IonGrid,
-    IonRow,
-    IonCol,
-    IonToggle,
-    IonLabel,
     IonRange,
     SpinnerLogoComponent,
     BrandLogoComponent,
@@ -108,6 +98,10 @@ export class LoginPage implements OnInit {
 
   getIconoPorRol(rol: string): string {
     return this.ICONOS_ROLES[(rol ?? '').toLowerCase()] ?? 'help-circle-outline';
+  }
+
+  rolLegible(rol: string): string {
+    return (rol ?? '').replaceAll('_', ' ');
   }
 
   cargarPerfil(index: number, perfil: PerfilRapido): void {

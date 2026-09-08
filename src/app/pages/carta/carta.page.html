@@ -1,16 +1,10 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
+      <ion-back-button defaultHref="/home" text="Volver"></ion-back-button>
     </ion-buttons>
 
     <ion-title>Carta de platos</ion-title>
-
-    <ion-buttons slot="end">
-      <ion-button (click)="irAAgregar()" aria-label="Agregar plato">
-        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -22,24 +16,47 @@
         <app-spinner-logo [size]="54"></app-spinner-logo>
         <span>Cargando la carta...</span>
       </div>
-    } @else if (mensajeError) {
-      <div class="mensaje-error">
-        {{ mensajeError }}
-      </div>
-    } @else if (platos.length === 0) {
-      <div class="carta-vacia">
-        <ion-icon name="restaurant-outline"></ion-icon>
-        <span>Todavía no hay platos cargados en la carta.</span>
-      </div>
     } @else {
 
-      <div class="platos-lista">
+      <button type="button" class="btn-agregar" (click)="irAAgregar()">
+        <ion-icon name="add-outline"></ion-icon>
+        Agregar plato
+      </button>
 
-        @for (plato of platos; track plato.id) {
+      <ion-searchbar
+        class="buscador"
+        placeholder="Buscar por nombre o descripción"
+        [debounce]="200"
+        (ionInput)="filtrar($event)"
+      ></ion-searchbar>
 
-          <div class="plato-card">
+      @if (mensajeError) {
+        <div class="mensaje-error">
+          {{ mensajeError }}
+          <button type="button" (click)="cargarPlatos()">Reintentar</button>
+        </div>
+      }
 
-            <!-- Una sola fotografía por vez, sin recortes ni partes de otras -->
+      @if (!mensajeError && listaFiltrada.length === 0) {
+        <div class="carta-vacia">
+          <ion-icon name="restaurant-outline"></ion-icon>
+          <span>
+            @if (platos.length === 0) {
+              Todavía no hay platos cargados en la carta.
+            } @else {
+              No hay platos que coincidan con la búsqueda.
+            }
+          </span>
+        </div>
+      }
+
+      <div class="lista">
+
+        @for (plato of paginaItems; track plato.id) {
+
+          <article class="plato-card">
+
+            <!-- Carrusel de fotos del registro -->
             <div class="plato-foto">
 
               @if (fotoVisible(plato); as foto) {
@@ -47,7 +64,7 @@
               } @else {
                 <div class="foto-faltante">
                   <ion-icon name="restaurant-outline"></ion-icon>
-                  <span>Sin fotografía cargada</span>
+                  <span>Sin foto</span>
                 </div>
               }
 
@@ -90,7 +107,7 @@
 
               <div class="plato-detalles">
                 <span class="plato-tiempo">
-                  {{ plato.tiempo_preparacion }} minutos
+                  {{ plato.tiempo_preparacion }} min
                 </span>
                 <span class="plato-precio">
                   ${{ plato.precio }}
@@ -98,7 +115,7 @@
               </div>
             </div>
 
-          </div>
+          </article>
 
         }
 
@@ -108,3 +125,29 @@
 
   </div>
 </ion-content>
+
+@if (!cargando && listaFiltrada.length > 0) {
+  <ion-footer class="carta-footer">
+    <div class="paginador">
+      <ion-button
+        fill="clear"
+        [disabled]="pagina === 1"
+        (click)="paginaAnterior()"
+        aria-label="Página anterior"
+      >
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+
+      <span>Página {{ pagina }} de {{ totalPaginas }}</span>
+
+      <ion-button
+        fill="clear"
+        [disabled]="pagina === totalPaginas"
+        (click)="paginaSiguiente()"
+        aria-label="Página siguiente"
+      >
+        <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-footer>
+}

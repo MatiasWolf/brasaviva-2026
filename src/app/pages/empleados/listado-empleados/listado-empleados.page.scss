@@ -7,7 +7,8 @@
   --color: #ffd485;
 }
 
-ion-header {
+ion-header,
+ion-footer {
   background: #130905;
 }
 
@@ -22,29 +23,18 @@ ion-title {
   font-weight: 600;
 }
 
-ion-back-button,
-ion-toolbar ion-buttons ion-button {
+ion-back-button {
   --color: #ffd485;
 }
 
 .empleados-container {
   min-height: 100%;
-  padding: 16px 16px calc(24px + var(--ion-safe-area-bottom, 0px));
+  height: 100%;
+  padding: 14px 14px 14px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-}
-
-.fin-lista {
-  margin: 2px 0 0;
-  text-align: center;
-  font-size: 0.76rem;
-  color: rgba(255, 208, 160, 0.7);
-}
-
-ion-infinite-scroll-content {
-  --color: #ffd0a0;
-  min-height: 44px;
+  gap: 12px;
+  box-sizing: border-box;
 }
 
 .loader {
@@ -62,6 +52,34 @@ ion-infinite-scroll-content {
   }
 }
 
+/* Botón de alta bien visible, a todo el ancho. */
+.btn-agregar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ffb347 0%, #e9820e 100%);
+  color: #2a1204;
+  font-size: 1.05rem;
+  font-weight: 800;
+  font-family: inherit;
+  letter-spacing: 0.01em;
+  box-shadow: 0 6px 16px rgba(233, 130, 14, 0.35);
+  cursor: pointer;
+
+  ion-icon {
+    font-size: 1.4rem;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
 .buscador {
   --background: #fff3df;
   --color: #35170b;
@@ -70,6 +88,7 @@ ion-infinite-scroll-content {
   --border-radius: 12px;
   padding: 0;
   box-shadow: 0 3px 8px rgba(19, 9, 5, 0.25);
+  flex-shrink: 0;
 }
 
 .mensaje-error {
@@ -110,18 +129,34 @@ ion-infinite-scroll-content {
   }
 }
 
+/* Contenedor de tarjetas: ocupa el alto restante, y si por el tamaño de
+   pantalla no entran las 2 completas, hace scroll-snap para que ninguna
+   quede cortada a la mitad. */
 .lista {
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+  overflow-y: auto;
+  scroll-snap-type: y proximity;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .empleado-card {
+  scroll-snap-align: start;
+  /* Las 3 tarjetas se reparten el alto disponible en partes iguales. */
+  flex: 1 1 0;
+  min-height: 138px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px;
-  border-radius: 16px;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 18px;
   border: 2px solid #802323;
   background: linear-gradient(160deg, #5e1f1f 0%, #431717 100%);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
@@ -129,9 +164,9 @@ ion-infinite-scroll-content {
 
 .avatar {
   flex-shrink: 0;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
+  width: 96px;
+  height: 96px;
+  border-radius: 20px;
   overflow: hidden;
   display: grid;
   place-items: center;
@@ -145,7 +180,7 @@ ion-infinite-scroll-content {
   }
 
   ion-icon {
-    font-size: 1.6rem;
+    font-size: 2.6rem;
     color: #fff8f1;
   }
 }
@@ -156,7 +191,7 @@ ion-infinite-scroll-content {
 
   h2 {
     margin: 0;
-    font-size: 0.98rem;
+    font-size: 1.15rem;
     font-weight: 700;
     color: #ffe9cf;
     white-space: nowrap;
@@ -165,8 +200,8 @@ ion-infinite-scroll-content {
   }
 
   .correo {
-    margin: 2px 0 6px;
-    font-size: 0.78rem;
+    margin: 3px 0 8px;
+    font-size: 0.85rem;
     color: rgba(255, 248, 241, 0.66);
     white-space: nowrap;
     overflow: hidden;
@@ -181,9 +216,9 @@ ion-infinite-scroll-content {
 }
 
 .chip {
-  padding: 2px 8px;
+  padding: 3px 10px;
   border-radius: 999px;
-  font-size: 0.7rem;
+  font-size: 0.74rem;
   font-weight: 600;
 }
 
@@ -215,14 +250,58 @@ ion-infinite-scroll-content {
   color: #ffc7bd;
 }
 
+/* Botones de acción grandes y separados, para no tocar el equivocado. */
 .acciones {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+
+  .accion {
+    --border-radius: 12px;
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+    --padding-start: 14px;
+    --padding-end: 14px;
+    margin: 0;
+    height: 44px;
+    font-size: 0.86rem;
+    font-weight: 700;
+    text-transform: none;
+
+    ion-icon {
+      font-size: 1.15rem;
+    }
+  }
+
+  .accion--editar {
+    --color: #ffd485;
+    --border-color: #ffd485;
+  }
+}
+
+/* Paginador fijo abajo. */
+.empleados-footer {
+  &::before {
+    display: none;
+  }
+}
+
+.paginador {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 8px 12px calc(8px + var(--ion-safe-area-bottom, 0px));
+  color: #ffd0a0;
+  font-size: 0.9rem;
+  font-weight: 700;
 
   ion-button {
-    --padding-start: 6px;
-    --padding-end: 6px;
+    --color: #ffd485;
+    --padding-start: 10px;
+    --padding-end: 10px;
     margin: 0;
-    font-size: 1.15rem;
+    font-size: 1.4rem;
   }
 }

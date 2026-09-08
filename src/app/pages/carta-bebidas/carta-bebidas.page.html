@@ -1,16 +1,10 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
+      <ion-back-button defaultHref="/home" text="Volver"></ion-back-button>
     </ion-buttons>
 
     <ion-title>Carta de bebidas</ion-title>
-
-    <ion-buttons slot="end">
-      <ion-button (click)="irAAgregar()" aria-label="Agregar bebida">
-        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -22,24 +16,47 @@
         <app-spinner-logo [size]="54"></app-spinner-logo>
         <span>Cargando la carta...</span>
       </div>
-    } @else if (mensajeError) {
-      <div class="mensaje-error">
-        {{ mensajeError }}
-      </div>
-    } @else if (bebidas.length === 0) {
-      <div class="carta-vacia">
-        <ion-icon name="wine-outline"></ion-icon>
-        <span>Todavía no hay bebidas cargadas en la carta.</span>
-      </div>
     } @else {
 
-      <div class="bebidas-lista">
+      <button type="button" class="btn-agregar" (click)="irAAgregar()">
+        <ion-icon name="add-outline"></ion-icon>
+        Agregar bebida
+      </button>
 
-        @for (bebida of bebidas; track bebida.id) {
+      <ion-searchbar
+        class="buscador"
+        placeholder="Buscar por nombre o descripción"
+        [debounce]="200"
+        (ionInput)="filtrar($event)"
+      ></ion-searchbar>
 
-          <div class="bebida-card">
+      @if (mensajeError) {
+        <div class="mensaje-error">
+          {{ mensajeError }}
+          <button type="button" (click)="cargarBebidas()">Reintentar</button>
+        </div>
+      }
 
-            <!-- Una sola fotografía por vez, sin recortes ni partes de otras -->
+      @if (!mensajeError && listaFiltrada.length === 0) {
+        <div class="carta-vacia">
+          <ion-icon name="wine-outline"></ion-icon>
+          <span>
+            @if (bebidas.length === 0) {
+              Todavía no hay bebidas cargadas en la carta.
+            } @else {
+              No hay bebidas que coincidan con la búsqueda.
+            }
+          </span>
+        </div>
+      }
+
+      <div class="lista">
+
+        @for (bebida of paginaItems; track bebida.id) {
+
+          <article class="bebida-card">
+
+            <!-- Carrusel de fotos del registro -->
             <div class="bebida-foto">
 
               @if (fotoVisible(bebida); as foto) {
@@ -47,7 +64,7 @@
               } @else {
                 <div class="foto-faltante">
                   <ion-icon name="wine-outline"></ion-icon>
-                  <span>Sin fotografía cargada</span>
+                  <span>Sin foto</span>
                 </div>
               }
 
@@ -90,7 +107,7 @@
 
               <div class="bebida-detalles">
                 <span class="bebida-tiempo">
-                  {{ bebida.tiempo_preparacion }} minutos
+                  {{ bebida.tiempo_preparacion }} min
                 </span>
                 <span class="bebida-precio">
                   ${{ bebida.precio }}
@@ -98,7 +115,7 @@
               </div>
             </div>
 
-          </div>
+          </article>
 
         }
 
@@ -108,3 +125,29 @@
 
   </div>
 </ion-content>
+
+@if (!cargando && listaFiltrada.length > 0) {
+  <ion-footer class="carta-footer">
+    <div class="paginador">
+      <ion-button
+        fill="clear"
+        [disabled]="pagina === 1"
+        (click)="paginaAnterior()"
+        aria-label="Página anterior"
+      >
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+
+      <span>Página {{ pagina }} de {{ totalPaginas }}</span>
+
+      <ion-button
+        fill="clear"
+        [disabled]="pagina === totalPaginas"
+        (click)="paginaSiguiente()"
+        aria-label="Página siguiente"
+      >
+        <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-footer>
+}

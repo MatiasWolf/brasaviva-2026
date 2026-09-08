@@ -78,10 +78,36 @@ src/
 
 | Imagen | Descripción | Ruta |
 |---|---|---|
-| _(completar)_ | Ícono de la aplicación | `_(completar)_` |
-| _(completar)_ | Splash screen estática | `_(completar)_` |
-| _(completar)_ | Splash screen animada | `_(completar)_` |
-| _(completar)_ | _(completar)_ | `_(completar)_` |
+| <img src="src/assets/brand/logo-mono.svg" width="60" alt="Logo mono"> | Logo en una tinta — usado en login, splash (estática y animada) y el spinner de carga, vía `<app-brand-logo variant="mono">` | `src/assets/brand/logo-mono.svg` |
+| <img src="src/assets/brand/logo.svg" width="60" alt="Logo a color"> | Logo a color completo — disponible en `BrandLogoComponent` (`variant="color"`), todavía no se usa en ninguna pantalla | `src/assets/brand/logo.svg` |
+| <img src="src/assets/icons/icon-192.webp" width="60" alt="Ícono PWA"> | Ícono de la app para el manifest PWA y "agregar a pantalla de inicio" | `src/assets/icons/icon-48.webp` … `icon-512.webp` |
+| <img src="resources/logo.png" width="60" alt="Logo fuente para splash nativo"> | Logo fuente (transparente) para generar el splash nativo con `@capacitor/assets` | `resources/logo.png` |
+| <img src="resources/icon_foreground.png" width="60" alt="Ícono adaptativo Android – primer plano"> | Capa de primer plano del ícono adaptativo de Android | `resources/icon_foreground.png` |
+| <img src="resources/icon_background.png" width="60" alt="Ícono adaptativo Android – fondo"> | Capa de fondo del ícono adaptativo de Android | `resources/icon_background.png` |
+
+### Capturas de pantalla
+
+
+
+<!-- o con tamaño controlado: -->
+<img src="docs/capturas/login.png" width="240" alt="Login">
+```
+
+| Pantalla | Imagen | Ruta |
+|---|---|---|
+| Splash | <img src="docs/capturas/splash.png" width="240" alt="Splash"> | `docs/capturas/splash.png` |
+| Login | <img src="docs/capturas/login.png" width="240" alt="Login"> | `docs/capturas/login.png` |
+| Home (dueño / supervisor) | <img src="docs/capturas/principal.png" width="240" alt="Principal"> | `docs/capturas/principal.png` |
+| Listado de empleados | <img src="docs/capturas/empleados.png" width="240" alt="Empleados"> | `docs/capturas/empleados.png` |
+| Alta de empleado | <img src="docs/capturas/alta-empleado.png" width="240" alt="Alta empleado"> |`docs/capturas/alta-empleado.png` |
+| Listado de mesas | <img src="docs/capturas/mesas.png" width="240" alt="Mesas"> | `docs/capturas/mesas.png` |
+| Alta de mesa | <img src="docs/capturas/alta-mesa.png" width="240" alt="Alta mesa"> | `docs/capturas/alta-mesa.png` |
+| Carta de platos | <img src="docs/capturas/platos.png" width="240" alt="Carta de platos"> | `docs/capturas/platos.png` |
+| Alta de platos | <img src="docs/capturas/alta-platos.png" width="240" alt="Alta de platos"> | `docs/capturas/alta-platos.png` |
+| Carta de bebidas | <img src="docs/capturas/bebidas.png" width="240" alt="Carta de bebidas"> | `docs/capturas/bebidas.png` |
+| Alta de bebidas | <img src="docs/capturas/alta-bebidas.png" width="240" alt="Alta de bebidas"> | `docs/capturas/alta-bebidas.png` |
+| Registro de cliente | <img src="docs/capturas/registro-cliente.png" width="240" alt="Registro de Cliente"> | `docs/capturas/registro-cliente.png` |
+| Registro de cliente Anónimo | <img src="docs/capturas/registro-anonimo.png" width="240" alt="Registro de Cliente anónimo"> | `docs/capturas/registro-anonimo.png` |
 
 ---
 
@@ -96,13 +122,13 @@ src/
 | 3 | Agregar nueva bebida | Moyano, Martín | 1 | 03-09 | 03-09 | ✅ Completo |
 | 4 | Agregar nueva mesa | Wolf, Matías | 2 | 04-09 | 06-09 | ✅ Completo |
 | 5 | Crear cliente registrado | Miguel, Luján | 2 | 01-09 | 03-09 | ✅ Completo |
-| 6 | Verificar ingreso de cliente | Wolf, Matías | 1,5 | 07-09 | 08-09 | ⬜ Pendiente |
-| 7 | Rechazar cliente | Wolf, Matías | 2 | 09-09 | 11-09 | ⬜ Pendiente |
-| 8 | Aceptar cliente | Wolf, Matías | 1 | 11-09 | 12-09 | ⬜ Pendiente |
+| 6 | Verificar ingreso de cliente | Wolf, Matías | 1,5 | 07-09 | 08-09 | 🟨 En progreso |
+| 7 | Rechazar cliente | Wolf, Matías | 2 | 09-09 | 11-09 | 🟨 En progreso |
+| 8 | Aceptar cliente | Wolf, Matías | 1 | 11-09 | 12-09 | 🟨 En progreso |
 | 9 | Ingreso cliente anónimo | Miguel, Luján | 1 | 02-09 | 03-09 | ✅ Completo |
-| 10 | Metre asigna mesa | Miguel, Luján | 1,5 | 07-09 | 08-09 | ⬜ Pendiente |
-| 11 | Ver menú + consulta al mozo | Miguel, Luján | 3 | 08-09 | 11-09 | ⬜ Pendiente |
-| 12 | Cliente realiza pedido | Torrez, Maximiliano | 3 | aprox. 08-09 | 11-09 | ⬜ Pendiente |
+| 10 | Metre asigna mesa | Miguel, Luján | 1,5 | 07-09 | 08-09 | 🟨 En progreso |
+| 11 | Ver menú + consulta al mozo | Torrez, Maximiliano | 3 | 08-09 | 11-09 | 🟨 En progreso |
+| 12 | Cliente realiza pedido | Torrez, Maximiliano | 3 | aprox. 08-09 | 11-09 | 🟨 En progreso |
 | 13 | Mozo rechaza pedido | Torrez, Maximiliano | 1 | 12-09 | 13-09 | ⬜ Pendiente |
 | 14 | Mozo confirma pedido | Torrez, Maximiliano | 1,5 | 14-09 | 15-09 | ⬜ Pendiente |
 | 15 | Juegos con descuento | Miguel, Luján | 4 | 12-09 | 16-09 | ⬜ Pendiente |

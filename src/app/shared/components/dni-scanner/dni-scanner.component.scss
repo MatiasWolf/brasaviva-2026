@@ -74,9 +74,26 @@ ion-modal.dni-scanner-modal {
 
 .mensaje-error {
   margin: 20px 0 0;
-  max-width: 320px;
+  max-width: 340px;
   text-align: center;
   color: #ffb4ab;
-  font-size: 0.9rem;
-  line-height: 1.4;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.reintentar {
+  margin-top: 14px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border: 1.5px solid #ffd485;
+  background: transparent;
+  color: #ffd485;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+
+  &:active {
+    background: rgba(255, 212, 133, 0.15);
+  }
 }

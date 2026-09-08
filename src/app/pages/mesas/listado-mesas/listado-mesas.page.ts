@@ -1,22 +1,14 @@
-import {
-  Component,
-  computed,
-  inject,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {
-  InfiniteScrollCustomEvent,
   IonBackButton,
   IonButton,
   IonButtons,
   IonContent,
+  IonFooter,
   IonHeader,
   IonIcon,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
   IonModal,
   IonSearchbar,
   IonTitle,
@@ -27,6 +19,8 @@ import {
 import { addIcons } from 'ionicons';
 import {
   addOutline,
+  chevronBackOutline,
+  chevronForwardOutline,
   closeOutline,
   gridOutline,
   peopleOutline,
@@ -51,9 +45,8 @@ import { SpinnerLogoComponent } from '../../../shared/components/spinner-logo/sp
     IonBackButton,
     IonButton,
     IonContent,
+    IonFooter,
     IonIcon,
-    IonInfiniteScroll,
-    IonInfiniteScrollContent,
     IonModal,
     IonSearchbar,
     SpinnerLogoComponent,
@@ -64,14 +57,13 @@ export class ListadoMesasPage implements ViewWillEnter {
   private readonly router = inject(Router);
   private readonly toastCtrl = inject(ToastController);
 
-  private readonly porTanda = 8;
-  private readonly content = viewChild(IonContent);
+  readonly porPagina = 3;
 
   readonly lista = signal<Mesa[]>([]);
   readonly cargando = signal(true);
   readonly error = signal('');
   readonly filtro = signal('');
-  readonly visibles = signal(this.porTanda);
+  readonly pagina = signal(1);
   readonly actualizando = signal<string | null>(null);
   readonly mesaQr = signal<Mesa | null>(null);
 
@@ -85,13 +77,14 @@ export class ListadoMesasPage implements ViewWillEnter {
     );
   });
 
-  readonly itemsVisibles = computed(() =>
-    this.listaFiltrada().slice(0, this.visibles()),
+  readonly totalPaginas = computed(() =>
+    Math.max(1, Math.ceil(this.listaFiltrada().length / this.porPagina)),
   );
 
-  readonly hayMas = computed(
-    () => this.visibles() < this.listaFiltrada().length,
-  );
+  readonly paginaItems = computed(() => {
+    const desde = (this.pagina() - 1) * this.porPagina;
+    return this.listaFiltrada().slice(desde, desde + this.porPagina);
+  });
 
   constructor() {
     addIcons({
@@ -100,6 +93,8 @@ export class ListadoMesasPage implements ViewWillEnter {
       'people-outline': peopleOutline,
       'qr-code-outline': qrCodeOutline,
       'close-outline': closeOutline,
+      'chevron-back-outline': chevronBackOutline,
+      'chevron-forward-outline': chevronForwardOutline,
     });
   }
 
@@ -110,7 +105,7 @@ export class ListadoMesasPage implements ViewWillEnter {
   async cargar(): Promise<void> {
     this.cargando.set(true);
     this.error.set('');
-    this.visibles.set(this.porTanda);
+    this.pagina.set(1);
     try {
       this.lista.set(await this.mesaService.listarMesas());
     } catch {
@@ -118,35 +113,19 @@ export class ListadoMesasPage implements ViewWillEnter {
     } finally {
       this.cargando.set(false);
     }
-    void this.rellenarSiNoHayScroll();
   }
 
   filtrar(event: CustomEvent): void {
     this.filtro.set((event.detail as { value?: string }).value ?? '');
-    this.visibles.set(this.porTanda);
-    void this.rellenarSiNoHayScroll();
+    this.pagina.set(1);
   }
 
-  cargarMas(event: InfiniteScrollCustomEvent): void {
-    this.visibles.update((n) => n + this.porTanda);
-    void event.target.complete();
+  paginaAnterior(): void {
+    this.pagina.update((p) => Math.max(1, p - 1));
   }
 
-  private async rellenarSiNoHayScroll(): Promise<void> {
-    if (!this.hayMas()) {
-      return;
-    }
-    await new Promise((resolve) => setTimeout(resolve));
-
-    const content = this.content();
-    if (!content) {
-      return;
-    }
-    const el = await content.getScrollElement();
-    if (el.scrollHeight <= el.clientHeight && this.hayMas()) {
-      this.visibles.update((n) => n + this.porTanda);
-      await this.rellenarSiNoHayScroll();
-    }
+  paginaSiguiente(): void {
+    this.pagina.update((p) => Math.min(this.totalPaginas(), p + 1));
   }
 
   tipoLegible(mesa: Mesa): string {

@@ -1,288 +1,339 @@
-/* =========================================
-FONDO GENERAL
-========================================= */
+/* Carta de platos — listado paginado, sin tarjetas cortadas por el scroll. */
 
 .carta-content {
---background:
-radial-gradient(
-circle at 15% 10%,
-rgba(255, 212, 133, 0.22),
-transparent 30%
-),
-linear-gradient(
-180deg,
-#3a170b 0%,
-#6b3219 42%,
-#b86f3f 72%,
-#f5dcc0 100%
-);
-
---color: #fff1dc;
+  --background:
+    radial-gradient(circle at 15% 10%, rgba(255, 212, 133, 0.22), transparent 30%),
+    linear-gradient(180deg, #3a170b 0%, #6b3219 42%, #b86f3f 72%, #f5dcc0 100%);
+  --color: #fff1dc;
 }
 
-ion-header {
-background: #3a170b;
+ion-header,
+ion-footer {
+  background: #3a170b;
 }
 
 ion-toolbar {
---background: #3a170b;
---color: #ffd485;
---border-color: transparent;
+  --background: #3a170b;
+  --color: #ffd485;
+  --border-color: transparent;
 }
 
 ion-title {
-color: #ffd485;
-font-weight: 600;
+  color: #ffd485;
+  font-weight: 600;
 }
 
 ion-back-button {
---color: #ffd485;
+  --color: #ffd485;
 }
 
-/* =========================================
-CONTENEDOR
-========================================= */
-
+/* ===== CONTENEDOR ===== */
 .carta-container {
-width: 100%;
-max-width: 560px;
-margin: 0 auto;
-padding: 24px 20px 40px;
-box-sizing: border-box;
+  width: 100%;
+  max-width: 560px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 14px 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-/* =========================================
-ESTADOS
-========================================= */
-
+/* ===== ESTADOS ===== */
 .estado-carga {
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 12px;
-
-padding: 60px 0;
-
-color: #fff1dc;
-font-size: 15px;
-font-weight: 600;
-}
-
-.estado-carga app-spinner-logo {
-display: block;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #fff1dc;
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .mensaje-error {
-padding: 14px 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(180, 55, 40, 0.18);
+  border: 1px solid rgba(180, 55, 40, 0.35);
+  color: #ffe0d8;
+  font-size: 14px;
+  text-align: center;
 
-border-radius: 10px;
-
-background: rgba(180, 55, 40, 0.18);
-border: 1px solid rgba(180, 55, 40, 0.35);
-
-color: #ffe0d8;
-
-font-size: 14px;
-text-align: center;
+  button {
+    margin-top: 8px;
+    background: transparent;
+    border: 1px solid rgba(255, 224, 216, 0.6);
+    border-radius: 8px;
+    color: #ffe0d8;
+    padding: 4px 12px;
+    font-weight: 600;
+  }
 }
 
 .carta-vacia {
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 40px 16px;
+  border-radius: 14px;
+  background: rgba(255, 248, 241, 0.1);
+  border: 2px dashed rgba(255, 222, 186, 0.45);
+  color: #fff1dc;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
 
-padding: 40px 16px;
-
-border-radius: 14px;
-
-background: rgba(255, 248, 241, 0.10);
-border: 2px dashed rgba(255, 222, 186, 0.45);
-
-color: #fff1dc;
-
-font-size: 15px;
-font-weight: 600;
-text-align: center;
+  ion-icon {
+    font-size: 42px;
+    color: #ffd485;
+  }
 }
 
-.carta-vacia ion-icon {
-font-size: 42px;
-color: #ffd485;
+/* ===== BOTÓN AGREGAR: grande, a todo el ancho ===== */
+.btn-agregar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ffb347 0%, #e9820e 100%);
+  color: #2a1204;
+  font-size: 1.05rem;
+  font-weight: 800;
+  font-family: inherit;
+  letter-spacing: 0.01em;
+  box-shadow: 0 6px 16px rgba(233, 130, 14, 0.35);
+  cursor: pointer;
+  flex-shrink: 0;
+
+  ion-icon {
+    font-size: 1.4rem;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 }
 
-/* =========================================
-LISTADO DE PLATOS
-========================================= */
+.buscador {
+  --background: #fff3df;
+  --color: #35170b;
+  --placeholder-color: #805238;
+  --icon-color: #805238;
+  --border-radius: 12px;
+  padding: 0;
+  box-shadow: 0 3px 8px rgba(19, 9, 5, 0.25);
+  flex-shrink: 0;
+}
 
-.platos-lista {
-display: flex;
-flex-direction: column;
-gap: 18px;
+/* ===== LISTA PAGINADA ===== */
+/* Ocupa el alto restante; si por el tamaño de pantalla las 3 tarjetas no
+   entran completas, scroll-snap evita que alguna quede cortada a la mitad. */
+.lista {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  scroll-snap-type: y proximity;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .plato-card {
-background: #fff3df;
-
-border: 2px solid #c0784d;
-border-radius: 16px;
-
-overflow: hidden;
-
-box-shadow:
-0 4px 12px rgba(58, 23, 11, 0.22);
+  scroll-snap-align: start;
+  flex: 1 1 0;
+  min-height: 150px;
+  display: flex;
+  gap: 14px;
+  padding: 12px;
+  background: #fff3df;
+  border: 2px solid #c0784d;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(58, 23, 11, 0.22);
+  overflow: hidden;
 }
 
-/* Una fotografía por vez, ocupando todo el contenedor */
-
+/* Carrusel de fotos del registro */
 .plato-foto {
-position: relative;
+  position: relative;
+  flex-shrink: 0;
+  width: 40%;
+  max-width: 190px;
+  align-self: stretch;
+  min-height: 126px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #4d200f;
 
-width: 100%;
-aspect-ratio: 4 / 3;
-
-background: #4d200f;
-
-overflow: hidden;
-}
-
-.plato-foto img {
-width: 100%;
-height: 100%;
-
-object-fit: cover;
-object-position: center;
-
-display: block;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
 }
 
 .foto-faltante {
-width: 100%;
-height: 100%;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #ffe0a3;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
 
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-gap: 10px;
-
-color: #ffe0a3;
-font-size: 14px;
-font-weight: 600;
-}
-
-.foto-faltante ion-icon {
-font-size: 42px;
-color: #ffd485;
+  ion-icon {
+    font-size: 32px;
+    color: #ffd485;
+  }
 }
 
 .nav-foto {
-position: absolute;
-top: 50%;
-transform: translateY(-50%);
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(58, 23, 11, 0.78);
+  padding: 0;
+  cursor: pointer;
 
-width: 42px;
-height: 42px;
-
-display: grid;
-place-items: center;
-
-border: none;
-border-radius: 50%;
-
-background: rgba(58, 23, 11, 0.78);
-
-padding: 0;
-cursor: pointer;
-}
-
-.nav-foto ion-icon {
-font-size: 24px;
-color: #ffd485;
+  ion-icon {
+    font-size: 18px;
+    color: #ffd485;
+  }
 }
 
 .nav-izquierda {
-left: 10px;
+  left: 6px;
 }
 
 .nav-derecha {
-right: 10px;
+  right: 6px;
 }
 
 .puntos {
-position: absolute;
-bottom: 10px;
-left: 0;
-right: 0;
-
-display: flex;
-justify-content: center;
-gap: 7px;
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
 }
 
 .punto {
-width: 9px;
-height: 9px;
-
-border-radius: 50%;
-
-background: rgba(255, 241, 220, 0.45);
-border: 1px solid rgba(58, 23, 11, 0.5);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 241, 220, 0.45);
+  border: 1px solid rgba(58, 23, 11, 0.5);
 }
 
 .punto-activo {
-background: #ffd485;
+  background: #ffd485;
 }
 
 .plato-info {
-padding: 14px 16px 16px;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .plato-info h2 {
-margin: 0 0 6px;
-
-color: #4d200f;
-
-font-size: 19px;
-font-weight: 700;
+  margin: 0 0 4px;
+  color: #4d200f;
+  font-size: 1.15rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .plato-descripcion {
-margin: 0 0 10px;
-
-color: #6b3925;
-
-font-size: 14px;
-line-height: 1.4;
+  margin: 0 0 8px;
+  color: #6b3925;
+  font-size: 13px;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .plato-detalles {
-display: flex;
-align-items: center;
-justify-content: space-between;
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .plato-tiempo {
-color: #805238;
-
-font-size: 13px;
-font-weight: 600;
+  color: #805238;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .plato-precio {
-color: #4d200f;
+  color: #4d200f;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
 
-font-size: 20px;
-font-weight: 800;
+/* ===== PAGINADOR FIJO ===== */
+.carta-footer {
+  &::before {
+    display: none;
+  }
+}
+
+.paginador {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 8px 12px calc(8px + var(--ion-safe-area-bottom, 0px));
+  color: #ffd0a0;
+  font-size: 0.9rem;
+  font-weight: 700;
+
+  ion-button {
+    --color: #ffd485;
+    --padding-start: 10px;
+    --padding-end: 10px;
+    margin: 0;
+    font-size: 1.4rem;
+  }
 }
 
 @media (max-width: 380px) {
+  .plato-info h2 {
+    font-size: 1.02rem;
+  }
 
-.plato-info h2 {
-font-size: 17px;
-}
-
-.plato-precio {
-font-size: 18px;
-}
+  .plato-precio {
+    font-size: 1.1rem;
+  }
 }

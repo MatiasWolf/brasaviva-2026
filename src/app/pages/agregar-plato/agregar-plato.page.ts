@@ -12,6 +12,7 @@ import {
   IonButton,
   IonButtons,
   IonContent,
+  IonFooter,
   IonHeader,
   IonInput,
   IonTextarea,
@@ -26,6 +27,8 @@ import { SpinnerLogoComponent } from '../../shared/components/spinner-logo/spinn
 import { addIcons } from 'ionicons';
 import {
   checkmarkCircle,
+  chevronBackOutline,
+  chevronForwardOutline,
   restaurantOutline,
   cameraOutline,
   imagesOutline,
@@ -51,6 +54,7 @@ interface FotoSlot {
     IonButtons,
     IonBackButton,
     IonContent,
+    IonFooter,
     IonInput,
     IonTextarea,
     IonButton,
@@ -77,6 +81,9 @@ export class AgregarPlatoPage {
 
   isModalOpen = false;
 
+  /** Índice de la foto visible en el carrusel (0, 1 o 2). */
+  fotoActiva = 0;
+
   private readonly fb = inject(FormBuilder);
   private readonly platoService = inject(PlatoService);
   private readonly router = inject(Router);
@@ -86,6 +93,8 @@ export class AgregarPlatoPage {
   constructor() {
     addIcons({
       'checkmark-circle': checkmarkCircle,
+      'chevron-back-outline': chevronBackOutline,
+      'chevron-forward-outline': chevronForwardOutline,
       'restaurant-outline': restaurantOutline,
       'camera-outline': cameraOutline,
       'images-outline': imagesOutline,
@@ -159,6 +168,18 @@ export class AgregarPlatoPage {
     this.mensajeError = '';
 
     input.value = '';
+  }
+
+  fotoAnterior(): void {
+    this.fotoActiva = (this.fotoActiva + this.fotos.length - 1) % this.fotos.length;
+  }
+
+  fotoSiguiente(): void {
+    this.fotoActiva = (this.fotoActiva + 1) % this.fotos.length;
+  }
+
+  irAFoto(indice: number): void {
+    this.fotoActiva = indice;
   }
 
   get faltanFotos(): boolean {

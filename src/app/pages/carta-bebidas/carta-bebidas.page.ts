@@ -6,10 +6,12 @@ import {
   IonButton,
   IonButtons,
   IonContent,
+  IonFooter,
   IonHeader,
+  IonIcon,
+  IonSearchbar,
   IonTitle,
   IonToolbar,
-  IonIcon,
   ViewWillEnter
 } from '@ionic/angular';
 import { BebidaService } from '../../core/services/bebida.service';
@@ -29,10 +31,12 @@ import { addOutline, chevronBackOutline, chevronForwardOutline, wineOutline } fr
     IonToolbar,
     IonTitle,
     IonButtons,
-    IonButton,
     IonBackButton,
+    IonButton,
     IonContent,
+    IonFooter,
     IonIcon,
+    IonSearchbar,
     SpinnerLogoComponent
   ]
 })
@@ -46,6 +50,13 @@ export class CartaBebidasPage implements ViewWillEnter {
 
   /** Índice de la fotografía visible para cada bebida. */
   fotoActual: Record<string, number> = {};
+
+  /** Registros por página. Fijo y bajo para que nunca se corte una tarjeta. */
+  readonly porPagina = 3;
+
+  pagina = 1;
+
+  filtro = '';
 
   private readonly bebidaService = inject(BebidaService);
   private readonly cdr = inject(ChangeDetectorRef);
@@ -72,6 +83,7 @@ export class CartaBebidasPage implements ViewWillEnter {
 
     this.cargando = true;
     this.mensajeError = '';
+    this.pagina = 1;
 
     try {
 
@@ -88,6 +100,38 @@ export class CartaBebidasPage implements ViewWillEnter {
       this.cargando = false;
       this.cdr.detectChanges();
     }
+  }
+
+  get listaFiltrada(): Bebida[] {
+    const q = this.filtro.trim().toLowerCase();
+    if (!q) {
+      return this.bebidas;
+    }
+    return this.bebidas.filter(b =>
+      `${b.nombre} ${b.descripcion}`.toLowerCase().includes(q)
+    );
+  }
+
+  get totalPaginas(): number {
+    return Math.max(1, Math.ceil(this.listaFiltrada.length / this.porPagina));
+  }
+
+  get paginaItems(): Bebida[] {
+    const desde = (this.pagina - 1) * this.porPagina;
+    return this.listaFiltrada.slice(desde, desde + this.porPagina);
+  }
+
+  filtrar(event: CustomEvent): void {
+    this.filtro = (event.detail as { value?: string }).value ?? '';
+    this.pagina = 1;
+  }
+
+  paginaAnterior(): void {
+    this.pagina = Math.max(1, this.pagina - 1);
+  }
+
+  paginaSiguiente(): void {
+    this.pagina = Math.min(this.totalPaginas, this.pagina + 1);
   }
 
   /** Fotografías cargadas de una bebida, sin los espacios vacíos. */

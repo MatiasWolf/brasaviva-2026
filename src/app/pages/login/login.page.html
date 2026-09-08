@@ -32,56 +32,52 @@
       </ion-item>
     </form>
 
-    <ion-button
-      expand="block"
-      fill="clear"
-      class="register-link-button"
-      (click)="irARegistroCliente()"
-    >
-      Crear Cuenta
-    </ion-button>
+    <div class="link-buttons-row">
+      <ion-button
+        expand="block"
+        fill="clear"
+        class="register-link-button"
+        (click)="irARegistroCliente()"
+      >
+        Crear Cuenta
+      </ion-button>
 
-    <ion-button
-      expand="block"
-      fill="clear"
-      class="guest-link-button"
-      (click)="irARegistroAnonimo()"
-    >
-      Ingresar como Invitado
-    </ion-button>
+      <ion-button
+        expand="block"
+        fill="clear"
+        class="guest-link-button"
+        (click)="irARegistroAnonimo()"
+      >
+        Ingresar como Invitado
+      </ion-button>
+    </div>
 
     <div class="fast-login-section">
       <p class="divider-text">Acceso Rápido</p>
 
-      <ion-grid class="fast-grid">
-        <ion-row>
-          @for (perfil of perfilesRapidos(); track perfil.id; let i = $index) {
-            <ion-col size="6" size-md="4">
-              <ion-item
-                class="toggle-item"
-                lines="none"
-                [color]="perfilSeleccionadoIndex() === i ? 'primary' : 'medium'"
-              >
-                <ion-icon [name]="getIconoPorRol(perfil.rol_nombre)" slot="start"></ion-icon>
-
-                <ion-label class="toggle-label">
-                  {{ perfil.rol_nombre | titlecase }}
-                </ion-label>
-
-                <ion-toggle
-                  slot="end"
-                  [checked]="perfilSeleccionadoIndex() === i"
-                  (ionChange)="cargarPerfil(i, perfil)"
-                ></ion-toggle>
-              </ion-item>
-            </ion-col>
-          } @empty {
-            <ion-col size="12">
-              <p class="info-text">Cargando perfiles...</p>
-            </ion-col>
-          }
-        </ion-row>
-      </ion-grid>
+      <div class="fast-grid">
+        @for (perfil of perfilesRapidos(); track perfil.id; let i = $index) {
+          <button
+            type="button"
+            class="perfil-card"
+            [class.perfil-card--activo]="perfilSeleccionadoIndex() === i"
+            (click)="cargarPerfil(i, perfil)"
+          >
+            <span class="perfil-avatar">
+              @if (perfil.imagen_url) {
+                <img [src]="perfil.imagen_url" [alt]="perfil.rol_nombre" />
+              } @else {
+                <ion-icon [name]="getIconoPorRol(perfil.rol_nombre)"></ion-icon>
+              }
+            </span>
+            <span class="perfil-nombre">
+              {{ rolLegible(perfil.rol_nombre) | titlecase }}
+            </span>
+          </button>
+        } @empty {
+          <p class="info-text">Cargando perfiles...</p>
+        }
+      </div>
     </div>
 
     <div class="swipe-container">

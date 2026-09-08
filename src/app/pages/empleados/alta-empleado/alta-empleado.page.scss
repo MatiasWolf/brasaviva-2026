@@ -7,6 +7,13 @@
   --color: #fff1dc;
 }
 
+/* Scroll-snap: cada campo "encaja" al scrollear, ninguno queda cortado. */
+.empleado-content::part(scroll) {
+  scroll-snap-type: y proximity;
+  scroll-padding-top: 12px;
+  scroll-padding-bottom: 12px;
+}
+
 ion-header {
   background: #130905;
 }
@@ -226,6 +233,7 @@ ion-back-button {
 }
 
 .campo {
+  scroll-snap-align: start;
   width: 100%;
   min-height: 68px;
   background: #fff3df;

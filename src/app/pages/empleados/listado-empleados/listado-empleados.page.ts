@@ -1,23 +1,15 @@
-import {
-  Component,
-  computed,
-  inject,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {
   AlertController,
-  InfiniteScrollCustomEvent,
   IonBackButton,
   IonButton,
   IonButtons,
   IonContent,
+  IonFooter,
   IonHeader,
   IonIcon,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
   IonSearchbar,
   IonTitle,
   IonToolbar,
@@ -26,6 +18,8 @@ import {
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import {
+  chevronBackOutline,
+  chevronForwardOutline,
   createOutline,
   personAddOutline,
   peopleOutline,
@@ -50,9 +44,8 @@ import { SpinnerLogoComponent } from '../../../shared/components/spinner-logo/sp
     IonBackButton,
     IonButton,
     IonContent,
+    IonFooter,
     IonIcon,
-    IonInfiniteScroll,
-    IonInfiniteScrollContent,
     IonSearchbar,
     SpinnerLogoComponent,
   ],
@@ -63,15 +56,14 @@ export class ListadoEmpleadosPage implements ViewWillEnter {
   private readonly alertCtrl = inject(AlertController);
   private readonly toastCtrl = inject(ToastController);
 
-  private readonly porTanda = 8;
-
-  private readonly content = viewChild(IonContent);
+  /** Registros por página. Fijo y bajo para que nunca se corte una tarjeta. */
+  readonly porPagina = 3;
 
   readonly lista = signal<Usuario[]>([]);
   readonly cargando = signal(true);
   readonly error = signal('');
   readonly filtro = signal('');
-  readonly visibles = signal(this.porTanda);
+  readonly pagina = signal(1);
 
   readonly listaFiltrada = computed(() => {
     const q = this.filtro().trim().toLowerCase();
@@ -85,13 +77,14 @@ export class ListadoEmpleadosPage implements ViewWillEnter {
     );
   });
 
-  readonly itemsVisibles = computed(() =>
-    this.listaFiltrada().slice(0, this.visibles()),
+  readonly totalPaginas = computed(() =>
+    Math.max(1, Math.ceil(this.listaFiltrada().length / this.porPagina)),
   );
 
-  readonly hayMas = computed(
-    () => this.visibles() < this.listaFiltrada().length,
-  );
+  readonly paginaItems = computed(() => {
+    const desde = (this.pagina() - 1) * this.porPagina;
+    return this.listaFiltrada().slice(desde, desde + this.porPagina);
+  });
 
   constructor() {
     addIcons({
@@ -99,6 +92,8 @@ export class ListadoEmpleadosPage implements ViewWillEnter {
       'person-add-outline': personAddOutline,
       'create-outline': createOutline,
       'trash-outline': trashOutline,
+      'chevron-back-outline': chevronBackOutline,
+      'chevron-forward-outline': chevronForwardOutline,
     });
   }
 
@@ -109,7 +104,7 @@ export class ListadoEmpleadosPage implements ViewWillEnter {
   async cargar(): Promise<void> {
     this.cargando.set(true);
     this.error.set('');
-    this.visibles.set(this.porTanda);
+    this.pagina.set(1);
     try {
       this.lista.set(await this.empleados.listarEmpleados());
     } catch {
@@ -117,41 +112,19 @@ export class ListadoEmpleadosPage implements ViewWillEnter {
     } finally {
       this.cargando.set(false);
     }
-    void this.rellenarSiNoHayScroll();
   }
 
   filtrar(event: CustomEvent): void {
     this.filtro.set((event.detail as { value?: string }).value ?? '');
-    this.visibles.set(this.porTanda);
-    void this.rellenarSiNoHayScroll();
+    this.pagina.set(1);
   }
 
-  cargarMas(event: InfiniteScrollCustomEvent): void {
-    this.visibles.update((n) => n + this.porTanda);
-    void event.target.complete();
+  paginaAnterior(): void {
+    this.pagina.update((p) => Math.max(1, p - 1));
   }
 
-  /**
-   * Si la lista no llega a ocupar la pantalla, `ion-infinite-scroll` nunca se
-   * dispara. En ese caso vamos cargando tandas hasta que haya scroll real o no
-   * queden más empleados.
-   */
-  private async rellenarSiNoHayScroll(): Promise<void> {
-    if (!this.hayMas()) {
-      return;
-    }
-    // esperar a que Angular pinte las tarjetas nuevas
-    await new Promise((resolve) => setTimeout(resolve));
-
-    const content = this.content();
-    if (!content) {
-      return;
-    }
-    const el = await content.getScrollElement();
-    if (el.scrollHeight <= el.clientHeight && this.hayMas()) {
-      this.visibles.update((n) => n + this.porTanda);
-      await this.rellenarSiNoHayScroll();
-    }
+  paginaSiguiente(): void {
+    this.pagina.update((p) => Math.min(this.totalPaginas(), p + 1));
   }
 
   rolLegible(empleado: Usuario): string {
@@ -188,6 +161,9 @@ export class ListadoEmpleadosPage implements ViewWillEnter {
     try {
       await this.empleados.eliminarEmpleado(empleado.id);
       this.lista.update((actual) => actual.filter((e) => e.id !== empleado.id));
+      if (this.pagina() > this.totalPaginas()) {
+        this.pagina.set(this.totalPaginas());
+      }
       await this.mostrarToast('Empleado eliminado.', 'success');
     } catch (err) {
       await this.mostrarToast(

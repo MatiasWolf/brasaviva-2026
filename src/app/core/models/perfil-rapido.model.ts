@@ -4,4 +4,5 @@ export interface PerfilRapido {
   correo: string;
   clave: string;
   orden: number;
+  imagen_url: string | null;
 }

@@ -1,14 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
+      <ion-back-button defaultHref="/home" text="Volver"></ion-back-button>
     </ion-buttons>
     <ion-title>Mesas</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="irAAlta()" aria-label="Agregar mesa">
-        <ion-icon slot="icon-only" name="add-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -21,6 +16,11 @@
         <p>Cargando mesas...</p>
       </div>
     } @else {
+
+      <button type="button" class="btn-agregar" (click)="irAAlta()">
+        <ion-icon name="add-outline"></ion-icon>
+        Agregar mesa
+      </button>
 
       <ion-searchbar
         class="buscador"
@@ -46,78 +46,95 @@
               No hay mesas que coincidan con la búsqueda.
             }
           </p>
-          <ion-button fill="outline" (click)="irAAlta()">
-            Agregar mesa
-          </ion-button>
         </div>
       }
 
       <div class="lista">
-        @for (mesa of itemsVisibles(); track mesa.id) {
+        @for (mesa of paginaItems(); track mesa.id) {
           <article class="mesa-card">
-            <button
-              type="button"
-              class="avatar"
-              (click)="verQr(mesa)"
-              aria-label="Ver código QR de la mesa"
-            >
-              @if (mesa.foto_url) {
-                <img [src]="mesa.foto_url" [alt]="'Mesa ' + mesa.numero" />
-              } @else {
-                <ion-icon name="grid-outline"></ion-icon>
-              }
-              <span class="avatar-qr">
-                <ion-icon name="qr-code-outline"></ion-icon>
-              </span>
-            </button>
+            <div class="card-top">
+              <button
+                type="button"
+                class="avatar"
+                (click)="verQr(mesa)"
+                aria-label="Ver código QR de la mesa"
+              >
+                @if (mesa.foto_url) {
+                  <img [src]="mesa.foto_url" [alt]="'Mesa ' + mesa.numero" />
+                } @else {
+                  <ion-icon name="grid-outline"></ion-icon>
+                }
+                <span class="avatar-qr">
+                  <ion-icon name="qr-code-outline"></ion-icon>
+                </span>
+              </button>
 
-            <div class="datos">
-              <h2>Mesa {{ mesa.numero }}</h2>
-              <p class="comensales">
-                <ion-icon name="people-outline"></ion-icon>
-                {{ mesa.comensales }} comensales
-              </p>
-              <div class="chips">
+              <div class="datos">
+                <h2>Mesa {{ mesa.numero }}</h2>
+                <p class="comensales">
+                  <ion-icon name="people-outline"></ion-icon>
+                  {{ mesa.comensales }} comensales
+                </p>
                 <span class="chip chip--tipo">{{ tipoLegible(mesa) | titlecase }}</span>
               </div>
             </div>
 
             <div class="acciones">
+              <ion-button
+                class="accion"
+                fill="outline"
+                (click)="verQr(mesa)"
+              >
+                <ion-icon slot="start" name="qr-code-outline"></ion-icon>
+                Ver QR
+              </ion-button>
+
               <button
                 type="button"
-                class="chip chip--disponibilidad"
+                class="btn-disponibilidad"
                 [attr.data-disponibilidad]="mesa.disponibilidad"
                 [disabled]="actualizando() === mesa.id"
                 (click)="alternarDisponibilidad(mesa)"
               >
-                {{ actualizando() === mesa.id ? '...' : (mesa.disponibilidad === 'vacia' ? 'Vacía' : 'Ocupada') }}
+                {{ actualizando() === mesa.id
+                    ? 'Guardando...'
+                    : (mesa.disponibilidad === 'vacia' ? 'Marcar ocupada' : 'Marcar vacía') }}
               </button>
             </div>
           </article>
         }
       </div>
 
-      <ion-infinite-scroll
-        [disabled]="!hayMas()"
-        (ionInfinite)="cargarMas($event)"
-      >
-        <ion-infinite-scroll-content
-          loadingSpinner="dots"
-          loadingText="Cargando más mesas..."
-        ></ion-infinite-scroll-content>
-      </ion-infinite-scroll>
-
-      @if (!hayMas() && listaFiltrada().length > 0) {
-        <p class="fin-lista">
-          {{ listaFiltrada().length }}
-          {{ listaFiltrada().length === 1 ? 'mesa' : 'mesas' }} en total
-        </p>
-      }
-
     }
 
   </div>
 </ion-content>
+
+@if (!cargando() && listaFiltrada().length > 0) {
+  <ion-footer class="mesas-footer">
+    <div class="paginador">
+      <ion-button
+        fill="clear"
+        [disabled]="pagina() === 1"
+        (click)="paginaAnterior()"
+        aria-label="Página anterior"
+      >
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+
+      <span>Página {{ pagina() }} de {{ totalPaginas() }}</span>
+
+      <ion-button
+        fill="clear"
+        [disabled]="pagina() === totalPaginas()"
+        (click)="paginaSiguiente()"
+        aria-label="Página siguiente"
+      >
+        <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-footer>
+}
 
 <!-- MODAL QR -->
 <ion-modal [isOpen]="mesaQr() !== null" (didDismiss)="cerrarQr()" class="qr-modal">

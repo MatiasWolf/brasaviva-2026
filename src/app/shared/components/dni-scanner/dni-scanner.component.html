@@ -18,6 +18,9 @@
 
       @if (mensajeError()) {
         <p class="mensaje-error">{{ mensajeError() }}</p>
+        <button type="button" class="reintentar" (click)="iniciar()">
+          Reintentar
+        </button>
       } @else {
         <p class="instrucciones">
           Enfocá el código de barras del dorso del DNI dentro del marco.

@@ -6,10 +6,12 @@ import {
   IonButton,
   IonButtons,
   IonContent,
+  IonFooter,
   IonHeader,
+  IonIcon,
+  IonSearchbar,
   IonTitle,
   IonToolbar,
-  IonIcon,
   ViewWillEnter
 } from '@ionic/angular';
 import { PlatoService } from '../../core/services/plato.service';
@@ -29,10 +31,12 @@ import { addOutline, chevronBackOutline, chevronForwardOutline, restaurantOutlin
     IonToolbar,
     IonTitle,
     IonButtons,
-    IonButton,
     IonBackButton,
+    IonButton,
     IonContent,
+    IonFooter,
     IonIcon,
+    IonSearchbar,
     SpinnerLogoComponent
   ]
 })
@@ -46,6 +50,13 @@ export class CartaPage implements ViewWillEnter {
 
   /** Índice de la fotografía visible para cada plato. */
   fotoActual: Record<string, number> = {};
+
+  /** Registros por página. Fijo y bajo para que nunca se corte una tarjeta. */
+  readonly porPagina = 3;
+
+  pagina = 1;
+
+  filtro = '';
 
   private readonly platoService = inject(PlatoService);
   private readonly cdr = inject(ChangeDetectorRef);
@@ -72,6 +83,7 @@ export class CartaPage implements ViewWillEnter {
 
     this.cargando = true;
     this.mensajeError = '';
+    this.pagina = 1;
 
     try {
 
@@ -88,6 +100,38 @@ export class CartaPage implements ViewWillEnter {
       this.cargando = false;
       this.cdr.detectChanges();
     }
+  }
+
+  get listaFiltrada(): Plato[] {
+    const q = this.filtro.trim().toLowerCase();
+    if (!q) {
+      return this.platos;
+    }
+    return this.platos.filter(p =>
+      `${p.nombre} ${p.descripcion}`.toLowerCase().includes(q)
+    );
+  }
+
+  get totalPaginas(): number {
+    return Math.max(1, Math.ceil(this.listaFiltrada.length / this.porPagina));
+  }
+
+  get paginaItems(): Plato[] {
+    const desde = (this.pagina - 1) * this.porPagina;
+    return this.listaFiltrada.slice(desde, desde + this.porPagina);
+  }
+
+  filtrar(event: CustomEvent): void {
+    this.filtro = (event.detail as { value?: string }).value ?? '';
+    this.pagina = 1;
+  }
+
+  paginaAnterior(): void {
+    this.pagina = Math.max(1, this.pagina - 1);
+  }
+
+  paginaSiguiente(): void {
+    this.pagina = Math.min(this.totalPaginas, this.pagina + 1);
   }
 
   /** Fotografías cargadas de un plato, sin los espacios vacíos. */

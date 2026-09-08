@@ -57,6 +57,20 @@ export class DniScannerComponent implements OnDestroy {
       return;
     }
 
+    if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) {
+      // getUserMedia solo funciona en HTTPS o localhost. Si esto no es
+      // "isSecureContext", el navegador bloquea la cámara sin importar el
+      // permiso del sistema operativo, y a veces lo muestra como un error
+      // de permisos genérico.
+      this.mensajeError.set(
+        'El escaneo necesita una conexión segura (HTTPS) o la app instalada. ' +
+          'Si estás probando con "ionic serve" abriendo la IP de la compu desde ' +
+          'el celular, ahí no va a funcionar: abrí la app empaquetada, o probá ' +
+          'desde la misma computadora donde corre "ionic serve".',
+      );
+      return;
+    }
+
     this.lector = new BrowserPDF417Reader();
 
     try {
@@ -78,9 +92,7 @@ export class DniScannerComponent implements OnDestroy {
       );
     } catch (error) {
       console.error('Error al iniciar la cámara:', error);
-      this.mensajeError.set(
-        'No se pudo acceder a la cámara. Revisá los permisos e intentá de nuevo.',
-      );
+      this.mensajeError.set(this.mensajeDeError(error));
     }
   }
 
@@ -88,5 +100,32 @@ export class DniScannerComponent implements OnDestroy {
     this.controles?.stop();
     this.controles = null;
     this.lector = null;
+  }
+
+  /** Traduce el DOMException de getUserMedia a un mensaje accionable. */
+  private mensajeDeError(error: unknown): string {
+    const nombre = (error as { name?: string } | undefined)?.name ?? '';
+
+    switch (nombre) {
+      case 'NotAllowedError':
+      case 'PermissionDeniedError':
+        return (
+          'Le negaste (o el sistema le negó) el permiso de cámara a la app. ' +
+          'Activalo desde Ajustes del celular → Apps → Brasa Viva → Permisos → ' +
+          'Cámara, y volvé a intentar.'
+        );
+      case 'NotFoundError':
+      case 'DevicesNotFoundError':
+        return 'No se encontró ninguna cámara en este dispositivo.';
+      case 'NotReadableError':
+      case 'TrackStartError':
+        return 'La cámara está siendo usada por otra aplicación. Cerrala e intentá de nuevo.';
+      case 'OverconstrainedError':
+        return 'No se pudo configurar la cámara de este dispositivo para escanear.';
+      case 'SecurityError':
+        return 'El navegador bloqueó el acceso a la cámara por seguridad (hace falta HTTPS o la app instalada).';
+      default:
+        return 'No se pudo acceder a la cámara. Revisá los permisos e intentá de nuevo.';
+    }
   }
 }

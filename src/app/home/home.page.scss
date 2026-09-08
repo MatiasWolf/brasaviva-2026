@@ -22,10 +22,12 @@
 
 .home-container {
   min-height: 100%;
-  padding: 20px 16px 32px;
+  height: 100%;
+  padding: 20px 16px calc(20px + var(--ion-safe-area-bottom, 0px));
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
+  box-sizing: border-box;
 }
 
 .home-header {
@@ -104,37 +106,44 @@
   }
 }
 
+/* Botones grandes, a todo el ancho, que se reparten el alto disponible
+   para que no queden espacios vacíos ni haga falta scroll. */
 .menu-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   gap: 12px;
 }
 
 .menu-card {
   appearance: none;
+  flex: 1 1 0;
+  min-height: 84px;
+  max-height: 150px;
+  width: 100%;
   border: 2px solid #802323;
   background: linear-gradient(160deg, #5e1f1f 0%, #431717 100%);
   border-radius: 18px;
-  min-height: 132px;
-  padding: 16px 12px;
+  padding: 14px 20px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
+  gap: 18px;
   color: #ffd485;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
   cursor: pointer;
   transition: transform 0.12s ease, border-color 0.12s ease;
 
   &:active {
-    transform: scale(0.96);
+    transform: scale(0.98);
     border-color: #ffaa55;
   }
 
   &__icon {
-    width: 52px;
-    height: 52px;
+    flex-shrink: 0;
+    width: 56px;
+    height: 56px;
     display: grid;
     place-items: center;
     border-radius: 16px;
@@ -142,21 +151,20 @@
     border: 1px solid rgba(255, 248, 241, 0.2);
 
     ion-icon {
-      font-size: 1.7rem;
+      font-size: 2rem;
       color: #fff8f1;
     }
   }
 
   &__title {
-    font-size: 0.9rem;
-    font-weight: 600;
-    text-align: center;
-    line-height: 1.2;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-align: left;
+    line-height: 1.15;
   }
 }
 
 .sin-botones {
-  grid-column: 1 / -1;
   text-align: center;
   color: #dfa070;
   padding: 24px 0;

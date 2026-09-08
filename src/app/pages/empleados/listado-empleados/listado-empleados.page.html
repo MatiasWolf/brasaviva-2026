@@ -4,11 +4,6 @@
       <ion-back-button defaultHref="/home" text="Volver"></ion-back-button>
     </ion-buttons>
     <ion-title>Empleados</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="irAAlta()" aria-label="Agregar empleado">
-        <ion-icon slot="icon-only" name="person-add-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -21,6 +16,11 @@
         <p>Cargando empleados...</p>
       </div>
     } @else {
+
+      <button type="button" class="btn-agregar" (click)="irAAlta()">
+        <ion-icon name="person-add-outline"></ion-icon>
+        Agregar empleado
+      </button>
 
       <ion-searchbar
         class="buscador"
@@ -46,14 +46,11 @@
               No hay empleados que coincidan con la búsqueda.
             }
           </p>
-          <ion-button fill="outline" (click)="irAAlta()">
-            Agregar empleado
-          </ion-button>
         </div>
       }
 
       <div class="lista">
-        @for (empleado of itemsVisibles(); track empleado.id) {
+        @for (empleado of paginaItems(); track empleado.id) {
           <article class="empleado-card">
             <div class="avatar">
               @if (empleado.foto_url) {
@@ -72,49 +69,58 @@
                   {{ empleado.estado | titlecase }}
                 </span>
               </div>
-            </div>
 
-            <div class="acciones">
-              <ion-button
-                fill="clear"
-                size="small"
-                (click)="editar(empleado)"
-                aria-label="Editar empleado"
-              >
-                <ion-icon slot="icon-only" name="create-outline"></ion-icon>
-              </ion-button>
-              <ion-button
-                fill="clear"
-                size="small"
-                color="danger"
-                (click)="confirmarEliminar(empleado)"
-                aria-label="Eliminar empleado"
-              >
-                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-              </ion-button>
+              <div class="acciones">
+                <ion-button
+                  class="accion accion--editar"
+                  fill="outline"
+                  (click)="editar(empleado)"
+                >
+                  <ion-icon slot="start" name="create-outline"></ion-icon>
+                  Modificar
+                </ion-button>
+                <ion-button
+                  class="accion accion--eliminar"
+                  fill="outline"
+                  color="danger"
+                  (click)="confirmarEliminar(empleado)"
+                >
+                  <ion-icon slot="start" name="trash-outline"></ion-icon>
+                  Eliminar
+                </ion-button>
+              </div>
             </div>
           </article>
         }
       </div>
 
-      <ion-infinite-scroll
-        [disabled]="!hayMas()"
-        (ionInfinite)="cargarMas($event)"
-      >
-        <ion-infinite-scroll-content
-          loadingSpinner="dots"
-          loadingText="Cargando más empleados..."
-        ></ion-infinite-scroll-content>
-      </ion-infinite-scroll>
-
-      @if (!hayMas() && listaFiltrada().length > 0) {
-        <p class="fin-lista">
-          {{ listaFiltrada().length }}
-          {{ listaFiltrada().length === 1 ? 'empleado' : 'empleados' }} en total
-        </p>
-      }
-
     }
 
   </div>
 </ion-content>
+
+@if (!cargando() && listaFiltrada().length > 0) {
+  <ion-footer class="empleados-footer">
+    <div class="paginador">
+      <ion-button
+        fill="clear"
+        [disabled]="pagina() === 1"
+        (click)="paginaAnterior()"
+        aria-label="Página anterior"
+      >
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+
+      <span>Página {{ pagina() }} de {{ totalPaginas() }}</span>
+
+      <ion-button
+        fill="clear"
+        [disabled]="pagina() === totalPaginas()"
+        (click)="paginaSiguiente()"
+        aria-label="Página siguiente"
+      >
+        <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-footer>
+}

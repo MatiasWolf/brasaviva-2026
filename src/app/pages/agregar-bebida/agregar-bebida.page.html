@@ -1,88 +1,80 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button defaultHref="/home"></ion-back-button>
+      <ion-back-button defaultHref="/home" text="Volver"></ion-back-button>
     </ion-buttons>
 
-    <ion-title>Nueva bebida</ion-title>
+    <ion-title>Agregar bebida</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="bebida-content">
   <div class="bebida-container">
 
-    <!-- ENCABEZADO -->
-    <div class="bebida-header">
-      <div class="icon-stage">
-        <div class="glow-core"></div>
-
-        <div class="icon-badge">
-          <ion-icon name="wine-outline"></ion-icon>
-        </div>
-      </div>
-
-      <h1>Agregar bebida</h1>
-
-      <p>
-        Cargá los datos y las fotos de la nueva bebida para
-        sumarla a la carta del restaurante.
-      </p>
-    </div>
-
-    <!-- FOTOS -->
+    <!-- FOTOS: carrusel, una a la vez -->
     <div class="fotos-seccion">
 
       <div class="fotos-encabezado">
         <span class="fotos-label">Fotos de la bebida</span>
-        <span class="fotos-contador">{{ fotosCargadas }} de 3 cargadas</span>
+        <span class="fotos-contador">{{ fotosCargadas }} de 3</span>
       </div>
 
-      @for (foto of fotos; track $index) {
+      <div class="carrusel">
+        <button
+          type="button"
+          class="carrusel-flecha"
+          (click)="fotoAnterior()"
+          aria-label="Fotografía anterior"
+        >
+          <ion-icon name="chevron-back-outline"></ion-icon>
+        </button>
 
-        <div class="foto-bloque">
+        <div class="foto-contenedor">
+          @if (fotos[fotoActiva].previewUrl) {
+            <img
+              [src]="fotos[fotoActiva].previewUrl"
+              [alt]="'Fotografía ' + (fotoActiva + 1) + ' de la bebida'"
+            />
+          } @else {
+            <div class="foto-vacia">
+              <ion-icon name="wine-outline"></ion-icon>
+              <span>Fotografía {{ fotoActiva + 1 }}</span>
+            </div>
+          }
 
-          <span class="foto-numero">Fotografía {{ $index + 1 }}</span>
-
-          <div class="foto-contenedor">
-
-            @if (foto.previewUrl) {
-              <img [src]="foto.previewUrl" [alt]="'Fotografía ' + ($index + 1) + ' de la bebida'" />
-            } @else {
-              <div class="foto-vacia">
-                <ion-icon name="wine-outline"></ion-icon>
-                <span>Todavía no elegiste esta fotografía</span>
-              </div>
-            }
-
-          </div>
-
-          <div class="foto-acciones">
-
-            <label class="btn-foto">
-              <ion-icon name="camera-outline"></ion-icon>
-              <span>{{ foto.previewUrl ? 'Sacar otra foto' : 'Sacar foto' }}</span>
-              <input
-                type="file"
-                accept="image/*"
-                capture="environment"
-                (change)="seleccionarFoto($index, $event)"
-              />
-            </label>
-
-            <label class="btn-foto">
-              <ion-icon [name]="foto.previewUrl ? 'repeat-outline' : 'images-outline'"></ion-icon>
-              <span>{{ foto.previewUrl ? 'Elegir otra imagen' : 'Elegir de la galería' }}</span>
-              <input
-                type="file"
-                accept="image/*"
-                (change)="seleccionarFoto($index, $event)"
-              />
-            </label>
-
-          </div>
-
+          <label class="btn-foto">
+            <ion-icon name="camera-outline"></ion-icon>
+            <span>{{ fotos[fotoActiva].previewUrl ? 'Cambiar' : 'Elegir foto' }}</span>
+            <input
+              type="file"
+              accept="image/*"
+              (change)="seleccionarFoto(fotoActiva, $event)"
+            />
+          </label>
         </div>
-      }
+
+        <button
+          type="button"
+          class="carrusel-flecha"
+          (click)="fotoSiguiente()"
+          aria-label="Fotografía siguiente"
+        >
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </button>
+      </div>
+
+      <div class="carrusel-dots">
+        @for (foto of fotos; track $index) {
+          <button
+            type="button"
+            class="dot"
+            [class.dot--activo]="fotoActiva === $index"
+            [class.dot--cargada]="!!foto.archivo"
+            (click)="irAFoto($index)"
+            [attr.aria-label]="'Ir a la fotografía ' + ($index + 1)"
+          ></button>
+        }
+      </div>
 
       @if (faltanFotos) {
         <div class="mensaje-error-campo">
@@ -139,7 +131,7 @@
           label="Descripción"
           labelPlacement="stacked"
           placeholder="Describí los ingredientes y la preparación"
-          autoGrow="true"
+          [rows]="2"
           (ionFocus)="mensajeError = ''"
         ></ion-textarea>
 
@@ -232,23 +224,7 @@
         }
       </div>
 
-      <!-- ERROR GENERAL -->
-      @if (mensajeError) {
-        <div class="mensaje-error">
-          {{ mensajeError }}
-        </div>
-      }
-
-      <!-- BOTÓN GUARDAR -->
-      <ion-button
-        expand="block"
-        type="submit"
-        class="btn-guardar"
-        [disabled]="enviando"
-      >
-        {{ enviando ? 'Guardando la bebida...' : 'Agregar a la carta' }}
-      </ion-button>
-
+      <button type="submit" class="submit-oculto" aria-hidden="true" tabindex="-1"></button>
     </form>
 
   </div>
@@ -263,6 +239,22 @@
     </div>
   }
 </ion-content>
+
+<ion-footer class="bebida-footer">
+  @if (mensajeError) {
+    <div class="mensaje-error">{{ mensajeError }}</div>
+  }
+
+  <ion-button
+    expand="block"
+    type="button"
+    class="btn-guardar"
+    [disabled]="enviando"
+    (click)="guardarBebida()"
+  >
+    {{ enviando ? 'Guardando la bebida...' : 'Agregar a la carta' }}
+  </ion-button>
+</ion-footer>
 
 <!-- MODAL BEBIDA AGREGADA -->
 
