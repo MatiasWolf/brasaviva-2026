@@ -1,0 +1,156 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text="Volver"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mesas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="mesas-content">
+  <div class="mesas-container">
+
+    @if (cargando()) {
+      <div class="loader">
+        <app-spinner-logo [size]="48"></app-spinner-logo>
+        <p>Cargando mesas...</p>
+      </div>
+    } @else {
+
+      <button type="button" class="btn-agregar" (click)="irAAlta()">
+        <ion-icon name="add-outline"></ion-icon>
+        Agregar mesa
+      </button>
+
+      <ion-searchbar
+        class="buscador"
+        placeholder="Buscar por número o tipo"
+        [debounce]="200"
+        (ionInput)="filtrar($event)"
+      ></ion-searchbar>
+
+      @if (error()) {
+        <div class="mensaje-error">
+          {{ error() }}
+          <button type="button" (click)="cargar()">Reintentar</button>
+        </div>
+      }
+
+      @if (!error() && listaFiltrada().length === 0) {
+        <div class="vacio">
+          <ion-icon name="grid-outline"></ion-icon>
+          <p>
+            @if (lista().length === 0) {
+              Todavía no hay mesas cargadas.
+            } @else {
+              No hay mesas que coincidan con la búsqueda.
+            }
+          </p>
+        </div>
+      }
+
+      <div class="lista">
+        @for (mesa of paginaItems(); track mesa.id) {
+          <article class="mesa-card">
+            <div class="card-top">
+              <button
+                type="button"
+                class="avatar"
+                (click)="verQr(mesa)"
+                aria-label="Ver código QR de la mesa"
+              >
+                @if (mesa.foto_url) {
+                  <img [src]="mesa.foto_url" [alt]="'Mesa ' + mesa.numero" />
+                } @else {
+                  <ion-icon name="grid-outline"></ion-icon>
+                }
+                <span class="avatar-qr">
+                  <ion-icon name="qr-code-outline"></ion-icon>
+                </span>
+              </button>
+
+              <div class="datos">
+                <h2>Mesa {{ mesa.numero }}</h2>
+                <p class="comensales">
+                  <ion-icon name="people-outline"></ion-icon>
+                  {{ mesa.comensales }} comensales
+                </p>
+                <span class="chip chip--tipo">{{ tipoLegible(mesa) | titlecase }}</span>
+              </div>
+            </div>
+
+            <div class="acciones">
+              <ion-button
+                class="accion"
+                fill="outline"
+                (click)="verQr(mesa)"
+              >
+                <ion-icon slot="start" name="qr-code-outline"></ion-icon>
+                Ver QR
+              </ion-button>
+
+              <button
+                type="button"
+                class="btn-disponibilidad"
+                [attr.data-disponibilidad]="mesa.disponibilidad"
+                [disabled]="actualizando() === mesa.id"
+                (click)="alternarDisponibilidad(mesa)"
+              >
+                {{ actualizando() === mesa.id
+                    ? 'Guardando...'
+                    : (mesa.disponibilidad === 'vacia' ? 'Marcar ocupada' : 'Marcar vacía') }}
+              </button>
+            </div>
+          </article>
+        }
+      </div>
+
+    }
+
+  </div>
+</ion-content>
+
+@if (!cargando() && listaFiltrada().length > 0) {
+  <ion-footer class="mesas-footer">
+    <div class="paginador">
+      <ion-button
+        fill="clear"
+        [disabled]="pagina() === 1"
+        (click)="paginaAnterior()"
+        aria-label="Página anterior"
+      >
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+
+      <span>Página {{ pagina() }} de {{ totalPaginas() }}</span>
+
+      <ion-button
+        fill="clear"
+        [disabled]="pagina() === totalPaginas()"
+        (click)="paginaSiguiente()"
+        aria-label="Página siguiente"
+      >
+        <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-footer>
+}
+
+<!-- MODAL QR -->
+<ion-modal [isOpen]="mesaQr() !== null" (didDismiss)="cerrarQr()" class="qr-modal">
+  <ng-template>
+    <div class="qr-wrapper">
+      <button type="button" class="qr-cerrar" (click)="cerrarQr()" aria-label="Cerrar">
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+
+      <h2>Mesa {{ mesaQr()?.numero }}</h2>
+
+      @if (mesaQr()?.qr_url) {
+        <img [src]="mesaQr()?.qr_url" alt="Código QR de la mesa" class="qr-imagen" />
+      }
+
+      <p>Escaneá este código para identificar la mesa.</p>
+    </div>
+  </ng-template>
+</ion-modal>

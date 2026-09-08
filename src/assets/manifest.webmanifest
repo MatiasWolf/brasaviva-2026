@@ -1,0 +1,23 @@
+{
+  "name": "Brasa Viva",
+  "short_name": "Brasa Viva",
+  "description": "Gestión integral del restaurante Brasa Viva.",
+  "lang": "es",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#130905",
+  "theme_color": "#130905",
+  "icons": [
+    { "src": "/assets/icons/icon-48.webp", "type": "image/webp", "sizes": "48x48" },
+    { "src": "/assets/icons/icon-72.webp", "type": "image/webp", "sizes": "72x72" },
+    { "src": "/assets/icons/icon-96.webp", "type": "image/webp", "sizes": "96x96" },
+    { "src": "/assets/icons/icon-128.webp", "type": "image/webp", "sizes": "128x128" },
+    { "src": "/assets/icons/icon-192.webp", "type": "image/webp", "sizes": "192x192" },
+    { "src": "/assets/icons/icon-256.webp", "type": "image/webp", "sizes": "256x256" },
+    { "src": "/assets/icons/icon-512.webp", "type": "image/webp", "sizes": "512x512" },
+    { "src": "/assets/icons/icon-512.webp", "type": "image/webp", "sizes": "512x512", "purpose": "maskable" }
+  ]
+}

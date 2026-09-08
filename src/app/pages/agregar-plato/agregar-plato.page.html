@@ -1,0 +1,293 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text="Volver"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Agregar plato</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="plato-content">
+  <div class="plato-container">
+
+    <!-- FOTOS: carrusel, una a la vez -->
+    <div class="fotos-seccion">
+
+      <div class="fotos-encabezado">
+        <span class="fotos-label">Fotos del plato</span>
+        <span class="fotos-contador">{{ fotosCargadas }} de 3</span>
+      </div>
+
+      <div class="carrusel">
+        <button
+          type="button"
+          class="carrusel-flecha"
+          (click)="fotoAnterior()"
+          aria-label="Fotografía anterior"
+        >
+          <ion-icon name="chevron-back-outline"></ion-icon>
+        </button>
+
+        <div class="foto-contenedor">
+          @if (fotos[fotoActiva].previewUrl) {
+            <img
+              [src]="fotos[fotoActiva].previewUrl"
+              [alt]="'Fotografía ' + (fotoActiva + 1) + ' del plato'"
+            />
+          } @else {
+            <div class="foto-vacia">
+              <ion-icon name="restaurant-outline"></ion-icon>
+              <span>Fotografía {{ fotoActiva + 1 }}</span>
+            </div>
+          }
+
+          <label class="btn-foto">
+            <ion-icon name="camera-outline"></ion-icon>
+            <span>{{ fotos[fotoActiva].previewUrl ? 'Cambiar' : 'Elegir foto' }}</span>
+            <input
+              type="file"
+              accept="image/*"
+              (change)="seleccionarFoto(fotoActiva, $event)"
+            />
+          </label>
+        </div>
+
+        <button
+          type="button"
+          class="carrusel-flecha"
+          (click)="fotoSiguiente()"
+          aria-label="Fotografía siguiente"
+        >
+          <ion-icon name="chevron-forward-outline"></ion-icon>
+        </button>
+      </div>
+
+      <div class="carrusel-dots">
+        @for (foto of fotos; track $index) {
+          <button
+            type="button"
+            class="dot"
+            [class.dot--activo]="fotoActiva === $index"
+            [class.dot--cargada]="!!foto.archivo"
+            (click)="irAFoto($index)"
+            [attr.aria-label]="'Ir a la fotografía ' + ($index + 1)"
+          ></button>
+        }
+      </div>
+
+      @if (faltanFotos) {
+        <div class="mensaje-error-campo">
+          <span>Cargá las tres fotografías del plato.</span>
+        </div>
+      }
+
+    </div>
+
+    <!-- FORMULARIO -->
+    <form
+      [formGroup]="platoForm"
+      (ngSubmit)="guardarPlato()"
+      class="plato-form"
+    >
+
+      <!-- NOMBRE -->
+      <div class="campo">
+        <ion-input
+          formControlName="nombre"
+          type="text"
+          label="Nombre del plato"
+          labelPlacement="stacked"
+          placeholder="Ej: Bife de chorizo"
+          (ionFocus)="mensajeError = ''"
+        ></ion-input>
+
+        @if (
+          platoForm.get('nombre')?.dirty &&
+          platoForm.get('nombre')?.invalid
+        ) {
+          <div class="mensaje-error-campo">
+
+            @if (platoForm.get('nombre')?.hasError('required')) {
+              <span>El nombre es obligatorio.</span>
+            }
+
+            @if (platoForm.get('nombre')?.hasError('minlength')) {
+              <span>El nombre debe tener al menos 3 caracteres.</span>
+            }
+
+            @if (platoForm.get('nombre')?.hasError('maxlength')) {
+              <span>El nombre no puede superar los 60 caracteres.</span>
+            }
+
+          </div>
+        }
+      </div>
+
+      <!-- DESCRIPCIÓN -->
+      <div class="campo campo-textarea">
+        <ion-textarea
+          formControlName="descripcion"
+          label="Descripción"
+          labelPlacement="stacked"
+          placeholder="Describí los ingredientes y la preparación"
+          [rows]="2"
+          (ionFocus)="mensajeError = ''"
+        ></ion-textarea>
+
+        @if (
+          platoForm.get('descripcion')?.dirty &&
+          platoForm.get('descripcion')?.invalid
+        ) {
+          <div class="mensaje-error-campo">
+
+            @if (platoForm.get('descripcion')?.hasError('required')) {
+              <span>La descripción es obligatoria.</span>
+            }
+
+            @if (platoForm.get('descripcion')?.hasError('minlength')) {
+              <span>La descripción debe tener al menos 10 caracteres.</span>
+            }
+
+            @if (platoForm.get('descripcion')?.hasError('maxlength')) {
+              <span>La descripción no puede superar los 300 caracteres.</span>
+            }
+
+          </div>
+        }
+      </div>
+
+      <!-- TIEMPO DE ELABORACIÓN -->
+      <div class="campo">
+        <ion-input
+          formControlName="tiempoElaboracion"
+          type="text"
+          inputmode="numeric"
+          label="Tiempo de elaboración (minutos)"
+          labelPlacement="stacked"
+          placeholder="Ej: 5"
+          (ionFocus)="mensajeError = ''"
+        ></ion-input>
+
+        @if (
+          platoForm.get('tiempoElaboracion')?.dirty &&
+          platoForm.get('tiempoElaboracion')?.invalid
+        ) {
+          <div class="mensaje-error-campo">
+
+            @if (platoForm.get('tiempoElaboracion')?.hasError('required')) {
+              <span>El tiempo de elaboración es obligatorio.</span>
+            }
+
+            @if (
+              platoForm.get('tiempoElaboracion')?.hasError('pattern') ||
+              platoForm.get('tiempoElaboracion')?.hasError('min') ||
+              platoForm.get('tiempoElaboracion')?.hasError('max')
+            ) {
+              <span>Ingresá un tiempo válido en minutos (de 1 a 240).</span>
+            }
+
+          </div>
+        }
+      </div>
+
+      <!-- PRECIO -->
+      <div class="campo">
+        <ion-input
+          formControlName="precio"
+          type="text"
+          inputmode="decimal"
+          label="Precio"
+          labelPlacement="stacked"
+          placeholder="Ej: 8500"
+          (ionFocus)="mensajeError = ''"
+        ></ion-input>
+
+        @if (
+          platoForm.get('precio')?.dirty &&
+          platoForm.get('precio')?.invalid
+        ) {
+          <div class="mensaje-error-campo">
+
+            @if (platoForm.get('precio')?.hasError('required')) {
+              <span>El precio es obligatorio.</span>
+            }
+
+            @if (
+              platoForm.get('precio')?.hasError('pattern') ||
+              platoForm.get('precio')?.hasError('min')
+            ) {
+              <span>Ingresá un precio válido.</span>
+            }
+
+          </div>
+        }
+      </div>
+
+      <button type="submit" class="submit-oculto" aria-hidden="true" tabindex="-1"></button>
+    </form>
+
+  </div>
+
+  <!-- ESPERA: indicador visual con el logo -->
+  @if (enviando) {
+    <div class="capa-espera">
+      <div class="espera-caja">
+        <app-spinner-logo [size]="52"></app-spinner-logo>
+        <span>Guardando el plato...</span>
+      </div>
+    </div>
+  }
+</ion-content>
+
+<ion-footer class="plato-footer">
+  @if (mensajeError) {
+    <div class="mensaje-error">{{ mensajeError }}</div>
+  }
+
+  <ion-button
+    expand="block"
+    type="button"
+    class="btn-guardar"
+    [disabled]="enviando"
+    (click)="guardarPlato()"
+  >
+    {{ enviando ? 'Guardando el plato...' : 'Agregar a la carta' }}
+  </ion-button>
+</ion-footer>
+
+<!-- MODAL PLATO AGREGADO -->
+
+<ion-modal
+  [isOpen]="isModalOpen"
+  backdropDismiss="false"
+  class="success-modal"
+>
+
+  <ng-template>
+
+    <div class="modal-wrapper">
+
+      <div class="icon-container">
+        <ion-icon name="checkmark-circle"></ion-icon>
+      </div>
+
+      <h2>¡Plato agregado!</h2>
+
+      <p>
+        El plato fue guardado correctamente y ya
+        <strong>forma parte de la carta</strong>.
+      </p>
+
+      <ion-button
+        expand="block"
+        shape="round"
+        (click)="irALaCarta()"
+      >
+        Ver la carta
+      </ion-button>
+
+    </div>
+
+  </ng-template>
+</ion-modal>

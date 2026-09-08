@@ -1,0 +1,153 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text="Volver"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Carta de platos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="carta-content">
+  <div class="carta-container">
+
+    @if (cargando) {
+      <div class="estado-carga">
+        <app-spinner-logo [size]="54"></app-spinner-logo>
+        <span>Cargando la carta...</span>
+      </div>
+    } @else {
+
+      <button type="button" class="btn-agregar" (click)="irAAgregar()">
+        <ion-icon name="add-outline"></ion-icon>
+        Agregar plato
+      </button>
+
+      <ion-searchbar
+        class="buscador"
+        placeholder="Buscar por nombre o descripción"
+        [debounce]="200"
+        (ionInput)="filtrar($event)"
+      ></ion-searchbar>
+
+      @if (mensajeError) {
+        <div class="mensaje-error">
+          {{ mensajeError }}
+          <button type="button" (click)="cargarPlatos()">Reintentar</button>
+        </div>
+      }
+
+      @if (!mensajeError && listaFiltrada.length === 0) {
+        <div class="carta-vacia">
+          <ion-icon name="restaurant-outline"></ion-icon>
+          <span>
+            @if (platos.length === 0) {
+              Todavía no hay platos cargados en la carta.
+            } @else {
+              No hay platos que coincidan con la búsqueda.
+            }
+          </span>
+        </div>
+      }
+
+      <div class="lista">
+
+        @for (plato of paginaItems; track plato.id) {
+
+          <article class="plato-card">
+
+            <!-- Carrusel de fotos del registro -->
+            <div class="plato-foto">
+
+              @if (fotoVisible(plato); as foto) {
+                <img [src]="foto" [alt]="plato.nombre" />
+              } @else {
+                <div class="foto-faltante">
+                  <ion-icon name="restaurant-outline"></ion-icon>
+                  <span>Sin foto</span>
+                </div>
+              }
+
+              @if (fotosDe(plato).length > 1) {
+
+                <button
+                  type="button"
+                  class="nav-foto nav-izquierda"
+                  aria-label="Ver la fotografía anterior"
+                  (click)="fotoAnterior(plato)"
+                >
+                  <ion-icon name="chevron-back-outline"></ion-icon>
+                </button>
+
+                <button
+                  type="button"
+                  class="nav-foto nav-derecha"
+                  aria-label="Ver la fotografía siguiente"
+                  (click)="fotoSiguiente(plato)"
+                >
+                  <ion-icon name="chevron-forward-outline"></ion-icon>
+                </button>
+
+                <div class="puntos">
+                  @for (foto of fotosDe(plato); track $index) {
+                    <span
+                      class="punto"
+                      [class.punto-activo]="$index === indiceDe(plato)"
+                    ></span>
+                  }
+                </div>
+
+              }
+
+            </div>
+
+            <div class="plato-info">
+              <h2>{{ plato.nombre }}</h2>
+              <p class="plato-descripcion">{{ plato.descripcion }}</p>
+
+              <div class="plato-detalles">
+                <span class="plato-tiempo">
+                  {{ plato.tiempo_preparacion }} min
+                </span>
+                <span class="plato-precio">
+                  ${{ plato.precio }}
+                </span>
+              </div>
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+    }
+
+  </div>
+</ion-content>
+
+@if (!cargando && listaFiltrada.length > 0) {
+  <ion-footer class="carta-footer">
+    <div class="paginador">
+      <ion-button
+        fill="clear"
+        [disabled]="pagina === 1"
+        (click)="paginaAnterior()"
+        aria-label="Página anterior"
+      >
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+
+      <span>Página {{ pagina }} de {{ totalPaginas }}</span>
+
+      <ion-button
+        fill="clear"
+        [disabled]="pagina === totalPaginas"
+        (click)="paginaSiguiente()"
+        aria-label="Página siguiente"
+      >
+        <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-footer>
+}

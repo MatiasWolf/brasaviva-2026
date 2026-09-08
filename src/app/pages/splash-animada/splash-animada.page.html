@@ -1,0 +1,30 @@
+<ion-content [fullscreen]="true" class="splash-animada" (click)="saltar()">
+  <div class="splash-shell">
+    <div class="pulse-ring ring-one"></div>
+    <div class="pulse-ring ring-two"></div>
+
+    <section class="brand-stack">
+      <div class="icon-stage">
+        <div class="glow-core"></div>
+        <div class="icon-badge">
+          <app-brand-logo variant="mono" [size]="140" />
+        </div>
+      </div>
+
+      <p class="eyebrow">Trabajo Final Integrador</p>
+      <h1>Brasa Viva</h1>
+    </section>
+
+    <section class="grupo-stack">
+      <p class="nombreGrupo">{{ nombreGrupo }}</p>
+      @for (nombre of integrantes; track nombre) {
+        <p class="signature">{{ nombre }}</p>
+      }
+    </section>
+
+    <div class="loading-copy">
+      <span class="loading-bar"></span>
+      <p>Cargando gestión de restaurante...</p>
+    </div>
+  </div>
+</ion-content>
