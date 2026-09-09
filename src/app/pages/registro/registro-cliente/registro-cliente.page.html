@@ -10,6 +10,18 @@
 <ion-content class="registro-content">
   <div class="registro-container">
 
+
+<!-- ENCABEZADO -->
+<div class="registro-header">
+  
+  <h1>Crear cuenta</h1>
+
+  <p>
+    Registrate para disfrutar de todas las opciones
+    disponibles en nuestro restaurante.
+  </p>
+</div>
+
 <!-- FOTO DE PERFIL -->
 <div class="foto-section">
 
@@ -135,68 +147,73 @@
     </div>
 
 
-    <!-- DNI -->
-    <div class="campo">
-      <ion-input
-        formControlName="dni"
-        type="text"
-        inputmode="numeric"
-        label="Número de documento"
-        labelPlacement="stacked"
-        placeholder="Ingresá tu DNI"
-        (ionFocus)="mensajeError = ''"
-      ></ion-input>
+    <!-- DNI + EMAIL -->
+    <div class="fila-dni-email">
 
-      @if (
-        registroForm.get('dni')?.dirty &&
-        registroForm.get('dni')?.invalid
-      ) {
-        <div class="mensaje-error-campo">
+      <!-- DNI -->
+      <div class="campo">
+        <ion-input 
+          formControlName="dni" 
+          type="text" 
+          inputmode="numeric" 
+          label="Número de documento" 
+          labelPlacement="stacked" 
+          placeholder="Ingresá tu DNI" 
+          (ionFocus)="mensajeError = ''"
+        ></ion-input>
 
-          @if (registroForm.get('dni')?.hasError('required')) {
-            <span>El DNI es obligatorio.</span>
-          }
+        @if (
+          registroForm.get('dni')?.dirty && 
+          registroForm.get('dni')?.invalid
+        ) {
+          <div class="mensaje-error-campo">
 
-          @if (registroForm.get('dni')?.hasError('pattern')) {
-            <span>El DNI debe contener entre 7 y 8 números.</span>
-          }
+            @if (registroForm.get('dni')?.hasError('required')) {
+              <span>El DNI es obligatorio.</span>
+            }
 
-        </div>
-      }
-    </div>
+            @if (registroForm.get('dni')?.hasError('pattern')) {
+              <span>El DNI debe contener entre 7 y 8 números.</span>
+            }
+
+          </div>
+        }
+      </div>
 
 
-    <!-- EMAIL -->
-    <div class="campo">
-      <ion-input
-        formControlName="email"
-        type="email"
-        label="Correo electrónico"
-        labelPlacement="stacked"
-        placeholder="ejemplo@correo.com"
-        (ionFocus)="mensajeError = ''"
-      ></ion-input>
+      <!-- EMAIL -->
+      <div class="campo">
+        <ion-input 
+          formControlName="email" 
+          type="email" 
+          label="Correo electrónico" 
+          labelPlacement="stacked" 
+          placeholder="ejemplo@correo.com" 
+          (ionFocus)="mensajeError = ''"
+        ></ion-input>
 
-      @if (
-        registroForm.get('email')?.dirty &&
-        registroForm.get('email')?.invalid
-      ) {
-        <div class="mensaje-error-campo">
+        @if (
+          registroForm.get('email')?.dirty && 
+          registroForm.get('email')?.invalid
+        ) {
+          <div class="mensaje-error-campo">
 
-          @if (registroForm.get('email')?.hasError('required')) {
-            <span>El correo electrónico es obligatorio.</span>
-          }
+            @if (registroForm.get('email')?.hasError('required')) {
+              <span>El correo electrónico es obligatorio.</span>
+            }
 
-          @if (registroForm.get('email')?.hasError('pattern')) {
-            <span>Ingresá un correo electrónico válido.</span>
-          }
+            @if (registroForm.get('email')?.hasError('pattern')) {
+              <span>Ingresá un correo electrónico válido.</span>
+            }
 
-          @if (registroForm.get('email')?.hasError('maxlength')) {
-            <span>El correo no puede superar los 100 caracteres.</span>
-          }
+            @if (registroForm.get('email')?.hasError('maxlength')) {
+              <span>El correo no puede superar los 100 caracteres.</span>
+            }
 
-        </div>
-      }
+          </div>
+        }
+      </div>
+
     </div>
 
 
