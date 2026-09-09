@@ -31,6 +31,7 @@ import {
   IonBackButton,
   ToastController,
   IonModal,
+  IonFooter
 } from '@ionic/angular';
 
 import { addIcons } from 'ionicons';
@@ -91,6 +92,7 @@ interface ClienteListaEspera {
     IonCardContent,
     IonAvatar,
     FormsModule,
+    IonFooter,
   ],
 })
 export class ListaEsperaPage implements OnInit, OnDestroy {
@@ -119,6 +121,8 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
   clientes: ClienteListaEspera[] = [];
   cargando = false;
   error = '';
+  pagina = signal(1);
+  itemsPorPagina = 3; 
 
   constructor() {
 
@@ -208,7 +212,6 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
     const texto = (this.textoBusqueda ?? '')
       .trim()
       .toLowerCase();
-
     if (!texto) {
       return this.clientes;
     }
@@ -508,6 +511,31 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
     this.mesaSeleccionada.set(null);
   }
 
+  paginaItems() {
+    const inicio = (this.pagina() - 1) * this.itemsPorPagina;
+    const fin = inicio + this.itemsPorPagina;
+
+    return this.clientesFiltrados.slice(inicio, fin);
+  }
+  
+  totalPaginas() {
+    return Math.max(
+      1,
+      Math.ceil(this.clientesFiltrados.length / this.itemsPorPagina)
+    );
+  }
+
+  paginaAnterior() {
+    if (this.pagina() > 1) {
+      this.pagina.update(p => p - 1);
+    }
+  }
+
+  paginaSiguiente() {
+    if (this.pagina() < this.totalPaginas()) {
+      this.pagina.update(p => p + 1);
+    }
+  }
 
   async cerrarSesion(): Promise<void> {
     try {

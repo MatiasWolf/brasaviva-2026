@@ -22,47 +22,49 @@
   </p>
 </div>
 
-<!-- FOTO DE PERFIL -->
-<div class="foto-section">
+  <!-- FOTO Y ESCANEAR DNI -->
+<div class="foto-dni-row">
 
+  <!-- FOTO DE PERFIL -->
+  <div class="foto-section">
+    <button
+      type="button"
+      class="foto-button"
+      (click)="tomarFoto()"
+    >
+      @if (fotoPreview) {
+
+        <img
+          [src]="fotoPreview"
+          alt="Foto de perfil"
+          class="foto-preview"
+        />
+
+        <div class="foto-check">
+          <ion-icon name="checkmark-circle"></ion-icon>
+        </div>
+
+      } @else {
+
+        <ion-icon name="camera-outline"></ion-icon>
+
+        <span>Tomar foto</span>
+
+      }
+    </button>
+  </div>
+
+  <!-- ESCANEAR DNI -->
   <button
     type="button"
-    class="foto-button"
-    (click)="tomarFoto()"
+    class="foto-button btn-escanear-dni"
+    (click)="escanearDni()"
   >
-
-    @if (fotoPreview) {
-
-      <img
-        [src]="fotoPreview"
-        alt="Foto de perfil"
-        class="foto-preview"
-      />
-
-      <div class="foto-check">
-        <ion-icon name="checkmark-circle"></ion-icon>
-      </div>
-
-    } @else {
-
-      <ion-icon name="camera-outline"></ion-icon>
-
-      <span>Tomar foto</span>
-
-    }
-
+    <ion-icon name="scan-outline"></ion-icon>
+    <span>Escanear DNI</span>
   </button>
+
 </div>
-
-
-<!-- ESCANEAR DNI -->
-<button type="button" class="btn-escanear-dni" (click)="escanearDni()">
-  <ion-icon name="scan-outline"></ion-icon>
-  Escanear DNI
-</button>
-<p class="escanear-dni-hint">
-  Completa apellido, nombre y DNI leyendo el código de barras del dorso.
-</p>
 
 <!-- FORMULARIO -->
 <form
