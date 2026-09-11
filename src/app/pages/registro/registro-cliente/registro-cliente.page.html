@@ -278,36 +278,35 @@
     </div>
 
 
-    <!-- ERROR GENERAL -->
-    @if (mensajeError) {
-      <div class="mensaje-error">
-        {{ mensajeError }}
-      </div>
-    }
-
-
-    <!-- BOTÓN REGISTRAR -->
-    <ion-button
-      expand="block"
-      type="submit"
-      class="btn-registrar"
-      [disabled]="enviando"
-    >
-      {{ enviando ? 'Registrando...' : 'Crear cuenta' }}
-    </ion-button>
-
-
     <!-- LOGIN -->
     <p class="texto-login">
       ¿Ya tenés una cuenta?
       <span (click)="irAlLogin()">Iniciar sesión</span>
     </p>
 
+    <button type="submit" class="submit-oculto" aria-hidden="true" tabindex="-1"></button>
+
     </form>
 
 
   </div>
 </ion-content>
+
+<ion-footer class="registro-footer">
+  @if (mensajeError) {
+    <div class="mensaje-error">{{ mensajeError }}</div>
+  }
+
+  <ion-button
+    expand="block"
+    type="button"
+    class="btn-registrar"
+    [disabled]="enviando"
+    (click)="registrarCliente()"
+  >
+    {{ enviando ? 'Registrando...' : 'Crear cuenta' }}
+  </ion-button>
+</ion-footer>
 
 <!-- MODAL REGISTRO EXITOSO -->
 

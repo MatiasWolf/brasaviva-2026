@@ -1,6 +1,6 @@
-/* Listado de empleados — paleta "brasa" consistente con el home. */
+/* Listado de clientes pendientes de aprobación — misma paleta "brasa" que los demás listados. */
 
-.empleados-content {
+.clientes-content {
   --background:
     radial-gradient(circle at 15% 0%, rgba(246, 193, 133, 0.16), transparent 22%),
     linear-gradient(180deg, #130905 0%, #3a1710 100%);
@@ -27,10 +27,10 @@ ion-back-button {
   --color: #ffd485;
 }
 
-.empleados-container {
+.clientes-container {
   min-height: 100%;
   height: 100%;
-  padding: 14px 14px 14px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -50,45 +50,6 @@ ion-back-button {
     margin: 0;
     color: rgba(255, 248, 241, 0.74);
   }
-}
-
-/* Botón de alta bien visible, a todo el ancho. */
-.btn-agregar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  min-height: 52px;
-  border: none;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #ffb347 0%, #e9820e 100%);
-  color: #2a1204;
-  font-size: 1.05rem;
-  font-weight: 800;
-  font-family: inherit;
-  letter-spacing: 0.01em;
-  box-shadow: 0 6px 16px rgba(233, 130, 14, 0.35);
-  cursor: pointer;
-
-  ion-icon {
-    font-size: 1.4rem;
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-}
-
-.buscador {
-  --background: #fff3df;
-  --color: #35170b;
-  --placeholder-color: #805238;
-  --icon-color: #805238;
-  --border-radius: 12px;
-  padding: 0;
-  box-shadow: 0 3px 8px rgba(19, 9, 5, 0.25);
-  flex-shrink: 0;
 }
 
 .mensaje-error {
@@ -112,9 +73,11 @@ ion-back-button {
 }
 
 .vacio {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   padding: 40px 16px;
   text-align: center;
@@ -129,8 +92,8 @@ ion-back-button {
   }
 }
 
-/* Contenedor de tarjetas: ocupa el alto restante, y si por el tamaño de
-   pantalla no entran las 2 completas, hace scroll-snap para que ninguna
+/* Contenedor de tarjetas: ocupa el alto restante; si por el tamaño de
+   pantalla no entran las 3 completas, scroll-snap evita que alguna
    quede cortada a la mitad. */
 .lista {
   flex: 1;
@@ -147,15 +110,14 @@ ion-back-button {
   }
 }
 
-.empleado-card {
+.cliente-card {
   scroll-snap-align: start;
   /* Si sobra alto, las tarjetas se reparten el espacio libre (flex-grow);
      si el contenido real necesita más de lo disponible, NUNCA se
      comprimen por debajo de su tamaño natural (flex-shrink: 0) — así no
-     se superponen con la tarjeta siguiente, y en ese caso la lista
-     simplemente scrollea (para eso está el scroll-snap). */
+     se superponen con la tarjeta siguiente. */
   flex: 1 0 auto;
-  min-height: 138px;
+  min-height: 150px;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -166,10 +128,11 @@ ion-back-button {
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
 }
 
+/* Foto con buen tamaño, siempre pegada a los datos del cliente. */
 .avatar {
   flex-shrink: 0;
-  width: 96px;
-  height: 96px;
+  width: 112px;
+  height: 112px;
   border-radius: 20px;
   overflow: hidden;
   display: grid;
@@ -184,7 +147,7 @@ ion-back-button {
   }
 
   ion-icon {
-    font-size: 2.6rem;
+    font-size: 3rem;
     color: #fff8f1;
   }
 }
@@ -204,54 +167,19 @@ ion-back-button {
   }
 
   .correo {
-    margin: 3px 0 8px;
+    margin: 3px 0 0;
     font-size: 0.85rem;
     color: rgba(255, 248, 241, 0.66);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-}
 
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.chip {
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 0.74rem;
-  font-weight: 600;
-}
-
-.chip--rol {
-  background: rgba(255, 170, 85, 0.16);
-  border: 1px solid rgba(255, 170, 85, 0.4);
-  color: #ffd0a0;
-}
-
-.chip--estado {
-  border: 1px solid transparent;
-}
-
-.chip--estado[data-estado='aprobado'] {
-  background: rgba(72, 160, 90, 0.2);
-  border-color: rgba(72, 160, 90, 0.5);
-  color: #b7e6c2;
-}
-
-.chip--estado[data-estado='pendiente'] {
-  background: rgba(226, 170, 60, 0.2);
-  border-color: rgba(226, 170, 60, 0.5);
-  color: #f2d9a8;
-}
-
-.chip--estado[data-estado='rechazado'] {
-  background: rgba(180, 55, 40, 0.22);
-  border-color: rgba(180, 55, 40, 0.5);
-  color: #ffc7bd;
+  .fecha {
+    margin: 2px 0 8px;
+    font-size: 0.76rem;
+    color: rgba(255, 224, 163, 0.6);
+  }
 }
 
 /* Botones de acción grandes y separados, para no tocar el equivocado. */
@@ -259,14 +187,9 @@ ion-back-button {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 12px;
 
   .accion {
     --border-radius: 12px;
-    --padding-top: 16px;
-    --padding-bottom: 16px;
-    --padding-start: 14px;
-    --padding-end: 14px;
     margin: 0;
     height: 44px;
     font-size: 0.86rem;
@@ -278,14 +201,16 @@ ion-back-button {
     }
   }
 
-  .accion--editar {
-    --color: #ffd485;
-    --border-color: #ffd485;
+  .accion--aprobar {
+    --background: #3f9a52;
+    --background-hover: #47ac5c;
+    --background-activated: #368647;
+    --color: #ffffff;
   }
 }
 
 /* Paginador fijo abajo. */
-.empleados-footer {
+.clientes-footer {
   &::before {
     display: none;
   }
@@ -307,5 +232,16 @@ ion-back-button {
     --padding-end: 10px;
     margin: 0;
     font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .avatar {
+    width: 92px;
+    height: 92px;
+  }
+
+  .datos h2 {
+    font-size: 1.02rem;
   }
 }

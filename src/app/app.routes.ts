@@ -134,11 +134,18 @@ export const routes: Routes = [
     ),
   },
   {
+    path: 'clientes-pendientes',
+    loadComponent: () =>
+      import(
+        './pages/clientes/listado-clientes-pendientes/listado-clientes-pendientes.page'
+      ).then((m) => m.ListadoClientesPendientesPage),
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor'])],
+  },
+  {
     path: '',
     redirectTo: 'splash-estatica',
     pathMatch: 'full',
   },
-  
 
 ];
 

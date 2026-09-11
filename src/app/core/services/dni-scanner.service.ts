@@ -1,20 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DatosDni, SexoDni } from '../models/dni.model';
 
-/**
- * Parseo del código PDF417 del DNI argentino (tarjeta, desde ~2012) y cálculo
- * del CUIL a partir del DNI + sexo.
- *
- * El contenido típico es una cadena separada por "@", por ejemplo:
- *   00385617597@QUIROGA@JUAN CARLOS@M@27717418@A@06/03/1990@25/06/2018@
- * (trámite, apellido, nombre, sexo, dni, ejemplar, fecha nacimiento, fecha emisión)
- *
- * El orden exacto puede variar entre versiones de la tarjeta, así que en vez
- * de confiar en la posición de cada campo, se clasifica cada token por su
- * forma (numérico de 7-8 dígitos = DNI, "M"/"F"/"X" = sexo, fecha dd/mm/aaaa,
- * texto en mayúsculas = apellido/nombre). Si no se puede identificar DNI y al
- * menos apellido + nombre, se considera que el código no es un DNI válido.
- */
 @Injectable({
   providedIn: 'root',
 })
@@ -55,10 +41,6 @@ export class DniScannerService {
     };
   }
 
-  /**
-   * CUIL a partir del DNI y el sexo (dígito verificador módulo 11). Es una
-   * estimación: siempre queda en un campo editable para que se pueda corregir.
-   */
   calcularCuil(dni: string, sexo: SexoDni): string {
     const dniCompleto = dni.padStart(8, '0');
     const prefijoBase = sexo === 'F' ? '27' : '20';
@@ -67,7 +49,6 @@ export class DniScannerService {
     let dv = this.digitoVerificador(prefijo, dniCompleto);
 
     if (dv === null) {
-      // Cuando 20/27 no resuelve, la convención habitual usa el prefijo 23.
       prefijo = '23';
       dv = this.digitoVerificador(prefijo, dniCompleto) ?? 9;
     }

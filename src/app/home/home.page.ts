@@ -42,6 +42,7 @@ import {
 
 import { AuthService } from '../core/services/auth.service';
 import { MenuService } from '../core/services/menu.service';
+import { PushNotificationsService } from '../core/services/push-notifications.service';
 import { Usuario } from '../core/models/usuario.model';
 import {
   BotonMenu,
@@ -72,6 +73,7 @@ export class HomePage implements OnInit {
   private readonly menu = inject(MenuService);
   private readonly router = inject(Router);
   private readonly anonymousSession = inject(AnonymousSessionService);
+  private readonly pushNotifications = inject(PushNotificationsService);
 
   readonly usuario = signal<Usuario | null>(null);
   readonly sesionAnonima = signal<SesionAnonima | null>(null);
@@ -164,6 +166,9 @@ export class HomePage implements OnInit {
         const estado = usuario.estado_estadia ?? 'sin_estadia';
         this.estadiaEstado.set(estado);
       }
+      if (['dueño', 'supervisor'].includes(usuario.roles?.nombre ?? '')) {
+        void this.pushNotifications.inicializar(usuario.id);
+      }
       this.botones.set(
         await this.menu.getBotonesPorRol(usuario.rol_id)
       );
@@ -186,7 +191,6 @@ export class HomePage implements OnInit {
     });
   }
 
-  // Actualiza el estado de estadía del usuario o sesión anónima y navega a la página de inicio
   async ionViewWillEnter(): Promise<void> {
     this.procesandoQr.set(false);
     const usuario = await this.auth.cargarUsuarioActual();

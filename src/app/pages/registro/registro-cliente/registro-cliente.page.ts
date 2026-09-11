@@ -9,7 +9,7 @@ import {
   ValidationErrors
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonInput, IonTitle, IonToolbar, IonIcon, IonModal } from '@ionic/angular';
+import { IonBackButton, IonButton, IonButtons, IonContent, IonFooter, IonHeader, IonInput, IonTitle, IonToolbar, IonIcon, IonModal } from '@ionic/angular';
 import { AuthService } from '../../../core/services/auth.service';
 import { CameraService } from '../../../core/services/camera.service';
 import { addIcons } from 'ionicons';
@@ -34,6 +34,7 @@ import { DatosDni } from '../../../core/models/dni.model';
     IonModal,
     IonBackButton,
     IonContent,
+    IonFooter,
     IonInput,
     IonButton,
     IonIcon,

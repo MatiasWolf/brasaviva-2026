@@ -1,0 +1,104 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text="Volver"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Clientes pendientes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="clientes-content">
+  <div class="clientes-container">
+
+    @if (cargando()) {
+      <div class="loader">
+        <app-spinner-logo [size]="48"></app-spinner-logo>
+        <p>Cargando clientes...</p>
+      </div>
+    } @else {
+
+      @if (error()) {
+        <div class="mensaje-error">
+          {{ error() }}
+          <button type="button" (click)="cargar()">Reintentar</button>
+        </div>
+      }
+
+      @if (!error() && lista().length === 0) {
+        <div class="vacio">
+          <ion-icon name="people-outline"></ion-icon>
+          <p>No hay clientes esperando aprobación.</p>
+        </div>
+      }
+
+      <div class="lista">
+        @for (cliente of paginaItems(); track cliente.id) {
+          <article class="cliente-card">
+            <div class="avatar">
+              @if (cliente.foto_url) {
+                <img [src]="cliente.foto_url" [alt]="cliente.nombre" />
+              } @else {
+                <ion-icon name="people-outline"></ion-icon>
+              }
+            </div>
+
+            <div class="datos">
+              <h2>{{ cliente.apellido }}, {{ cliente.nombre }}</h2>
+              <p class="correo">{{ cliente.correo }}</p>
+              <p class="fecha">
+                Se registró el {{ cliente.created_at | date: 'dd/MM/yyyy HH:mm' }}
+              </p>
+
+              <div class="acciones">
+                <ion-button
+                  class="accion accion--aprobar"
+                  (click)="confirmarAprobar(cliente)"
+                >
+                  <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
+                  Aprobar
+                </ion-button>
+                <ion-button
+                  class="accion accion--rechazar"
+                  fill="outline"
+                  color="danger"
+                  (click)="confirmarRechazar(cliente)"
+                >
+                  <ion-icon slot="start" name="close-circle-outline"></ion-icon>
+                  Rechazar
+                </ion-button>
+              </div>
+            </div>
+          </article>
+        }
+      </div>
+
+    }
+
+  </div>
+</ion-content>
+
+@if (!cargando() && lista().length > 0) {
+  <ion-footer class="clientes-footer">
+    <div class="paginador">
+      <ion-button
+        fill="clear"
+        [disabled]="pagina() === 1"
+        (click)="paginaAnterior()"
+        aria-label="Página anterior"
+      >
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+
+      <span>Página {{ pagina() }} de {{ totalPaginas() }}</span>
+
+      <ion-button
+        fill="clear"
+        [disabled]="pagina() === totalPaginas()"
+        (click)="paginaSiguiente()"
+        aria-label="Página siguiente"
+      >
+        <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-footer>
+}

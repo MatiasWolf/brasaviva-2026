@@ -144,8 +144,12 @@ ion-back-button {
 
 .mesa-card {
   scroll-snap-align: start;
-  /* Las 3 tarjetas se reparten el alto disponible en partes iguales. */
-  flex: 1 1 0;
+  /* Si sobra alto, las tarjetas se reparten el espacio libre (flex-grow);
+     si el contenido real necesita más de lo disponible, NUNCA se
+     comprimen por debajo de su tamaño natural (flex-shrink: 0) — así no
+     se superponen con la tarjeta siguiente, y en ese caso la lista
+     simplemente scrollea (para eso está el scroll-snap). */
+  flex: 1 0 auto;
   min-height: 138px;
   display: flex;
   flex-direction: column;

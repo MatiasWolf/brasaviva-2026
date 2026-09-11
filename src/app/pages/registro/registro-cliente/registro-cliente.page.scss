@@ -20,6 +20,13 @@
   --color: #fff1dc;
 }
 
+/* Scroll-snap: cada campo "encaja" al scrollear, ninguno queda cortado. */
+.registro-content::part(scroll) {
+  scroll-snap-type: y proximity;
+  scroll-padding-top: 12px;
+  scroll-padding-bottom: 12px;
+}
+
 
 /* =========================================
    HEADER
@@ -53,8 +60,34 @@ ion-back-button {
   width: 100%;
   max-width: 480px;
   margin: 0 auto;
-  padding: 28px 24px 40px;
+  /* Colchón extra abajo para que el último campo no quede pegado al
+     footer fijo (su alto real varía según el celular: gesto de
+     navegación, safe-area, etc.). */
+  padding: 28px 24px calc(96px + var(--ion-safe-area-bottom, 0px));
   box-sizing: border-box;
+}
+
+.registro-footer {
+  background: #130905;
+  padding: 10px 16px calc(10px + var(--ion-safe-area-bottom, 0px));
+
+  &::before {
+    display: none;
+  }
+
+  .mensaje-error {
+    margin: 0 0 8px;
+  }
+}
+
+.submit-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  pointer-events: none;
 }
 
 
@@ -153,6 +186,7 @@ ion-back-button {
 ========================================= */
 
 .campo {
+  scroll-snap-align: start;
   width: 100%;
   min-height: 68px;
 

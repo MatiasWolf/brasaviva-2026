@@ -52,8 +52,6 @@ export class MesaService {
       await this.webPathABlob(datos.fotoWebPath),
     );
 
-    // El QR codifica el id de la mesa; quien construya el punto 17
-    // (escanear QR de mesa) lo usa para buscarla.
     const qrUrl = await this.generarYSubirQr(id);
 
     const { data, error } = await this.supabaseService.client

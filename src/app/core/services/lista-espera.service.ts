@@ -19,7 +19,6 @@ export class ListaEsperaService {
 
     const usuario = this.authService.usuarioActual;
 
-    // CLIENTE REGISTRADO
     if (usuario) {
 
       const { error } =
@@ -46,7 +45,6 @@ export class ListaEsperaService {
       return;
     }
 
-    // CLIENTE ANÓNIMO
     const sesion =
       await this.anonymousSessionService.obtenerSesion();
 

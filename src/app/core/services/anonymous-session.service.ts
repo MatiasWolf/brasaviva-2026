@@ -112,8 +112,6 @@ export class AnonymousSessionService {
 
     try {
 
-      // Verificamos si el cliente todavía está
-      // esperando en la lista de espera.
       const { data, error: errorLista } =
         await this.supabase.client
           .from('lista_espera')
@@ -126,17 +124,11 @@ export class AnonymousSessionService {
         throw errorLista;
       }
 
-      // Si todavía está esperando:
-      // NO borrar sesión
-      // NO borrar foto
-      // SOLO cerrar sesión localmente.
       if (data) {
         localStorage.removeItem(this.STORAGE_KEY);
         return;
       }
 
-      // Si no está en lista de espera,
-      // podemos eliminar sus datos.
       await this.storageService.eliminarFoto(id);
 
       const { error } =
@@ -158,8 +150,6 @@ export class AnonymousSessionService {
 
     } finally {
 
-      // En todos los casos se elimina la sesión
-      // del dispositivo.
       localStorage.removeItem(this.STORAGE_KEY);
     }
   }

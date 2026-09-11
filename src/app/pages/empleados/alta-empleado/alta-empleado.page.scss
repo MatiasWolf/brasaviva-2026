@@ -37,7 +37,10 @@ ion-back-button {
   width: 100%;
   max-width: 480px;
   margin: 0 auto;
-  padding: 24px 24px 24px;
+  /* Colchón extra abajo: en algunos celulares el footer fijo mide más de
+     lo que ion-content calculó al reservar espacio (gesto de navegación,
+     safe-area), y el último campo quedaba pegado al botón. */
+  padding: 24px 24px calc(96px + var(--ion-safe-area-bottom, 0px));
   box-sizing: border-box;
 }
 

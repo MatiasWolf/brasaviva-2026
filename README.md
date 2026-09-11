@@ -122,7 +122,7 @@ src/
 | 3 | Agregar nueva bebida | Moyano, Martín | 1 | 03-09 | 03-09 | ✅ Completo |
 | 4 | Agregar nueva mesa | Wolf, Matías | 2 | 04-09 | 06-09 | ✅ Completo |
 | 5 | Crear cliente registrado | Miguel, Luján | 2 | 01-09 | 03-09 | ✅ Completo |
-| 6 | Verificar ingreso de cliente | Wolf, Matías | 1,5 | 07-09 | 08-09 | 🟨 En progreso |
+| 6 | Verificar ingreso de cliente | Wolf, Matías | 1,5 | 08-09 | 09-09 | ✅ Completo |
 | 7 | Rechazar cliente | Wolf, Matías | 2 | 09-09 | 11-09 | 🟨 En progreso |
 | 8 | Aceptar cliente | Wolf, Matías | 1 | 11-09 | 12-09 | 🟨 En progreso |
 | 9 | Ingreso cliente anónimo | Miguel, Luján | 1 | 02-09 | 03-09 | ✅ Completo |

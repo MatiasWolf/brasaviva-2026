@@ -1,9 +1,7 @@
 import { createClient, SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-/** Roles que pueden gestionar empleados (alta / edición / baja). */
 export const ROLES_ADMIN = ['dueño', 'supervisor'];
 
-/** Roles que un admin puede asignarle a un empleado nuevo. */
 export const ROLES_ASIGNABLES = [
   'supervisor',
   'metre',
@@ -13,19 +11,11 @@ export const ROLES_ASIGNABLES = [
 ];
 
 export interface Contexto {
-  /** Cliente con permisos de service_role (ignora RLS). */
   admin: SupabaseClient;
-  /** id del usuario que hizo la request. */
   callerId: string;
-  /** nombre del rol del usuario que hizo la request. */
   callerRol: string;
 }
 
-/**
- * Valida el JWT que viaja en la request, resuelve el perfil del que llama y
- * verifica que sea dueño o supervisor. Si algo falla devuelve una `Response`
- * lista para retornar; si todo está bien devuelve el `Contexto`.
- */
 export async function resolverAdmin(
   req: Request,
   errorResponse: (mensaje: string, status: number) => Response,
@@ -61,7 +51,6 @@ export async function resolverAdmin(
 
   const admin = createClient(url, serviceKey);
 
-  // Perfil sin embed, para no depender de la relación FK en el schema cache.
   const { data: perfil, error: perfilErr } = await admin
     .from('usuarios')
     .select('estado, rol_id')
