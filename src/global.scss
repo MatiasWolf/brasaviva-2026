@@ -153,3 +153,28 @@
   font-weight: 700;
 }
 
+
+
+/*
+ * MOZO CHAT - MODAL
+ */
+
+ion-modal.modal-chat-mozo {
+  --width: 100%;
+  --height: 100%;
+  --border-radius: 0;
+}
+
+ion-modal.modal-chat-mozo .btn-cerrar-modal {
+  --color: #ffd485;
+
+  width: 48px;
+  height: 48px;
+  margin: 0;
+}
+
+ion-modal.modal-chat-mozo .btn-cerrar-modal ion-icon {
+  width: 28px;
+  height: 28px;
+  color: #ffd485;
+}
