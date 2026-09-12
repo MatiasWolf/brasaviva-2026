@@ -133,28 +133,35 @@ ion-back-button {
   }
 }
 
-.btn-foto {
+.acciones-foto {
   position: absolute;
   right: 10px;
   bottom: 10px;
   display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  border-radius: 999px;
+  gap: 8px;
+}
+
+.btn-foto-mini {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
   background: #ffd485;
   color: #4d200f;
-  font-size: 12px;
-  font-weight: 800;
   cursor: pointer;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
 
   ion-icon {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   input {
     display: none;
+  }
+
+  &:active {
+    background: #e9b95e;
   }
 }
 

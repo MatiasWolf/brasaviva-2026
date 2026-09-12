@@ -42,15 +42,26 @@
             </div>
           }
 
-          <label class="btn-foto">
-            <ion-icon name="camera-outline"></ion-icon>
-            <span>{{ fotos[fotoActiva].previewUrl ? 'Cambiar' : 'Elegir foto' }}</span>
-            <input
-              type="file"
-              accept="image/*"
-              (change)="seleccionarFoto(fotoActiva, $event)"
-            />
-          </label>
+          <div class="acciones-foto">
+            <label class="btn-foto-mini" aria-label="Tomar foto">
+              <ion-icon name="camera-outline"></ion-icon>
+              <input
+                type="file"
+                accept="image/*"
+                capture="environment"
+                (change)="seleccionarFoto(fotoActiva, $event)"
+              />
+            </label>
+
+            <label class="btn-foto-mini" aria-label="Elegir de la galería">
+              <ion-icon name="images-outline"></ion-icon>
+              <input
+                type="file"
+                accept="image/*"
+                (change)="seleccionarFoto(fotoActiva, $event)"
+              />
+            </label>
+          </div>
         </div>
 
         <button
