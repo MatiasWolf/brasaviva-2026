@@ -94,11 +94,6 @@ src/
 ### Capturas de pantalla
 
 
-
-<!-- o con tamaño controlado: -->
-<img src="docs/capturas/login.png" width="240" alt="Login">
-```
-
 | Pantalla | Imagen | Ruta |
 |---|---|---|
 | Splash | <img src="docs/capturas/splash.png" width="240" alt="Splash"> | `docs/capturas/splash.png` |
@@ -114,6 +109,8 @@ src/
 | Alta de bebidas | <img src="docs/capturas/alta-bebidas.png" width="240" alt="Alta de bebidas"> | `docs/capturas/alta-bebidas.png` |
 | Registro de cliente | <img src="docs/capturas/registro-cliente.png" width="240" alt="Registro de Cliente"> | `docs/capturas/registro-cliente.png` |
 | Registro de cliente Anónimo | <img src="docs/capturas/registro-anonimo.png" width="240" alt="Registro de Cliente anónimo"> | `docs/capturas/registro-anonimo.png` |
+| Mail de aceptación | <img src="docs/capturas/mail_aceptacion.png" width="500" alt="Mail de aceptación"> | `docs/capturas/mail_aceptacion.png` |
+| Mail de rechazo | <img src="docs/capturas/mail_rechazo.png" width="500" alt="Mail de rechazo"> | `docs/capturas/mail_rechazo.png` |
 
 ---
 
@@ -157,6 +154,9 @@ src/
 | 3 | Agregar nueva bebida | `feature/agregar-bebida` |
 | 4 | Agregar nueva mesa | `integracion/primera-fecha` |
 | 5 | Crear cliente registrado | `feature/registro-cliente` |
+| 6 | Verificar ingreso de cliente | `feature/clientes-pendientes-push-mail` |
+| 7 | Rechazar cliente | `feature/clientes-pendientes-push-mail` |
+| 8 | Aceptar cliente | `feature/clientes-pendientes-push-mail` |
 | 9 | Ingreso como cliente anónimo | `feature/registro-cliente-anonimo` |
 
 ---
