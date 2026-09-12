@@ -62,12 +62,8 @@
 
             <div class="datos">
               <h2>{{ empleado.apellido }}, {{ empleado.nombre }}</h2>
-              <p class="correo">{{ empleado.correo }}</p>
               <div class="chips">
                 <span class="chip chip--rol">{{ rolLegible(empleado) | titlecase }}</span>
-                <span class="chip chip--estado" [attr.data-estado]="empleado.estado">
-                  {{ empleado.estado | titlecase }}
-                </span>
               </div>
 
               <div class="acciones">

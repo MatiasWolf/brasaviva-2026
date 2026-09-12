@@ -134,7 +134,6 @@ ion-back-button {
   flex-direction: column;
   gap: 14px;
   overflow-y: auto;
-  scroll-snap-type: y proximity;
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
@@ -143,14 +142,11 @@ ion-back-button {
 }
 
 .mesa-card {
-  scroll-snap-align: start;
-  /* Si sobra alto, las tarjetas se reparten el espacio libre (flex-grow);
-     si el contenido real necesita más de lo disponible, NUNCA se
-     comprimen por debajo de su tamaño natural (flex-shrink: 0) — así no
-     se superponen con la tarjeta siguiente, y en ese caso la lista
-     simplemente scrollea (para eso está el scroll-snap). */
-  flex: 1 0 auto;
-  min-height: 138px;
+  /* Con 2 por página el contenido natural entra de sobra: flex-grow las
+     estira parejo para ocupar el espacio libre. flex-shrink (con el
+     min-height como piso) es solo un resguardo para pantallas chicas. */
+  flex: 1 1 auto;
+  min-height: 118px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -251,33 +247,12 @@ ion-back-button {
   color: #ffd0a0;
 }
 
-/* Acciones grandes y separadas. */
 .acciones {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-
-  .accion {
-    --border-radius: 12px;
-    --color: #ffd485;
-    --border-color: #ffd485;
-    --padding-top: 16px;
-    --padding-bottom: 16px;
-    margin: 0;
-    height: 44px;
-    font-size: 0.86rem;
-    font-weight: 700;
-    text-transform: none;
-
-    ion-icon {
-      font-size: 1.15rem;
-    }
-  }
 }
 
 .btn-disponibilidad {
   flex: 1;
-  min-width: 150px;
   appearance: none;
   border: 1px solid transparent;
   border-radius: 12px;

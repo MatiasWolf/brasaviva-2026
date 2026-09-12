@@ -40,6 +40,12 @@ cd brasaviva-2026
 # Instalar dependencias
 npm install
 
+# Sincronizar el proyecto con Android Studio
+npx cap sync android
+npx cap open android
+
+# Desde Android Studio, al conectar el celular mediante USB, vas a poder instalar la aplicación en tu celular
+
 # Levantar en modo desarrollo
 ionic serve
 ```
@@ -123,8 +129,8 @@ src/
 | 4 | Agregar nueva mesa | Wolf, Matías | 2 | 04-09 | 06-09 | ✅ Completo |
 | 5 | Crear cliente registrado | Miguel, Luján | 2 | 01-09 | 03-09 | ✅ Completo |
 | 6 | Verificar ingreso de cliente | Wolf, Matías | 1,5 | 08-09 | 09-09 | ✅ Completo |
-| 7 | Rechazar cliente | Wolf, Matías | 2 | 09-09 | 11-09 | 🟨 En progreso |
-| 8 | Aceptar cliente | Wolf, Matías | 1 | 11-09 | 12-09 | 🟨 En progreso |
+| 7 | Rechazar cliente | Wolf, Matías | 2 | 09-09 | 11-09 | ✅ Completo |
+| 8 | Aceptar cliente | Wolf, Matías | 1 | 11-09 | 11-09 | ✅ Completo |
 | 9 | Ingreso cliente anónimo | Miguel, Luján | 1 | 02-09 | 03-09 | ✅ Completo |
 | 10 | Metre asigna mesa | Miguel, Luján | 1,5 | 07-09 | 08-09 | 🟨 En progreso |
 | 11 | Ver menú + consulta al mozo | Torrez, Maximiliano | 3 | 08-09 | 11-09 | 🟨 En progreso |

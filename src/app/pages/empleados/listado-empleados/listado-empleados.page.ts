@@ -56,8 +56,9 @@ export class ListadoEmpleadosPage implements ViewWillEnter {
   private readonly alertCtrl = inject(AlertController);
   private readonly toastCtrl = inject(ToastController);
 
-  /** Registros por página. Fijo y bajo para que nunca se corte una tarjeta. */
-  readonly porPagina = 3;
+  /** Registros por página. 2 entran completos entre el buscador y el
+   *  paginador en cualquier celular, sin necesidad de scroll. */
+  readonly porPagina = 2;
 
   readonly lista = signal<Usuario[]>([]);
   readonly cargando = signal(true);

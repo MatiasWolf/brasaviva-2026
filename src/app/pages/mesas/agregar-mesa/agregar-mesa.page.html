@@ -28,56 +28,57 @@
 
     <form [formGroup]="mesaForm" (ngSubmit)="guardar()" class="mesa-form">
 
-      <!-- NÚMERO -->
-      <div class="campo">
-        <ion-input
-          formControlName="numero"
-          type="text"
-          inputmode="numeric"
-          label="Número de mesa"
-          labelPlacement="stacked"
-          placeholder="Ej: 12"
-          (ionFocus)="mensajeError.set('')"
-        ></ion-input>
+      <!-- NÚMERO + COMENSALES -->
+      <div class="fila">
+        <div class="campo">
+          <ion-input
+            formControlName="numero"
+            type="text"
+            inputmode="numeric"
+            label="Número"
+            labelPlacement="stacked"
+            placeholder="Ej: 12"
+            (ionFocus)="mensajeError.set('')"
+          ></ion-input>
 
-        @if (mesaForm.get('numero')?.dirty && mesaForm.get('numero')?.invalid) {
-          <div class="mensaje-error-campo">
-            @if (mesaForm.get('numero')?.hasError('required')) {
-              <span>El número de mesa es obligatorio.</span>
-            }
-            @if (mesaForm.get('numero')?.hasError('pattern')) {
-              <span>Ingresá un número entero mayor a cero (hasta 4 cifras).</span>
-            }
-          </div>
-        }
-      </div>
+          @if (mesaForm.get('numero')?.dirty && mesaForm.get('numero')?.invalid) {
+            <div class="mensaje-error-campo">
+              @if (mesaForm.get('numero')?.hasError('required')) {
+                <span>Obligatorio.</span>
+              }
+              @if (mesaForm.get('numero')?.hasError('pattern')) {
+                <span>Entero mayor a cero.</span>
+              }
+            </div>
+          }
+        </div>
 
-      <!-- COMENSALES -->
-      <div class="campo">
-        <ion-input
-          formControlName="comensales"
-          type="text"
-          inputmode="numeric"
-          label="Cantidad de comensales"
-          labelPlacement="stacked"
-          placeholder="Ej: 4"
-          (ionFocus)="mensajeError.set('')"
-        ></ion-input>
+        <div class="campo">
+          <ion-input
+            formControlName="comensales"
+            type="text"
+            inputmode="numeric"
+            label="Comensales"
+            labelPlacement="stacked"
+            placeholder="Ej: 4"
+            (ionFocus)="mensajeError.set('')"
+          ></ion-input>
 
-        @if (mesaForm.get('comensales')?.dirty && mesaForm.get('comensales')?.invalid) {
-          <div class="mensaje-error-campo">
-            @if (mesaForm.get('comensales')?.hasError('required')) {
-              <span>La cantidad de comensales es obligatoria.</span>
-            }
-            @if (
-              mesaForm.get('comensales')?.hasError('pattern') ||
-              mesaForm.get('comensales')?.hasError('min') ||
-              mesaForm.get('comensales')?.hasError('max')
-            ) {
-              <span>Ingresá un número entero entre 1 y 30.</span>
-            }
-          </div>
-        }
+          @if (mesaForm.get('comensales')?.dirty && mesaForm.get('comensales')?.invalid) {
+            <div class="mensaje-error-campo">
+              @if (mesaForm.get('comensales')?.hasError('required')) {
+                <span>Obligatorio.</span>
+              }
+              @if (
+                mesaForm.get('comensales')?.hasError('pattern') ||
+                mesaForm.get('comensales')?.hasError('min') ||
+                mesaForm.get('comensales')?.hasError('max')
+              ) {
+                <span>Entre 1 y 30.</span>
+              }
+            </div>
+          }
+        </div>
       </div>
 
       <!-- TIPO -->

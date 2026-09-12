@@ -57,7 +57,9 @@ export class ListadoMesasPage implements ViewWillEnter {
   private readonly router = inject(Router);
   private readonly toastCtrl = inject(ToastController);
 
-  readonly porPagina = 3;
+  /** Registros por página. 2 entran completos entre el buscador y el
+   *  paginador en cualquier celular, sin necesidad de scroll. */
+  readonly porPagina = 2;
 
   readonly lista = signal<Mesa[]>([]);
   readonly cargando = signal(true);

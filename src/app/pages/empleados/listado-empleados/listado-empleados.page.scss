@@ -129,9 +129,11 @@ ion-back-button {
   }
 }
 
-/* Contenedor de tarjetas: ocupa el alto restante, y si por el tamaño de
-   pantalla no entran las 2 completas, hace scroll-snap para que ninguna
-   quede cortada a la mitad. */
+/* Contenedor de tarjetas: con 2 por página, entre el buscador y el
+   paginador siempre entran completas — flex-grow las estira parejo para
+   ocupar el espacio libre, y flex-shrink (con el min-height como piso)
+   es solo un resguardo para pantallas muy chicas. Sin scroll-snap: acá
+   no hay inputs, así que no hace falta. */
 .lista {
   flex: 1;
   min-height: 0;
@@ -139,7 +141,6 @@ ion-back-button {
   flex-direction: column;
   gap: 14px;
   overflow-y: auto;
-  scroll-snap-type: y proximity;
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
@@ -148,14 +149,8 @@ ion-back-button {
 }
 
 .empleado-card {
-  scroll-snap-align: start;
-  /* Si sobra alto, las tarjetas se reparten el espacio libre (flex-grow);
-     si el contenido real necesita más de lo disponible, NUNCA se
-     comprimen por debajo de su tamaño natural (flex-shrink: 0) — así no
-     se superponen con la tarjeta siguiente, y en ese caso la lista
-     simplemente scrollea (para eso está el scroll-snap). */
-  flex: 1 0 auto;
-  min-height: 138px;
+  flex: 1 1 auto;
+  min-height: 118px;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -202,21 +197,13 @@ ion-back-button {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-
-  .correo {
-    margin: 3px 0 8px;
-    font-size: 0.85rem;
-    color: rgba(255, 248, 241, 0.66);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
 }
 
 .chips {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  margin: 4px 0 0;
 }
 
 .chip {
@@ -230,28 +217,6 @@ ion-back-button {
   background: rgba(255, 170, 85, 0.16);
   border: 1px solid rgba(255, 170, 85, 0.4);
   color: #ffd0a0;
-}
-
-.chip--estado {
-  border: 1px solid transparent;
-}
-
-.chip--estado[data-estado='aprobado'] {
-  background: rgba(72, 160, 90, 0.2);
-  border-color: rgba(72, 160, 90, 0.5);
-  color: #b7e6c2;
-}
-
-.chip--estado[data-estado='pendiente'] {
-  background: rgba(226, 170, 60, 0.2);
-  border-color: rgba(226, 170, 60, 0.5);
-  color: #f2d9a8;
-}
-
-.chip--estado[data-estado='rechazado'] {
-  background: rgba(180, 55, 40, 0.22);
-  border-color: rgba(180, 55, 40, 0.5);
-  color: #ffc7bd;
 }
 
 /* Botones de acción grandes y separados, para no tocar el equivocado. */

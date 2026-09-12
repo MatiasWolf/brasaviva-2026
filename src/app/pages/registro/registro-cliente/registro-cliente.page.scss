@@ -20,14 +20,6 @@
   --color: #fff1dc;
 }
 
-/* Scroll-snap: cada campo "encaja" al scrollear, ninguno queda cortado. */
-.registro-content::part(scroll) {
-  scroll-snap-type: y proximity;
-  scroll-padding-top: 12px;
-  scroll-padding-bottom: 12px;
-}
-
-
 /* =========================================
    HEADER
 ========================================= */
@@ -59,12 +51,13 @@ ion-back-button {
 .registro-container {
   width: 100%;
   max-width: 480px;
+  min-height: 100%;
   margin: 0 auto;
-  /* Colchón extra abajo para que el último campo no quede pegado al
-     footer fijo (su alto real varía según el celular: gesto de
-     navegación, safe-area, etc.). */
-  padding: 28px 24px calc(96px + var(--ion-safe-area-bottom, 0px));
+  padding: 14px 20px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .registro-footer {
@@ -96,14 +89,14 @@ ion-back-button {
 ========================================= */
 
 .registro-header {
+  flex-shrink: 0;
   text-align: center;
-  margin-bottom: 24px;
 }
 
 .registro-header h1 {
-  margin: 0 0 10px;
+  margin: 0 0 4px;
   color: #ffd485;
-  font-size: 30px;
+  font-size: 22px;
   font-weight: 700;
   letter-spacing: 0.3px;
   text-shadow: 2px 2px 4px rgba(74, 26, 26, 0.6);
@@ -113,8 +106,8 @@ ion-back-button {
   margin: 0 auto;
   max-width: 370px;
   color: #f9e6ce;
-  font-size: 15px;
-  line-height: 1.5;
+  font-size: 13px;
+  line-height: 1.35;
 }
 
 
@@ -123,9 +116,11 @@ ion-back-button {
 ========================================= */
 
 .registro-form {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 0;
+  justify-content: center;
 }
 
 
@@ -137,9 +132,9 @@ ion-back-button {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
   width: 100%;
-  margin: 5px 0 20px;
+  flex-shrink: 0;
 }
 
 .foto-section {
@@ -156,8 +151,8 @@ ion-back-button {
 .foto-button {
   position: relative;
 
-  width: 110px;
-  height: 110px;
+  width: 88px;
+  height: 88px;
 
   display: flex;
   flex-direction: column;
@@ -184,12 +179,12 @@ ion-back-button {
 }
 
 .foto-button ion-icon {
-  font-size: 2.2rem;
+  font-size: 1.9rem;
   color: #ffd485;
 }
 
 .foto-button span {
-  font-size: 0.85rem;
+  font-size: 0.76rem;
   font-weight: 600;
   color: #ffd485;
 }
@@ -244,8 +239,8 @@ ion-back-button {
 ========================================= */
 
 .foto-preview {
-  width: 106px;
-  height: 106px;
+  width: 82px;
+  height: 82px;
 
   object-fit: cover;
   border-radius: 50%;
@@ -290,17 +285,16 @@ ion-back-button {
 ========================================= */
 
 .campo {
-  scroll-snap-align: start;
   width: 100%;
-  min-height: 68px;
+  min-height: 56px;
 
   background: #fff3df;
 
   border: 2px solid #c0784d;
   border-radius: 12px;
 
-  padding: 6px 14px;
-  margin-bottom: 14px;
+  padding: 4px 12px;
+  margin-bottom: 8px;
 
   box-sizing: border-box;
 
@@ -310,6 +304,24 @@ ion-back-button {
     border-color 0.2s ease,
     background 0.2s ease,
     box-shadow 0.2s ease;
+}
+
+
+/* =========================================
+   PARES CORTOS EN LA MISMA FILA
+   (apellido/nombre, contraseña/confirmar). El texto largo se recorta
+   con el scroll interno del input, nunca se sale de su recuadro.
+========================================= */
+
+.fila {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+
+  .campo {
+    flex: 1;
+    min-width: 0;
+  }
 }
 
 
@@ -646,13 +658,13 @@ ion-modal.success-modal ion-button {
   }
 
   .foto-button {
-    width: 100px;
-    height: 100px;
+    width: 76px;
+    height: 76px;
   }
 
   .foto-preview {
-    width: 96px;
-    height: 96px;
+    width: 70px;
+    height: 70px;
   }
 
   ion-modal.success-modal .modal-wrapper {

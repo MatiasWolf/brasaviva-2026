@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "458264494236",
+    "project_id": "brasa-viva-26",
+    "storage_bucket": "brasa-viva-26.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458264494236:android:fffbeedcd3359bb40aed59",
+        "android_client_info": {
+          "package_name": "com.brasaviva.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBgIc88ZEFjePmN5j7pP7tKDZBTRdA4EM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

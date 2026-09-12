@@ -7,13 +7,6 @@
   --color: #fff1dc;
 }
 
-/* Scroll-snap: cada campo "encaja" al scrollear, ninguno queda cortado. */
-.mesa-content::part(scroll) {
-  scroll-snap-type: y proximity;
-  scroll-padding-top: 12px;
-  scroll-padding-bottom: 12px;
-}
-
 ion-header {
   background: #130905;
 }
@@ -36,12 +29,13 @@ ion-back-button {
 .mesa-container {
   width: 100%;
   max-width: 480px;
+  min-height: 100%;
   margin: 0 auto;
-  /* Colchón extra abajo: en algunos celulares el footer fijo mide más de
-     lo que ion-content calculó al reservar espacio (gesto de navegación,
-     safe-area), y el último campo quedaba pegado al botón. */
-  padding: 24px 24px calc(96px + var(--ion-safe-area-bottom, 0px));
+  padding: 14px 20px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 /* FOTO: contenedor individual, grande y centrado (no es un avatar circular). */
@@ -49,13 +43,13 @@ ion-back-button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 4px 0 24px;
+  flex-shrink: 0;
 }
 
 .foto-button {
   position: relative;
   width: 100%;
-  max-width: 280px;
+  max-width: 220px;
   aspect-ratio: 4 / 3;
   display: flex;
   flex-direction: column;
@@ -127,7 +121,7 @@ ion-back-button {
 }
 
 .foto-hint {
-  margin: 10px 0 0;
+  margin: 6px 0 0;
   text-align: center;
   font-size: 0.78rem;
   color: #fff1dc;
@@ -135,20 +129,32 @@ ion-back-button {
 
 /* FORMULARIO */
 .mesa-form {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 0;
+  justify-content: center;
+}
+
+/* Número y comensales: contenido corto, uno al lado del otro. */
+.fila {
+  display: flex;
+  gap: 10px;
+
+  .campo {
+    flex: 1;
+    min-width: 0;
+  }
 }
 
 .campo {
-  scroll-snap-align: start;
   width: 100%;
-  min-height: 68px;
+  min-height: 56px;
   background: #fff3df;
   border: 2px solid #c0784d;
   border-radius: 12px;
-  padding: 6px 14px;
-  margin-bottom: 14px;
+  padding: 4px 12px;
+  margin-bottom: 8px;
   box-sizing: border-box;
   box-shadow: 0 3px 8px rgba(19, 9, 5, 0.25);
   transition:
