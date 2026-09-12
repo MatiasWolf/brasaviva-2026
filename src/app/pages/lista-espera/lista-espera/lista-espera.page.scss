@@ -1,11 +1,21 @@
+
 .lista-espera-bg {
   --background:
-    radial-gradient(circle at 15% 0%, rgba(246, 193, 133, 0.16), transparent 22%),
-    linear-gradient(180deg, #130905 0%, #3a1710 100%);
+    radial-gradient(
+      circle at 15% 0%,
+      rgba(246, 193, 133, 0.16),
+      transparent 22%
+    ),
+    linear-gradient(
+      180deg,
+      #130905 0%,
+      #3a1710 100%
+    );
   --color: #ffd485;
 }
 
-ion-header {
+ion-header,
+ion-footer {
   background: #130905;
 }
 
@@ -20,61 +30,21 @@ ion-title {
   font-weight: 600;
 }
 
-ion-back-button,
-ion-toolbar ion-buttons ion-button {
+ion-back-button {
   --color: #ffd485;
 }
 
-
-  .welcome-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    
-
-    h2 {
-
-      font-size: 1.1rem;
-      font-weight: 600;
-
-      color: #ffd485;
-    }
-
-    p {
-      margin: 0;
-
-      font-size: 0.85rem;
-
-      color: #dfa070;
-    }
-  }
-
-
-
-/* =========================================
-   CONTENEDOR
-   ========================================= */
-
 .lista-espera-container {
   min-height: 100%;
-  padding: 10px 16px 32px;
-
+  height: 100%;
+  padding: 14px 14px 14px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 12px;
+  box-sizing: border-box;
 }
 
-
-
-
-
-/* =========================================
-   BUSCADOR
-   ========================================= */
-
-ion-searchbar {
+.buscador {
   --background: #fff3df;
   --color: #35170b;
   --placeholder-color: #805238;
@@ -82,273 +52,230 @@ ion-searchbar {
   --border-radius: 12px;
   padding: 0;
   box-shadow: 0 3px 8px rgba(19, 9, 5, 0.25);
+  flex-shrink: 0;
 }
 
+.welcome-section {
+  flex-shrink: 0;
+  h1 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #ffe9cf;
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+  .cantidad {
+    color: #ffd485;
+  }
+}
 
-/* =========================================
-   FILTROS
-   ========================================= */
-
-.filtros {
+.lista-clientes {
+  flex: 1;
+  min-height: 0;
   display: flex;
-  gap: 8px;
-
-  width: 100%;
-
-  overflow-x: auto;
-
-  padding: 2px 0 6px;
-
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
   }
+}
 
-  ion-chip {
-    flex-shrink: 0;
+.cliente-card {
+  flex: 1 1 0;
+  min-height: 150px;
+  margin: 0;
+  border: 2px solid #802323;
+  border-radius: 18px;
+  background: linear-gradient(
+    160deg,
+    #5e1f1f 0%,
+    #431717 100%
+  ) !important;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 0;
 
-    --background: rgba(255, 170, 85, 0.08);
-    --color: #ffd485;
+  ion-card-content {
+    --background: transparent;
+    background: transparent;
 
-    border: 1px solid rgba(255, 170, 85, 0.3);
+    padding: 10px 12px 8px;
 
-    font-size: 0.78rem;
-    font-weight: 600;
+    flex: 1;
+    min-height: 0;
 
-    &.activo {
-      --background: rgba(255, 170, 85, 0.16);
-      --color: #ffd485;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-      border-color: #ffaa55;
-    }
+    box-sizing: border-box;
   }
 }
 
-
-/* =========================================
-   LISTA
-   ========================================= */
-
-.lista-clientes {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-
-/* =========================================
-   CARD CLIENTE
-   ========================================= */
-
-.cliente-card {
-  margin: 0;
-  min-height: 230px;
-
-  background:
-    linear-gradient(
-      160deg,
-      #5e1f1f 0%,
-      #431717 100%
-    );
-
-  border: 2px solid #802323;
-  border-radius: 18px;
-  color: #ffd485;
-
-  box-shadow:
-    0 6px 14px rgba(0, 0, 0, 0.35);
-}
-
-.cliente-card ion-card-content {
-  padding: 20px;
-}
-
-
-/* =========================================
-   LAYOUT DE LA CARD
-========================================= */
 .cliente-layout {
   display: flex;
   align-items: center;
-  gap: 20px;
-  width: 100%;
+  gap: 12px;
+  min-width: 0;
 }
-
-
-/* =========================================
-   FOTO
-   ========================================= */
 
 .foto-container {
   flex-shrink: 0;
-
   ion-avatar {
-    width: 130px;
-    height: 130px;
-    margin-bottom: 15px;
-
+    width: 96px;
+    height: 96px;
+    border-radius: 20px;
+    overflow: hidden;
     display: grid;
     place-items: center;
-
     background: rgba(255, 248, 241, 0.1);
-    border: 2px solid #ffd485;
-    overflow: hidden;
-
-    ion-icon {
-      font-size: 3.5rem;
-      color: #fff8f1;
-    }
-
+    border: 1px solid rgba(255, 248, 241, 0.2);
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
-  }
-}
-
-/* =========================================
-   DATOS DEL CLIENTE
-   ========================================= */
-
-.datos-cliente {
-  flex: 1;
-  min-width: 0;
-  margin-left: auto;
-
-  h2 {
-    margin: 0 0 10px;
-    color: #ffd485;
-    font-size: 1.15rem;
-    font-weight: 700;
-    line-height: 1.2;
-  }
-
-  p {
-    margin: 6px 0;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-
-    color: #dfa070;
-    font-size: 0.84rem;
-    line-height: 1.2;
-
     ion-icon {
-      flex-shrink: 0;
-      font-size: 1rem;
-      color: #ffaa55;
+      font-size: 2.6rem;
+      color: #fff8f1;
     }
   }
 }
 
-/* =========================================
-   TIEMPO DE ESPERA
-   ========================================= */
-
-.tiempo-espera {
-  color: #ffd485 !important;
-  font-weight: 600;
-
-  ion-icon {
-    color: #ffd485 !important;
+.datos-cliente {
+  flex: 1;
+  min-width: 0;
+  h2 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffe9cf;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  p {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 2px 0 0;
+    font-size: 0.85rem;
+    color: rgba(255, 248, 241, 0.66);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    ion-icon {
+      flex-shrink: 0;
+    }
+  }
+  .tiempo-espera {
+    color: #ffd0a0;
   }
 }
-
-
-  /* =========================================
-   ACCIONES
-   ========================================= */
-
 .acciones {
   display: flex;
   flex-direction: row;
-  gap: 10px;
-  width: 80%;
-  margin-top: 20px;
-  margin:auto;
-
+  gap: 8px;
+  width: 100%;
+  margin-top: 6px;
   ion-button {
     flex: 1;
-    height: 56px;
+    height: 40px;
     margin: 0;
-
     --border-radius: 12px;
-
-    font-size: 0.8rem;
+    --padding-start: 8px;
+    --padding-end: 8px;
+    font-size: 0.75rem;
     font-weight: 600;
     text-transform: none;
-
-    --box-shadow: 0 5px 12px rgba(0, 0, 0, 0.25);
+    --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    ion-icon {
+      font-size: 1rem;
+    }
   }
-
-  ion-button:First-child {
+  ion-button:first-child {
     --background: #802323;
     --background-activated: #6b1d1d;
     --color: #fff8f1;
   }
-
   ion-button:last-child {
     --background: #ffd485;
     --background-activated: #e9b95e;
     --color: #4d200f;
-    
+  }
+}
+
+.chip {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+.sin-clientes {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px 16px;
+  text-align: center;
+  color: #dfa070;
+  ion-icon {
+    font-size: 2.6rem;
+  }
+  h2 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+  p {
+    margin: 0;
+  }
+}
+
+.lista-espera-footer {
+  &::before {
+    display: none;
+  }
+}
+.paginador {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding:
+    8px
+    12px
+    calc(8px + var(--ion-safe-area-bottom, 0px));
+  color: #ffd0a0;
+
+  font-size: 0.9rem;
+  font-weight: 700;
+
+  ion-button {
+    --color: #ffd485;
+
+    --padding-start: 10px;
+    --padding-end: 10px;
+
+    margin: 0;
+
+    font-size: 1.4rem;
   }
 }
 
 
 /* =========================================
-   SIN CLIENTES
+   MODAL ASIGNAR MESA
    ========================================= */
 
-.sin-clientes {
-  text-align: center;
-
-  padding: 30px 20px;
-
-  ion-icon {
-    font-size: 3rem;
-
-    color: #ffaa55;
-
-    margin-bottom: 12px;
-  }
-
-  h2 {
-    margin: 0 0 8px;
-
-    color: #ffd485;
-
-    font-family:
-      Georgia,
-      'Times New Roman',
-      serif;
-
-    font-size: 1.2rem;
-  }
-
-  p {
-    margin: 0;
-
-    color: #dfa070;
-
-    font-size: 0.85rem;
-
-    line-height: 1.4;
-  }
-}
-
-/* =========================================================
-   MODAL ASIGNAR MESA
-   ========================================================= */
-
-ion-modal.asignar-mesa-modal {
-  --width: 100%;
-  --height: 100%;
-  --border-radius: 0;
-  --background: #130905;
-}
-
-/* Fondo general del modal */
 .asignar-mesa-content {
   --background:
     radial-gradient(
@@ -365,48 +292,22 @@ ion-modal.asignar-mesa-modal {
   --color: #ffd485;
 }
 
-/* Header del modal */
-
-.asignar-mesa-modal ion-header {
-  background: #130905;
-}
-
-.asignar-mesa-modal ion-toolbar {
-  --background: #130905;
-  --color: #ffd485;
-  --border-color: transparent;
-}
-
-.asignar-mesa-modal ion-title {
-  color: #ffd485;
-  font-weight: 600;
-}
-
-.asignar-mesa-modal ion-toolbar ion-button {
-  --color: #ffd485;
-}
-
-/* Contenedor */
 
 .asignar-mesa-container {
-  min-height: 100%;
-  padding: 20px 16px calc(
-    30px + var(--ion-safe-area-bottom, 0px)
-  );
+  padding: 14px;
 
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  box-sizing: border-box;
 }
 
-/* =========================================================
-   INFORMACIÓN DEL CLIENTE
-   ========================================================= */
+
+/* Cliente seleccionado */
 
 .cliente-asignacion {
-  padding: 20px;
+  padding: 16px;
 
   border-radius: 18px;
+
+  border: 2px solid #802323;
 
   background: linear-gradient(
     160deg,
@@ -414,175 +315,24 @@ ion-modal.asignar-mesa-modal {
     #431717 100%
   );
 
-  border: 2px solid #802323;
-
-  box-shadow: 0 7px 18px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
 }
-
-/* CONTENIDO DE LA CARD */
 
 .cliente-asignacion-info {
   display: flex;
   align-items: center;
-  gap: 22px;
-}
 
-/* FOTO DEL CLIENTE */
+  gap: 16px;
+}
 
 .cliente-asignacion-avatar {
   flex-shrink: 0;
 
-  width: 120px;
-  height: 120px;
-
-  border-radius: 22px;
-  overflow: hidden;
-
-  display: grid;
-  place-items: center;
-
-  background: rgba(255, 248, 241, 0.1);
-
-  border: 2px solid rgba(255, 212, 133, 0.5);
-
-  img {
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-  }
-
-  ion-icon {
-    font-size: 3.5rem;
-    color: #fff8f1;
-  }
-}
-
-/* DATOS DEL CLIENTE */
-
-.cliente-asignacion-datos {
-  flex: 1;
-  min-width: 0;
-
-  h2 {
-    margin: 0 0 10px;
-
-    color: #ffe9cf;
-
-    font-size: 1.4rem;
-    font-weight: 700;
-  }
-
-  p {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-
-    margin: 0 0 12px;
-
-    color: rgba(255, 248, 241, 0.75);
-
-    font-size: 1rem;
-
-    ion-icon {
-      font-size: 1.15rem;
-    }
-  }
-
-  .chip {
-    display: inline-block;
-  }
-}
-
-/* TIPO DE MESA */
-
-.cliente-asignacion-datos .chip--tipo {
-  padding: 5px 11px;
-
-  border-radius: 999px;
-
-  font-size: 0.80rem;
-  font-weight: 600;
-
-  background: rgba(255, 170, 85, 0.16);
-
-  border: 1px solid rgba(255, 170, 85, 0.4);
-
-  color: #ffd0a0;
-}
-/* =========================================================
-   CARDS DE MESAS — MÁS GRANDES E INTUITIVAS
-   ========================================================= */
-
-.lista-mesas-asignacion {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-/* CARD DE MESA */
-
-.lista-mesas-asignacion .mesa-card {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 20px;
-
-  min-height: 180px;
-  padding: 24px;
+  width: 96px;
+  height: 96px;
 
   border-radius: 20px;
-  border: 2px solid #802323;
 
-  background: linear-gradient(
-    160deg,
-    #5e1f1f 0%,
-    #431717 100%
-  );
-
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-
-  cursor: pointer;
-
-  transition:
-    transform 0.15s ease,
-    border-color 0.15s ease,
-    box-shadow 0.15s ease,
-    background 0.15s ease;
-
-  &:active {
-    transform: scale(0.97);
-  }
-}
-
-/* CARD SELECCIONADA */
-
-.lista-mesas-asignacion
-  .mesa-card--seleccionada {
-  border-color: #ffd485;
-
-  background: linear-gradient(
-    160deg,
-    #702828 0%,
-    #511b1b 100%
-  );
-
-  box-shadow:
-    0 0 0 3px rgba(255, 212, 133, 0.2),
-    0 10px 24px rgba(0, 0, 0, 0.5);
-}
-
-/* FOTO */
-
-.lista-mesas-asignacion .avatar {
-  flex-shrink: 0;
-
-  width: 80px;
-  height: 80px;
-
-  border-radius: 16px;
   overflow: hidden;
 
   display: grid;
@@ -599,422 +349,376 @@ ion-modal.asignar-mesa-modal {
   }
 
   ion-icon {
-    font-size: 2.2rem;
+    font-size: 2.6rem;
     color: #fff8f1;
   }
 }
 
-/* DATOS */
-
-.lista-mesas-asignacion .datos {
+.cliente-asignacion-datos {
   flex: 1;
   min-width: 0;
 
   h2 {
-    margin: 0 0 6px;
-
-    color: #ffe9cf;
-
-    font-size: 1.25rem;
-    font-weight: 700;
-  }
-
-  .comensales {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-
-    margin: 0 0 10px;
-
-    color: rgba(255, 248, 241, 0.72);
-
-    font-size: 0.95rem;
-
-    ion-icon {
-      font-size: 1.1rem;
-    }
-  }
-}
-
-/* CHIPS */
-
-.lista-mesas-asignacion .chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.lista-mesas-asignacion .chip {
-  padding: 5px 11px;
-
-  border-radius: 999px;
-
-  font-size: 0.78rem;
-  font-weight: 600;
-}
-
-.lista-mesas-asignacion .chip--tipo {
-  background: rgba(255, 170, 85, 0.16);
-  border: 1px solid rgba(255, 170, 85, 0.4);
-  color: #ffd0a0;
-}
-
-.lista-mesas-asignacion .chip--disponible {
-  background: rgba(72, 160, 90, 0.2);
-  border: 1px solid rgba(72, 160, 90, 0.5);
-  color: #b7e6c2;
-}
-
-/* =========================================================
-   ICONO DE SELECCIÓN
-   ========================================================= */
-
-.lista-mesas-asignacion .seleccion {
-  flex-shrink: 0;
-
-  width: 48px;
-  height: 48px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  ion-icon {
-    font-size: 2.8rem;
-
-    color: rgba(255, 248, 241, 0.35);
-
-    transition:
-      transform 0.15s ease,
-      color 0.15s ease;
-  }
-}
-
-/* ICONO CUANDO ESTÁ SELECCIONADA */
-
-.lista-mesas-asignacion
-  .mesa-card--seleccionada
-  .seleccion
-  ion-icon {
-  color: #ffd485;
-
-  transform: scale(1.1);
-}
-
-/* =========================================================
-   SIN MESAS
-   ========================================================= */
-
-.sin-mesas {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  gap: 10px;
-
-  padding: 45px 20px;
-
-  text-align: center;
-
-  color: #dfa070;
-
-  ion-icon {
-    font-size: 3rem;
-  }
-
-  h3 {
     margin: 0;
 
-    color: #ffe9cf;
+    font-size: 1.15rem;
+    font-weight: 700;
 
-    font-size: 1.05rem;
+    color: #ffe9cf;
   }
 
   p {
-    margin: 0;
+    margin: 5px 0 8px;
 
-    max-width: 340px;
-
-    color: rgba(255, 248, 241, 0.65);
+    color: rgba(255, 248, 241, 0.66);
 
     font-size: 0.85rem;
-
-    line-height: 1.5;
   }
 }
 
-/* =========================================================
-   BOTÓN CONFIRMAR
-   ========================================================= */
 
-.confirmar-asignacion {
-  margin-top: auto;
+/* =========================================
+   MESAS DISPONIBLES
+   ========================================= */
 
-  padding-top: 8px;
+.titulo-mesas {
+  margin: 18px 0 12px;
 
-  ion-button {
-    --background: #ffd485;
-    --background-hover: #ffe0a3;
-    --color: #35170b;
+  color: #ffd485;
 
-    --border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
 
-    height: 52px;
+.lista-mesas-asignacion {
+  display: flex;
+  flex-direction: column;
 
-    font-size: 0.95rem;
-    font-weight: 700;
+  gap: 12px;
+}
 
-    margin: 0;
+.mesa-card {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  padding: 16px;
+
+  border-radius: 18px;
+
+  border: 2px solid #802323;
+
+  background: linear-gradient(
+    160deg,
+    #5e1f1f 0%,
+    #431717 100%
+  );
+
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+
+  cursor: pointer;
+
+  .avatar {
+    flex-shrink: 0;
+
+    width: 96px;
+    height: 96px;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    display: grid;
+    place-items: center;
+
+    background: rgba(255, 248, 241, 0.1);
+
+    border: 1px solid rgba(255, 248, 241, 0.2);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
 
     ion-icon {
-      font-size: 1.2rem;
+      font-size: 2.6rem;
+      color: #fff8f1;
     }
+  }
+
+  .datos {
+    flex: 1;
+    min-width: 0;
+
+    h2 {
+      margin: 0;
+
+      color: #ffe9cf;
+
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .comensales {
+      margin: 3px 0 8px;
+
+      color: rgba(255, 248, 241, 0.66);
+
+      font-size: 0.85rem;
+    }
+  }
+
+  .seleccion {
+    flex-shrink: 0;
+
+    color: #ffd485;
+
+    font-size: 1.5rem;
   }
 }
 
+.mesa-card--seleccionada {
+  border-color: #ffd485;
+
+  box-shadow:
+    0 0 0 1px #ffd485,
+    0 6px 14px rgba(0, 0, 0, 0.35);
+}
+/* =========================================
+   BOTÓN CONFIRMAR ASIGNACIÓN
+   ========================================= */
+
+.confirmar-asignacion {
+  width: 100%;
+  margin-top: 14px;
+}
+
+.confirmar-asignacion ion-button {
+  width: 100%;
+  height: 52px;
+
+  margin: 0;
+
+  --background: #fff3df;
+  --background-hover: #fff8ed;
+  --background-activated: #ffe9cf;
+
+  --color: #802323;
+
+  --border-radius: 14px;
+
+  --padding-start: 16px;
+  --padding-end: 16px;
+
+  --box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.3);
+
+  font-size: 1rem;
+  font-weight: 800;
+
+  text-transform: none;
+
+  ion-icon {
+    font-size: 1.4rem;
+    margin-right: 5px;
+  }
+}
 
 /* =========================================
    MODAL ASIGNACIÓN EXITOSA
-   BRASA VIVA
    ========================================= */
 
 .modal-asignacion-exitosa {
-  --width: 60%;
-  --height: 80%;
-  --max-width: 600px;
-  --min-width: 420px;
-  --max-height: 650px;
-  --min-height: 430px;
-  --border-radius: 28px;
   --background: transparent;
-}
 
-/* =========================================
-   CONTENEDOR
-   ========================================= */
+  --width: min(90%, 420px);
+  --height: auto;
 
-.exito-container {
-  width: 100%;
-  height: 100%;
+  --border-radius: 18px;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
+  --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 
-  background: #2b1712;
-
-  border: 1px solid #6d3328;
-  border-radius: 28px;
-
-  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.55);
-
-  padding: 45px 50px;
-
-  box-sizing: border-box;
-}
-
-/* =========================================
-   ICONO
-   ========================================= */
-
-.exito-icono {
-  width: 100px;
-  height: 100px;
-
-  display: flex;
   align-items: center;
   justify-content: center;
-
-  background: rgba(245, 193, 108, 0.12);
-
-  border: 2px solid #f5c16c;
-  border-radius: 50%;
-
-  flex-shrink: 0;
 }
 
-.exito-icono ion-icon {
-  font-size: 65px;
-  color: #f5c16c;
+.exito-container {
+  padding: 24px;
+
+  border-radius: 18px;
+
+  background: linear-gradient(
+    160deg,
+    #5e1f1f 0%,
+    #431717 100%
+  );
+
+  border: 2px solid #802323;
+
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+
+  color: #ffe9cf;
 }
 
-/* =========================================
-   TÍTULO
-   ========================================= */
+.exito-icono {
+  display: flex;
+  justify-content: center;
+
+  ion-icon {
+    font-size: 4rem;
+    color: #ffd485;
+  }
+}
 
 .exito-titulo {
   text-align: center;
 
-  margin-bottom: 25px;
+  h2 {
+    margin: 12px 0 20px;
+
+    color: #ffe9cf;
+  }
 }
-
-.exito-titulo h2 {
-  margin: 0 0 8px;
-
-  color: #f5c16c;
-
-  font-size: 1.8rem;
-  font-weight: 700;
-}
-
-.exito-titulo p {
-  margin: 0;
-
-  color: #fff4e6;
-
-  font-size: 1rem;
-  opacity: 0.85;
-}
-
-/* =========================================
-   INFORMACIÓN
-   ========================================= */
 
 .exito-info {
-  width: 100%;
-
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
 
-  background: #3a1e17;
+  padding: 14px 0;
 
-  border: 1px solid #6d3328;
-  border-radius: 18px;
-
-  padding: 22px 15px;
-
-  margin-bottom: 22px;
+  border-top: 1px solid rgba(255, 248, 241, 0.15);
+  border-bottom: 1px solid rgba(255, 248, 241, 0.15);
 }
 
 .exito-dato {
-  flex: 1;
-
   display: flex;
   flex-direction: column;
-  align-items: center;
 
-  text-align: center;
+  gap: 4px;
 }
 
 .dato-label {
-  color: #fff4e6;
+  font-size: 0.75rem;
 
-  font-size: 0.85rem;
-
-  opacity: 0.7;
-
-  margin-bottom: 7px;
+  color: rgba(255, 248, 241, 0.66);
 }
 
-.dato-valor {
-  color: #ffffff;
+.dato-valor,
+.dato-mesa {
+  color: #ffe9cf;
 
-  font-size: 1.15rem;
-
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .dato-mesa {
-  color: #f5c16c;
+  color: #ffd485;
 
-  font-size: 2rem;
-
-  font-weight: 700;
+  font-size: 1.2rem;
 }
 
 .separador {
   width: 1px;
-  height: 55px;
+  height: 36px;
 
-  background: #6d3328;
+  background: rgba(255, 248, 241, 0.2);
 }
 
-
-
-/* =========================================
-   BOTÓN
-   ========================================= */
-
 .exito-acciones {
-  width: 100%;
-
-  margin-top: 25px;
+  margin-top: 20px;
 }
 
 .btn-aceptar-exito {
-  width: 100%;
-  height: 60px;
+  --background: linear-gradient(
+    135deg,
+    #ffb347 0%,
+    #e9820e 100%
+  );
 
-  --background: #f5c16c;
-  --background-hover: #ffd58a;
-  --background-activated: #e5ad55;
+  --color: #2a1204;
 
-  --color: #2b1712;
+  --border-radius: 12px;
 
-  --border-radius: 14px;
+  height: 44px;
 
-  font-size: 1rem;
   font-weight: 700;
 
   text-transform: none;
 }
 
-.btn-aceptar-exito ion-icon {
-  font-size: 22px;
-}
-
-
 
 /* =========================================
-   RESPONSIVE
+   MOBILE
    ========================================= */
 
-@media (max-width: 430px) {
-  .cliente-card ion-card-content {
-    padding: 16px;
+@media (max-width: 480px) {
+
+  .lista-espera-container {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .lista-clientes {
+    gap: 10px;
+  }
+
+  /*
+   * Mantenemos la misma altura mínima de Empleados.
+   * Solamente reducimos un poco el contenido interno
+   * para que las 3 cards puedan entrar en pantallas chicas.
+   */
+  .cliente-card {
+    min-height: 138px;
+
+    ion-card-content {
+      padding: 12px;
+    }
   }
 
   .cliente-layout {
-    gap: 14px;
+    gap: 12px;
   }
 
   .foto-container ion-avatar {
-    width: 105px;
-    height: 105px;
+    width: 72px;
+    height: 72px;
+
+    ion-icon {
+      font-size: 2.2rem;
+    }
   }
 
-  .datos-cliente h2 {
-    font-size: 1rem;
-  }
+  .datos-cliente {
 
-  .datos-cliente p {
-    font-size: 0.76rem;
+    h2 {
+      font-size: 1rem;
+    }
+
+    p {
+      font-size: 0.78rem;
+    }
   }
 
   .acciones {
     gap: 8px;
 
     ion-button {
-      height: 52px;
-      font-size: 0.72rem;
+      height: 40px;
+
+      font-size: 0.78rem;
+
+      ion-icon {
+        font-size: 1rem;
+      }
     }
   }
-}
 
-@media (max-width: 600px) {
-  .modal-asignacion-exitosa {
-    --width: 90%;
-    --height: 60%;
-    --min-width: unset;
-  }
+  .paginador {
+    gap: 12px;
 
-  .exito-container {
-    padding: 25px 22px;
-  }
-
-  .exito-titulo h2 {
-    font-size: 1.5rem;
+    font-size: 0.85rem;
   }
 }
+

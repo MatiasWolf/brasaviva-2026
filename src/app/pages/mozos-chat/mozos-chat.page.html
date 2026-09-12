@@ -1,0 +1,241 @@
+<ion-header>
+  <ion-toolbar>
+
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>Consultas de clientes</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="mozos-chat-content">
+  <div class="mozos-chat-container">
+    @if (cargando()) {
+      <div class="chat-loader">
+        <div class="loader-logo">
+          <ion-icon name="chatbubbles-outline"></ion-icon>
+        </div>
+        <p>Cargando consultas...</p>
+        <ion-spinner name="crescent"></ion-spinner>
+      </div>
+    }
+    @else {
+      <div class="chat-layout">
+        <div class="mesas-panel">
+          <!-- TÍTULO -->
+          <div class="panel-titulo">
+            <ion-icon name="chatbubbles-outline"></ion-icon>
+            <div>
+              <h2>Conversaciones</h2>
+              <p>Mesas con consultas</p>
+            </div>
+          </div>
+
+          <!-- SIN CONSULTAS -->
+          @if (mesas().length === 0) {
+            <div class="sin-consultas">
+              <ion-icon name="chatbubble-outline"></ion-icon>
+              <p>No hay consultas todavía.</p>
+            </div>
+          }
+          @else {
+            <!-- LISTA DE MESAS -->
+            <div class="lista-mesas">
+              @for (mesa of mesas(); track mesa.id) {
+                <button
+                  type="button"
+                  class="mesa-item"
+                  [class.mesa-item-nuevo]="mesa.tieneMensajeNuevo"
+                  [class.mesa-item-seleccionada]="
+                    mesaSeleccionadaId() === mesa.id
+                  "
+                  (click)="seleccionarMesa(mesa)"
+                >
+                  <!-- CONTENIDO PRINCIPAL DE LA CARD -->
+                  <div class="mesa-datos">
+                    <!-- TÍTULO: ICONO + MESA -->
+                    <div class="mesa-fila-superior">
+                      <div class="mesa-icono">
+                        <ion-icon name="restaurant-outline"></ion-icon>
+                      </div>
+                      <strong>
+                        Mesa {{ mesa.numero }}
+                      </strong>
+                    </div>
+
+                    <!-- BURBUJA CENTRADA VERTICALMENTE -->
+                    @if (mesa.ultimoMensaje) {
+                      <div class="mesa-fila-inferior">
+                        <div class="mensaje-wrapper mensaje-propio">
+                         <div class="mensaje-burbuja">
+                            <!-- CABECERA -->
+                            <div class="mensaje-cabecera">
+                              <span class="mensaje-emisor">
+                                @if (
+                                  mesa.ultimoMensaje.emisor_tipo === 'mesa'
+                                ) {
+                                  Mesa {{ mesa.numero }}
+                                }
+                                @else {
+                                  Mozo
+                                  {{
+                                    mesa.ultimoMensaje.nombre_mozo ?? 'Mozo'
+                                  }}
+                                }
+                              </span>
+                              <span class="mensaje-hora">
+                                {{
+                                  mesa.ultimoMensaje.created_at
+                                    | date:'dd/MM · HH:mm'
+                                }}
+                              </span>
+                            </div>
+
+                            <!-- MENSAJE -->
+                            <p class="mensaje-texto">
+                              {{ mesa.ultimoMensaje.mensaje }}
+                            </p>
+                          </div>
+                        </div>
+
+                        @if (mesa.tieneMensajeNuevo) {
+                          <span class="indicador-nuevo"></span>
+                        }
+                      </div>
+                    }
+                  </div>
+                  <!-- FLECHA -->
+                  <ion-icon
+                    class="mesa-flecha"
+                    name="chevron-forward-outline">
+                  </ion-icon>
+                </button>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</ion-content>
+
+
+<!-- ===================================================== -->
+<!-- MODAL DE CONVERSACIÓN -->
+<!-- ===================================================== -->
+
+<ion-modal
+  [isOpen]="modalAbierto()"
+  (didPresent)="scrollAlFinal()"
+  (didDismiss)="cerrarModal()"
+  class="modal-chat-mozo"
+>
+  <ng-template>
+    <!-- HEADER DEL MODAL -->
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button
+            class="btn-cerrar-modal"
+            (click)="cerrarModal()"
+            aria-label="Cerrar chat"
+          >
+            <ion-icon name="close-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+
+        <ion-title>
+          Mesa {{ mesaSeleccionadaNumero() }}
+        </ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <!-- CONTENIDO DEL CHAT -->
+    <ion-content
+      class="modal-chat-content"
+      #chatContent
+    >
+      <div class="modal-mensajes">
+        @for (
+          mensaje of mensajesMesaSeleccionada();
+          track mensaje.id
+        ) {
+          <div
+            class="mensaje-wrapper"
+            [class.mensaje-cliente]="
+              mensaje.emisor_tipo === 'mesa'
+            "
+            [class.mensaje-mozo]="
+              mensaje.emisor_tipo === 'mozo'
+            "
+            [class.mensaje-propio]="
+              esMensajePropio(mensaje)
+            "
+            [class.mensaje-otro-mozo]="
+              mensaje.emisor_tipo === 'mozo' &&
+              !esMensajePropio(mensaje)
+            "
+          >
+            <div class="mensaje-burbuja">
+              <!-- CABECERA DEL MENSAJE -->
+              <div class="mensaje-cabecera">
+                <span class="mensaje-emisor">
+                  @if (
+                    mensaje.emisor_tipo === 'mesa'
+                  ) {
+                    Mesa {{ mesaSeleccionadaNumero() }}
+
+                  }
+                  @else {
+                    Mozo
+                    {{ mensaje.nombre_mozo ?? 'Mozo' }}
+                  }
+                </span>
+                <span class="mensaje-hora">
+                  {{
+                    mensaje.created_at
+                      | date:'dd/MM · HH:mm'
+                  }}
+                </span>
+              </div>
+              <!-- TEXTO DEL MENSAJE -->
+              <p class="mensaje-texto">
+                {{ mensaje.mensaje }}
+              </p>
+            </div>
+          </div>
+        }
+      </div>
+    </ion-content>
+
+    <!-- FOOTER -->
+    <div class="modal-respuesta-container">
+      <ion-input
+        [ngModel]="nuevoMensaje()"
+        (ngModelChange)="nuevoMensaje.set($event)"
+        placeholder="Escribí una respuesta..."
+        [disabled]="enviando()"
+        (keyup.enter)="enviarRespuesta()"
+      ></ion-input>
+      <ion-button
+        class="btn-enviar"
+        (click)="enviarRespuesta()"
+        [disabled]="
+          enviando() ||
+          !nuevoMensaje().trim()
+        "
+        aria-label="Enviar mensaje"
+      >
+        @if (enviando()) {
+          <ion-spinner name="crescent"></ion-spinner>
+        }
+        @else {
+          <span>Enviar</span>
+          <ion-icon name="send-outline"></ion-icon>
+        }
+      </ion-button>
+    </div>
+  </ng-template>
+</ion-modal>

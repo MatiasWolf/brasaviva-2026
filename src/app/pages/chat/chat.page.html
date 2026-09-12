@@ -1,0 +1,125 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/home"></ion-back-button>
+      </ion-buttons>
+  <ion-title>Consulta al mozo</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content class="chat-content">
+  <div class="chat-container">
+
+<!-- Cargando -->
+@if (cargando()) {
+  <div class="chat-loader">
+    <div class="loader-logo">
+      <ion-icon name="flame-outline"></ion-icon>
+    </div>
+    <p>Cargando conversación...</p>
+  </div>
+}
+<!-- Sin mesa asignada -->
+@else if (!mesaId()) {
+  <div class="chat-vacio">
+    <div class="vacio-icono">
+      <ion-icon name="chatbubbles-outline"></ion-icon>
+    </div>
+    <h2>Sin mesa asignada</h2>
+    <p>
+      La consulta al mozo estará disponible
+      cuando tengas una mesa asignada.
+    </p>
+  </div>
+}
+<!-- Chat -->
+@else {
+  <!-- Información de la conversación -->
+  <div class="chat-info">
+    <div class="chat-info-icon">
+      <ion-icon name="restaurant-outline"></ion-icon>
+    </div>
+    <div class="chat-info-text">
+      <h2>Atención al cliente</h2>
+      <p>
+        Tu mesa está siendo atendida
+      </p>
+    </div>
+  </div>
+
+  <!-- Área de mensajes -->
+  <div class="mensajes">
+    <!-- No hay mensajes -->
+    @if (mensajes().length === 0) {
+      <div class="sin-mensajes">
+        <div class="sin-mensajes-icono">
+          <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+        </div>
+        <h3>Iniciá una conversación</h3>
+        <p>
+          Escribí tu consulta y un mozo te responderá.
+        </p>
+      </div>
+    }
+    <!-- Lista de mensajes -->
+    @else {
+      @for (mensaje of mensajes(); track mensaje.id) {
+        <div
+          class="mensaje-wrapper"
+          [class.mensaje-cliente]="mensaje.emisor_tipo === 'mesa'"
+          [class.mensaje-mozo]="mensaje.emisor_tipo === 'mozo'"
+        >
+          <div class="mensaje-burbuja">
+            <!-- Cabecera: emisor + fecha/hora -->
+            <div class="mensaje-cabecera">
+              <span class="mensaje-emisor">
+                @if (mensaje.emisor_tipo === 'mozo') {
+                  Mozo {{ mensaje.nombre_mozo ?? 'Mozo' }}
+                } @else {
+                  Mesa {{ numeroMesa() }}
+                }
+              </span>
+              <span class="mensaje-hora">
+                {{ mensaje.created_at | date:'dd/MM · HH:mm' }}
+              </span>
+            </div>
+            <!-- Texto -->
+            <p class="mensaje-texto">
+              {{ mensaje.mensaje }}
+            </p>
+          </div>
+        </div>
+      }
+    }
+  </div>
+}
+
+  </div>
+</ion-content>
+<!-- Campo para enviar mensajes -->
+@if (mesaId()) {
+  <ion-footer class="chat-footer">
+<ion-toolbar>
+  <div class="input-container">
+    <ion-input
+      [ngModel]="nuevoMensaje()"
+      (ngModelChange)="nuevoMensaje.set($event)"
+      placeholder="Escribí tu consulta..."
+      [disabled]="enviando()"
+      (keyup.enter)="enviarMensaje()">
+    </ion-input>
+    <ion-button
+      class="btn-enviar"
+      (click)="enviarMensaje()"
+      [disabled]="enviando() || !nuevoMensaje().trim()"
+      aria-label="Enviar mensaje">
+      @if (enviando()) {
+        <ion-spinner name="crescent"></ion-spinner>
+      } @else {
+        <span>Enviar</span>
+        <ion-icon name="send-outline"></ion-icon>
+      }
+    </ion-button>
+  </div>
+</ion-toolbar>
+  </ion-footer>
+}

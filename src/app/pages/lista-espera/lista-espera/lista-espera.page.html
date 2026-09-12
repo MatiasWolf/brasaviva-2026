@@ -1,316 +1,620 @@
 
 <ion-header>
   <ion-toolbar>
+
     <ion-buttons slot="start">
       <ion-back-button
-        defaultHref="/home"
-        >
+        defaultHref="/home">
       </ion-back-button>
     </ion-buttons>
+
     <ion-title>Lista de espera</ion-title>
+
     <ion-buttons slot="end">
       <ion-button
         class="logout-btn"
         (click)="cerrarSesion()"
         aria-label="Cerrar sesión">
+
         <ion-icon
           slot="icon-only"
           name="log-out-outline">
         </ion-icon>
+
       </ion-button>
     </ion-buttons>
+
   </ion-toolbar>
 </ion-header>
 
+
 <ion-content class="lista-espera-bg">
+
   <div class="lista-espera-container">
+
     <!-- BUSCADOR -->
     <ion-searchbar
       class="buscador"
       placeholder="Buscar por nombre, tipo de mesa o cantidad de personas"
       [debounce]="200"
-      [(ngModel)]="textoBusqueda">
+      [(ngModel)]="textoBusqueda"
+      (ngModelChange)="pagina.set(1)">
+      
     </ion-searchbar>
-    <!-- ENCABEZADO -->
-    <div class="welcome-section">
-      <h1>
-        <span class="cantidad">{{ clientesFiltrados.length }} </span>
-        <span> Clientes esperando</span>
-      </h1>
-    </div>
+
+    <!-- LISTA DE CLIENTES -->
     <div class="lista-clientes">
-      <ion-card
-        *ngFor="let cliente of clientesFiltrados"
-        class="cliente-card">
-        <ion-card-content>
-          <div class="cliente-layout">
-            <!-- FOTO -->
-            <div class="foto-container">
-              <ion-avatar>
-                <img
-                  *ngIf="cliente.foto_url"
-                  [src]="cliente.foto_url"
-                  alt="Foto del cliente"
-                />
+
+      <!-- CARDS PAGINADAS -->
+      @for (cliente of paginaItems(); track cliente.id) {
+
+        <ion-card class="cliente-card">
+
+          <ion-card-content>
+
+            <!-- INFORMACIÓN DEL CLIENTE -->
+            <div class="cliente-layout">
+
+              <!-- FOTO -->
+              <div class="foto-container">
+
+                <ion-avatar>
+
+                  @if (cliente.foto_url) {
+
+                    <img
+                      [src]="cliente.foto_url"
+                      alt="Foto del cliente"
+                    />
+
+                  } @else {
+
+                    <ion-icon
+                      name="person">
+                    </ion-icon>
+
+                  }
+
+                </ion-avatar>
+
+              </div>
+
+
+              <!-- DATOS -->
+              <div class="datos-cliente">
+
+                <h2>
+                  {{ cliente.nombre }}
+                </h2>
+
+                <p>
+                  <ion-icon
+                    name="people-outline">
+                  </ion-icon>
+
+                  {{ cliente.cantidad_personas }}
+
+                  {{
+                    cliente.cantidad_personas === 1
+                      ? 'persona'
+                      : 'personas'
+                  }}
+                </p>
+
+                <p>
+                  <ion-icon
+                    name="restaurant-outline">
+                  </ion-icon>
+
+                  {{ tipoMesaLegible(cliente.tipo_mesa) }}
+                </p>
+
+                <p>
+                  <ion-icon
+                    name="time-outline">
+                  </ion-icon>
+
+                  Ingresó
+                  {{
+                    (cliente.fecha_ingreso || cliente.created_at)
+                      | date:'HH:mm:ss'
+                  }}
+                </p>
+
+                <p class="tiempo-espera">
+
+                  <ion-icon
+                    name="hourglass-outline">
+                  </ion-icon>
+
+                  Esperando
+                  {{
+                    tiempoEspera(
+                      cliente.fecha_ingreso || cliente.created_at
+                    )
+                  }}
+
+                </p>
+
+              </div>
+
+            </div>
+
+
+            <!-- BOTONES -->
+            <div class="acciones">
+
+              <ion-button
+                expand="block"
+                (click)="cancelarCliente(cliente)">
+
                 <ion-icon
-                  *ngIf="!cliente.foto_url"
-                  name="person">
+                  slot="start"
+                  name="close-circle-outline">
                 </ion-icon>
-              </ion-avatar>
+
+                Cancelar
+
+              </ion-button>
+
+
+              <ion-button
+                expand="block"
+                (click)="asignarMesa(cliente)">
+
+                <ion-icon
+                  slot="start"
+                  name="restaurant-outline">
+                </ion-icon>
+
+                Asignar
+
+              </ion-button>
+
             </div>
-            <!-- DATOS -->
-            <div class="datos-cliente">
-              <h2>{{ cliente.nombre }}</h2>
-              <p>
-                <ion-icon name="people-outline"></ion-icon>
-                {{ cliente.cantidad_personas }}
-                {{ cliente.cantidad_personas === 1 ? 'persona' : 'personas' }}
-              </p>
-              <p>
-                <ion-icon name="restaurant-outline"></ion-icon>
-                {{ tipoMesaLegible(cliente.tipo_mesa) }}
-              </p>
-              <p>
-                <ion-icon name="time-outline"></ion-icon>
-                Ingresó {{ (cliente.fecha_ingreso || cliente.created_at) | date:'HH:mm:ss' }}
-              </p>
-              <p class="tiempo-espera">
-                <ion-icon name="hourglass-outline"></ion-icon>
-                Esperando {{ tiempoEspera(cliente.fecha_ingreso || cliente.created_at) }}
-             </p>
-            </div>
-          </div>
-          <!-- BOTONES -->
-          <div class="acciones">
-            <ion-button
-              expand="block"
-              (click)="cancelarCliente(cliente)">
-              <ion-icon
-                slot="start"
-                name="close-circle-outline">
-              </ion-icon>
-              Cancelar
-            </ion-button>
-            <ion-button
-              expand="block"
-              (click)="asignarMesa(cliente)">
-              <ion-icon
-                slot="start"
-                name="restaurant-outline">
-              </ion-icon>
-              Asignar
-            </ion-button>
-          </div>
-        </ion-card-content>
-      </ion-card>
-      <div
-        *ngIf="clientesFiltrados.length === 0"
-        class="sin-clientes">
-        <ion-icon name="people-outline"></ion-icon>
-        <h2>No hay clientes en espera</h2>
-        <p>
-          No hay clientes que coincidan con los filtros seleccionados.
-        </p>
-      </div>
+
+          </ion-card-content>
+
+        </ion-card>
+
+      }
+
+
+      <!-- SIN CLIENTES -->
+      @if (clientesFiltrados.length === 0) {
+
+        <div class="sin-clientes">
+
+          <ion-icon
+            name="people-outline">
+          </ion-icon>
+
+          <h2>
+            No hay clientes en espera
+          </h2>
+
+          <p>
+            No hay clientes que coincidan con los filtros seleccionados.
+          </p>
+
+        </div>
+
+      }
+
     </div>
+
   </div>
+
 </ion-content>
 
 
-<!-- MODAL ASIGNAR MESA -->
+<!-- =========================================
+     PAGINACIÓN
+     ========================================= -->
+
+@if (clientesFiltrados.length > 0) {
+
+  <ion-footer class="lista-espera-footer">
+
+    <div class="paginador">
+
+      <!-- PÁGINA ANTERIOR -->
+      <ion-button
+        fill="clear"
+        [disabled]="pagina() === 1"
+        (click)="paginaAnterior()"
+        aria-label="Página anterior">
+
+        <ion-icon
+          slot="icon-only"
+          name="chevron-back-outline">
+        </ion-icon>
+
+      </ion-button>
+
+
+      <!-- PÁGINA ACTUAL -->
+      <span>
+        Página {{ pagina() }} de {{ totalPaginas() }}
+      </span>
+
+
+      <!-- PÁGINA SIGUIENTE -->
+      <ion-button
+        fill="clear"
+        [disabled]="pagina() === totalPaginas()"
+        (click)="paginaSiguiente()"
+        aria-label="Página siguiente">
+
+        <ion-icon
+          slot="icon-only"
+          name="chevron-forward-outline">
+        </ion-icon>
+
+      </ion-button>
+
+    </div>
+
+  </ion-footer>
+
+}
+
+
+<!-- =========================================
+     MODAL - ASIGNAR MESA
+     ========================================= -->
+
 <ion-modal
   [isOpen]="clienteAsignando() !== null"
   (didDismiss)="cerrarAsignacion()"
-  class="asignar-mesa-modal"
->
+  class="asignar-mesa-modal">
+
   <ng-template>
+
     <ion-header>
+
       <ion-toolbar>
+
         <ion-buttons slot="start">
-          <ion-button (click)="cerrarAsignacion()" aria-label="Cerrar">
-            <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+
+          <ion-button
+            (click)="cerrarAsignacion()"
+            aria-label="Cerrar">
+
+            <ion-icon
+              slot="icon-only"
+              name="close-outline">
+            </ion-icon>
+
           </ion-button>
+
         </ion-buttons>
-        <ion-title>Seleccionar mesa</ion-title>
+
+        <ion-title>
+          Seleccionar mesa
+        </ion-title>
+
       </ion-toolbar>
+
     </ion-header>
+
+
     <ion-content class="asignar-mesa-content">
+
       <div class="asignar-mesa-container">
+
+
         <!-- INFORMACIÓN DEL CLIENTE -->
+
         @if (clienteAsignando(); as cliente) {
-        <div class="cliente-asignacion">
 
-          <div class="cliente-asignacion-info">
+          <div class="cliente-asignacion">
 
-            <div class="cliente-asignacion-avatar">
-              @if (cliente.foto_url) {
-                <img
-                  [src]="cliente.foto_url"
-                  [alt]="'Foto de ' + cliente.nombre"
-                />
-              } @else {
-                <ion-icon name="person"></ion-icon>
-              }
-            </div>
+            <div class="cliente-asignacion-info">
 
-            <div class="cliente-asignacion-datos">
 
-              <h2>{{ cliente.nombre }}</h2>
+              <!-- AVATAR -->
+              <div class="cliente-asignacion-avatar">
 
-              <p>
-                <ion-icon name="people-outline"></ion-icon>
-                {{ cliente.cantidad_personas }}
-                {{ cliente.cantidad_personas === 1 ? 'persona' : 'personas' }}
-              </p>
+                @if (cliente.foto_url) {
 
-              <span class="chip chip--tipo">
-                {{ tipoMesaLegible(cliente.tipo_mesa) }}
-              </span>
+                  <img
+                    [src]="cliente.foto_url"
+                    [alt]="'Foto de ' + cliente.nombre"
+                  />
+
+                } @else {
+
+                  <ion-icon
+                    name="person">
+                  </ion-icon>
+
+                }
+
+              </div>
+
+
+              <!-- DATOS -->
+              <div class="cliente-asignacion-datos">
+
+                <h2>
+                  {{ cliente.nombre }}
+                </h2>
+
+                <p>
+
+                  <ion-icon
+                    name="people-outline">
+                  </ion-icon>
+
+                  {{ cliente.cantidad_personas }}
+
+                  {{
+                    cliente.cantidad_personas === 1
+                      ? 'persona'
+                      : 'personas'
+                  }}
+
+                </p>
+
+                <span class="chip chip--tipo">
+
+                  {{ tipoMesaLegible(cliente.tipo_mesa) }}
+
+                </span>
+
+              </div>
 
             </div>
 
           </div>
 
-        </div>
-      }
+        }
+
+
+        <!-- TÍTULO MESAS -->
         <h3 class="titulo-mesas">
           Mesas disponibles
         </h3>
+
+
         <!-- LISTADO DE MESAS -->
         <div class="lista-mesas-asignacion">
+
           @for (mesa of mesasDisponibles(); track mesa.id) {
+
             <article
               class="mesa-card"
               [class.mesa-card--seleccionada]="mesaSeleccionada()?.id === mesa.id"
-              (click)="seleccionarMesa(mesa)"
-            >
+              (click)="seleccionarMesa(mesa)">
+
+
               <!-- FOTO -->
               <div class="avatar">
+
                 @if (mesa.foto_url) {
+
                   <img
                     [src]="mesa.foto_url"
                     [alt]="'Mesa ' + mesa.numero"
                   />
+
                 } @else {
-                  <ion-icon name="grid-outline"></ion-icon>
+
+                  <ion-icon
+                    name="grid-outline">
+                  </ion-icon>
+
                 }
+
               </div>
+
+
               <!-- DATOS -->
               <div class="datos">
-                <h2>Mesa {{ mesa.numero }}</h2>
+
+                <h2>
+                  Mesa {{ mesa.numero }}
+                </h2>
+
                 <p class="comensales">
-                  <ion-icon name="people-outline"></ion-icon>
+
+                  <ion-icon
+                    name="people-outline">
+                  </ion-icon>
+
                   {{ mesa.comensales }} comensales
+
                 </p>
+
+
                 <div class="chips">
+
                   <span class="chip chip--tipo">
                     {{ tipoMesaLegible(mesa.tipo) }}
                   </span>
+
                   <span class="chip chip--disponible">
                     Vacía
                   </span>
+
                 </div>
+
               </div>
+
+
               <!-- INDICADOR DE SELECCIÓN -->
               <div class="seleccion">
+
                 @if (mesaSeleccionada()?.id === mesa.id) {
-                  <ion-icon name="checkmark-circle-outline"></ion-icon>
+
+                  <ion-icon
+                    name="checkmark-circle-outline">
+                  </ion-icon>
+
                 } @else {
-                  <ion-icon name="radio-button-off-outline"></ion-icon>
+
+                  <ion-icon
+                    name="radio-button-off-outline">
+                  </ion-icon>
+
                 }
+
               </div>
+
             </article>
+
           }
+
         </div>
+
+
         <!-- SIN MESAS -->
         @if (mesasDisponibles().length === 0) {
+
           <div class="sin-mesas">
-            <ion-icon name="grid-outline"></ion-icon>
-            <h3>No hay mesas disponibles</h3>
+
+            <ion-icon
+              name="grid-outline">
+            </ion-icon>
+
+            <h3>
+              No hay mesas disponibles
+            </h3>
+
             <p>
               No encontramos una mesa disponible que cumpla
               con los requisitos de este cliente.
             </p>
+
           </div>
+
         }
+
+
         <!-- BOTÓN CONFIRMAR -->
         @if (mesaSeleccionada(); as mesa) {
+
           <div class="confirmar-asignacion">
+
             <ion-button
               expand="block"
-              (click)="confirmarAsignacion()"
-            >
+              (click)="confirmarAsignacion()">
+
               <ion-icon
                 slot="start"
-                name="checkmark-circle-outline"
-              ></ion-icon>
+                name="checkmark-circle-outline">
+              </ion-icon>
+
               Asignar Mesa {{ mesa.numero }}
+
             </ion-button>
+
           </div>
+
         }
+
       </div>
+
     </ion-content>
+
   </ng-template>
+
 </ion-modal>
+
 
 <!-- =========================================
      MODAL - ASIGNACIÓN EXITOSA
      ========================================= -->
+
 <ion-modal
   [isOpen]="mostrarModalExito"
   cssClass="modal-asignacion-exitosa"
-  (didDismiss)="cerrarModalExito()"
->
+  (didDismiss)="cerrarModalExito()">
+
   <ng-template>
+
     <div class="exito-container">
 
-      <!-- Icono -->
+
+      <!-- ICONO -->
       <div class="exito-icono">
-        <ion-icon name="checkmark-circle-outline"></ion-icon>
+
+        <ion-icon
+          name="checkmark-circle-outline">
+        </ion-icon>
+
       </div>
 
-      <!-- Título -->
+
+      <!-- TÍTULO -->
       <div class="exito-titulo">
-        <h2>¡Mesa asignada!</h2>
+
+        <h2>
+          ¡Mesa asignada!
+        </h2>
+
       </div>
 
-      <!-- Información -->
+
+      <!-- INFORMACIÓN -->
       <div class="exito-info">
 
+
         <div class="exito-dato">
-          <span class="dato-label">Cliente</span>
+
+          <span class="dato-label">
+            Cliente
+          </span>
+
           <span class="dato-valor">
             {{ clienteAsignadoExito?.nombre }}
           </span>
+
         </div>
+
 
         <div class="separador"></div>
 
+
         <div class="exito-dato">
-          <span class="dato-label">Mesa</span>
+
+          <span class="dato-label">
+            Mesa
+          </span>
+
           <span class="dato-mesa">
             {{ mesaAsignadaExito?.numero }}
           </span>
+
         </div>
+
 
       </div>
 
-      <!-- Botón -->
+
+      <!-- BOTÓN -->
       <div class="exito-acciones">
+
         <ion-button
           expand="block"
           class="btn-aceptar-exito"
-          (click)="cerrarModalExito()"
-        >
+          (click)="cerrarModalExito()">
+
           <ion-icon
             slot="start"
-            name="checkmark-circle-outline"
-          ></ion-icon>
+            name="checkmark-circle-outline">
+          </ion-icon>
 
           Aceptar
+
         </ion-button>
+
       </div>
 
+
     </div>
+
   </ng-template>
+
 </ion-modal>

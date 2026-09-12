@@ -142,10 +142,18 @@ export const routes: Routes = [
     canActivate: [authGuard, rolGuard(['dueño', 'supervisor'])],
   },
   {
+    path: 'chat',
+    loadComponent: () => import('./pages/chat/chat.page').then((m) => m.ChatPage),
+  },
+  {
+    path: 'mozos-chat',
+    loadComponent: () =>
+      import('./pages/mozos-chat/mozos-chat.page').then((m) => m.MozosChatPage),
+  },
+  {
     path: '',
     redirectTo: 'splash-estatica',
     pathMatch: 'full',
   },
-
 ];
 
