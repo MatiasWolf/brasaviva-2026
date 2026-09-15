@@ -36,15 +36,21 @@ export class PedidoService {
         const itemExistente = pedidoActual.find(item => item.producto.id === producto.id);
 
         if (itemExistente) {
-        this.pedido.set(
-            pedidoActual.map(item =>
-            item.producto.id === producto.id
-                ? { ...item, cantidad: item.cantidad + 1 }
-                : item
-            )
-        );
+            // Si ya llegó a 20, no hace nada 
+            if (itemExistente.cantidad >= 20) {
+                console.warn(`Límite alcanzado: No se pueden pedir más de 20 unidades de ${producto.nombre}`);
+                return; 
+            }
+
+            this.pedido.set(
+                pedidoActual.map(item =>
+                item.producto.id === producto.id
+                    ? { ...item, cantidad: item.cantidad + 1 }
+                    : item
+                )
+            );
         } else {
-        this.pedido.set([...pedidoActual, { producto, cantidad: 1 }]);
+            this.pedido.set([...pedidoActual, { producto, cantidad: 1 }]);
         }
     }
 
@@ -65,6 +71,11 @@ export class PedidoService {
             )
         );
         }
+    }
+
+    eliminarDelPedido(productoId: number) {
+        const pedidoActual = this.pedido();
+        this.pedido.set(pedidoActual.filter(item => item.producto.id !== productoId));
     }
 
     vaciarPedido() {

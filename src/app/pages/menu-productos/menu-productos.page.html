@@ -22,7 +22,6 @@
   @if (pedidoService.cargandoProductos()) {
     <div class="loader">
       <ion-spinner name="crescent" color="primary"></ion-spinner>
-      <p>Cargando la carta...</p>
     </div>
   } @else {
     
@@ -52,7 +51,7 @@
     <div style="display: flex; flex-direction: column; gap: 8px;">
       
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span style="color: rgba(255, 248, 241, 0.75); font-size: 0.9rem;">Tiempo de preparación estimado:</span>
+        <span style="color: rgba(255, 248, 241, 0.75); font-size: 0.9rem;">Tiempo estimado:</span>
         <span style="color: #ffaa55; font-weight: bold; font-size: 1.1rem;">
           {{ pedidoService.tiempoEstimadoTotal() }} min
         </span>
@@ -66,8 +65,8 @@
       </div>
 
       <ion-button expand="block" style="--background: #802323; --color: #ffd485; font-weight: bold;" 
-                  (click)="pedidoService.enviarPedidoAConfirmar(1)">
-        Terminar Pedido
+                  (click)="abrirDetallePedido()">
+        Ver Pedido
       </ion-button>
       
     </div>

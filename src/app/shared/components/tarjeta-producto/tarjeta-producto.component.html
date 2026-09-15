@@ -27,7 +27,12 @@
         <ion-icon name="time-outline"></ion-icon>
         <span> {{ producto.tiempo_preparacion }} min</span>
       </div>
-      <p>{{ producto.descripcion }}</p>
+      @if (producto.descripcion) {
+      <p [class.recortado]="!descripcionExpandida()" 
+        (click)="descripcionExpandida.set(!descripcionExpandida())">
+        {{ producto.descripcion }}
+      </p>
+}
       
       <!-- Contenedor inferior: Precio y controladores de cantidad -->
       <div class="fila-precio-acciones">
@@ -40,10 +45,15 @@
           </ion-button>
           
           <!-- Badge con la cantidad actual en el carrito -->
-          <ion-badge color="light">{{ cantidadEnCarrito }}</ion-badge>
+          <div class="contenedor-carrito-badge-flotante">
+            <ion-icon name="cart-outline" class="icono-carrito-base"></ion-icon>
+            @if (cantidadEnCarrito > 0) {
+              <span class="globo-notificacion">{{ cantidadEnCarrito }}</span>
+            }
+          </div>
           
           <!-- Agregar unidad al pedido -->
-          <ion-button fill="clear" (click)="alAgregar.emit(producto)">
+          <ion-button fill="clear" (click)="alAgregar.emit(producto)" [style.visibility]="cantidadEnCarrito >= 20 ? 'hidden' : 'visible'">
             <ion-icon name="add-circle"></ion-icon>
           </ion-button>
         </div>
