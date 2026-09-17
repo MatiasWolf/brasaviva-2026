@@ -1,5 +1,13 @@
 <ion-header>
   <ion-toolbar class="home-bg">
+    <!-- BOTÓN PARA VOLVER AL HOME (Evita que el usuario se estanque) -->
+    <ion-buttons slot="start">
+      <!-- Forzamos la ruta al home como destino absoluto en cualquier dispositivo -->
+      <ion-button routerLink="/home">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
     <ion-title>Menú de Productos</ion-title>
   </ion-toolbar>
   

@@ -1,20 +1,21 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonSpinner, IonIcon, IonFooter, IonList, IonSegment, IonSegmentButton, IonLabel, ModalController } from '@ionic/angular';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonSpinner, IonIcon, IonFooter, IonList, IonSegment, IonSegmentButton, ModalController, IonButtons } from '@ionic/angular';
 import { PedidoService } from '../../core/services/pedido.service';
 import { addIcons } from 'ionicons'; 
 import { addCircle, arrowBackOutline, arrowForwardOutline, removeCircle, restaurantOutline, wineOutline } from 'ionicons/icons'; // <-- Importar íconos específicos
 import { TarjetaProductoComponent } from '../../shared/components/tarjeta-producto/tarjeta-producto.component';
 import { DetallePedidoComponent } from '../../shared/components/detalle-pedido/detalle-pedido.component';
-
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-menu-productos',
   templateUrl: './menu-productos.page.html',
   styleUrls: ['./menu-productos.page.scss'],
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule,
-    FormsModule, IonButton, IonSpinner, IonFooter, IonList, TarjetaProductoComponent, IonSegment, IonSegmentButton, IonIcon]
+    FormsModule, IonButton, IonSpinner, IonFooter, IonList, TarjetaProductoComponent,
+    IonSegment, IonSegmentButton, IonIcon, IonButtons, RouterLink]
 })
 export class MenuProductosPage implements OnInit {
 
@@ -50,14 +51,12 @@ export class MenuProductosPage implements OnInit {
   async abrirDetallePedido() {
     const modal = await this.modalController.create({
       component: DetallePedidoComponent,
-      // Opcional: Podés darle estilos o comportamiento de tarjeta de iOS
       mode: 'md', 
       cssClass: 'modal-pedido-personalizado' 
     });
 
     await modal.present();
 
-    // Por si necesitás reaccionar cuando el modal se cierre (ej: el pedido se envió con éxito)
     const { data } = await modal.onWillDismiss();
     if (data?.verificado) {
       console.log('El pedido fue enviado exitosamente al mozo.');
