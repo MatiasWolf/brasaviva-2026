@@ -39,19 +39,17 @@ export class DetallePedidoComponent {
   }
 
   async confirmarPedido() {
-    // ID 22 de ocupación temporal para la prueba 
-    const resultado = await this.pedidoService.enviarPedidoAConfirmar(22);
+    const resultado = await this.pedidoService.enviarPedidoAConfirmar();
     
     if (resultado && resultado.ok) {
-      // 1. ÉXITO: Cerramos el modal notificando el estado positivo
+      // 1. ÉXITO: Cerrar el modal notificando el estado positivo
       this.modalController.dismiss({ verificado: true });
       
       // 2. NAVIGACIÓN: Redirigir a la pantalla de seguimiento del cliente
-      // Reemplaza 'seguimiento-pedido' por la ruta exacta de tu proyecto
       this.router.navigate(['/seguimiento-pedido']); 
       
     } else if (resultado && resultado.productosAgotados && resultado.productosAgotados.length > 0) {
-      // 3. ERROR DE DISPONIBILIDAD: Listamos los platos que se quitaron automáticamente
+      // 3. ERROR DE DISPONIBILIDAD: Listar los platos que se quitaron automáticamente
       const listaProductos = resultado.productosAgotados.join(', ');
       await this.mostrarToast(
         `Los siguientes productos no están disponibles y se quitaron de tu pedido: ${listaProductos}`,
@@ -69,7 +67,7 @@ export class DetallePedidoComponent {
   }
 
   /**
-   * Método auxiliar para renderizar mensajes flotantes elegantes de Ionic
+   * Método auxiliar para renderizar mensajes flotantes de Ionic
    */
   private async mostrarToast(mensaje: string, color: 'warning' | 'danger') {
     const toast = await this.toastController.create({

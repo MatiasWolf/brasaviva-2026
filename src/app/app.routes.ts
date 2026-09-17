@@ -154,6 +154,10 @@ export const routes: Routes = [
     path: '',
     redirectTo: 'splash-estatica',
     pathMatch: 'full',
+  },  {
+    path: 'seguimiento-pedido',
+    loadComponent: () => import('./pages/seguimiento-pedido/seguimiento-pedido.page').then( m => m.SeguimientoPedidoPage)
   },
+
 ];
 

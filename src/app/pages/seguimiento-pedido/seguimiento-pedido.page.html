@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar class="home-bg">
+    <!-- BOTÓN ABSOLUTO PARA VOLVER AL HOME (Punto 11) -->
+    <ion-buttons slot="start">
+      <ion-button routerLink="/home">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Estado de tu Pedido</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="fondo-bodegon">
+  <div class="contenedor-seguimiento">
+    
+    @switch (pedidoService.estadoPedidoActual()) {
+      
+      <!-- CASO 1: ESPERA ACTIVA (Punto 12) -->
+      @case ('pendiente_confirmacion') {
+        <div class="tarjeta-estado animacion-fade">
+          <ion-spinner name="crescent" class="spinner-dorado"></ion-spinner>
+          <h2>Esperando al mozo</h2>
+          <p>Tu pedido fue enviado con éxito. El mozo lo está revisando para autorizarlo.</p>
+        </div>
+      }
+
+      <!-- CASO 2: ACEPTADO Y EN COCINA (Punto 14) -->
+      @case ('en_preparacion') {
+        <div class="tarjeta-estado animacion-fade éxito">
+          <ion-icon name="restaurant-outline" class="icono-estado"></ion-icon>
+          <h2>¡Pedido Aceptado!</h2>
+          <p>La cocina y el bar ya están preparando tus platos.</p>
+          <div class="badge-tiempo">
+            <ion-icon name="time-outline"></ion-icon>
+            <span>Preparación estimada: {{ pedidoService.tiempoEstimadoTotal() }} min</span>
+          </div>
+        </div>
+      }
+
+      <!-- CASO 3: RECHAZADO POR EL MOZO (Punto 13) -->
+      @case ('rechazado') {
+        <div class="tarjeta-estado animacion-fade error">
+          <ion-icon name="close-circle-outline" class="icono-estado rojo"></ion-icon>
+          <h2>Pedido Rechazado</h2>
+          <p>El mozo rechazó el pedido por modificaciones. Por favor, revisá las cantidades o productos.</p>
+          
+          <!-- BOTÓN EXCLUSIVO DEL PUNTO 13 PARA VOLVER A LA CARTA A EDITAR -->
+          <ion-button (click)="irAModificarPedido()" class="boton-modificar" expand="block">
+            Modificar mi Pedido
+          </ion-button>
+        </div>
+      }
+
+      <!-- CASO POR DEFECTO: CONTROL DE CARGA INICIAL -->
+      @default {
+        <div class="tarjeta-estado">
+          <ion-spinner name="dots" class="spinner-dorado"></ion-spinner>
+          <p>Sincronizando con el restaurante...</p>
+        </div>
+      }
+    }
+
+  </div>
+</ion-content>

@@ -14,6 +14,8 @@ export class PedidoService {
  
     public cargandoProductos = signal<boolean>(false);
 
+    public ocupacionMesaId: number = 22;
+
     public importeTotal = computed(() => {
         return this.pedido().reduce((total, item) => total + (item.producto.precio * item.cantidad), 0);
     });
@@ -30,6 +32,8 @@ export class PedidoService {
         return this.pedido().reduce((total, item) => total + item.cantidad, 0);
     });
 
+    public estadoPedidoActual = signal<string | null>(null);
+    private pedidoRealtimeChannel: any = null;
 
     agregarAlPedido(producto: Producto) {
         const pedidoActual = this.pedido();
@@ -102,14 +106,14 @@ export class PedidoService {
         }
     }
 
-    async enviarPedidoAConfirmar(ocupacionMesaId: number): Promise<{ ok: boolean; productosAgotados?: string[]; error?: any }> {
+    async enviarPedidoAConfirmar(): Promise<{ ok: boolean; productosAgotados?: string[]; error?: any }> {
         try {
             const itemsActuales = this.pedido();
             if (itemsActuales.length === 0) {
                 throw new Error('No se puede enviar un pedido vacío.');
             }
 
-            // 1. VALIDACIÓN PREVENTIVA DE DISPONIBILIDAD (Misma lógica previa)
+            // 1. VALIDACIÓN PREVENTIVA DE DISPONIBILIDAD
             const idsProductos = itemsActuales.map(item => item.producto.id);
             const { data: productosDB, error: errorValidacion } = await this.supabaseService.client
                 .from('productos')
@@ -136,7 +140,7 @@ export class PedidoService {
             const { data: pedidoExistente, error: errorBusqueda } = await this.supabaseService.client
                 .from('pedidos')
                 .select('id, estado')
-                .eq('ocupacion_id', ocupacionMesaId)
+                .eq('ocupacion_id', this.ocupacionMesaId)
                 .eq('estado', 'rechazado')
                 .maybeSingle();
 
@@ -145,10 +149,10 @@ export class PedidoService {
             let pedidoId: number;
 
             if (pedidoExistente) {
-                // ---- CAMINIO B: RE-ACTUALIZACIÓN POR RECHAZO (PUNTO 13) ----
+                // ---- CAMINIO B: RE-ACTUALIZACIÓN POR RECHAZO ----
                 pedidoId = pedidoExistente.id;
 
-                // A. Actualizamos la cabecera del pedido existente regresándolo a pendiente
+                // A. Actualiza la cabecera del pedido existente regresándolo a pendiente
                 const { error: errorUpdate } = await this.supabaseService.client
                     .from('pedidos')
                     .update({
@@ -161,7 +165,7 @@ export class PedidoService {
 
                 if (errorUpdate) throw errorUpdate;
 
-                // B. Limpiamos por completo los ítems viejos e inválidos para evitar basura
+                // B. Limpia los ítems viejos e inválidos para evitar basura
                 const { error: errorDeleteItems } = await this.supabaseService.client
                     .from('items_pedido')
                     .delete()
@@ -170,11 +174,11 @@ export class PedidoService {
                 if (errorDeleteItems) throw errorDeleteItems;
 
             } else {
-                // ---- CAMINO A: PEDIDO NUEVO DESDE CERO (PUNTO 12) ----
+                // ---- CAMINO A: PEDIDO NUEVO DESDE CERO ----
                 const { data: nuevoPedido, error: errorPedido } = await this.supabaseService.client
                     .from('pedidos')
                     .insert({
-                        ocupacion_id: ocupacionMesaId,
+                        ocupacion_id: this.ocupacionMesaId,
                         estado: 'pendiente_confirmacion',
                         importe_total: this.importeTotal(),
                         tiempo_estimado_preparacion: this.tiempoEstimadoTotal()
@@ -203,13 +207,70 @@ export class PedidoService {
 
             if (errorItems) throw errorItems;
 
-            // 4. ÉXITO TOTAL: Vaciamos el carrito local
+            // 4. ÉXITO: Vaciamos el carrito local
             this.vaciarPedido();
             return { ok: true };
 
         } catch (err) {
             console.error('Error en el proceso transaccional del pedido:', err);
             return { ok: false, error: err };
+        }
+    }
+
+    /**
+   * Carga el estado actual del pedido y abre la escucha en tiempo real
+   */
+    async escucharEstadoPedido() {
+        // 1. PRIMERO: Hacemos una consulta rápida para saber en qué estado nació el pedido
+        try {
+        const { data: pedidoActual, error: errorFetch } = await this.supabaseService.client
+            .from('pedidos')
+            .select('estado')
+            .eq('ocupacion_id', this.ocupacionMesaId)
+            // Buscamos el pedido que no esté finalizado (o el último creado)
+            .order('created_at', { ascending: false }) 
+            .limit(1)
+            .maybeSingle();
+
+        if (errorFetch) throw errorFetch;
+        
+        if (pedidoActual) {
+            // Rellenamos la signal con el estado real de la base de datos de entrada
+            this.estadoPedidoActual.set(pedidoActual.estado);
+        }
+        } catch (err) {
+        console.error('Error al recuperar el estado inicial del pedido:', err);
+        }
+
+        // 2. SEGUNDO: Dejamos el canal Realtime encendido para los cambios futuros (Mismo código de antes)
+        if (this.pedidoRealtimeChannel) {
+        this.supabaseService.client.removeChannel(this.pedidoRealtimeChannel);
+        }
+
+        this.pedidoRealtimeChannel = this.supabaseService.client
+        .channel('seguimiento-pedido-cliente')
+        .on(
+            'postgres_changes',
+            {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'pedidos',
+            filter: `ocupacion_id=eq.${this.ocupacionMesaId}`
+            },
+            (payload: any) => {
+            console.log('Cambio detectado en tiempo real:', payload.new);
+            this.estadoPedidoActual.set(payload.new.estado);
+            }
+        )
+        .subscribe();
+    }
+
+    //Cierra el canal de escucha del pedido
+    desconectarseDelPedido() {
+        if (this.pedidoRealtimeChannel) {
+        this.supabaseService.client.removeChannel(this.pedidoRealtimeChannel);
+        this.pedidoRealtimeChannel = null;
+        this.estadoPedidoActual.set(null);
         }
     }
 }

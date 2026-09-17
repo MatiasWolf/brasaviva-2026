@@ -1,0 +1,109 @@
+$color-primario: #ffd485;       
+$color-secundario: #ffaa55;     
+$fondo-chocolate: #130905;      
+$tarjeta-marron: #250a0a;       
+$borde-oscuro: #802323;         
+$texto-claro: #f5ebe6;          
+$rojo-error: #ff6b6b;           
+
+.home-bg {
+    --background: linear-gradient(135deg, #411616 0%, #130905 100%);
+    --color: #{$color-primario};
+    font-weight: bold;
+    border-bottom: 2px solid $borde-oscuro;
+    }
+
+    .fondo-bodegon {
+    --background: linear-gradient(180deg, #130905 0%, #3a1710 100%);
+    --color: #{$texto-claro};
+    }
+
+    .contenedor-seguimiento {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    padding: 16px;
+    }
+
+    .tarjeta-estado {
+    background-color: $tarjeta-marron;
+    border: 2px solid $borde-oscuro;
+    border-radius: 16px;
+    padding: 32px 24px;
+    text-align: center;
+    max-width: 340px;
+    width: 100%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    
+    h2 {
+        color: $color-primario;
+        font-size: 1.6rem;
+        margin-top: 16px;
+        margin-bottom: 12px;
+        font-weight: bold;
+        letter-spacing: 0.5px;
+    }
+    
+    p {
+        color: $texto-claro;
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+    }
+
+    .spinner-dorado {
+    --color: #{$color-primario};
+    transform: scale(1.5);
+    }
+
+    .icono-estado {
+    font-size: 4.5rem;
+    color: $color-secundario;
+    
+    &.rojo {
+        color: $rojo-error;
+    }
+    }
+
+    .badge-tiempo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: rgba($color-primario, 0.1);
+    border: 1px solid rgba($color-primario, 0.3);
+    padding: 8px 16px;
+    border-radius: 20px;
+    color: $color-primario;
+    font-weight: 500;
+    margin-top: 8px;
+    }
+
+    // Botón exclusivo del Punto 13 (Modificar Pedido)
+    .boton-modificar {
+    --background: #{$borde-oscuro};
+    --background-activated: #411616;
+    --color: #{$color-primario};
+    --border-radius: 8px;
+    font-weight: bold;
+    margin-top: 16px;
+    letter-spacing: 0.5px;
+    }
+
+    // Animación sutil de transición entre los estados en tiempo real
+    .animacion-fade {
+    animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
