@@ -1,11 +1,12 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonSpinner, IonIcon, IonFooter, IonList, IonSegment, IonSegmentButton, IonLabel } from '@ionic/angular';
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonSpinner, IonIcon, IonFooter, IonList, IonSegment, IonSegmentButton, IonLabel, ModalController } from '@ionic/angular';
 import { PedidoService } from '../../core/services/pedido.service';
 import { addIcons } from 'ionicons'; 
 import { addCircle, arrowBackOutline, arrowForwardOutline, removeCircle, restaurantOutline, wineOutline } from 'ionicons/icons'; // <-- Importar íconos específicos
 import { TarjetaProductoComponent } from '../../shared/components/tarjeta-producto/tarjeta-producto.component';
+import { DetallePedidoComponent } from '../../shared/components/detalle-pedido/detalle-pedido.component';
 
 
 @Component({
@@ -18,6 +19,7 @@ import { TarjetaProductoComponent } from '../../shared/components/tarjeta-produc
 export class MenuProductosPage implements OnInit {
 
   public pedidoService = inject(PedidoService);
+  private modalController = inject(ModalController);
 
   // CONTROL DE PESTAÑAS: 1 para Platos, 2 para Bebidas 
   public categoriaActiva = signal<number>(1);
@@ -43,6 +45,23 @@ export class MenuProductosPage implements OnInit {
 
   cambiarCategoria(event: any) {
     this.categoriaActiva.set(Number(event.detail.value));
+  }
+
+  async abrirDetallePedido() {
+    const modal = await this.modalController.create({
+      component: DetallePedidoComponent,
+      // Opcional: Podés darle estilos o comportamiento de tarjeta de iOS
+      mode: 'md', 
+      cssClass: 'modal-pedido-personalizado' 
+    });
+
+    await modal.present();
+
+    // Por si necesitás reaccionar cuando el modal se cierre (ej: el pedido se envió con éxito)
+    const { data } = await modal.onWillDismiss();
+    if (data?.verificado) {
+      console.log('El pedido fue enviado exitosamente al mozo.');
+    }
   }
 
 }

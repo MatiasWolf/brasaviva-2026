@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, output, signal } from '@angular/core';
-import { IonBadge, IonButton, IonCard, IonCardContent, IonIcon, IonLabel } from '@ionic/angular';
+import { IonButton, IonCard, IonCardContent, IonIcon } from '@ionic/angular';
 import { Producto } from '../../../core/models/pedido.models';
 import { addIcons } from 'ionicons';
-import { addCircle, arrowBackOutline, arrowForwardOutline, removeCircle, timeOutline } from 'ionicons/icons';
+import { addCircle, arrowBackOutline, arrowForwardOutline, cartOutline, removeCircle, timeOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-tarjeta-producto',
   templateUrl: './tarjeta-producto.component.html',
   styleUrls: ['./tarjeta-producto.component.scss'],
-  imports: [CommonModule, IonCard, IonCardContent, IonButton, IonIcon, IonBadge],
+  imports: [CommonModule, IonCard, IonCardContent, IonButton, IonIcon],
 })
 export class TarjetaProductoComponent  implements OnInit {
 
@@ -21,11 +21,14 @@ export class TarjetaProductoComponent  implements OnInit {
   alAgregar = output<Producto>();
   alRestar = output<number>();
 
-  // Signal LOCAL: controla la foto activa de la tarjeta
+  // Controla la foto activa de la tarjeta
   public fotoActivaIndex = signal<number>(0);
 
+  // Controla si la descripción larga está expandida
+  public descripcionExpandida = signal<boolean>(false);
+
   constructor() {
-    addIcons({ addCircle, removeCircle, arrowBackOutline, arrowForwardOutline, timeOutline });
+    addIcons({ addCircle, removeCircle, arrowBackOutline, arrowForwardOutline, timeOutline, cartOutline  });
   }
 
   ngOnInit() {}

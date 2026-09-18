@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar class="modal-bg">
+    <ion-title>Mi Pedido</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="cerrar()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="modal-bg modal-container">
+  
+  <div class="resumen-contenedor">
+    <div class="encabezado-seccion">
+      <ion-icon name="restaurant-outline"></ion-icon>
+      <span>Modificar productos</span>
+    </div>
+
+    <ion-list lines="none" class="lista-items">
+      @for (item of pedidoService.pedido(); track item.producto.id) {
+        <div class="item-pedido-card">
+  <div class="info-producto">
+    <h3>{{ item.producto.nombre }}</h3>
+    <span class="subtotal-item">${{ item.producto.precio * item.cantidad }}</span>
+  </div>
+  
+  <div class="acciones-item-derecha">
+    <!-- Controles de cantidad -->
+    <div class="controles-cantidad">
+      <!-- Se deshabilita el botón si la cantidad es 1, impidiendo el flujo del servicio -->
+      <ion-button fill="clear" 
+                  (click)="pedidoService.restarDelPedido(item.producto.id)"
+                  [disabled]="item.cantidad === 1">
+        <ion-icon name="remove-circle"></ion-icon>
+      </ion-button>
+      <span class="cantidad-badge">{{ item.cantidad }}</span>
+      <ion-button fill="clear" 
+                  (click)="pedidoService.agregarAlPedido(item.producto)"
+                  [style.visibility]="item.cantidad >= 20 ? 'hidden' : 'visible'">
+        <ion-icon name="add-circle"></ion-icon>
+      </ion-button>
+    </div>
+
+    <!-- Botón con el Tacho de Basura para remoción completa -->
+    <ion-button fill="clear" class="boton-eliminar" (click)="pedidoService.eliminarDelPedido(item.producto.id)">
+      <ion-icon name="trash-outline"></ion-icon>
+    </ion-button>
+  </div>
+</div>
+      } @empty {
+        <div class="pedido-vacio">
+          <ion-icon name="trash-outline"></ion-icon>
+          <p>No hay productos en el pedido.</p>
+        </div>
+      }
+    </ion-list>
+  </div>
+
+</ion-content>
+
+@if (pedidoService.cantidadTotalItems() > 0) {
+  <ion-footer class="modal-bg footer-modal">
+    <div class="bloque-totales">
+      
+      <div class="fila-resumen">
+        <span class="etiqueta">Tiempo máximo estimado:</span>
+        <span class="valor-destacado">{{ pedidoService.tiempoEstimadoTotal() || pedidoService.tiempoEstimadoTotal() }} minutos</span>
+      </div>
+
+      <div class="fila-resumen total-seccion">
+        <span class="etiqueta-total">Total a abonar:</span>
+        <span class="valor-total">${{ pedidoService.importeTotal() }}</span>
+      </div>
+
+      <ion-button expand="block" class="boton-enviar" (click)="confirmarPedido()">
+        Enviar Pedido
+      </ion-button>
+      
+    </div>
+  </ion-footer>
+}

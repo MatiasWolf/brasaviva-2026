@@ -38,7 +38,6 @@ export class PedidoService {
         const itemExistente = pedidoActual.find(item => item.producto.id === producto.id);
 
         if (itemExistente) {
-            // Si ya llego a 20, no hace nada
             if (itemExistente.cantidad >= 20) {
                 console.warn(`Limite alcanzado: No se pueden pedir mas de 20 unidades de ${producto.nombre}`);
                 return;
@@ -52,7 +51,7 @@ export class PedidoService {
                 )
             );
         } else {
-        this.pedido.set([...pedidoActual, { producto, cantidad: 1 }]);
+            this.pedido.set([...pedidoActual, { producto, cantidad: 1 }]);
         }
     }
 
@@ -104,13 +103,6 @@ export class PedidoService {
         }
     }
 
-    /**
-     * Guarda el pedido y lo deja pendiente de que el mozo lo confirme
-     * (punto 12 -> 14). Recien confirmado aparece en cocina y bar.
-     *
-     * El sector y el estado de cada item se mandan explicitos: los default que
-     * traia la tabla no son los estados de la app.
-     */
     async enviarPedidoAConfirmar(ocupacionMesaId: number) {
         const items = this.pedido();
 
@@ -170,16 +162,10 @@ export class PedidoService {
         }
     }
 
-    /** Categoria 2 es bebida (bar), el resto va a cocina. */
     private sectorDe(producto: Producto): 'cocina' | 'bar' {
         return producto.categoria_id === 2 ? 'bar' : 'cocina';
     }
 
-    /**
-     * La ocupacion de mesa activa contra la que se registra el pedido. Si el id
-     * que llega no corresponde a ninguna, busca la del cliente que esta usando
-     * la app (registrado o anonimo). Llamarla con 0 fuerza esa busqueda.
-     */
     async ocupacionActiva(
         ocupacionMesaId: number
     ): Promise<{ id: number }> {

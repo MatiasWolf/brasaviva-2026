@@ -1,0 +1,238 @@
+// Paleta del grupo
+$color-primario: #ffd485;
+$color-secundario: #ffaa55;
+$color-texto-suave: rgba(255, 248, 241, 0.74);
+$borde-oscuro: #802323;
+
+ion-toolbar {
+  --background: radial-gradient(circle at 15% 0%, rgba(246, 193, 133, 0.16), transparent 22%),
+                linear-gradient(180deg, #130905 0%, #3a1710 100%) !important;
+  --color: #{$color-primario};
+  border-bottom: 2px solid $borde-oscuro;
+}
+
+ion-content {
+  &.modal-bg {
+    --background: radial-gradient(circle at 15% 0%, rgba(246, 193, 133, 0.16), transparent 22%),
+                  linear-gradient(180deg, #130905 0%, #3a1710 100%);
+    --color: #{$color-primario};
+  }
+
+  &.modal-container {
+    &::part(scroll) {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+  }
+}
+
+.resumen-contenedor {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.encabezado-seccion {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: $color-secundario;
+  font-family: Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-bottom: 1px solid rgba(255, 170, 85, 0.2);
+  padding-bottom: 8px;
+}
+
+.lista-items {
+  background: transparent !important;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.item-pedido-card {
+  background: linear-gradient(160deg, #411616 0%, #250a0a 100%);
+  border: 1px solid rgba(255, 170, 85, 0.25);
+  border-radius: 14px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+
+  .info-producto {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    h3 {
+      margin: 0;
+      color: $color-primario;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .subtotal-item {
+      color: $color-secundario;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+  }
+
+  .acciones-item-derecha {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .controles-cantidad {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(19, 9, 5, 0.6);
+    border: 1px solid rgba(255, 170, 85, 0.3);
+    border-radius: 999px;
+    padding: 2px 4px;
+
+    ion-button {
+      --color: #{$color-primario};
+      --padding-start: 0;
+      --padding-end: 0;
+      margin: 0;
+      width: 34px;
+      height: 34px;
+
+      &[disabled] {
+        opacity: 0.4;
+        --color: #dfa070;
+      }
+
+      ion-icon {
+        font-size: 1.5rem;
+      }
+    }
+
+    .cantidad-badge {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #fff;
+      min-width: 24px;
+      text-align: center;
+    }
+  }
+
+  .boton-eliminar {
+    --color: #ffaa55;
+    --padding-start: 0;
+    --padding-end: 0;
+    margin: 0;
+    width: 36px;
+    height: 36px;
+
+    &:active {
+      --color: #802323;
+    }
+
+    ion-icon {
+      font-size: 1.45rem;
+    }
+  }
+}
+
+.pedido-vacio {
+  text-align: center;
+  color: #dfa070;
+  padding: 40px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+
+  ion-icon {
+    font-size: 3rem;
+    color: rgba(255, 170, 85, 0.3);
+  }
+}
+
+// ANULACIÓN DEL FONDO BLANCO NATIVO DE IONIC
+ion-footer {
+  --background: transparent !important;
+  --padding-top: 0px !important;
+  --padding-bottom: 0px !important;
+  --padding-start: 0px !important;
+  --padding-end: 0px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+
+  &::after {
+    background-image: none !important;
+  }
+}
+
+// CONTENEDOR DE TOTALES CON EL DEGRADADO ORIGINAL
+.bloque-totales {
+  background: linear-gradient(180deg, #250f0a 0%, #130905 100%) !important;
+  border-top: 2px solid $borde-oscuro;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+
+  .fila-resumen {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .etiqueta {
+      color: rgba(255, 248, 241, 0.7);
+      font-size: 0.9rem;
+    }
+
+    .valor-destacado {
+      color: $color-secundario;
+      font-weight: bold;
+    }
+
+    &.total-seccion {
+      border-top: 1px solid rgba(255, 212, 133, 0.15);
+      padding-top: 10px;
+      margin-bottom: 6px;
+
+      .etiqueta-total {
+        color: $color-primario;
+        font-family: Georgia, serif;
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+
+      .valor-total {
+        color: $color-primario;
+        font-family: Georgia, serif;
+        font-size: 1.6rem;
+        font-weight: 800;
+      }
+    }
+  }
+
+  .boton-enviar {
+    --background: linear-gradient(160deg, #802323 0%, #4a1111 100%);
+    --color: #fff8f1;
+    --border-radius: 12px;
+    --border-color: #{$color-secundario};
+    --border-style: solid;
+    --border-width: 1px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+    width: 100%;
+  }
+}
