@@ -150,6 +150,49 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/mozos-chat/mozos-chat.page').then((m) => m.MozosChatPage),
   },
+  // -------------------------------------------------------------------
+  // Puntos 16, 17 y 18 - Pedidos (Moyano, Martin)
+  // -------------------------------------------------------------------
+  {
+    // Punto 16: la cocina recibe los pedidos de comida.
+    path: 'pedidos/cocina',
+    loadComponent: () =>
+      import('./pages/pedidos/sector-pedidos/sector-pedidos.page').then(
+        (m) => m.SectorPedidosPage
+      ),
+    data: { sector: 'cocina' },
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor', 'cocinero'])],
+  },
+  {
+    // Punto 17: el bar recibe los pedidos de bebida.
+    path: 'pedidos/bar',
+    loadComponent: () =>
+      import('./pages/pedidos/sector-pedidos/sector-pedidos.page').then(
+        (m) => m.SectorPedidosPage
+      ),
+    data: { sector: 'bar' },
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor', 'cantinero'])],
+  },
+  {
+    // Punto 18: al mozo le avisan que el pedido esta completo.
+    path: 'pedidos/listos',
+    loadComponent: () =>
+      import('./pages/pedidos/pedidos-listos/pedidos-listos.page').then(
+        (m) => m.PedidosListosPage
+      ),
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor', 'mozo'])],
+  },
+  {
+    // La otra mitad de los puntos 16, 17 y 18: los tres terminan con "el
+    // cliente verifica el cambio de estado en su pedido". Sin guard, igual que
+    // el resto de las pantallas de cliente, porque el cliente anonimo no tiene
+    // sesion de auth. La ruta ya estaba cargada en botones_menu.
+    path: 'seguimiento-pedido',
+    loadComponent: () =>
+      import('./pages/pedidos/seguimiento-pedido/seguimiento-pedido.page').then(
+        (m) => m.SeguimientoPedidoPage
+      ),
+  },
   {
     path: '',
     redirectTo: 'splash-estatica',

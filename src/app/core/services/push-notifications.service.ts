@@ -56,8 +56,9 @@ export class PushNotificationsService {
       PushNotifications.addListener(
         'pushNotificationActionPerformed',
         (accion: ActionPerformed) => {
-          if (accion.notification.data?.['tipo'] === 'cliente_pendiente') {
-            void this.router.navigateByUrl('/clientes-pendientes');
+          const destino = this.rutaSegunTipo(accion.notification.data);
+          if (destino) {
+            void this.router.navigateByUrl(destino);
           }
         },
       );
@@ -65,8 +66,9 @@ export class PushNotificationsService {
       LocalNotifications.addListener(
         'localNotificationActionPerformed',
         (accion) => {
-          if (accion.notification.extra?.['tipo'] === 'cliente_pendiente') {
-            void this.router.navigateByUrl('/clientes-pendientes');
+          const destino = this.rutaSegunTipo(accion.notification.extra);
+          if (destino) {
+            void this.router.navigateByUrl(destino);
           }
         },
       );
@@ -74,6 +76,26 @@ export class PushNotificationsService {
       await PushNotifications.register();
     } catch (error) {
       console.error('No se pudo inicializar las notificaciones push:', error);
+    }
+  }
+
+  /**
+   * A dónde lleva cada notificación cuando el usuario la toca.
+   * El tipo lo manda la edge function que la originó.
+   */
+  private rutaSegunTipo(datos: unknown): string | null {
+    const tipo = (datos as Record<string, unknown> | null | undefined)?.[
+      'tipo'
+    ];
+
+    switch (tipo) {
+      case 'cliente_pendiente':
+        return '/clientes-pendientes';
+      case 'pedido_listo':
+        // Punto 18: el mozo va directo a la lista de pedidos completos.
+        return '/pedidos/listos';
+      default:
+        return null;
     }
   }
 

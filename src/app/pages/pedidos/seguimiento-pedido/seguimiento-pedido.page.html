@@ -1,0 +1,172 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text="Volver"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Estado de mi pedido</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="seguimiento-content">
+  <div class="seguimiento-container">
+
+    @if (cargando()) {
+      <div class="loader">
+        <app-spinner-logo [size]="48"></app-spinner-logo>
+        <p>Buscando tu pedido...</p>
+      </div>
+    } @else {
+
+      @if (error()) {
+        <div class="mensaje-error">
+          {{ error() }}
+          <button type="button" (click)="cargar()">Reintentar</button>
+        </div>
+      }
+
+      @if (!error() && !hayPedidos()) {
+        <div class="vacio">
+          <ion-icon name="receipt-outline"></ion-icon>
+          <p>Todavía no hiciste ningún pedido.</p>
+          <span>Entrá al menú, elegí lo que quieras y seguilo desde acá.</span>
+        </div>
+      }
+
+      @for (pedido of enCurso(); track pedido.id) {
+        <article class="pedido">
+
+          <header class="pedido-top">
+            <div class="mesa">
+              <span class="mesa-numero">{{ pedido.mesa_numero }}</span>
+              <span class="mesa-label">Mesa</span>
+            </div>
+
+            <div class="datos">
+              <p class="fecha">
+                <ion-icon name="calendar-outline"></ion-icon>
+                {{ pedido.created_at | date: 'dd/MM/yyyy' }} a las
+                {{ pedido.created_at | date: 'HH:mm' }} horas
+              </p>
+              <p class="total">Total: $ {{ pedido.importe_total | number: '1.2-2' }}</p>
+            </div>
+          </header>
+
+          <!-- Recorrido del pedido: es lo que el cliente viene a mirar. -->
+          <ol class="recorrido">
+            @for (paso of pasos(pedido); track paso.estado) {
+              <li
+                class="paso"
+                [class.paso--alcanzado]="paso.alcanzado"
+                [class.paso--actual]="paso.actual"
+              >
+                <ion-icon [name]="paso.alcanzado ? 'checkmark-circle' : 'ellipse-outline'"></ion-icon>
+                <div class="paso-texto">
+                  <span class="paso-titulo">{{ paso.titulo }}</span>
+                  @if (paso.actual) {
+                    <span class="paso-detalle">{{ paso.detalle }}</span>
+                  }
+                </div>
+              </li>
+            }
+          </ol>
+
+          <!-- Qué sector falta, cuando el pedido está en preparación. -->
+          @if (pedido.estado === 'en_preparacion' || pedido.estado === 'confirmado') {
+            <p class="falta">
+              <ion-icon name="hourglass-outline"></ion-icon>
+              @if (tieneSector(pedido, 'cocina') && faltaSector(pedido, 'cocina') &&
+                   tieneSector(pedido, 'bar') && faltaSector(pedido, 'bar')) {
+                Falta la comida y la bebida.
+              } @else if (tieneSector(pedido, 'cocina') && faltaSector(pedido, 'cocina')) {
+                La bebida ya está. Falta la comida.
+              } @else if (tieneSector(pedido, 'bar') && faltaSector(pedido, 'bar')) {
+                La comida ya está. Falta la bebida.
+              } @else {
+                Estamos terminando.
+              }
+            </p>
+          }
+
+          <ul class="items">
+            @for (item of pedido.items; track item.id) {
+              <li class="item" [attr.data-estado]="item.estado_item">
+                <ion-icon [name]="iconoSector(item.sector)"></ion-icon>
+                <span class="cantidad">{{ item.cantidad }}×</span>
+                <span class="nombre">{{ item.producto_nombre }}</span>
+              </li>
+            }
+          </ul>
+
+        </article>
+      }
+
+      <!-- ------------------------------------------------------- ENTREGADOS -->
+      @if (entregados().length > 0) {
+        <h2 class="seccion seccion--ok">
+          <ion-icon name="checkmark-done-outline"></ion-icon>
+          Ya entregados ({{ entregados().length }})
+        </h2>
+
+        @for (pedido of entregados(); track pedido.id) {
+          <article class="pedido pedido--cerrado">
+            <header class="pedido-top">
+              <div class="mesa">
+                <span class="mesa-numero">{{ pedido.mesa_numero }}</span>
+                <span class="mesa-label">Mesa</span>
+              </div>
+
+              <div class="datos">
+                <p class="fecha">
+                  <ion-icon name="calendar-outline"></ion-icon>
+                  {{ pedido.created_at | date: 'dd/MM/yyyy' }} a las
+                  {{ pedido.created_at | date: 'HH:mm' }} horas
+                </p>
+                <p class="total">Total: $ {{ pedido.importe_total | number: '1.2-2' }}</p>
+              </div>
+            </header>
+
+            <ul class="items">
+              @for (item of pedido.items; track item.id) {
+                <li class="item" data-estado="listo">
+                  <ion-icon [name]="iconoSector(item.sector)"></ion-icon>
+                  <span class="cantidad">{{ item.cantidad }}×</span>
+                  <span class="nombre">{{ item.producto_nombre }}</span>
+                </li>
+              }
+            </ul>
+          </article>
+        }
+      }
+
+      <!-- ------------------------------------------------------- RECHAZADOS -->
+      @if (rechazados().length > 0) {
+        <h2 class="seccion seccion--error">
+          <ion-icon name="close-circle"></ion-icon>
+          Rechazados por el mozo ({{ rechazados().length }})
+        </h2>
+
+        @for (pedido of rechazados(); track pedido.id) {
+          <article class="pedido pedido--rechazado">
+            <header class="pedido-top">
+              <div class="mesa">
+                <span class="mesa-numero">{{ pedido.mesa_numero }}</span>
+                <span class="mesa-label">Mesa</span>
+              </div>
+
+              <div class="datos">
+                <p class="fecha">
+                  <ion-icon name="calendar-outline"></ion-icon>
+                  {{ pedido.created_at | date: 'dd/MM/yyyy' }} a las
+                  {{ pedido.created_at | date: 'HH:mm' }} horas
+                </p>
+                <p class="rechazo">Modificá el pedido y volvé a enviarlo.</p>
+              </div>
+            </header>
+          </article>
+        }
+      }
+
+    }
+
+  </div>
+</ion-content>

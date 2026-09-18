@@ -1,12 +1,14 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { ItemCarrito, Producto } from '../models/pedido.models';
 import { SupabaseService } from './supabase.service';
+import { AnonymousSessionService } from './anonymous-session.service';
 
 @Injectable({
     providedIn: 'root' 
 })
 export class PedidoService {
     private supabaseService = inject(SupabaseService);
+    private anonymousSession = inject(AnonymousSessionService);
 
     public productos = signal<Producto[]>([]);
  
@@ -36,13 +38,19 @@ export class PedidoService {
         const itemExistente = pedidoActual.find(item => item.producto.id === producto.id);
 
         if (itemExistente) {
-        this.pedido.set(
-            pedidoActual.map(item =>
-            item.producto.id === producto.id
-                ? { ...item, cantidad: item.cantidad + 1 }
-                : item
-            )
-        );
+            // Si ya llego a 20, no hace nada
+            if (itemExistente.cantidad >= 20) {
+                console.warn(`Limite alcanzado: No se pueden pedir mas de 20 unidades de ${producto.nombre}`);
+                return;
+            }
+
+            this.pedido.set(
+                pedidoActual.map(item =>
+                item.producto.id === producto.id
+                    ? { ...item, cantidad: item.cantidad + 1 }
+                    : item
+                )
+            );
         } else {
         this.pedido.set([...pedidoActual, { producto, cantidad: 1 }]);
         }
@@ -65,6 +73,11 @@ export class PedidoService {
             )
         );
         }
+    }
+
+    eliminarDelPedido(productoId: number) {
+        const pedidoActual = this.pedido();
+        this.pedido.set(pedidoActual.filter(item => item.producto.id !== productoId));
     }
 
     vaciarPedido() {
@@ -91,19 +104,121 @@ export class PedidoService {
         }
     }
 
+    /**
+     * Guarda el pedido y lo deja pendiente de que el mozo lo confirme
+     * (punto 12 -> 14). Recien confirmado aparece en cocina y bar.
+     *
+     * El sector y el estado de cada item se mandan explicitos: los default que
+     * traia la tabla no son los estados de la app.
+     */
     async enviarPedidoAConfirmar(ocupacionMesaId: number) {
-        try {
-        console.log('Enviando pedido para la ocupación de mesa:', ocupacionMesaId);
-        console.log('Detalle del pedido:', this.pedido());
-        console.log('Total a cobrar:', this.importeTotal());
-        console.log('Tiempo estimado total:', this.tiempoEstimadoTotal());
+        const items = this.pedido();
 
-        this.vaciarPedido();
-        
-        return { ok: true };
-        } catch (err) {
-        console.error('Error al procesar el pedido:', err);
-        return { ok: false, error: err };
+        if (items.length === 0) {
+            return { ok: false, error: new Error('El pedido está vacío.') };
         }
+
+        try {
+            // El pedido se cuelga de la ocupacion: de ahi sale la mesa.
+            const ocupacion = await this.ocupacionActiva(ocupacionMesaId);
+
+            const { data: pedido, error: errorPedido } =
+                await this.supabaseService.client
+                    .from('pedidos')
+                    .insert({
+                        ocupacion_id: ocupacion.id,
+                        estado: 'pendiente',
+                        importe_total: this.importeTotal(),
+                        tiempo_estimado_preparacion: this.tiempoEstimadoTotal(),
+                    })
+                    .select('id')
+                    .single();
+
+            if (errorPedido) throw errorPedido;
+
+            const { error: errorItems } =
+                await this.supabaseService.client
+                    .from('items_pedido')
+                    .insert(
+                        items.map(item => ({
+                            pedido_id: pedido.id,
+                            producto_id: item.producto.id,
+                            cantidad: item.cantidad,
+                            precio_unitario: item.producto.precio,
+                            sector: this.sectorDe(item.producto),
+                            estado_item: 'pendiente',
+                        }))
+                    );
+
+            if (errorItems) {
+                // Sin items el pedido no sirve: se borra la cabecera.
+                await this.supabaseService.client
+                    .from('pedidos')
+                    .delete()
+                    .eq('id', pedido.id);
+
+                throw errorItems;
+            }
+
+            this.vaciarPedido();
+
+            return { ok: true, pedidoId: pedido.id as number };
+
+        } catch (err) {
+            console.error('Error al procesar el pedido:', err);
+            return { ok: false, error: err };
+        }
+    }
+
+    /** Categoria 2 es bebida (bar), el resto va a cocina. */
+    private sectorDe(producto: Producto): 'cocina' | 'bar' {
+        return producto.categoria_id === 2 ? 'bar' : 'cocina';
+    }
+
+    /**
+     * La ocupacion de mesa activa contra la que se registra el pedido. Si el id
+     * que llega no corresponde a ninguna, busca la del cliente que esta usando
+     * la app (registrado o anonimo). Llamarla con 0 fuerza esa busqueda.
+     */
+    async ocupacionActiva(
+        ocupacionMesaId: number
+    ): Promise<{ id: number }> {
+
+        const buscar = async (columna: string, valor: string | number) => {
+            const { data } = await this.supabaseService.client
+                .from('ocupaciones_mesa')
+                .select('id')
+                .eq(columna, valor)
+                .eq('estado', 'activa')
+                .order('fecha_ingreso', { ascending: false })
+                .limit(1)
+                .maybeSingle();
+
+            return data as { id: number } | null;
+        };
+
+        if (ocupacionMesaId) {
+            const porId = await buscar('id', ocupacionMesaId);
+            if (porId) return porId;
+        }
+
+        const { data: sesion } =
+            await this.supabaseService.client.auth.getUser();
+
+        if (sesion?.user) {
+            const porUsuario = await buscar('usuario_id', sesion.user.id);
+            if (porUsuario) return porUsuario;
+        }
+
+        const idAnonimo = this.anonymousSession.obtenerIdSesion();
+
+        if (idAnonimo) {
+            const porAnonimo = await buscar('sesion_anonima_id', idAnonimo);
+            if (porAnonimo) return porAnonimo;
+        }
+
+        throw new Error(
+            'No encontramos una mesa asignada. Pedile al metre que te asigne una.'
+        );
     }
 }
