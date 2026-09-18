@@ -1,4 +1,7 @@
-export type EstadoOcupacionMesa = 'activa' | 'finalizada';
+export type EstadoOcupacionMesa =
+  | 'asignada'
+  | 'activa'
+  | 'finalizada';
 
 export interface OcupacionMesa {
   id: number;

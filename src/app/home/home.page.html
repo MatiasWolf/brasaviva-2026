@@ -76,3 +76,11 @@
   (escaneado)="onQrEscaneado($event)"
   (cerrado)="cerrarQrScanner()">
 </app-qr-scanner>
+
+<app-resultado-qr-modal
+  [abierto]="mostrandoResultadoQr()"
+  [tipo]="resultadoQrTipo()"
+  [titulo]="resultadoQrTitulo()"
+  [mensaje]="resultadoQrMensaje()"
+  (cerrado)="cerrarResultadoQr()">
+</app-resultado-qr-modal>
