@@ -192,7 +192,7 @@ export class HomePage implements OnInit {
       }
 
       if (
-        ['dueño', 'supervisor', 'cliente_registrado'].includes(
+        ['dueño', 'supervisor', 'mozo', 'cliente_registrado'].includes(
           usuario.roles?.nombre ?? ''
         )
       ) {

@@ -108,6 +108,14 @@ export class PushNotificationsService {
           if (tipo === 'mesa_asignada') {
             void this.router.navigateByUrl('/home');
           }
+
+          if (tipo === 'consulta_mozo') {
+            void this.router.navigateByUrl('/mozos-chat');
+          }
+
+          if (tipo === 'respuesta_mozo') {
+            void this.router.navigateByUrl('/chat');
+          }
         },
       );
       LocalNotifications.addListener(
@@ -123,6 +131,12 @@ export class PushNotificationsService {
           }
           if (tipo === 'mesa_asignada') {
             void this.router.navigateByUrl('/home');
+          }
+          if (tipo === 'consulta_mozo') {
+            void this.router.navigateByUrl('/mozos-chat');
+          }
+          if (tipo === 'respuesta_mozo') {
+            void this.router.navigateByUrl('/chat');
           }
         },
       );
