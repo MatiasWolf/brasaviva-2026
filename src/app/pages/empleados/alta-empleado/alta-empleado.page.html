@@ -9,22 +9,22 @@
 
 <ion-content class="empleado-content">
   <div class="empleado-container">
-    <div class="acciones-rapidas">
-      <button type="button" class="foto-button" (click)="tomarFoto()">
+    <div class="foto-section">
+      <button type="button" class="foto-button-grande" (click)="tomarFoto()">
         @if (fotoPreview()) {
-          <img [src]="fotoPreview()" alt="Foto del empleado" class="foto-preview" />
+          <img [src]="fotoPreview()" alt="Foto del empleado" class="foto-preview-grande" />
           <div class="foto-check">
             <ion-icon name="checkmark-circle"></ion-icon>
           </div>
         } @else {
           <ion-icon name="camera-outline"></ion-icon>
-          <span>Tomar foto</span>
+          <span>Foto de perfil</span>
         }
       </button>
 
-      <button type="button" class="foto-button btn-escanear-dni" (click)="escanearDni()">
+      <button type="button" class="btn-escanear-dni" (click)="escanearDni()">
         <ion-icon name="scan-outline"></ion-icon>
-        <span>Escanear DNI</span>
+        Escanear DNI
       </button>
     </div>
 
@@ -258,10 +258,6 @@
 </ion-content>
 
 <ion-footer class="empleado-footer">
-  @if (mensajeError()) {
-    <div class="mensaje-error">{{ mensajeError() }}</div>
-  }
-
   <ion-button
     expand="block"
     type="button"
@@ -272,29 +268,6 @@
     {{ enviando() ? 'Creando cuenta...' : 'Crear empleado' }}
   </ion-button>
 </ion-footer>
-
-<!-- MODAL ALTA EXITOSA -->
-<ion-modal [isOpen]="modalExito()" backdropDismiss="false" class="success-modal">
-  <ng-template>
-    <div class="modal-wrapper">
-      <div class="icon-container">
-        <ion-icon name="checkmark-circle"></ion-icon>
-      </div>
-
-      <h2>¡Empleado creado!</h2>
-      <p>
-        La cuenta quedó <strong>activa</strong>. Compartile al empleado su
-        correo y la contraseña para que pueda ingresar.
-      </p>
-
-      <div class="divider"></div>
-
-      <ion-button expand="block" shape="round" (click)="irAlListado()">
-        Volver al listado
-      </ion-button>
-    </div>
-  </ng-template>
-</ion-modal>
 
 <!-- ESCANEO DE DNI -->
 <app-dni-scanner

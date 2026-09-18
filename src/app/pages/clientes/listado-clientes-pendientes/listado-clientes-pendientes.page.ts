@@ -11,7 +11,6 @@ import {
   IonIcon,
   IonTitle,
   IonToolbar,
-  ToastController,
   ViewWillEnter,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
@@ -26,6 +25,8 @@ import {
 import { ClientesPendientesService } from '../../../core/services/clientes-pendientes.service';
 import { Usuario } from '../../../core/models/usuario.model';
 import { SpinnerLogoComponent } from '../../../shared/components/spinner-logo/spinner-logo.component';
+import { MensajeModalService } from '../../../core/services/mensaje-modal.service';
+import { traducirErrorSupabase } from '../../../core/utils/traducir-error.util';
 
 @Component({
   selector: 'app-listado-clientes-pendientes',
@@ -50,7 +51,7 @@ import { SpinnerLogoComponent } from '../../../shared/components/spinner-logo/sp
 export class ListadoClientesPendientesPage implements ViewWillEnter {
   private readonly clientes = inject(ClientesPendientesService);
   private readonly alertCtrl = inject(AlertController);
-  private readonly toastCtrl = inject(ToastController);
+  private readonly mensajeModal = inject(MensajeModalService);
 
   /** Registros por página. Fijo y bajo para que nunca se corte una tarjeta. */
   readonly porPagina = 3;
@@ -163,7 +164,7 @@ export class ListadoClientesPendientesPage implements ViewWillEnter {
       );
     } catch (err) {
       await this.mostrarToast(
-        (err as Error)?.message ?? 'No se pudo completar la acción.',
+        traducirErrorSupabase(err, 'No se pudo completar la acción.'),
         'danger',
       );
     }
@@ -173,12 +174,10 @@ export class ListadoClientesPendientesPage implements ViewWillEnter {
     message: string,
     color: 'success' | 'danger',
   ): Promise<void> {
-    const toast = await this.toastCtrl.create({
-      message,
-      duration: 3000,
-      position: 'top',
-      color,
-    });
-    await toast.present();
+    if (color === 'success') {
+      this.mensajeModal.exito(message);
+    } else {
+      this.mensajeModal.error(message);
+    }
   }
 }

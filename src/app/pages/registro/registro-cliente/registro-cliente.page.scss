@@ -85,33 +85,6 @@ ion-back-button {
 
 
 /* =========================================
-   ENCABEZADO
-========================================= */
-
-.registro-header {
-  flex-shrink: 0;
-  text-align: center;
-}
-
-.registro-header h1 {
-  margin: 0 0 4px;
-  color: #ffd485;
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  text-shadow: 2px 2px 4px rgba(74, 26, 26, 0.6);
-}
-
-.registro-header p {
-  margin: 0 auto;
-  max-width: 370px;
-  color: #f9e6ce;
-  font-size: 13px;
-  line-height: 1.35;
-}
-
-
-/* =========================================
    FORMULARIO
 ========================================= */
 
@@ -125,51 +98,47 @@ ion-back-button {
 
 
 /* =========================================
-   FOTO + ESCANEAR DNI
+   FOTO: grande y centrada arriba, con el botón de
+   escaneo de DNI debajo — una sola columna simétrica.
 ========================================= */
-
-.foto-dni-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  width: 100%;
-  flex-shrink: 0;
-}
 
 .foto-section {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
-
-/* =========================================
-   BOTONES FOTO / DNI
-========================================= */
-
-.foto-button {
+/* Cuadrado grande (no círculo), como en el alta de mesa: con 6 campos
+   más el escaneo de DNI debajo, aprovecha mejor el ancho disponible que
+   un avatar circular. */
+.foto-button-grande {
   position: relative;
 
-  width: 88px;
-  height: 88px;
+  width: 100%;
+  max-width: 230px;
+  aspect-ratio: 1 / 1;
+  max-height: 30vh;
+  flex-shrink: 0;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  gap: 6px;
+  gap: 8px;
   padding: 0;
 
   border: 2px dashed rgba(255, 212, 133, 0.65);
-  border-radius: 50%;
+  border-radius: 24px;
 
   background: rgba(19, 9, 5, 0.35);
   color: #ffd485;
 
   cursor: pointer;
 
+  overflow: hidden;
   box-sizing: border-box;
 
   transition:
@@ -178,22 +147,22 @@ ion-back-button {
     border-color 0.2s ease;
 }
 
-.foto-button ion-icon {
-  font-size: 1.9rem;
+.foto-button-grande ion-icon {
+  font-size: 2.8rem;
   color: #ffd485;
 }
 
-.foto-button span {
-  font-size: 0.76rem;
+.foto-button-grande span {
+  font-size: 0.85rem;
   font-weight: 600;
   color: #ffd485;
 }
 
-.foto-button:active {
-  transform: scale(0.96);
+.foto-button-grande:active {
+  transform: scale(0.97);
 }
 
-.foto-button:hover {
+.foto-button-grande:hover {
   background: rgba(255, 170, 85, 0.12);
   border-color: #ffaa55;
 }
@@ -204,33 +173,44 @@ ion-back-button {
 ========================================= */
 
 .btn-escanear-dni {
-  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  width: 100%;
+  max-width: 230px;
+  height: 42px;
+
+  border-radius: 999px;
+  border: 2px solid rgba(255, 212, 133, 0.65);
+
+  background: rgba(19, 9, 5, 0.35);
+  color: #ffd485;
+
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .btn-escanear-dni ion-icon {
-  font-size: 1.9rem;
+  font-size: 1.25rem;
 }
 
-.btn-escanear-dni span {
-  font-size: 0.72rem;
-  line-height: 1.15;
-  padding: 0 6px;
+.btn-escanear-dni:active {
+  transform: scale(0.97);
 }
 
-
-/* =========================================
-   AYUDA ESCANEAR DNI
-========================================= */
-
-.escanear-dni-hint {
-  margin: -8px auto 14px;
-  max-width: 320px;
-
-  color: #f9e6ce;
-  font-size: 12px;
-  line-height: 1.4;
-
-  text-align: center;
+.btn-escanear-dni:hover {
+  background: rgba(255, 170, 85, 0.12);
+  border-color: #ffaa55;
 }
 
 
@@ -238,12 +218,14 @@ ion-back-button {
    PREVIEW DE LA FOTO
 ========================================= */
 
-.foto-preview {
-  width: 82px;
-  height: 82px;
+.foto-preview-grande {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 
   object-fit: cover;
-  border-radius: 50%;
+  border-radius: 22px;
 
   border: 3px solid #ffd485;
 
@@ -258,11 +240,11 @@ ion-back-button {
 .foto-check {
   position: absolute;
 
-  right: -2px;
-  bottom: -2px;
+  right: 0;
+  bottom: 0;
 
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
 
   display: flex;
   align-items: center;
@@ -275,7 +257,7 @@ ion-back-button {
 }
 
 .foto-check ion-icon {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   color: #ffd485;
 }
 
@@ -467,30 +449,6 @@ ion-input::part(native)::placeholder {
 
 
 /* =========================================
-   LINK LOGIN
-========================================= */
-
-.texto-login {
-  margin: 14px 0 0;
-
-  text-align: center;
-
-  color: #4d200f;
-  font-size: 14px;
-}
-
-.texto-login span {
-  color: #3a170b;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.texto-login span:hover {
-  text-decoration: underline;
-}
-
-
-/* =========================================
    MODAL - REGISTRO EXITOSO
 ========================================= */
 
@@ -653,18 +611,8 @@ ion-modal.success-modal ion-button {
     padding-right: 18px;
   }
 
-  .foto-dni-row {
-    gap: 12px;
-  }
-
-  .foto-button {
-    width: 76px;
-    height: 76px;
-  }
-
-  .foto-preview {
-    width: 70px;
-    height: 70px;
+  .foto-button-grande {
+    max-width: 190px;
   }
 
   ion-modal.success-modal .modal-wrapper {

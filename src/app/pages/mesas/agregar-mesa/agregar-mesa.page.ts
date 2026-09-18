@@ -28,6 +28,8 @@ import { cameraOutline, checkmarkCircle, gridOutline } from 'ionicons/icons';
 import { MesaService } from '../../../core/services/mesa.service';
 import { CameraService } from '../../../core/services/camera.service';
 import { Mesa, TIPOS_MESA } from '../../../core/models/mesa.model';
+import { MensajeModalService } from '../../../core/services/mensaje-modal.service';
+import { traducirErrorSupabase } from '../../../core/utils/traducir-error.util';
 
 @Component({
   selector: 'app-agregar-mesa',
@@ -66,6 +68,7 @@ export class AgregarMesaPage {
   readonly mesaCreada = signal<Mesa | null>(null);
 
   private readonly cameraService = inject(CameraService);
+  private readonly mensajeModal = inject(MensajeModalService);
 
   readonly mesaForm: FormGroup = this.fb.group({
     numero: [
@@ -101,7 +104,7 @@ export class AgregarMesaPage {
       }
     } catch (error) {
       console.error('Error al tomar la foto:', error);
-      this.mensajeError.set('No se pudo obtener la foto. Intentá nuevamente.');
+      this.mostrarError('No se pudo obtener la foto. Intentá nuevamente.');
     }
   }
 
@@ -110,11 +113,11 @@ export class AgregarMesaPage {
 
     if (this.mesaForm.invalid) {
       this.mesaForm.markAllAsTouched();
-      this.mensajeError.set('Completá correctamente todos los campos.');
+      this.mostrarError('Completá correctamente todos los campos.');
       return;
     }
     if (!this.fotoPreview()) {
-      this.mensajeError.set('La foto de la mesa es obligatoria.');
+      this.mostrarError('La foto de la mesa es obligatoria.');
       return;
     }
 
@@ -125,7 +128,7 @@ export class AgregarMesaPage {
     this.enviando.set(true);
     try {
       if (await this.mesaService.existeNumero(numeroNum)) {
-        this.mensajeError.set(`Ya existe una mesa con el número ${numeroNum}.`);
+        this.mostrarError(`Ya existe una mesa con el número ${numeroNum}.`);
         return;
       }
 
@@ -136,13 +139,14 @@ export class AgregarMesaPage {
         fotoWebPath: this.fotoPreview()!,
       });
 
+      // Este éxito sí necesita su propio modal (no el genérico): tiene que
+      // mostrar el QR recién generado, que el modal compartido no soporta.
       this.mesaCreada.set(mesa);
       this.modalExito.set(true);
     } catch (error) {
       console.error('ALTA MESA ERROR:', error);
-      this.mensajeError.set(
-        (error as Error)?.message ??
-          'No se pudo dar de alta la mesa. Intentá nuevamente.',
+      this.mostrarError(
+        traducirErrorSupabase(error, 'No se pudo dar de alta la mesa. Intentá nuevamente.'),
       );
     } finally {
       this.enviando.set(false);
@@ -152,5 +156,10 @@ export class AgregarMesaPage {
   irAlListado(): void {
     this.modalExito.set(false);
     this.router.navigate(['/mesas'], { replaceUrl: true });
+  }
+
+  private mostrarError(mensaje: string): void {
+    this.mensajeError.set(mensaje);
+    this.mensajeModal.error(mensaje);
   }
 }

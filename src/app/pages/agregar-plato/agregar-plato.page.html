@@ -252,10 +252,6 @@
 </ion-content>
 
 <ion-footer class="plato-footer">
-  @if (mensajeError) {
-    <div class="mensaje-error">{{ mensajeError }}</div>
-  }
-
   <ion-button
     expand="block"
     type="button"
@@ -266,39 +262,3 @@
     {{ enviando ? 'Guardando el plato...' : 'Agregar a la carta' }}
   </ion-button>
 </ion-footer>
-
-<!-- MODAL PLATO AGREGADO -->
-
-<ion-modal
-  [isOpen]="isModalOpen"
-  backdropDismiss="false"
-  class="success-modal"
->
-
-  <ng-template>
-
-    <div class="modal-wrapper">
-
-      <div class="icon-container">
-        <ion-icon name="checkmark-circle"></ion-icon>
-      </div>
-
-      <h2>¡Plato agregado!</h2>
-
-      <p>
-        El plato fue guardado correctamente y ya
-        <strong>forma parte de la carta</strong>.
-      </p>
-
-      <ion-button
-        expand="block"
-        shape="round"
-        (click)="irALaCarta()"
-      >
-        Ver la carta
-      </ion-button>
-
-    </div>
-
-  </ng-template>
-</ion-modal>

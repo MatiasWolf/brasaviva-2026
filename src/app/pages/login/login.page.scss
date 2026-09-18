@@ -1,7 +1,16 @@
+/* Fondo oscuro de punta a punta (como el resto de la app: home, listados,
+   formularios), solo en tonos marrones — sin el remate claro del final,
+   que no combinaba con el resto de los elementos de la pantalla. */
 .login-bg {
   --background:
     radial-gradient(circle at 20% 20%, rgba(246, 193, 133, 0.2), transparent 18%),
-    linear-gradient(180deg, #130905 0%, #4d200f 54%, #f5dcc0 100%);
+    linear-gradient(
+      180deg,
+      #130905 0%,
+      #3a170b 45%,
+      #4d200f 75%,
+      #6b3219 100%
+    );
   --color: #ffd485;
 }
 
@@ -193,34 +202,38 @@
     }
   }
 
+  /* Solo la foto es "tocable": sin fondo ni borde de tarjeta, para que no
+     se lean como botones fijos. La selección se marca con un anillo de
+     color sobre el círculo y un leve agrandado, no con un panel relleno. */
   .fast-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
+    gap: 14px 10px;
   }
 
-  .perfil-card {
+  .perfil-avatar-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
-    padding: 8px 4px;
-    border-radius: 12px;
-    border: 1.5px solid transparent;
-    background: rgba(0, 0, 0, 0.4);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    gap: 8px;
+    padding: 4px 2px;
+    border: none;
+    background: transparent;
     cursor: pointer;
     font-family: inherit;
-    transition: background 0.15s ease, border-color 0.15s ease;
 
     .perfil-avatar {
-      width: 42px;
-      height: 42px;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
       overflow: hidden;
       display: grid;
       place-items: center;
       background: rgba(255, 248, 241, 0.1);
+      box-shadow: 0 0 0 2px transparent;
+      transition:
+        transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.22s ease;
 
       img {
         width: 100%;
@@ -229,31 +242,38 @@
       }
 
       ion-icon {
-        font-size: 1.4rem;
+        font-size: 1.7rem;
         color: #ffd485;
       }
     }
 
+    /* Dorado, igual que el resto de los textos de la página (título,
+       "Acceso Rápido", links) — con el fondo oscuro de punta a punta esto
+       da buen contraste en cualquier fila. La sombra oscura suma un
+       colchón extra por si la foto de fondo del avatar es muy clara. */
     .perfil-nombre {
-      font-size: 0.68rem;
-      font-weight: 600;
-      color: #ffd485;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: #ffe0a3;
       text-align: center;
-      line-height: 1.15;
+      line-height: 1.2;
+      text-shadow: 0 1px 3px rgba(19, 9, 5, 0.7);
+      transition: color 0.2s ease;
     }
 
     &--activo {
-      background: rgba(232, 106, 40, 0.92);
-      border-color: #ffd485;
+      .perfil-avatar {
+        transform: scale(1.14);
+        box-shadow: 0 0 0 3px #ffaa55, 0 4px 10px rgba(233, 130, 14, 0.45);
+      }
 
-      .perfil-nombre,
-      .perfil-avatar ion-icon {
-        color: #fff;
+      .perfil-nombre {
+        color: #ffd485;
       }
     }
 
-    &:active {
-      transform: scale(0.96);
+    &:active .perfil-avatar {
+      transform: scale(0.94);
     }
   }
 

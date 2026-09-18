@@ -1,0 +1,27 @@
+<ion-modal
+  [isOpen]="servicio.abierto()"
+  (didDismiss)="servicio.cerrar()"
+  class="mensaje-modal"
+  [class.mensaje-modal--error]="servicio.tipo() === 'error'"
+>
+  <ng-template>
+    <div class="modal-wrapper">
+
+      <div class="icon-container">
+        @if (servicio.tipo() === 'exito') {
+          <ion-icon name="checkmark-circle"></ion-icon>
+        } @else {
+          <ion-icon name="alert-circle"></ion-icon>
+        }
+      </div>
+
+      <h2>{{ servicio.titulo() }}</h2>
+      <p>{{ servicio.mensaje() }}</p>
+
+      <ion-button expand="block" shape="round" (click)="servicio.cerrar()">
+        {{ servicio.textoBoton() }}
+      </ion-button>
+
+    </div>
+  </ng-template>
+</ion-modal>

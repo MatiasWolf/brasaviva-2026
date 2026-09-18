@@ -11,9 +11,10 @@ import {
   IonHeader,
   IonIcon,
   IonSearchbar,
+  IonSelect,
+  IonSelectOption,
   IonTitle,
   IonToolbar,
-  ToastController,
   ViewWillEnter,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
@@ -29,6 +30,8 @@ import {
 import { EmpleadosService } from '../../../core/services/empleados.service';
 import { Usuario } from '../../../core/models/usuario.model';
 import { SpinnerLogoComponent } from '../../../shared/components/spinner-logo/spinner-logo.component';
+import { MensajeModalService } from '../../../core/services/mensaje-modal.service';
+import { traducirErrorSupabase } from '../../../core/utils/traducir-error.util';
 
 @Component({
   selector: 'app-listado-empleados',
@@ -47,6 +50,8 @@ import { SpinnerLogoComponent } from '../../../shared/components/spinner-logo/sp
     IonFooter,
     IonIcon,
     IonSearchbar,
+    IonSelect,
+    IonSelectOption,
     SpinnerLogoComponent,
   ],
 })
@@ -54,7 +59,7 @@ export class ListadoEmpleadosPage implements ViewWillEnter {
   private readonly empleados = inject(EmpleadosService);
   private readonly router = inject(Router);
   private readonly alertCtrl = inject(AlertController);
-  private readonly toastCtrl = inject(ToastController);
+  private readonly mensajeModal = inject(MensajeModalService);
 
   /** Registros por página. 2 entran completos entre el buscador y el
    *  paginador en cualquier celular, sin necesidad de scroll. */
@@ -64,18 +69,32 @@ export class ListadoEmpleadosPage implements ViewWillEnter {
   readonly cargando = signal(true);
   readonly error = signal('');
   readonly filtro = signal('');
+  readonly filtroRol = signal('todos');
   readonly pagina = signal(1);
+
+  /** Roles que realmente tienen empleados cargados, para armar el filtro. */
+  readonly rolesDisponibles = computed(() => {
+    const roles = new Set(
+      this.lista()
+        .map((e) => e.roles?.nombre)
+        .filter((r): r is string => !!r),
+    );
+    return Array.from(roles).sort();
+  });
 
   readonly listaFiltrada = computed(() => {
     const q = this.filtro().trim().toLowerCase();
-    if (!q) {
-      return this.lista();
-    }
-    return this.lista().filter((e) =>
-      `${e.nombre} ${e.apellido} ${e.correo} ${e.roles?.nombre ?? ''}`
-        .toLowerCase()
-        .includes(q),
-    );
+    const rol = this.filtroRol();
+
+    return this.lista().filter((e) => {
+      const coincideTexto =
+        !q ||
+        `${e.nombre} ${e.apellido} ${e.correo} ${e.roles?.nombre ?? ''}`
+          .toLowerCase()
+          .includes(q);
+      const coincideRol = rol === 'todos' || e.roles?.nombre === rol;
+      return coincideTexto && coincideRol;
+    });
   });
 
   readonly totalPaginas = computed(() =>
@@ -118,6 +137,15 @@ export class ListadoEmpleadosPage implements ViewWillEnter {
   filtrar(event: CustomEvent): void {
     this.filtro.set((event.detail as { value?: string }).value ?? '');
     this.pagina.set(1);
+  }
+
+  filtrarPorRol(event: CustomEvent): void {
+    this.filtroRol.set((event.detail as { value?: string }).value ?? 'todos');
+    this.pagina.set(1);
+  }
+
+  rolLegibleTexto(rol: string): string {
+    return rol.replace(/_/g, ' ');
   }
 
   paginaAnterior(): void {
@@ -165,25 +193,11 @@ export class ListadoEmpleadosPage implements ViewWillEnter {
       if (this.pagina() > this.totalPaginas()) {
         this.pagina.set(this.totalPaginas());
       }
-      await this.mostrarToast('Empleado eliminado.', 'success');
+      this.mensajeModal.exito('El empleado fue eliminado.', 'Empleado eliminado');
     } catch (err) {
-      await this.mostrarToast(
-        (err as Error)?.message ?? 'No se pudo eliminar el empleado.',
-        'danger',
+      this.mensajeModal.error(
+        traducirErrorSupabase(err, 'No se pudo eliminar el empleado.'),
       );
     }
-  }
-
-  private async mostrarToast(
-    message: string,
-    color: 'success' | 'danger',
-  ): Promise<void> {
-    const toast = await this.toastCtrl.create({
-      message,
-      duration: 3000,
-      position: 'top',
-      color,
-    });
-    await toast.present();
   }
 }

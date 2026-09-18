@@ -88,7 +88,12 @@ Deno.serve(async (req) => {
     email: correo,
     password,
     email_confirm: true,
-    user_metadata: { apellido, nombre, dni },
+    // 'origen: empleado' es lo que distingue esta alta de un registro de
+    // cliente real en el trigger de auth.users (mismo shape de metadata
+    // en ambos casos, salvo por este campo) — así el trigger puede evitar
+    // dejar pasar, aunque sea un instante, una fila "pendiente" con rol
+    // cliente_registrado que dispara la notificación de cliente nuevo.
+    user_metadata: { apellido, nombre, dni, origen: 'empleado' },
   });
 
   if (createErr || !creado?.user) {

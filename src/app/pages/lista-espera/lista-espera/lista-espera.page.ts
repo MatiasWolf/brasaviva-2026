@@ -29,7 +29,6 @@ import {
   AlertController,
   IonButtons,
   IonBackButton,
-  ToastController,
   IonModal,
   IonFooter
 } from '@ionic/angular';
@@ -54,6 +53,7 @@ import {
 
 import { AuthService } from '../../../core/services/auth.service';
 import { SupabaseService } from '../../../core/services/supabase.service';
+import { MensajeModalService } from '../../../core/services/mensaje-modal.service';
 
 
 interface ClienteListaEspera {
@@ -101,7 +101,7 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly supabase = inject(SupabaseService);
   private readonly alertController = inject(AlertController);
-  private readonly toastController = inject(ToastController);
+  private readonly mensajeModal = inject(MensajeModalService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly mesaService = inject(MesaService);
 
@@ -257,14 +257,7 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
     } catch (error) {
       console.error('Error buscando mesas disponibles:', error);
 
-      const toast = await this.toastController.create({
-        message: 'No se pudieron cargar las mesas disponibles.',
-        duration: 3000,
-        position: 'top',
-        color: 'danger',
-      });
-
-      await toast.present();
+      this.mensajeModal.error('No se pudieron cargar las mesas disponibles.');
 
     } finally {
       this.cargandoMesas.set(false);
@@ -557,14 +550,11 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
     message: string,
     color: 'success' | 'danger'
   ): Promise<void> {
-    const toast =
-      await this.toastController.create({
-        message,
-        duration: 3000,
-        position: 'top',
-        color,
-      });
-    await toast.present();
+    if (color === 'success') {
+      this.mensajeModal.exito(message);
+    } else {
+      this.mensajeModal.error(message);
+    }
   }
 
   cerrarModalExito(): void {
