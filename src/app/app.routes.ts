@@ -158,6 +158,10 @@ export const routes: Routes = [
     path: 'seguimiento-pedido',
     loadComponent: () => import('./pages/seguimiento-pedido/seguimiento-pedido.page').then( m => m.SeguimientoPedidoPage)
   },
+  {
+    path: 'listado-pedidos',
+    loadComponent: () => import('./pages/listado-pedidos/listado-pedidos.page').then( m => m.ListadoPedidosPage)
+  },
 
 ];
 

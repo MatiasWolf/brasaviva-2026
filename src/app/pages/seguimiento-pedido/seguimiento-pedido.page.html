@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar class="home-bg">
-    <!-- BOTÓN ABSOLUTO PARA VOLVER AL HOME (Punto 11) -->
+    <!-- BOTÓN PARA VOLVER AL HOME -->
     <ion-buttons slot="start">
       <ion-button routerLink="/home">
         <ion-icon name="arrow-back-outline"></ion-icon>
@@ -15,7 +15,7 @@
     
     @switch (pedidoService.estadoPedidoActual()) {
       
-      <!-- CASO 1: ESPERA ACTIVA (Punto 12) -->
+      <!-- CASO 1: ESPERANDO CONFIRMACIÓN -->
       @case ('pendiente_confirmacion') {
         <div class="tarjeta-estado animacion-fade">
           <ion-spinner name="crescent" class="spinner-dorado"></ion-spinner>
@@ -24,7 +24,7 @@
         </div>
       }
 
-      <!-- CASO 2: ACEPTADO Y EN COCINA (Punto 14) -->
+      <!-- CASO 2: ACEPTADO Y EN COCINA -->
       @case ('en_preparacion') {
         <div class="tarjeta-estado animacion-fade éxito">
           <ion-icon name="restaurant-outline" class="icono-estado"></ion-icon>
@@ -37,14 +37,14 @@
         </div>
       }
 
-      <!-- CASO 3: RECHAZADO POR EL MOZO (Punto 13) -->
+      <!-- CASO 3: RECHAZADO POR EL MOZO -->
       @case ('rechazado') {
         <div class="tarjeta-estado animacion-fade error">
           <ion-icon name="close-circle-outline" class="icono-estado rojo"></ion-icon>
           <h2>Pedido Rechazado</h2>
           <p>El mozo rechazó el pedido por modificaciones. Por favor, revisá las cantidades o productos.</p>
           
-          <!-- BOTÓN EXCLUSIVO DEL PUNTO 13 PARA VOLVER A LA CARTA A EDITAR -->
+          <!-- BOTÓN PARA VOLVER A LA CARTA A EDITAR -->
           <ion-button (click)="irAModificarPedido()" class="boton-modificar" expand="block">
             Modificar mi Pedido
           </ion-button>

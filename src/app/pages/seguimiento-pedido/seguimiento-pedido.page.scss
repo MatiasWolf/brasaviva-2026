@@ -81,7 +81,6 @@ $rojo-error: #ff6b6b;
     margin-top: 8px;
     }
 
-    // Botón exclusivo del Punto 13 (Modificar Pedido)
     .boton-modificar {
     --background: #{$borde-oscuro};
     --background-activated: #411616;
@@ -92,7 +91,6 @@ $rojo-error: #ff6b6b;
     letter-spacing: 0.5px;
     }
 
-    // Animación sutil de transición entre los estados en tiempo real
     .animacion-fade {
     animation: fadeIn 0.4s ease-out forwards;
     }

@@ -1,0 +1,134 @@
+<ion-header>
+  <ion-toolbar class="home-bg">
+    <ion-buttons slot="start">
+      <ion-button routerLink="/home">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Listado de pedidos</ion-title>
+  </ion-toolbar>
+  
+  <ion-toolbar class="home-bg sub-barra-segmentos">
+    <ion-segment [value]="segmentoActivo()" (ionChange)="cambiarSegmento($event)" mode="md">
+      
+      <ion-segment-button value="nuevos">
+        <div class="contenedor-pestaña-badge">
+          <span class="texto-pestaña">Por Confirmar</span>
+          @if (cantidadNuevos() > 0) {
+            <span class="globo-contador estandar">{{ cantidadNuevos() }}</span>
+          }
+        </div>
+      </ion-segment-button>
+
+      <ion-segment-button value="cocina">
+        <div class="contenedor-pestaña-badge">
+          <span class="texto-pestaña">En Cocina</span>
+          @if (cantidadCocina() > 0) {
+            <span class="globo-contador neutro">{{ cantidadCocina() }}</span>
+          }
+        </div>
+      </ion-segment-button>
+
+      <ion-segment-button value="listos">
+        <div class="contenedor-pestaña-badge">
+          <span class="texto-pestaña">Para Servir</span>
+          @if (cantidadListos() > 0) {
+            <span class="globo-contador urgente">{{ cantidadListos() }}</span>
+          }
+        </div>
+      </ion-segment-button>
+
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="fondo-bodegon">
+  <div class="contenedor-listado">
+    
+    <!-- PESTAÑA 1: POR CONFIRMAR -->
+    @if (segmentoActivo() === 'nuevos') {
+      @for (pedido of pedidoService.pedidosPendientesMozo(); track pedido.id) {
+        <ion-card class="tarjeta-comanda nuevo">
+          <ion-card-content class="contenido-comanda">
+            <div class="fila-cabecera">
+              <h2 class="numero-mesa">
+                Mesa N° {{ pedido.ocupaciones_mesa?.mesas?.numero || 'S/N' }}
+              </h2>
+              <span class="monto-total">${{ pedido.importe_total }}</span>
+            </div>
+            <p class="descripcion-estado">Pedido nuevo esperando revisión.</p>
+            <div class="contenedor-botones-accion">
+              <ion-button fill="solid" class="boton-rechazar" (click)="rechazandoPedido(pedido)">
+                <ion-icon slot="start" name="close-circle-outline"></ion-icon> Rechazar
+              </ion-button>
+              <ion-button fill="solid" class="boton-aceptar" (click)="aceptar(pedido)">
+                <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon> Aceptar
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      } @empty {
+        <div class="listado-vacio">
+          <ion-icon name="alert-circle-outline" class="icono-vacio"></ion-icon>
+          <p class="texto-vacio">No hay pedidos nuevos por confirmar.</p>
+        </div>
+      }
+    }
+
+    <!-- PESTAÑA 2: EN COCINA -->
+    @if (segmentoActivo() === 'cocina') {
+      @for (pedido of pedidoService.pedidosEnPreparacionMozo(); track pedido.id) {
+        <ion-card class="tarjeta-comanda en-preparacion">
+          <ion-card-content class="contenido-comanda-reducido">
+            <div class="fila-cabecera">
+              <h2 class="numero-mesa">
+                Mesa N° {{ pedido.ocupaciones_mesa?.mesas?.numero || 'S/N' }}
+              </h2>
+              <span class="badge-estado produccion">
+                <ion-icon name="hourglass-outline"></ion-icon> Elaborando...
+              </span>
+            </div>
+            <p class="info-adicional">
+              Tiempo estimado de demora: <strong>{{ pedido.tiempo_estimado_preparacion }} min</strong>.
+            </p>
+          </ion-card-content>
+        </ion-card>
+      } @empty {
+        <div class="listado-vacio">
+          <ion-icon name="hourglass-outline" class="icono-vacio"></ion-icon>
+          <p class="texto-vacio">No hay pedidos elaborándose en este momento.</p>
+        </div>
+      }
+    }
+
+    <!-- PESTAÑA 3: PARA SERVIR -->
+    @if (segmentoActivo() === 'listos') {
+      @for (pedido of pedidoService.pedidosListosMozo(); track pedido.id) {
+        <ion-card class="tarjeta-comanda comanda-lista pulse-animation">
+          <ion-card-content class="contenido-comanda">
+            <div class="fila-cabecera">
+              <h2 class="numero-mesa">
+                Mesa N° {{ pedido.ocupaciones_mesa?.mesas?.numero || 'S/N' }}
+              </h2>
+              <span class="monto-total destacada">${{ pedido.importe_total }}</span>
+            </div>
+            <div class="fila-despacho">
+              <span class="badge-alerta-listo">
+                <ion-icon name="restaurant-outline"></ion-icon> Pedido Completo!
+              </span>
+              <ion-button size="small" class="boton-servir" (click)="entregar(pedido)">
+                <ion-icon slot="start" name="checkmark-done-circle-outline"></ion-icon> Servir Mesa
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      } @empty {
+        <div class="listado-vacio">
+          <ion-icon name="checkmark-done-circle-outline" class="icono-vacio"></ion-icon>
+          <p class="texto-vacio">No hay pedidos esperando ser servidos.</p>
+        </div>
+      }
+    }
+
+  </div>
+</ion-content>

@@ -11,7 +11,7 @@ import {
   IonSpinner 
 } from '@ionic/angular';
 import { Router, RouterLink } from '@angular/router';
-import { PedidoService } from '../../core/services/pedido.service'; // Ajustá la ruta según tu carpeta
+import { PedidoService } from '../../core/services/pedido.service'; 
 import { addIcons } from 'ionicons';
 import { 
   arrowBackOutline, 
@@ -40,12 +40,12 @@ import {
   ]
 })
 export class SeguimientoPedidoPage implements OnInit {
-  // Inyectamos tus servicios globales
+
   public pedidoService = inject(PedidoService);
   private router = inject(Router);
 
   constructor() {
-    // Registramos de forma manual los iconos que va a usar el HTML según el estado
+
     addIcons({ 
       arrowBackOutline, 
       timeOutline, 
@@ -57,24 +57,24 @@ export class SeguimientoPedidoPage implements OnInit {
 
   ngOnInit() {}
 
-  // Ciclo de vida Ionic: Se ejecuta justo antes de que la pantalla se vuelva visible
   ionViewWillEnter() {
-    // Prendemos el canal de escucha en tiempo real en Supabase
+    // Prender el canal de escucha en tiempo real en Supabase
     this.pedidoService.escucharEstadoPedido();
   }
 
-  // Ciclo de vida Ionic: Se ejecuta cuando el usuario navega a otra pantalla (ej: vuelve al Home)
   ionViewWillLeave() {
-    // Apagamos el canal para evitar consumo innecesario de batería y datos en el celu
+    // Apagar el canal de escucha
     this.pedidoService.desconectarseDelPedido();
   }
 
   /**
-   * Método de conveniencia para cuando el cliente presiona "Modificar Pedido" (Punto 13)
+   * Método para cuando el cliente presiona "Modificar Pedido"
    * Redirige internamente a la ruta de la carta
    */
   irAModificarPedido() {
-    this.router.navigate(['/menu-productos']); // Ajustá el nombre de tu ruta si es diferente
+    //Restaurar los datos del pedido con los datos del respaldo
+    this.pedidoService.restaurarPedidoDesdeRespaldo();
+    this.router.navigate(['/menu-productos']); 
   }
 }
 

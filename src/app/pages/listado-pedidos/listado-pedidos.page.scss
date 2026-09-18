@@ -1,0 +1,292 @@
+$color-primario: #ffd485;       
+$color-secundario: #ffaa55;     
+$tarjeta-marron: #250a0a;       
+$borde-oscuro: #802323;         
+$texto-claro: #f5ebe6;          
+$degradado-fondo: radial-gradient(circle at 15% 0%, rgba(246, 193, 133, 0.16), transparent 22%),
+                  linear-gradient(180deg, #130905 0%, #3a1710 100%);
+
+.home-bg {
+  --background: #{$degradado-fondo} !important;
+  --color: #{$color-primario};
+  border-bottom: 2px solid $borde-oscuro;
+
+  ion-button {
+    --color: #{$color-primario};
+    margin: 0;
+  }
+}
+
+.sub-barra-segmentos {
+  --padding-top: 0px;
+  --padding-bottom: 0px;
+}
+
+.fondo-bodegon {
+  --background: #{$degradado-fondo};
+  --color: #{$texto-claro};
+}
+
+ion-segment {
+  --background: rgba(19, 9, 5, 0.5) !important; 
+  border-top: 1px solid rgba(255, 170, 85, 0.15);
+  border-bottom: 1px solid rgba(255, 170, 85, 0.15);
+  border-radius: 0; 
+  margin: 0; 
+  width: 100%;
+  height: 46px;
+}
+
+ion-segment-button {
+  --background-checked: linear-gradient(160deg, #802323 0%, #4a1111 100%);
+  --color: #dfa070;
+  --color-checked: #{$color-primario};
+  --indicator-box-shadow: none !important; 
+  margin: 0;
+  height: 100%; 
+  transition: all 0.2s ease-in-out;
+
+  &::part(indicator-background) {
+    background: transparent;
+  }
+}
+
+// ALINEACIÓN DE PESTAÑAS Y GLOBOS CONTADORES
+.contenedor-pestaña-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.texto-pestaña {
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.78rem;
+}
+
+.globo-contador {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 50%;
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: #130905;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+
+  // Color dorado suave para ingresos pendientes
+  &.estandar {
+    background-color: #{$color-primario};
+  }
+
+  // Color marrón/dorado tenue para lo que está en cocina
+  &.neutro {
+    background-color: #dfa070;
+  }
+
+  // Color rojo vivo parpadeante para llamar la atención del mozo (Comida fría)
+  &.urgente {
+    background-color: #ff5555;
+    color: #fff;
+    border: 1px solid #ffd485;
+    animation: badgePulse 1.5s infinite ease-in-out;
+  }
+}
+
+.contenedor-listado {
+  padding: 16px; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 16px;
+}
+
+.tarjeta-comanda {
+  margin: 0; 
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+
+  &.nuevo {
+    background: linear-gradient(160deg, #411616 0%, #250a0a 100%); 
+    border: 2px solid #802323; 
+  }
+
+  &.en-preparacion {
+    background: linear-gradient(160deg, #2a1010 0%, #170505 100%); 
+    border: 2px solid rgba(255, 170, 85, 0.15); 
+  }
+
+  &.comanda-lista {
+    background: linear-gradient(160deg, #411616 0%, #1c0606 100%); 
+    border: 2px solid #ffaa55; 
+  }
+}
+
+.contenido-comanda {
+  color: $color-primario; 
+  padding: 16px; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 12px;
+}
+
+.contenido-comanda-reducido {
+  color: $color-primario; 
+  padding: 16px; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 8px;
+}
+
+.fila-cabecera {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+}
+
+.numero-mesa {
+  margin: 0; 
+  font-family: Georgia, serif; 
+  font-size: 1.4rem; 
+  font-weight: bold; 
+  color: $color-primario;
+}
+
+.monto-total {
+  font-weight: 800; 
+  font-size: 1.3rem; 
+  color: $color-secundario;
+
+  &.destacada {
+    font-size: 1.2rem;
+  }
+}
+
+.descripcion-estado {
+  margin: 0; 
+  color: rgba(255, 248, 241, 0.7); 
+  font-size: 0.95rem;
+}
+
+.info-adicional {
+  margin: 0; 
+  color: rgba(255, 248, 241, 0.6); 
+  font-size: 0.9rem;
+}
+
+.contenedor-botones-accion {
+  display: flex; 
+  gap: 12px; 
+  margin-top: 4px;
+}
+
+ion-button {
+  font-weight: bold;
+  margin: 0;
+
+  &.boton-rechazar {
+    flex: 1; 
+    --background: #802323; 
+    --color: #{$color-primario}; 
+  }
+
+  &.boton-aceptar {
+    flex: 1; 
+    --background: #{$color-secundario}; 
+    --color: #130905; 
+  }
+
+  &.boton-servir {
+    --background: linear-gradient(160deg, #ffaa55 0%, #dfa070 100%); 
+    --color: #130905; 
+  }
+}
+
+.badge-estado {
+  font-size: 0.85rem; 
+  font-weight: bold; 
+  text-transform: uppercase; 
+  display: flex; 
+  align-items: center; 
+  gap: 4px;
+
+  &.produccion {
+    color: $color-secundario;
+  }
+}
+
+.fila-despacho {
+  border-top: 1px solid rgba(255, 212, 133, 0.15); 
+  padding-top: 10px; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+}
+
+.badge-alerta-listo {
+  color: #fff; 
+  font-size: 0.9rem; 
+  font-weight: bold; 
+  display: flex; 
+  align-items: center; 
+  gap: 4px;
+
+  ion-icon {
+    color: $color-secundario;
+  }
+}
+
+.listado-vacio {
+  text-align: center; 
+  color: #dfa070; 
+  padding: 48px 16px; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+  gap: 12px;
+}
+
+.icono-vacio {
+  font-size: 3.5rem; 
+  color: rgba(255, 170, 85, 0.25);
+}
+
+.texto-vacio {
+  margin: 0;
+}
+
+// INTERFAZ DE ESTILOS PERSONALIZADA PARA TOASTS DE DISEÑO
+:global(ion-toast.toast-personalizado-mozo) {
+  --background: linear-gradient(135deg, #250a0a 0%, #130905 100%);
+  --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  --border-radius: 12px;
+  border: 1px solid #802323;
+  
+  &::part(message) {
+    color: #ffd485;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  &.toast-exito { border-color: #ffaa55; }
+  &.toast-alerta { border-color: #802323; }
+}
+
+// ANIMACIONES DE PULSO
+.pulse-animation { animation: cardPulse 2.5s infinite ease-in-out; }
+
+@keyframes cardPulse {
+  0% { transform: scale(1); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); }
+  50% { transform: scale(1.02); box-shadow: 0 6px 16px rgba(255, 170, 85, 0.2); border-color: #{$color-secundario}; }
+  100% { transform: scale(1); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); }
+}
+
+@keyframes badgePulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 85, 85, 0.7); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(255, 85, 85, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 85, 85, 0); }
+}
