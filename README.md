@@ -111,6 +111,7 @@ src/
 | Registro de cliente Anónimo | <img src="docs/capturas/registro-anonimo.png" width="240" alt="Registro de Cliente anónimo"> | `docs/capturas/registro-anonimo.png` |
 | Mail de aceptación | <img src="docs/capturas/mail_aceptacion.png" width="500" alt="Mail de aceptación"> | `docs/capturas/mail_aceptacion.png` |
 | Mail de rechazo | <img src="docs/capturas/mail_rechazo.png" width="500" alt="Mail de rechazo"> | `docs/capturas/mail_rechazo.png` |
+| Lista de espera | <img src="docs/capturas/lista_espera.png" width="240" alt="Lista de espera"> | `docs/capturas/lista_espera.png` |
 
 ---
 
@@ -129,7 +130,7 @@ src/
 | 7 | Rechazar cliente | Wolf, Matías | 2 | 09-09 | 11-09 | ✅ Completo |
 | 8 | Aceptar cliente | Wolf, Matías | 1 | 11-09 | 11-09 | ✅ Completo |
 | 9 | Ingreso cliente anónimo | Miguel, Luján | 1 | 02-09 | 03-09 | ✅ Completo |
-| 10 | Metre asigna mesa | Miguel, Luján | 1,5 | 07-09 | 08-09 | 🟨 En progreso |
+| 10 | Metre asigna mesa | Miguel, Luján | 2 | 16-09 | 18-09 | ✅ Completo |
 | 11 | Ver menú + consulta al mozo | Torrez, Maximiliano | 3 | 08-09 | 11-09 | 🟨 En progreso |
 | 12 | Cliente realiza pedido | Torrez, Maximiliano | 3 | aprox. 08-09 | 11-09 | 🟨 En progreso |
 | 13 | Mozo rechaza pedido | Torrez, Maximiliano | 1 | 12-09 | 13-09 | ⬜ Pendiente |
