@@ -6,7 +6,7 @@
   <ion-title>Consulta al mozo</ion-title>
     </ion-toolbar>
 </ion-header>
-<ion-content class="chat-content">
+<ion-content class="chat-content" #chatContent>
   <div class="chat-container">
 
 <!-- Cargando -->
@@ -47,7 +47,7 @@
   </div>
 
   <!-- Área de mensajes -->
-  <div class="mensajes">
+  <div class="mensajes" #mensajesContainer>
     <!-- No hay mensajes -->
     @if (mensajes().length === 0) {
       <div class="sin-mensajes">

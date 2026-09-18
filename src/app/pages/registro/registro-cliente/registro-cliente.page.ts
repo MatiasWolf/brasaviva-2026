@@ -172,9 +172,6 @@ export class RegistroClientePage {
         foto: this.fotoPreview!
       });
 
-      // El alta puede dejar una sesión activa (signUp inicia sesión sola).
-      // La cerramos: hasta que no lo aprueben, no puede entrar a la app.
-      // Si falla el signOut no bloqueamos el éxito: la cuenta ya se creó.
       await this.auth.logout().catch((error) =>
         console.error('No se pudo cerrar la sesión tras el registro:', error),
       );

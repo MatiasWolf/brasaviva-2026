@@ -415,6 +415,7 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
   }
 
 
+
   async confirmarAsignacion(): Promise<void> {
     const cliente = this.clienteAsignando();
     const mesa = this.mesaSeleccionada();
@@ -425,6 +426,7 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
 
     try {
       // 1. Crear la ocupación de la mesa
+      // Esto vincula al cliente con la mesa asignada.
       const { error: errorOcupacion } =
         await this.supabase.client
           .from('ocupaciones_mesa')
@@ -434,7 +436,7 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
             sesion_anonima_id: cliente.sesion_anonima_id,
             lista_espera_id: cliente.id,
             fecha_ingreso: new Date().toISOString(),
-            estado: 'activa',
+            estado: 'asignada',
           });
 
       if (errorOcupacion) {
@@ -468,21 +470,47 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
         throw errorLista;
       }
 
-      // 4. Quitar al cliente de la lista visual
+      // 4. Actualizar el estado de estadía del cliente
+      // Registrado
+      if (cliente.usuario_id) {
+        const { error: errorUsuario } =
+          await this.supabase.client
+            .from('usuarios')
+            .update({
+              estado_estadia: 'mesa_asignada',
+            })
+            .eq('id', cliente.usuario_id);
+
+        if (errorUsuario) {
+          throw errorUsuario;
+        }
+      }
+
+      // Anónimo
+      if (cliente.sesion_anonima_id) {
+        const { error: errorSesion } =
+          await this.supabase.client
+            .from('sesiones_anonimas')
+            .update({
+              estado_estadia: 'mesa_asignada',
+            })
+            .eq('id', cliente.sesion_anonima_id);
+
+        if (errorSesion) {
+          throw errorSesion;
+        }
+      }
+
+      // 5. Quitar al cliente de la lista visual
       this.clientes = this.clientes.filter(
         c => c.id !== cliente.id
       );
 
-      // 5. Mostrar modal de éxito
-      this.clientes = this.clientes.filter(
-        c => c.id !== cliente.id
-      );
-
+      // 6. Guardar datos para el modal de éxito
       this.clienteAsignadoExito = cliente;
       this.mesaAsignadaExito = mesa;
       this.mostrarModalExito = true;
 
-      
     } catch (error) {
       console.error(
         'Error al asignar mesa:',
@@ -495,7 +523,6 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
       );
     }
   }
-
 
 
   cerrarAsignacion(): void {

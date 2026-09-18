@@ -3,7 +3,9 @@ import {
   OnInit,
   OnDestroy,
   inject,
-  signal
+  signal,
+  ViewChild,
+  ElementRef
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -62,6 +64,12 @@ export class ChatPage implements OnInit, OnDestroy {
   cargando = signal(true);
   enviando = signal(false);
 
+  @ViewChild('chatContent')
+  chatContent?: IonContent;
+
+  @ViewChild('mensajesContainer')
+  mensajesContainer?: ElementRef<HTMLElement>;
+
 
   async ngOnInit(): Promise<void> {
     await this.cargarChat();
@@ -96,6 +104,9 @@ export class ChatPage implements OnInit, OnDestroy {
           ocupacion.id
         );
       this.mensajes.set(mensajes);
+      setTimeout(() => {
+        this.scrollAlFinal();
+      }, 100);
 
       this.chatService.escucharChatOcupacion(
         ocupacion.id,
@@ -117,6 +128,9 @@ export class ChatPage implements OnInit, OnDestroy {
               mensajeNuevo
             ]
           );
+          setTimeout(() => {
+            this.scrollAlFinal();
+          }, 100);
           console.log(
             'CHAT REALTIME - mensaje agregado al chat'
           );
@@ -175,5 +189,17 @@ export class ChatPage implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.chatService.cerrarEscuchaChatMesa();
+  }
+
+  async scrollAlFinal(): Promise<void> {
+    const contenedor =
+      this.mensajesContainer?.nativeElement;
+    if (contenedor) {
+      contenedor.scrollTo({
+        top: contenedor.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+    await this.chatContent?.scrollToBottom(300);
   }
 }
