@@ -10,7 +10,9 @@ import { RouterLink } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { 
   checkmarkCircleOutline, closeCircleOutline, alertCircleOutline, 
-  hourglassOutline, restaurantOutline, checkmarkDoneCircleOutline, arrowBackOutline 
+  hourglassOutline, restaurantOutline, checkmarkDoneCircleOutline, arrowBackOutline, 
+  chevronDownOutline,
+  chevronUpOutline
 } from 'ionicons/icons';
 
 @Component({
@@ -39,7 +41,8 @@ export class ListadoPedidosPage {
   constructor() {
     addIcons({ 
       checkmarkCircleOutline, closeCircleOutline, alertCircleOutline, 
-      hourglassOutline, restaurantOutline, checkmarkDoneCircleOutline, arrowBackOutline 
+      hourglassOutline, restaurantOutline, checkmarkDoneCircleOutline, arrowBackOutline, 
+      chevronDownOutline, chevronUpOutline 
     });
   }
 

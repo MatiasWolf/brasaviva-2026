@@ -2,9 +2,11 @@
   <ion-toolbar class="home-bg">
     <!-- BOTÓN PARA VOLVER AL HOME -->
     <ion-buttons slot="start">
-      <ion-button routerLink="/home">
-        <ion-icon name="arrow-back-outline"></ion-icon>
-      </ion-button>
+      @if (pedidoService.estadoPedidoActual() !== 'pendiente_confirmacion') {
+        <ion-button routerLink="/home">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+        </ion-button>
+      }
     </ion-buttons>
     <ion-title>Estado de tu Pedido</ion-title>
   </ion-toolbar>

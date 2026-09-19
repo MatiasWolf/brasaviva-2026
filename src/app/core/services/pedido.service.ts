@@ -322,12 +322,23 @@ export class PedidoService {
      */
     private async cargarDatosMozo() {
         try {
-            // Base común de selección para las tres consultas
             const consultaBase = `
-                id, ocupacion_id, estado, importe_total, tiempo_estimado_preparacion,
-                ocupaciones_mesa ( mesa_id, usuario_id, sesion_anonima_id, mesas ( numero ) )
+                id, 
+                ocupacion_id, 
+                estado, 
+                importe_total, 
+                tiempo_estimado_preparacion,
+                ocupaciones_mesa ( 
+                    mesa_id, usuario_id, sesion_anonima_id, 
+                    mesas ( numero ) 
+                ),
+                items_pedido (
+                    cantidad,
+                    precio_unitario,
+                    productos ( nombre )
+                )
             `;
-
+            
             // 1. Pestaña: Por Confirmar 
             const { data: pendientes } = await this.supabaseService.client
                 .from('pedidos')
