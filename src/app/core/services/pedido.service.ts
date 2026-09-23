@@ -1,22 +1,30 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { ItemCarrito, Producto } from '../models/pedido.models';
 import { SupabaseService } from './supabase.service';
+import { AuthService } from './auth.service';
+import { AnonymousSessionService } from './anonymous-session.service';
 
 @Injectable({
     providedIn: 'root' 
 })
 export class PedidoService {
     private supabaseService = inject(SupabaseService);
+    private authService = inject(AuthService);
+    private anonymousService = inject(AnonymousSessionService);
 
     public productos = signal<Producto[]>([]);
  
     public pedido = signal<ItemCarrito[]>([]);
 
     private respaldoPedido: ItemCarrito[] = [];
+
+    public tiempoEstimadoPedido = signal<number>(0);
+
+    public horaConfirmacionPedido: string | null = null;
  
     public cargandoProductos = signal<boolean>(false);
 
-    public ocupacionMesaId: number = 22;
+    public ocupacionMesaId: number | null = null;
 
     public pedidosPendientesMozo = signal<any[]>([]);
     public pedidosEnPreparacionMozo = signal<any[]>([]); 
@@ -110,6 +118,68 @@ export class PedidoService {
         console.error('Error al cargar la carta desde Supabase:', err);
         } finally {
         this.cargandoProductos.set(false);
+        }
+    }
+
+    /**
+     * Busca el ocupacion_id de la mesa en Supabase 
+     * evaluando si el cliente es registrado o anónimo.
+     */
+    async cargarOcupacionMesaId(): Promise<number | null> {
+        try {
+            let usuarioId: string | null = null;
+            let sesionAnonimaId: string | null = null;
+
+            // 1. Verificar si hay un usuario registrado logueado
+            if (this.authService.usuarioActual) {
+                usuarioId = this.authService.usuarioActual.id;
+            } else {
+                // 2. Si no, buscar el ID de la sesión anónima en el localStorage
+                sesionAnonimaId = this.anonymousService.obtenerIdSesion();
+            }
+
+            // Si no encontramos ninguna sesión activa, no se puede buscar ocupación
+            if (!usuarioId && !sesionAnonimaId) {
+                console.warn('No se detectó ninguna sesión activa (registrada o anónima) para buscar la mesa.');
+                this.ocupacionMesaId = null;
+                return null;
+            }
+
+            // 3. Inicializar la consulta apuntando a las ocupaciones vigentes
+            let consulta = this.supabaseService.client
+                .from('ocupaciones_mesa')
+                .select('id')
+                .in('estado', ['asignada', 'activa']);
+
+            // 4. Aplicar los filtros de identificación antes de cerrar la estructura de la consulta
+            if (usuarioId) {
+                consulta = consulta.eq('usuario_id', usuarioId);
+            } else {
+                consulta = consulta.eq('sesion_anonima_id', sesionAnonimaId);
+            }
+
+            // 5. Ordenar y ejecutar la llamada trayendo un único registro
+            const { data, error } = await consulta
+                .order('created_at', { ascending: false })
+                .limit(1)
+                .maybeSingle();
+
+            if (error) throw error;
+
+            if (data) {
+                this.ocupacionMesaId = data.id;
+                console.log(`Ocupación de mesa vinculada con éxito. ID: ${this.ocupacionMesaId}`);
+                return data.id;
+            } else {
+                console.warn('No se encontró ninguna ocupación de mesa activa en Supabase para este cliente.');
+                this.ocupacionMesaId = null;
+                return null;
+            }
+
+        } catch (err) {
+            console.error('Error al recuperar el ocupacion_id dinámico desde Supabase:', err);
+            this.ocupacionMesaId = null;
+            return null;
         }
     }
 
@@ -223,7 +293,7 @@ export class PedidoService {
         try {
         const { data: pedidoActual, error: errorFetch } = await this.supabaseService.client
             .from('pedidos')
-            .select('estado')
+            .select('estado, tiempo_estimado_preparacion, updated_at')
             .eq('ocupacion_id', this.ocupacionMesaId)
             // Buscamos el pedido que no esté finalizado (o el último creado)
             .order('created_at', { ascending: false }) 
@@ -233,9 +303,13 @@ export class PedidoService {
         if (errorFetch) throw errorFetch;
         
         if (pedidoActual) {
-            // Asignar a la signal el estado real de la base de datos de entrada
             this.estadoPedidoActual.set(pedidoActual.estado);
-            if (pedidoActual.estado === 'en_preparacion' || pedidoActual.estado === 'listo_para_entregar') {
+            this.tiempoEstimadoPedido.set(pedidoActual.tiempo_estimado_preparacion || 0);
+            this.horaConfirmacionPedido = pedidoActual.updated_at 
+                ? new Date(pedidoActual.updated_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+                : null;
+
+            if (pedidoActual.estado === 'en_preparacion' || pedidoActual.estado === 'listo') {
                     this.borrarRespaldoPedido();
                 }
         }
@@ -261,6 +335,7 @@ export class PedidoService {
             (payload: any) => {
                 console.log('Cambio detectado en tiempo real:', payload.new);
                 this.estadoPedidoActual.set(payload.new.estado);
+                this.tiempoEstimadoPedido.set(payload.new.tiempo_estimado_preparacion || 0);
 
                 if (payload.new.estado === 'en_preparacion') {
                     this.borrarRespaldoPedido();
@@ -357,7 +432,7 @@ export class PedidoService {
             const { data: listos } = await this.supabaseService.client
                 .from('pedidos')
                 .select(consultaBase)
-                .eq('estado', 'listo_para_entregar');
+                .eq('estado', 'listo');
             this.pedidosListosMozo.set(listos || []);
 
         } catch (err) {
@@ -381,7 +456,7 @@ export class PedidoService {
     /**
      * Confirma el pedido, lo manda a preparación y cambia la estadía del usuario
      */
-    async mozoConfirmaPedido(pedidoId: number, ocupacionData: any): Promise<boolean> {
+    async confirmarPedidoMozo(pedidoId: number, ocupacionData: any): Promise<boolean> {
         try {
             const { error: errorPedido } = await this.supabaseService.client
                 .from('pedidos')
@@ -389,6 +464,13 @@ export class PedidoService {
                 .eq('id', pedidoId);
 
             if (errorPedido) throw errorPedido;
+
+            const { error: errorItems } = await this.supabaseService.client
+                .from('items_pedido')
+                .update({ estado_item: 'en_preparacion' })
+                .eq('pedido_id', pedidoId);
+
+            if (errorItems) throw errorItems;
 
             this.borrarRespaldoPedido();
 
@@ -412,7 +494,7 @@ export class PedidoService {
     /**
      * Rchaza el pedido y limpia la tabla items_pedido 
      */
-    async mozoRechazaPedido(pedidoId: number): Promise<boolean> {
+    async rechazarPedidoMozo(pedidoId: number): Promise<boolean> {
         try {
             const { error: errorItems } = await this.supabaseService.client
                 .from('items_pedido')

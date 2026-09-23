@@ -59,7 +59,7 @@ export class ListadoPedidosPage {
   }
 
   async aceptar(pedido: any) {
-    const exito = await this.pedidoService.mozoConfirmaPedido(pedido.id, pedido.ocupaciones_mesa);
+    const exito = await this.pedidoService.confirmarPedidoMozo(pedido.id, pedido.ocupaciones_mesa);
     if (exito) {
       this.mostrarToast(`¡Pedido N° ${pedido.id} enviado a Cocina y Bar!`, 'toast-exito');
     } else {
@@ -68,9 +68,9 @@ export class ListadoPedidosPage {
   }
 
   async rechazandoPedido(pedido: any) {
-    const exito = await this.pedidoService.mozoRechazaPedido(pedido.id);
+    const exito = await this.pedidoService.rechazarPedidoMozo(pedido.id);
     if (exito) {
-      this.mostrarToast(`Pedido N° ${pedido.id} rechazado y vaciado con éxito.`, 'toast-alerta');
+      this.mostrarToast(`Pedido N° ${pedido.id} rechazado.`, 'toast-alerta');
     } else {
       this.mostrarToast('Error al rechazar el pedido.', 'toast-alerta');
     }

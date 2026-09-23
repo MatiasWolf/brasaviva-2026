@@ -22,7 +22,7 @@
         <div class="tarjeta-estado animacion-fade">
           <ion-spinner name="crescent" class="spinner-dorado"></ion-spinner>
           <h2>Esperando al mozo</h2>
-          <p>Tu pedido fue enviado con éxito. El mozo lo está revisando para autorizarlo.</p>
+          <p>Tu pedido fue enviado con éxito. El mozo lo está revisando para confirmarlo.</p>
         </div>
       }
 
@@ -31,20 +31,36 @@
         <div class="tarjeta-estado animacion-fade éxito">
           <ion-icon name="restaurant-outline" class="icono-estado"></ion-icon>
           <h2>¡Pedido Aceptado!</h2>
-          <p>La cocina y el bar ya están preparando tus platos.</p>
+          <p>La cocina y el bar ya lo están preparando.</p>
+          
           <div class="badge-tiempo">
             <ion-icon name="time-outline"></ion-icon>
-            <span>Preparación estimada: {{ pedidoService.tiempoEstimadoTotal() }} min</span>
+            <span>Tiempo estimado: {{ pedidoService.tiempoEstimadoPedido() }} min</span>
           </div>
+
+          @if (pedidoService.horaConfirmacionPedido) {
+            <p style="color: rgba(255, 248, 241, 0.45); font-size: 0.85rem; margin-top: 14px; margin-bottom: 0; letter-spacing: 0.3px;">
+              Enviado a las {{ pedidoService.horaConfirmacionPedido }} 
+            </p>
+          }
         </div>
       }
 
       <!-- CASO 3: RECHAZADO POR EL MOZO -->
+      @case ('listo') {
+        <div class="tarjeta-estado animacion-fade éxito">
+          <ion-icon name="checkmark-done-circle-outline" class="icono-estado"></ion-icon>
+          <h2>¡Pedido Listo!</h2>
+          <p>Tu pedido está listo. El mozo está en camino a tu mesa para servirlo.</p>
+        </div>
+      }
+
+      <!-- CASO 4: RECHAZADO POR EL MOZO -->
       @case ('rechazado') {
         <div class="tarjeta-estado animacion-fade error">
           <ion-icon name="close-circle-outline" class="icono-estado rojo"></ion-icon>
           <h2>Pedido Rechazado</h2>
-          <p>El mozo rechazó el pedido por modificaciones. Por favor, revisá las cantidades o productos.</p>
+          <p>El mozo rechazó tu pedido. Por favor, revisá las cantidades o productos.</p>
           
           <!-- BOTÓN PARA VOLVER A LA CARTA A EDITAR -->
           <ion-button (click)="irAModificarPedido()" class="boton-modificar" expand="block">
@@ -57,7 +73,7 @@
       @default {
         <div class="tarjeta-estado">
           <ion-spinner name="dots" class="spinner-dorado"></ion-spinner>
-          <p>Sincronizando con el restaurante...</p>
+          <p>Esperando al restaurante...</p>
         </div>
       }
     }

@@ -35,9 +35,10 @@ export class MenuProductosPage implements OnInit {
               restaurantOutline, wineOutline });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.pedidoService.cargarOcupacionMesaId(); 
     this.pedidoService.obtenerProductosMenu();
-  }
+}
 
   obtenerCantidad(productoId: number): number {
     const item = this.pedidoService.pedido().find(i => i.producto.id === productoId);

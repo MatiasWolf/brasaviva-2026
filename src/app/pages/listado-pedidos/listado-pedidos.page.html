@@ -48,7 +48,7 @@
     <!-- PESTAÑA 1: POR CONFIRMAR -->
     @if (segmentoActivo() === 'nuevos') {
       @for (pedido of pedidoService.pedidosPendientesMozo(); track pedido.id) {
-        <!-- Inicializamos una variable local para controlar el despliegue de esta tarjeta -->
+        <!-- Variable local para controlar el despliegue de esta tarjeta -->
         @let expandido = { activo: false };
 
         <ion-card class="tarjeta-comanda nuevo">
@@ -62,7 +62,7 @@
             
             <p class="descripcion-estado">Pedido nuevo esperando revisión.</p>
 
-            <!-- BOTÓN INTERACTIVO PARA DESPLEGAR PRODUCTOS (Punto 11/12) -->
+            <!-- BOTÓN INTERACTIVO PARA DESPLEGAR PRODUCTOS -->
             <div class="contenedor-link-detalle">
               <ion-button fill="clear" size="small" class="boton-expandir" (click)="expandido.activo = !expandido.activo">
                 <ion-icon slot="start" [name]="expandido.activo ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
@@ -70,7 +70,7 @@
               </ion-button>
             </div>
 
-            <!-- CONTENEDOR DESPLEGABLE EN ALTO CONTRASTE (Punto 11) -->
+            <!-- CONTENEDOR DESPLEGABLE -->
             @if (expandido.activo) {
               <div class="bloque-detalle-productos">
                 <h4 class="titulo-detalle">Detalle de la orden:</h4>
@@ -129,7 +129,7 @@
       }
     }
 
-    <!-- PESTAÑA 3: PARA SERVIR -->
+    <!-- PESTAÑA 3: LISTOS  -->
     @if (segmentoActivo() === 'listos') {
       @for (pedido of pedidoService.pedidosListosMozo(); track pedido.id) {
         <ion-card class="tarjeta-comanda comanda-lista pulse-animation">
