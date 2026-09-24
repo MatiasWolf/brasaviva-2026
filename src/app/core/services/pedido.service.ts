@@ -578,7 +578,7 @@ export class PedidoService {
             if (porUsuario) return porUsuario;
         }
 
-        const idAnonimo = this.anonymousSession.obtenerIdSesion();
+        const idAnonimo = this.anonymousService.obtenerIdSesion();
 
         if (idAnonimo) {
             const porAnonimo = await buscar('sesion_anonima_id', idAnonimo);
