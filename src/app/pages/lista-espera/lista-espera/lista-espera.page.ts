@@ -29,7 +29,6 @@ import {
   AlertController,
   IonButtons,
   IonBackButton,
-  ToastController,
   IonModal,
   IonFooter
 } from '@ionic/angular';
@@ -54,6 +53,7 @@ import {
 
 import { AuthService } from '../../../core/services/auth.service';
 import { SupabaseService } from '../../../core/services/supabase.service';
+import { MensajeModalService } from '../../../core/services/mensaje-modal.service';
 
 
 interface ClienteListaEspera {
@@ -101,7 +101,7 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly supabase = inject(SupabaseService);
   private readonly alertController = inject(AlertController);
-  private readonly toastController = inject(ToastController);
+  private readonly mensajeModal = inject(MensajeModalService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly mesaService = inject(MesaService);
 
@@ -257,14 +257,7 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
     } catch (error) {
       console.error('Error buscando mesas disponibles:', error);
 
-      const toast = await this.toastController.create({
-        message: 'No se pudieron cargar las mesas disponibles.',
-        duration: 3000,
-        position: 'top',
-        color: 'danger',
-      });
-
-      await toast.present();
+      this.mensajeModal.error('No se pudieron cargar las mesas disponibles.');
 
     } finally {
       this.cargandoMesas.set(false);
@@ -422,6 +415,7 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
   }
 
 
+
   async confirmarAsignacion(): Promise<void> {
     const cliente = this.clienteAsignando();
     const mesa = this.mesaSeleccionada();
@@ -432,6 +426,7 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
 
     try {
       // 1. Crear la ocupación de la mesa
+      // Esto vincula al cliente con la mesa asignada.
       const { error: errorOcupacion } =
         await this.supabase.client
           .from('ocupaciones_mesa')
@@ -441,7 +436,7 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
             sesion_anonima_id: cliente.sesion_anonima_id,
             lista_espera_id: cliente.id,
             fecha_ingreso: new Date().toISOString(),
-            estado: 'activa',
+            estado: 'asignada',
           });
 
       if (errorOcupacion) {
@@ -475,21 +470,47 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
         throw errorLista;
       }
 
-      // 4. Quitar al cliente de la lista visual
+      // 4. Actualizar el estado de estadía del cliente
+      // Registrado
+      if (cliente.usuario_id) {
+        const { error: errorUsuario } =
+          await this.supabase.client
+            .from('usuarios')
+            .update({
+              estado_estadia: 'mesa_asignada',
+            })
+            .eq('id', cliente.usuario_id);
+
+        if (errorUsuario) {
+          throw errorUsuario;
+        }
+      }
+
+      // Anónimo
+      if (cliente.sesion_anonima_id) {
+        const { error: errorSesion } =
+          await this.supabase.client
+            .from('sesiones_anonimas')
+            .update({
+              estado_estadia: 'mesa_asignada',
+            })
+            .eq('id', cliente.sesion_anonima_id);
+
+        if (errorSesion) {
+          throw errorSesion;
+        }
+      }
+
+      // 5. Quitar al cliente de la lista visual
       this.clientes = this.clientes.filter(
         c => c.id !== cliente.id
       );
 
-      // 5. Mostrar modal de éxito
-      this.clientes = this.clientes.filter(
-        c => c.id !== cliente.id
-      );
-
+      // 6. Guardar datos para el modal de éxito
       this.clienteAsignadoExito = cliente;
       this.mesaAsignadaExito = mesa;
       this.mostrarModalExito = true;
 
-      
     } catch (error) {
       console.error(
         'Error al asignar mesa:',
@@ -502,7 +523,6 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
       );
     }
   }
-
 
 
   cerrarAsignacion(): void {
@@ -557,14 +577,11 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
     message: string,
     color: 'success' | 'danger'
   ): Promise<void> {
-    const toast =
-      await this.toastController.create({
-        message,
-        duration: 3000,
-        position: 'top',
-        color,
-      });
-    await toast.present();
+    if (color === 'success') {
+      this.mensajeModal.exito(message);
+    } else {
+      this.mensajeModal.error(message);
+    }
   }
 
   cerrarModalExito(): void {

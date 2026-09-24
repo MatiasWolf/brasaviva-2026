@@ -21,22 +21,20 @@ export class AnonymousSessionService {
     apellido: string,
     fotoUrl: string | null = null
   ): Promise<SesionAnonima> {
-
     const { data, error } = await this.supabase.client
       .from('sesiones_anonimas')
       .insert({
         nombre,
         apellido,
-        foto_url: fotoUrl
+        foto_url: fotoUrl,
+        estado_estadia: 'sin_estadia'
       })
       .select()
       .single();
-
     if (error) {
       throw error;
     }
     localStorage.setItem(this.STORAGE_KEY, data.id);
-
     return data as SesionAnonima;
   }
 
@@ -54,7 +52,6 @@ export class AnonymousSessionService {
       .select('*')
       .eq('id', id)
       .single();
-
     if (error) {
       return null;
     }
@@ -83,6 +80,7 @@ export class AnonymousSessionService {
     }
     return data as SesionAnonima;
   }
+
   async actualizarEstado(
     estado: EstadiaEstado
   ): Promise<void> {
@@ -93,7 +91,7 @@ export class AnonymousSessionService {
     const { error } = await this.supabase.client
       .from('sesiones_anonimas')
       .update({
-        estado,
+        estado_estadia: estado,
         updated_at: new Date().toISOString()
       })
       .eq('id', id);
@@ -102,16 +100,12 @@ export class AnonymousSessionService {
     }
   }
 
-
   async cerrarSesion(): Promise<void> {
     const id = this.obtenerIdSesion();
-
     if (!id) {
       return;
     }
-
     try {
-
       const { data, error: errorLista } =
         await this.supabase.client
           .from('lista_espera')
@@ -119,37 +113,29 @@ export class AnonymousSessionService {
           .eq('sesion_anonima_id', id)
           .eq('estado', 'esperando')
           .maybeSingle();
-
       if (errorLista) {
         throw errorLista;
       }
-
       if (data) {
         localStorage.removeItem(this.STORAGE_KEY);
         return;
       }
-
       await this.storageService.eliminarFoto(id);
-
       const { error } =
         await this.supabase.client
           .from('sesiones_anonimas')
           .delete()
           .eq('id', id);
-
       if (error) {
         throw error;
       }
-
     } catch (error) {
-
       console.error(
         'Error al cerrar sesión anónima:',
         error
       );
 
     } finally {
-
       localStorage.removeItem(this.STORAGE_KEY);
     }
   }

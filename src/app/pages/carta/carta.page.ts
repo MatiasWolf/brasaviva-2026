@@ -51,8 +51,9 @@ export class CartaPage implements ViewWillEnter {
   /** Índice de la fotografía visible para cada plato. */
   fotoActual: Record<string, number> = {};
 
-  /** Registros por página. Fijo y bajo para que nunca se corte una tarjeta. */
-  readonly porPagina = 3;
+  /** Registros por página. Con 2, la tarjeta (foto + info) entra completa
+   *  y simétrica sin necesitar scroll. */
+  readonly porPagina = 2;
 
   pagina = 1;
 

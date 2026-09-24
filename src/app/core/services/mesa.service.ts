@@ -89,6 +89,30 @@ export class MesaService {
     }
   }
 
+  async eliminarMesa(id: string): Promise<void> {
+    const { error } = await this.supabaseService.client
+      .from(TABLA)
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      // 23503 = viola una FK (ej. la mesa tiene ocupaciones registradas).
+      if (error.code === '23503') {
+        throw new Error(
+          'No se puede eliminar: esta mesa tiene ocupaciones registradas.',
+        );
+      }
+      throw error;
+    }
+
+    // Limpieza best-effort del storage: si falla, la mesa ya se borró de
+    // todas formas, así que no lo tratamos como un error para el usuario.
+    await this.supabaseService.client.storage
+      .from(BUCKET)
+      .remove([`${id}.jpg`, `qr-${id}.png`])
+      .catch((err) => console.error('No se pudo limpiar el storage de la mesa:', err));
+  }
+
   private async webPathABlob(webPath: string): Promise<Blob> {
     const respuesta = await fetch(webPath);
     return respuesta.blob();

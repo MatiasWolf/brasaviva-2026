@@ -80,15 +80,39 @@ ion-back-button {
   }
 }
 
+.filtros-row {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
 .buscador {
   --background: #fff3df;
   --color: #35170b;
   --placeholder-color: #805238;
   --icon-color: #805238;
   --border-radius: 12px;
+  --box-shadow: none;
+  flex: 1;
+  min-width: 0;
   padding: 0;
+  font-size: 0.92rem;
   box-shadow: 0 3px 8px rgba(19, 9, 5, 0.25);
-  flex-shrink: 0;
+}
+
+.filtro-rol {
+  flex: 0 0 116px;
+  --background: #fff3df;
+  --color: #35170b;
+  --placeholder-color: #805238;
+  --padding-start: 12px;
+  --padding-end: 8px;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(19, 9, 5, 0.25);
+  font-size: 0.84rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mensaje-error {
@@ -148,13 +172,19 @@ ion-back-button {
   }
 }
 
+/* Grilla 2x2 simétrica: imagen / nombre+rol arriba, modificar / eliminar
+   abajo — las 4 celdas ocupan el mismo espacio. */
 .empleado-card {
-  flex: 1 1 auto;
-  min-height: 118px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px;
+  /* flex-basis 0 (no "auto"): reparte el espacio libre en partes iguales
+     entre las 2 tarjetas sin importar diferencias de contenido, para que
+     queden del mismo alto. */
+  flex: 1 1 0;
+  min-height: 168px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr auto;
+  gap: 10px;
+  padding: 14px;
   border-radius: 18px;
   border: 2px solid #802323;
   background: linear-gradient(160deg, #5e1f1f 0%, #431717 100%);
@@ -162,10 +192,12 @@ ion-back-button {
 }
 
 .avatar {
-  flex-shrink: 0;
-  width: 96px;
-  height: 96px;
-  border-radius: 20px;
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 72px;
+  border-radius: 16px;
   overflow: hidden;
   display: grid;
   place-items: center;
@@ -184,26 +216,29 @@ ion-back-button {
   }
 }
 
-.datos {
-  flex: 1;
+.datos-texto {
+  grid-column: 2;
+  grid-row: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
 
   h2 {
     margin: 0;
-    font-size: 1.15rem;
+    width: 100%;
+    font-size: 1.05rem;
     font-weight: 700;
     color: #ffe9cf;
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
-}
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 4px 0 0;
 }
 
 .chip {
@@ -219,34 +254,29 @@ ion-back-button {
   color: #ffd0a0;
 }
 
-/* Botones de acción grandes y separados, para no tocar el equivocado. */
-.acciones {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 12px;
+/* Botones de acción: uno por celda, mismo tamaño, separados. */
+.accion {
+  grid-row: 2;
+  --border-radius: 12px;
+  margin: 0;
+  height: 44px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: none;
 
-  .accion {
-    --border-radius: 12px;
-    --padding-top: 16px;
-    --padding-bottom: 16px;
-    --padding-start: 14px;
-    --padding-end: 14px;
-    margin: 0;
-    height: 44px;
-    font-size: 0.86rem;
-    font-weight: 700;
-    text-transform: none;
-
-    ion-icon {
-      font-size: 1.15rem;
-    }
+  ion-icon {
+    font-size: 1.1rem;
   }
+}
 
-  .accion--editar {
-    --color: #ffd485;
-    --border-color: #ffd485;
-  }
+.accion--editar {
+  grid-column: 1;
+  --color: #ffd485;
+  --border-color: #ffd485;
+}
+
+.accion--eliminar {
+  grid-column: 2;
 }
 
 /* Paginador fijo abajo. */

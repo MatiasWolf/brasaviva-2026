@@ -526,127 +526,194 @@ ion-back-button {
   }
 }
 
+
+
 /* =========================================
    MODAL ASIGNACIÓN EXITOSA
    ========================================= */
 
 .modal-asignacion-exitosa {
   --background: transparent;
-
-  --width: min(90%, 420px);
+  --width: min(94%, 460px);
   --height: auto;
-
-  --border-radius: 18px;
-
-  --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
-
-  align-items: center;
-  justify-content: center;
+  --border-radius: 20px;
+  --box-shadow: 0 15px 40px rgba(19, 9, 5, 0.35);
 }
+
+/* =========================================
+   CONTENEDOR
+   ========================================= */
 
 .exito-container {
-  padding: 24px;
+  width: 100%;
+  padding: 32px 36px 36px;
 
-  border-radius: 18px;
+  box-sizing: border-box;
 
   background: linear-gradient(
-    160deg,
-    #5e1f1f 0%,
-    #431717 100%
+    180deg,
+    #fff8ed 0%,
+    #fff3df 100%
   );
 
-  border: 2px solid #802323;
+  border: 2px solid #c0784d;
+  border-radius: 20px;
 
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 15px 40px rgba(19, 9, 5, 0.35);
 
-  color: #ffe9cf;
+  color: #4d200f;
 }
+
+/* =========================================
+   ICONO
+   ========================================= */
 
 .exito-icono {
   display: flex;
+  align-items: center;
   justify-content: center;
 
+  margin-bottom: 18px;
+
   ion-icon {
-    font-size: 4rem;
-    color: #ffd485;
+    display: block;
+
+    font-size: 4.2rem;
+
+    color: #e9820e;
   }
 }
+
+/* =========================================
+   TÍTULO
+   ========================================= */
 
 .exito-titulo {
   text-align: center;
 
   h2 {
-    margin: 12px 0 20px;
+    margin: 0 0 26px;
 
-    color: #ffe9cf;
+    color: #4d200f;
+
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
   }
 }
 
+/* =========================================
+   INFORMACIÓN
+   ========================================= */
+
 .exito-info {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
 
-  padding: 14px 0;
+  align-items: start;
 
-  border-top: 1px solid rgba(255, 248, 241, 0.15);
-  border-bottom: 1px solid rgba(255, 248, 241, 0.15);
+  width: 100%;
+
+  padding: 18px 0 20px;
+
+  border-top: 1px solid rgba(77, 32, 15, 0.16);
+  border-bottom: 1px solid rgba(77, 32, 15, 0.16);
 }
 
 .exito-dato {
   display: flex;
   flex-direction: column;
 
-  gap: 4px;
+  gap: 6px;
+
+  min-width: 0;
 }
 
+/* Cliente */
+.exito-dato:first-child {
+  align-items: flex-start;
+}
+
+/* Mesa */
+.exito-dato:last-child {
+  align-items: flex-end;
+  padding-left: 32px;
+}
+
+/* Etiquetas */
 .dato-label {
-  font-size: 0.75rem;
+  color: #805238;
 
-  color: rgba(255, 248, 241, 0.66);
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1.2;
 }
 
-.dato-valor,
-.dato-mesa {
-  color: #ffe9cf;
+/* Valor del cliente */
+.dato-valor {
+  max-width: 100%;
 
+  color: #4d200f;
+
+  font-size: 17px;
   font-weight: 700;
+  line-height: 1.25;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+/* Número de mesa */
 .dato-mesa {
-  color: #ffd485;
+  color: #e9820e;
 
-  font-size: 1.2rem;
+  font-size: 1.65rem;
+  font-weight: 800;
+  line-height: 1.1;
 }
 
-.separador {
-  width: 1px;
-  height: 36px;
-
-  background: rgba(255, 248, 241, 0.2);
-}
+/* =========================================
+   BOTÓN
+   ========================================= */
 
 .exito-acciones {
-  margin-top: 20px;
+  width: 100%;
+
+  margin-top: 26px;
 }
 
 .btn-aceptar-exito {
-  --background: linear-gradient(
-    135deg,
-    #ffb347 0%,
-    #e9820e 100%
-  );
+  width: 100%;
+  height: 48px;
 
-  --color: #2a1204;
+  margin: 0;
+
+  --background: #ffd485;
+  --background-hover: #ffe0a3;
+  --background-activated: #e9b95e;
+
+  --color: #4d200f;
 
   --border-radius: 12px;
 
-  height: 44px;
+  --padding-start: 16px;
+  --padding-end: 16px;
 
+  --box-shadow: 0 5px 12px rgba(19, 9, 5, 0.2);
+
+  font-family: inherit;
+  font-size: 15px;
   font-weight: 700;
 
   text-transform: none;
+
+  ion-icon {
+    font-size: 1.3rem;
+    margin-right: 6px;
+  }
 }
+
 
 
 /* =========================================

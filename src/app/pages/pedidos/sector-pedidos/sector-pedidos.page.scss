@@ -1,0 +1,385 @@
+/* Pedidos de cocina y de bar (puntos 16 y 17). */
+
+.pedidos-content {
+  --background:
+    radial-gradient(circle at 15% 0%, rgba(246, 193, 133, 0.16), transparent 22%),
+    linear-gradient(180deg, #130905 0%, #3a1710 100%);
+  --color: #ffd485;
+}
+
+ion-header {
+  background: #130905;
+}
+
+ion-toolbar {
+  --background: #130905;
+  --color: #ffd485;
+  --border-color: transparent;
+}
+
+ion-title {
+  color: #ffd485;
+  font-weight: 600;
+}
+
+ion-back-button {
+  --color: #ffd485;
+}
+
+.pedidos-container {
+  min-height: 100%;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.loader {
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: #ffd485;
+
+  p {
+    margin: 0;
+    color: rgba(255, 248, 241, 0.74);
+  }
+}
+
+.mensaje-error {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(180, 55, 40, 0.18);
+  border: 1px solid rgba(180, 55, 40, 0.35);
+  color: #ffe0d8;
+  font-size: 14px;
+  text-align: center;
+
+  button {
+    margin-top: 8px;
+    background: transparent;
+    border: 1px solid rgba(255, 224, 216, 0.6);
+    border-radius: 8px;
+    color: #ffe0d8;
+    padding: 4px 12px;
+    font-weight: 600;
+  }
+}
+
+.vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px 16px;
+  text-align: center;
+  color: #dfa070;
+
+  ion-icon {
+    font-size: 3.2rem;
+    opacity: 0.7;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #ffd485;
+  }
+
+  span {
+    font-size: 0.88rem;
+    color: rgba(255, 248, 241, 0.6);
+  }
+}
+
+/* ------------------------------------------------------------- secciones */
+
+.seccion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #f6c185;
+
+  ion-icon {
+    font-size: 1.2rem;
+  }
+
+  &--ok {
+    color: #8fd39a;
+  }
+}
+
+/* ----------------------------------------------------- grupo por mesa */
+
+.grupo-mesa {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 18px;
+  background: rgba(19, 9, 5, 0.35);
+  border: 1px solid rgba(246, 193, 133, 0.18);
+
+  &--terminada {
+    opacity: 0.85;
+  }
+}
+
+.grupo-encabezado {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ffb347 0%, #e9820e 100%);
+  color: #2a1204;
+  align-self: flex-start;
+}
+
+.mesa-numero {
+  font-size: 1.65rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.mesa-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* --------------------------------------------------------------- comanda */
+
+.comanda {
+  border-radius: 16px;
+  padding: 14px;
+  background: rgba(255, 243, 223, 0.06);
+  border: 1px solid rgba(246, 193, 133, 0.22);
+  box-shadow: 0 6px 16px rgba(19, 9, 5, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  /* Mas de 20 minutos esperando: se resalta. */
+  &--demorada {
+    border-color: rgba(226, 86, 62, 0.7);
+    box-shadow: 0 6px 18px rgba(226, 86, 62, 0.28);
+  }
+
+  &--terminada {
+    opacity: 0.72;
+    border-color: rgba(143, 211, 154, 0.35);
+  }
+}
+
+.comanda-top {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  p {
+    margin: 0;
+  }
+}
+
+.fecha {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #fff8f1;
+
+  ion-icon {
+    font-size: 1.05rem;
+    color: #f6c185;
+  }
+}
+
+.espera {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffd485;
+
+  ion-icon {
+    font-size: 1.05rem;
+  }
+}
+
+.comanda--demorada .espera {
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #e2563e;
+  color: #2a0d07;
+  font-weight: 800;
+}
+
+.estimado {
+  font-size: 0.82rem;
+  color: rgba(255, 248, 241, 0.6);
+}
+
+/* ----------------------------------------------------------------- ítems */
+
+.items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(19, 9, 5, 0.45);
+  border-left: 4px solid rgba(246, 193, 133, 0.35);
+
+  &[data-estado='en_preparacion'] {
+    border-left-color: #ffb347;
+  }
+
+  &[data-estado='listo'] {
+    border-left-color: #8fd39a;
+  }
+}
+
+.cantidad {
+  flex-shrink: 0;
+  min-width: 34px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffb347;
+}
+
+.nombre {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: #fff8f1;
+}
+
+.acciones-item {
+  flex-shrink: 0;
+}
+
+.btn-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  /* 44px es el minimo comodo para tocar sin mirar, que es como se usa esto
+     en la cocina. */
+  min-height: 44px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  cursor: pointer;
+
+  ion-icon {
+    font-size: 1.1rem;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &--empezar {
+    background: rgba(246, 193, 133, 0.18);
+    color: #ffd485;
+    border: 1px solid rgba(246, 193, 133, 0.5);
+  }
+
+  &--listo {
+    background: linear-gradient(135deg, #6fc07d 0%, #3f9b52 100%);
+    color: #0f2a15;
+  }
+}
+
+.chip-listo {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(143, 211, 154, 0.18);
+  color: #8fd39a;
+  font-size: 0.8rem;
+  font-weight: 700;
+
+  ion-icon {
+    font-size: 1rem;
+  }
+}
+
+.btn-comanda {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  border: none;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #ffb347 0%, #e9820e 100%);
+  color: #2a1204;
+  font-family: inherit;
+  font-size: 0.98rem;
+  font-weight: 800;
+  box-shadow: 0 5px 14px rgba(233, 130, 14, 0.3);
+  cursor: pointer;
+
+  ion-icon {
+    font-size: 1.3rem;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+
+/* ------------------------------------------------------------------ foco */
+.btn-item:focus-visible,
+.btn-comanda:focus-visible,
+.mensaje-error button:focus-visible {
+  outline: 3px solid #ffd485;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-item:active,
+  .btn-comanda:active {
+    transform: none;
+  }
+}

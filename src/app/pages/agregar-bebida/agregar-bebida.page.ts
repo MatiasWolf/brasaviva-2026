@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, ViewChild, inject } from '@angular/core';
+import { Component, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -18,12 +18,11 @@ import {
   IonTextarea,
   IonTitle,
   IonToolbar,
-  IonIcon,
-  IonModal,
-  ToastController
+  IonIcon
 } from '@ionic/angular';
 import { BebidaService } from '../../core/services/bebida.service';
 import { SpinnerLogoComponent } from '../../shared/components/spinner-logo/spinner-logo.component';
+import { MensajeModalService } from '../../core/services/mensaje-modal.service';
 import { addIcons } from 'ionicons';
 import {
   checkmarkCircle,
@@ -58,14 +57,11 @@ interface FotoSlot {
     IonInput,
     IonTextarea,
     IonButton,
-    IonModal,
     IonIcon,
     SpinnerLogoComponent
   ]
 })
 export class AgregarBebidaPage {
-
-  @ViewChild(IonModal) modalExito?: IonModal;
 
   bebidaForm: FormGroup;
 
@@ -79,8 +75,6 @@ export class AgregarBebidaPage {
 
   mensajeError = '';
 
-  isModalOpen = false;
-
   /** Índice de la foto visible en el carrusel (0, 1 o 2). */
   fotoActiva = 0;
 
@@ -88,7 +82,7 @@ export class AgregarBebidaPage {
   private readonly bebidaService = inject(BebidaService);
   private readonly router = inject(Router);
   private readonly cdr = inject(ChangeDetectorRef);
-  private readonly toastController = inject(ToastController);
+  private readonly mensajeModal = inject(MensajeModalService);
 
   constructor() {
     addIcons({
@@ -226,7 +220,11 @@ export class AgregarBebidaPage {
         this.fotos.map(foto => foto.archivo as File)
       );
 
-      this.isModalOpen = true;
+      this.mensajeModal.exito(
+        'La bebida fue guardada correctamente y ya forma parte de la carta.',
+        '¡Bebida agregada!'
+      );
+      await this.router.navigate(['/carta-bebidas']);
 
     } catch (error: any) {
 
@@ -243,27 +241,14 @@ export class AgregarBebidaPage {
     }
   }
 
-  async irALaCarta() {
-    await this.modalExito?.dismiss();
-    this.isModalOpen = false;
-    await this.router.navigate(['/carta-bebidas']);
-  }
-
-  /** Muestra el error en pantalla, con un aviso flotante y vibración. */
+  /** Muestra el error en pantalla, con vibración. */
   private async mostrarError(mensaje: string): Promise<void> {
 
     this.mensajeError = mensaje;
     this.vibrar();
     this.cdr.detectChanges();
 
-    const aviso = await this.toastController.create({
-      message: mensaje,
-      duration: 3000,
-      position: 'top',
-      color: 'danger'
-    });
-
-    await aviso.present();
+    this.mensajeModal.error(mensaje);
   }
 
   private vibrar(): void {

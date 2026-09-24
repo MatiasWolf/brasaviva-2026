@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ClienteService } from '../../../core/services/cliente.service';
 import { Router } from '@angular/router';
@@ -14,6 +14,7 @@ import {
   IonButton,
   IonButtons,
   IonContent,
+  IonFooter,
   IonHeader,
   IonInput,
   IonIcon,
@@ -28,6 +29,8 @@ import {
 } from 'ionicons/icons';
 
 import { CameraService } from '../../../core/services/camera.service';
+import { MensajeModalService } from '../../../core/services/mensaje-modal.service';
+import { traducirErrorSupabase } from '../../../core/utils/traducir-error.util';
 
 @Component({
   selector: 'app-registro',
@@ -43,6 +46,7 @@ import { CameraService } from '../../../core/services/camera.service';
     IonButtons,
     IonBackButton,
     IonContent,
+    IonFooter,
     IonInput,
     IonButton,
     IonIcon
@@ -53,6 +57,8 @@ export class RegistroPage {
   registroForm: FormGroup;
 
   fotoPreview: string | null = null;
+
+  private readonly mensajeModal = inject(MensajeModalService);
 
   constructor(
     private fb: FormBuilder,
@@ -101,16 +107,18 @@ export class RegistroPage {
 
     } catch (error) {
       console.error('Error al tomar la foto:', error);
-
+      this.mensajeModal.error('No se pudo obtener la foto. Intentá nuevamente.');
     }
   }
 
   async continuar(): Promise<void> {
     if (this.registroForm.invalid) {
       this.registroForm.markAllAsTouched();
+      this.mensajeModal.error('Completá correctamente todos los campos.');
       return;
     }
     if (!this.fotoPreview) {
+      this.mensajeModal.error('Debés agregar una foto de perfil.');
       return;
     }
     const { nombre, apellido } =
@@ -126,6 +134,9 @@ export class RegistroPage {
       console.error(
         'Error durante el registro del invitado:',
         error
+      );
+      this.mensajeModal.error(
+        traducirErrorSupabase(error, 'No se pudo completar el registro. Intentá nuevamente.'),
       );
     }
   }

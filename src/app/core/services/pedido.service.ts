@@ -21,7 +21,7 @@ export class PedidoService {
     public tiempoEstimadoPedido = signal<number>(0);
 
     public horaConfirmacionPedido: string | null = null;
- 
+
     public cargandoProductos = signal<boolean>(false);
 
     public ocupacionMesaId: number | null = null;
@@ -55,10 +55,9 @@ export class PedidoService {
         const itemExistente = pedidoActual.find(item => item.producto.id === producto.id);
 
         if (itemExistente) {
-            // Si ya llegó a 20, no hace nada 
             if (itemExistente.cantidad >= 20) {
-                console.warn(`Límite alcanzado: No se pueden pedir más de 20 unidades de ${producto.nombre}`);
-                return; 
+                console.warn(`Limite alcanzado: No se pueden pedir mas de 20 unidades de ${producto.nombre}`);
+                return;
             }
 
             this.pedido.set(
@@ -543,5 +542,51 @@ export class PedidoService {
         } catch (err) {
             return false;
         }
+    }
+
+    private sectorDe(producto: Producto): 'cocina' | 'bar' {
+        return producto.categoria_id === 2 ? 'bar' : 'cocina';
+    }
+
+    async ocupacionActiva(
+        ocupacionMesaId: number
+    ): Promise<{ id: number }> {
+
+        const buscar = async (columna: string, valor: string | number) => {
+            const { data } = await this.supabaseService.client
+                .from('ocupaciones_mesa')
+                .select('id')
+                .eq(columna, valor)
+                .eq('estado', 'activa')
+                .order('fecha_ingreso', { ascending: false })
+                .limit(1)
+                .maybeSingle();
+
+            return data as { id: number } | null;
+        };
+
+        if (ocupacionMesaId) {
+            const porId = await buscar('id', ocupacionMesaId);
+            if (porId) return porId;
+        }
+
+        const { data: sesion } =
+            await this.supabaseService.client.auth.getUser();
+
+        if (sesion?.user) {
+            const porUsuario = await buscar('usuario_id', sesion.user.id);
+            if (porUsuario) return porUsuario;
+        }
+
+        const idAnonimo = this.anonymousSession.obtenerIdSesion();
+
+        if (idAnonimo) {
+            const porAnonimo = await buscar('sesion_anonima_id', idAnonimo);
+            if (porAnonimo) return porAnonimo;
+        }
+
+        throw new Error(
+            'No encontramos una mesa asignada. Pedile al metre que te asigne una.'
+        );
     }
 }

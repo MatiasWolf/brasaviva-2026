@@ -23,7 +23,6 @@
           <span>Tomar foto de la mesa</span>
         }
       </button>
-      <p class="foto-hint">La foto es obligatoria.</p>
     </div>
 
     <form [formGroup]="mesaForm" (ngSubmit)="guardar()" class="mesa-form">
@@ -110,9 +109,6 @@
         <span class="campo-label">Disponibilidad</span>
         <span class="chip-vacia">Vacía</span>
       </div>
-      <p class="ayuda-campo">
-        Toda mesa nueva arranca "Vacía". Después la podés cambiar desde el listado.
-      </p>
 
       <button type="submit" class="submit-oculto" aria-hidden="true" tabindex="-1"></button>
     </form>
@@ -121,10 +117,6 @@
 </ion-content>
 
 <ion-footer class="mesa-footer">
-  @if (mensajeError()) {
-    <div class="mensaje-error">{{ mensajeError() }}</div>
-  }
-
   <ion-button
     expand="block"
     type="button"

@@ -2,6 +2,7 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {
+  AlertController,
   IonBackButton,
   IonButton,
   IonButtons,
@@ -13,7 +14,6 @@ import {
   IonSearchbar,
   IonTitle,
   IonToolbar,
-  ToastController,
   ViewWillEnter,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
@@ -25,11 +25,14 @@ import {
   gridOutline,
   peopleOutline,
   qrCodeOutline,
+  trashOutline,
 } from 'ionicons/icons';
 
 import { MesaService } from '../../../core/services/mesa.service';
 import { DisponibilidadMesa, Mesa } from '../../../core/models/mesa.model';
 import { SpinnerLogoComponent } from '../../../shared/components/spinner-logo/spinner-logo.component';
+import { MensajeModalService } from '../../../core/services/mensaje-modal.service';
+import { traducirErrorSupabase } from '../../../core/utils/traducir-error.util';
 
 @Component({
   selector: 'app-listado-mesas',
@@ -55,7 +58,8 @@ import { SpinnerLogoComponent } from '../../../shared/components/spinner-logo/sp
 export class ListadoMesasPage implements ViewWillEnter {
   private readonly mesaService = inject(MesaService);
   private readonly router = inject(Router);
-  private readonly toastCtrl = inject(ToastController);
+  private readonly alertCtrl = inject(AlertController);
+  private readonly mensajeModal = inject(MensajeModalService);
 
   /** Registros por página. 2 entran completos entre el buscador y el
    *  paginador en cualquier celular, sin necesidad de scroll. */
@@ -94,6 +98,7 @@ export class ListadoMesasPage implements ViewWillEnter {
       'grid-outline': gridOutline,
       'people-outline': peopleOutline,
       'qr-code-outline': qrCodeOutline,
+      'trash-outline': trashOutline,
       'close-outline': closeOutline,
       'chevron-back-outline': chevronBackOutline,
       'chevron-forward-outline': chevronForwardOutline,
@@ -157,25 +162,44 @@ export class ListadoMesasPage implements ViewWillEnter {
         actual.map((m) => (m.id === mesa.id ? { ...m, disponibilidad: nueva } : m)),
       );
     } catch (err) {
-      await this.mostrarToast(
-        (err as Error)?.message ?? 'No se pudo actualizar la disponibilidad.',
-        'danger',
+      this.mensajeModal.error(
+        traducirErrorSupabase(err, 'No se pudo actualizar la disponibilidad.'),
       );
     } finally {
       this.actualizando.set(null);
     }
   }
 
-  private async mostrarToast(
-    message: string,
-    color: 'success' | 'danger',
-  ): Promise<void> {
-    const toast = await this.toastCtrl.create({
-      message,
-      duration: 3000,
-      position: 'top',
-      color,
+  async confirmarEliminar(mesa: Mesa): Promise<void> {
+    const alert = await this.alertCtrl.create({
+      header: 'Eliminar mesa',
+      message: `¿Seguro que querés eliminar la mesa ${mesa.numero}? Esta acción no se puede deshacer.`,
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          handler: () => {
+            void this.eliminar(mesa);
+          },
+        },
+      ],
     });
-    await toast.present();
+    await alert.present();
+  }
+
+  private async eliminar(mesa: Mesa): Promise<void> {
+    try {
+      await this.mesaService.eliminarMesa(mesa.id);
+      this.lista.update((actual) => actual.filter((m) => m.id !== mesa.id));
+      if (this.pagina() > this.totalPaginas()) {
+        this.pagina.set(this.totalPaginas());
+      }
+      this.mensajeModal.exito('La mesa fue eliminada.', 'Mesa eliminada');
+    } catch (err) {
+      this.mensajeModal.error(
+        traducirErrorSupabase(err, 'No se pudo eliminar la mesa.'),
+      );
+    }
   }
 }

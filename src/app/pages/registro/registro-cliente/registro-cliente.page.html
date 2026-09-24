@@ -11,57 +11,41 @@
   <div class="registro-container">
 
 
-<!-- ENCABEZADO -->
-<div class="registro-header">
-  
-  <h1>Crear cuenta</h1>
-
-  <p>
-    Registrate para disfrutar de todas las opciones
-    disponibles en nuestro restaurante.
-  </p>
-</div>
-
-  <!-- FOTO Y ESCANEAR DNI -->
-<div class="foto-dni-row">
-
-  <!-- FOTO DE PERFIL -->
-  <div class="foto-section">
-    <button
-      type="button"
-      class="foto-button"
-      (click)="tomarFoto()"
-    >
-      @if (fotoPreview) {
-
-        <img
-          [src]="fotoPreview"
-          alt="Foto de perfil"
-          class="foto-preview"
-        />
-
-        <div class="foto-check">
-          <ion-icon name="checkmark-circle"></ion-icon>
-        </div>
-
-      } @else {
-
-        <ion-icon name="camera-outline"></ion-icon>
-
-        <span>Tomar foto</span>
-
-      }
-    </button>
-  </div>
-
-  <!-- ESCANEAR DNI -->
+  <!-- FOTO DE PERFIL, grande y centrada, con el escaneo de DNI debajo -->
+<div class="foto-section">
   <button
     type="button"
-    class="foto-button btn-escanear-dni"
+    class="foto-button-grande"
+    (click)="tomarFoto()"
+  >
+    @if (fotoPreview) {
+
+      <img
+        [src]="fotoPreview"
+        alt="Foto de perfil"
+        class="foto-preview-grande"
+      />
+
+      <div class="foto-check">
+        <ion-icon name="checkmark-circle"></ion-icon>
+      </div>
+
+    } @else {
+
+      <ion-icon name="camera-outline"></ion-icon>
+
+      <span>Foto de perfil</span>
+
+    }
+  </button>
+
+  <button
+    type="button"
+    class="btn-escanear-dni"
     (click)="escanearDni()"
   >
     <ion-icon name="scan-outline"></ion-icon>
-    <span>Escanear DNI</span>
+    Escanear DNI
   </button>
 
 </div>
@@ -301,12 +285,6 @@
     </div>
 
 
-    <!-- LOGIN -->
-    <p class="texto-login">
-      ¿Ya tenés una cuenta?
-      <span (click)="irAlLogin()">Iniciar sesión</span>
-    </p>
-
     <button type="submit" class="submit-oculto" aria-hidden="true" tabindex="-1"></button>
 
     </form>
@@ -316,10 +294,6 @@
 </ion-content>
 
 <ion-footer class="registro-footer">
-  @if (mensajeError) {
-    <div class="mensaje-error">{{ mensajeError }}</div>
-  }
-
   <ion-button
     expand="block"
     type="button"
@@ -330,47 +304,6 @@
     {{ enviando ? 'Registrando...' : 'Crear cuenta' }}
   </ion-button>
 </ion-footer>
-
-<!-- MODAL REGISTRO EXITOSO -->
-
-<ion-modal
-  [isOpen]="isModalOpen"
-  (didDismiss)="isModalOpen = false"
-  cssClass="success-modal"
->
-  <ng-template>
-
-    <div class="success-container">
-
-      <div class="success-icono">
-        <ion-icon name="checkmark-circle"></ion-icon>
-      </div>
-
-      <div class="success-titulo">
-        <h2>¡Registro exitoso!</h2>
-        
-      </div>
-
-      <div class="success-info">
-        <p>
-          Tu cuenta quedó pendiente de aprobación.
-          Te avisaremos cuando esté habilitada para ingresar a Brasa Viva.
-        </p>
-      </div>
-       
-      <div class="success-acciones">
-        <ion-button
-          (click)="irAlLogin()"
-          class="btn-aceptar-success"
-          expand="block">
-          Continuar
-        </ion-button>
-      </div>
-
-    </div>
-
-  </ng-template>
-</ion-modal>
 
 <!-- ESCANEO DE DNI -->
 <app-dni-scanner

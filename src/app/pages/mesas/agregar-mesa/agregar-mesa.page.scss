@@ -49,7 +49,8 @@ ion-back-button {
 .foto-button {
   position: relative;
   width: 100%;
-  max-width: 220px;
+  max-width: 340px;
+  max-height: 42vh;
   aspect-ratio: 4 / 3;
   display: flex;
   flex-direction: column;
@@ -120,13 +121,6 @@ ion-back-button {
   }
 }
 
-.foto-hint {
-  margin: 6px 0 0;
-  text-align: center;
-  font-size: 0.78rem;
-  color: #fff1dc;
-}
-
 /* FORMULARIO */
 .mesa-form {
   flex: 1;
@@ -139,7 +133,7 @@ ion-back-button {
 /* Número y comensales: contenido corto, uno al lado del otro. */
 .fila {
   display: flex;
-  gap: 10px;
+  gap: 14px;
 
   .campo {
     flex: 1;
@@ -147,14 +141,18 @@ ion-back-button {
   }
 }
 
+/* Sin foto+DNI arriba (esta alta no escanea DNI), el formulario tiene
+   menos filas que el de empleados — campos más altos y más separados
+   para que ocupen el espacio libre en vez de quedar apretados y centrados
+   con un hueco grande alrededor. */
 .campo {
   width: 100%;
-  min-height: 56px;
+  min-height: 72px;
   background: #fff3df;
   border: 2px solid #c0784d;
   border-radius: 12px;
-  padding: 4px 12px;
-  margin-bottom: 8px;
+  padding: 8px 14px;
+  margin-bottom: 18px;
   box-sizing: border-box;
   box-shadow: 0 3px 8px rgba(19, 9, 5, 0.25);
   transition:
@@ -173,7 +171,7 @@ ion-back-button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 56px;
+  min-height: 72px;
 }
 
 .campo-label {
@@ -190,13 +188,6 @@ ion-back-button {
   background: rgba(72, 160, 90, 0.18);
   border: 1px solid rgba(72, 160, 90, 0.5);
   color: #2f6b40;
-}
-
-.ayuda-campo {
-  margin: -6px 2px 14px;
-  font-size: 12px;
-  line-height: 1.4;
-  color: #fff1dc;
 }
 
 ion-input,

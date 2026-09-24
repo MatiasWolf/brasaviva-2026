@@ -151,10 +151,44 @@ export const routes: Routes = [
       import('./pages/mozos-chat/mozos-chat.page').then((m) => m.MozosChatPage),
   },
   {
+    path: 'pedidos/cocina',
+    loadComponent: () =>
+      import('./pages/pedidos/sector-pedidos/sector-pedidos.page').then(
+        (m) => m.SectorPedidosPage
+      ),
+    data: { sector: 'cocina' },
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor', 'cocinero'])],
+  },
+  {
+    path: 'pedidos/bar',
+    loadComponent: () =>
+      import('./pages/pedidos/sector-pedidos/sector-pedidos.page').then(
+        (m) => m.SectorPedidosPage
+      ),
+    data: { sector: 'bar' },
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor', 'cantinero'])],
+  },
+  {
+    path: 'pedidos/listos',
+    loadComponent: () =>
+      import('./pages/pedidos/pedidos-listos/pedidos-listos.page').then(
+        (m) => m.PedidosListosPage
+      ),
+    canActivate: [authGuard, rolGuard(['dueño', 'supervisor', 'mozo'])],
+  },
+  {
+    path: 'seguimiento-pedido',
+    loadComponent: () =>
+      import('./pages/pedidos/seguimiento-pedido/seguimiento-pedido.page').then(
+        (m) => m.SeguimientoPedidoPage
+      ),
+  },
+  {
     path: '',
     redirectTo: 'splash-estatica',
     pathMatch: 'full',
-  },  {
+  },
+  {
     path: 'seguimiento-pedido',
     loadComponent: () => import('./pages/seguimiento-pedido/seguimiento-pedido.page').then( m => m.SeguimientoPedidoPage)
   },

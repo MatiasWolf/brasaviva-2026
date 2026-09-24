@@ -53,8 +53,8 @@
         @for (perfil of perfilesRapidos(); track perfil.id; let i = $index) {
           <button
             type="button"
-            class="perfil-card"
-            [class.perfil-card--activo]="perfilSeleccionadoIndex() === i"
+            class="perfil-avatar-item"
+            [class.perfil-avatar-item--activo]="perfilSeleccionadoIndex() === i"
             (click)="cargarPerfil(i, perfil)"
           >
             <span class="perfil-avatar">

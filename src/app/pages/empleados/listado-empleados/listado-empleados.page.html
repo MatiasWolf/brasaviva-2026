@@ -22,12 +22,30 @@
         Agregar empleado
       </button>
 
-      <ion-searchbar
-        class="buscador"
-        placeholder="Buscar por nombre, correo o rol"
-        [debounce]="200"
-        (ionInput)="filtrar($event)"
-      ></ion-searchbar>
+      <div class="filtros-row">
+        <ion-searchbar
+          class="buscador"
+          placeholder="Buscar..."
+          [debounce]="200"
+          (ionInput)="filtrar($event)"
+        ></ion-searchbar>
+
+        <ion-select
+          class="filtro-rol"
+          interface="popover"
+          [value]="filtroRol()"
+          (ionChange)="filtrarPorRol($event)"
+          [interfaceOptions]="{ cssClass: 'select-brasa-popover' }"
+          aria-label="Filtrar por rol"
+        >
+          <ion-select-option value="todos">Todos</ion-select-option>
+          @for (rol of rolesDisponibles(); track rol) {
+            <ion-select-option [value]="rol">
+              {{ rolLegibleTexto(rol) | titlecase }}
+            </ion-select-option>
+          }
+        </ion-select>
+      </div>
 
       @if (error()) {
         <div class="mensaje-error">
@@ -60,32 +78,29 @@
               }
             </div>
 
-            <div class="datos">
+            <div class="datos-texto">
               <h2>{{ empleado.apellido }}, {{ empleado.nombre }}</h2>
-              <div class="chips">
-                <span class="chip chip--rol">{{ rolLegible(empleado) | titlecase }}</span>
-              </div>
-
-              <div class="acciones">
-                <ion-button
-                  class="accion accion--editar"
-                  fill="outline"
-                  (click)="editar(empleado)"
-                >
-                  <ion-icon slot="start" name="create-outline"></ion-icon>
-                  Modificar
-                </ion-button>
-                <ion-button
-                  class="accion accion--eliminar"
-                  fill="outline"
-                  color="danger"
-                  (click)="confirmarEliminar(empleado)"
-                >
-                  <ion-icon slot="start" name="trash-outline"></ion-icon>
-                  Eliminar
-                </ion-button>
-              </div>
+              <span class="chip chip--rol">{{ rolLegible(empleado) | titlecase }}</span>
             </div>
+
+            <ion-button
+              class="accion accion--editar"
+              fill="outline"
+              (click)="editar(empleado)"
+            >
+              <ion-icon slot="start" name="create-outline"></ion-icon>
+              Modificar
+            </ion-button>
+
+            <ion-button
+              class="accion accion--eliminar"
+              fill="outline"
+              color="danger"
+              (click)="confirmarEliminar(empleado)"
+            >
+              <ion-icon slot="start" name="trash-outline"></ion-icon>
+              Eliminar
+            </ion-button>
           </article>
         }
       </div>

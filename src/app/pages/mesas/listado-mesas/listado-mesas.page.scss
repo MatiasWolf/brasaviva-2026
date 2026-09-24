@@ -141,35 +141,33 @@ ion-back-button {
   }
 }
 
+/* Grilla 2x2 simétrica: imagen / datos arriba, estado / eliminar abajo —
+   las 4 celdas ocupan el mismo espacio. */
 .mesa-card {
-  /* Con 2 por página el contenido natural entra de sobra: flex-grow las
-     estira parejo para ocupar el espacio libre. flex-shrink (con el
-     min-height como piso) es solo un resguardo para pantallas chicas. */
-  flex: 1 1 auto;
-  min-height: 118px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 16px;
+  /* flex-basis 0 (no "auto"): así el espacio libre se reparte en partes
+     iguales entre las 2 tarjetas sin importar si el contenido de una
+     "pesa" naturalmente más que el de la otra — quedan del mismo alto. */
+  flex: 1 1 0;
+  min-height: 168px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr auto;
+  gap: 10px;
+  padding: 14px;
   border-radius: 18px;
   border: 2px solid #802323;
   background: linear-gradient(160deg, #5e1f1f 0%, #431717 100%);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
 }
 
-.card-top {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-}
-
 .avatar {
+  grid-column: 1;
+  grid-row: 1;
   position: relative;
-  flex-shrink: 0;
-  width: 96px;
-  height: 96px;
-  border-radius: 20px;
+  width: 100%;
+  height: 100%;
+  min-height: 72px;
+  border-radius: 16px;
   overflow: hidden;
   display: grid;
   place-items: center;
@@ -191,8 +189,8 @@ ion-back-button {
 
   .avatar-qr {
     position: absolute;
-    right: -3px;
-    bottom: -3px;
+    right: 6px;
+    bottom: 6px;
     width: 26px;
     height: 26px;
     display: grid;
@@ -208,13 +206,20 @@ ion-back-button {
   }
 }
 
-.datos {
-  flex: 1;
+.datos-texto {
+  grid-column: 2;
+  grid-row: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  text-align: center;
 
   h2 {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #ffe9cf;
   }
@@ -223,12 +228,12 @@ ion-back-button {
     display: flex;
     align-items: center;
     gap: 5px;
-    margin: 4px 0 8px;
-    font-size: 0.88rem;
+    margin: 0;
+    font-size: 0.82rem;
     color: rgba(255, 248, 241, 0.66);
 
     ion-icon {
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
   }
 }
@@ -247,20 +252,22 @@ ion-back-button {
   color: #ffd0a0;
 }
 
-.acciones {
-  display: flex;
+/* Botones de acción: uno por celda, mismo tamaño. */
+.accion {
+  grid-row: 2;
+  margin: 0;
+  height: 44px;
+  font-size: 0.8rem;
+  font-weight: 700;
 }
 
 .btn-disponibilidad {
-  flex: 1;
+  grid-column: 1;
   appearance: none;
   border: 1px solid transparent;
   border-radius: 12px;
   cursor: pointer;
-  padding: 12px 14px;
   font-family: inherit;
-  font-size: 0.86rem;
-  font-weight: 700;
 
   &[data-disponibilidad='vacia'] {
     background: rgba(72, 160, 90, 0.2);
@@ -276,6 +283,16 @@ ion-back-button {
 
   &:disabled {
     opacity: 0.6;
+  }
+}
+
+.accion--eliminar {
+  grid-column: 2;
+  --border-radius: 12px;
+  text-transform: none;
+
+  ion-icon {
+    font-size: 1.05rem;
   }
 }
 

@@ -52,46 +52,52 @@
       <div class="lista">
         @for (mesa of paginaItems(); track mesa.id) {
           <article class="mesa-card">
-            <div class="card-top">
-              <button
-                type="button"
-                class="avatar"
-                (click)="verQr(mesa)"
-                aria-label="Ver código QR de la mesa"
-              >
-                @if (mesa.foto_url) {
-                  <img [src]="mesa.foto_url" [alt]="'Mesa ' + mesa.numero" />
-                } @else {
-                  <ion-icon name="grid-outline"></ion-icon>
-                }
-                <span class="avatar-qr">
-                  <ion-icon name="qr-code-outline"></ion-icon>
-                </span>
-              </button>
+            <button
+              type="button"
+              class="avatar"
+              (click)="verQr(mesa)"
+              aria-label="Ver código QR de la mesa"
+            >
+              @if (mesa.foto_url) {
+                <img [src]="mesa.foto_url" [alt]="'Mesa ' + mesa.numero" />
+              } @else {
+                <ion-icon name="grid-outline"></ion-icon>
+              }
+              <span class="avatar-qr">
+                <ion-icon name="qr-code-outline"></ion-icon>
+              </span>
+            </button>
 
-              <div class="datos">
-                <h2>Mesa {{ mesa.numero }}</h2>
-                <p class="comensales">
-                  <ion-icon name="people-outline"></ion-icon>
-                  {{ mesa.comensales }} comensales
-                </p>
-                <span class="chip chip--tipo">{{ tipoLegible(mesa) | titlecase }}</span>
-              </div>
+            <div class="datos-texto">
+              <h2>Mesa {{ mesa.numero }}</h2>
+              <p class="comensales">
+                <ion-icon name="people-outline"></ion-icon>
+                {{ mesa.comensales }} comensales
+              </p>
+              <span class="chip chip--tipo">{{ tipoLegible(mesa) | titlecase }}</span>
             </div>
 
-            <div class="acciones">
-              <button
-                type="button"
-                class="btn-disponibilidad"
-                [attr.data-disponibilidad]="mesa.disponibilidad"
-                [disabled]="actualizando() === mesa.id"
-                (click)="alternarDisponibilidad(mesa)"
-              >
-                {{ actualizando() === mesa.id
-                    ? 'Guardando...'
-                    : (mesa.disponibilidad === 'vacia' ? 'Marcar ocupada' : 'Marcar vacía') }}
-              </button>
-            </div>
+            <button
+              type="button"
+              class="accion btn-disponibilidad"
+              [attr.data-disponibilidad]="mesa.disponibilidad"
+              [disabled]="actualizando() === mesa.id"
+              (click)="alternarDisponibilidad(mesa)"
+            >
+              {{ actualizando() === mesa.id
+                  ? 'Guardando...'
+                  : (mesa.disponibilidad === 'vacia' ? 'Marcar ocupada' : 'Marcar vacía') }}
+            </button>
+
+            <ion-button
+              class="accion accion--eliminar"
+              fill="outline"
+              color="danger"
+              (click)="confirmarEliminar(mesa)"
+            >
+              <ion-icon slot="start" name="trash-outline"></ion-icon>
+              Eliminar
+            </ion-button>
           </article>
         }
       </div>
