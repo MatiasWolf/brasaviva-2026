@@ -1,62 +1,74 @@
 <ion-card class="tarjeta-individual">
-  <ion-card-content>
+  <ion-card-content class="contenido-tarjeta-bloques">
     
-    <!-- CONTENEDOR DE FOTOS INDIVIDUALES -->
-    <div class="contenedor-carrusel">
-      <!-- Botón Foto Anterior -->
-      <ion-button fill="clear" (click)="cambiarFoto('anterior')">
-        <ion-icon name="arrow-back-outline"></ion-icon>
-      </ion-button>
-
-      <!-- Visor de la foto activa -->
-      <div class="visor-imagen">
-        <img [src]="obtenerUrlFoto()" [alt]="producto.nombre" class="foto-menu" />
-        <span class="contador-fotos">{{ fotoActivaIndex() + 1 }} / 3</span>
-      </div>
-
-      <!-- Botón Foto Siguiente -->
-      <ion-button fill="clear" (click)="cambiarFoto('siguiente')">
-        <ion-icon name="arrow-forward-outline"></ion-icon>
-      </ion-button>
-    </div>
-
-    <!-- DETALLES DEL PRODUCTO Y SELECCIÓN DE CANTIDADES -->
-    <div class="detalles-producto">
-      <h2>{{ producto.nombre }}</h2>
-      <div class="tiempo-elaboracion">
-        <ion-icon name="time-outline"></ion-icon>
-        <span> {{ producto.tiempo_preparacion }} min</span>
-      </div>
-      @if (producto.descripcion) {
-      <p [class.recortado]="!descripcionExpandida()" 
-        (click)="descripcionExpandida.set(!descripcionExpandida())">
-        {{ producto.descripcion }}
-      </p>
-}
+    <!-- BLOQUE SUPERIOR: DIVIDIDO EN FOTO (IZQ) Y TEXTOS (DER) -->
+    <div class="fila-superior-mixta">
       
-      <!-- Contenedor inferior: Precio y controladores de cantidad -->
-      <div class="fila-precio-acciones">
-        <span class="precio">${{ producto.precio }}</span>
-        
-        <div class="acciones-carrito">
-          <!-- Restar unidad del pedido -->
-          <ion-button fill="clear" (click)="alRestar.emit(producto.id)">
-            <ion-icon name="remove-circle"></ion-icon>
-          </ion-button>
+      <!-- Carrusel de fotos a la izquierda (La foto ahora ocupa todo el ancho) -->
+      <div class="contenedor-carrusel">
+        <div class="visor-imagen">
           
-          <!-- Badge con la cantidad actual en el carrito -->
-          <div class="contenedor-carrito-badge-flotante">
-            <ion-icon name="cart-outline" class="icono-carrito-base"></ion-icon>
-            @if (cantidadEnCarrito > 0) {
-              <span class="globo-notificacion">{{ cantidadEnCarrito }}</span>
+          <!-- Botón Foto Anterior (Flotante a la izquierda) -->
+          <ion-button fill="clear" class="btn-flecha flotante-izq" (click)="cambiarFoto('anterior')">
+            <ion-icon name="arrow-back-outline"></ion-icon>
+          </ion-button>
+
+          <!-- Imagen del Menú completa -->
+          <img [src]="obtenerUrlFoto()" [alt]="producto.nombre" class="foto-menu" />
+          
+          <!-- Indicador de 3 puntitos dinámicos (Dots) CORREGIDO CON ARRAY EXPLÍCITO -->
+          <div class="indicador-dots">
+            @for (index of [0, 1, 2]; track index) {
+              <span class="dot" [class.dot-activo]="fotoActivaIndex() === index"></span>
             }
           </div>
-          
-          <!-- Agregar unidad al pedido -->
-          <ion-button fill="clear" (click)="alAgregar.emit(producto)" [style.visibility]="cantidadEnCarrito >= 20 ? 'hidden' : 'visible'">
-            <ion-icon name="add-circle"></ion-icon>
+
+          <!-- Botón Foto Siguiente (Flotante a la derecha) -->
+          <ion-button fill="clear" class="btn-flecha flotante-der" (click)="cambiarFoto('siguiente')">
+            <ion-icon name="arrow-forward-outline"></ion-icon>
           </ion-button>
+          
         </div>
+      </div>
+
+      <!-- Detalles del producto a la derecha -->
+      <div class="detalles-producto">
+        <h2>{{ producto.nombre }}</h2>
+        
+        <div class="tiempo-elaboracion">
+          <ion-icon name="time-outline"></ion-icon>
+          <span>{{ producto.tiempo_preparacion }} min</span>
+        </div>
+
+        @if (producto.descripcion) {
+          <p [class.recortado]="!descripcionExpandida()" 
+             (click)="descripcionExpandida.set(!descripcionExpandida())">
+            {{ producto.descripcion }}
+          </p>
+        }
+      </div>
+    </div>
+    
+    
+    <div class="fila-precio-acciones">
+      <span class="precio">${{ producto.precio }}</span>
+      
+      <div class="acciones-carrito">
+        <ion-button fill="clear" (click)="alRestar.emit(producto.id)"[style.visibility]="cantidadEnCarrito === 0 ? 'hidden' : 'visible'">
+          <ion-icon name="remove-circle"></ion-icon>
+        </ion-button>
+        
+        <div class="contenedor-carrito-badge-flotante">
+          <ion-icon name="cart-outline" class="icono-carrito-base"></ion-icon>
+          @if (cantidadEnCarrito > 0) {
+            <span class="globo-notificacion">{{ cantidadEnCarrito }}</span>
+          }
+        </div>
+        
+        <ion-button fill="clear" (click)="alAgregar.emit(producto)" 
+                    [style.visibility]="cantidadEnCarrito >= 20 ? 'hidden' : 'visible'">
+          <ion-icon name="add-circle"></ion-icon>
+        </ion-button>
       </div>
     </div>
 

@@ -4,7 +4,7 @@ import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent, Ion
 import { PedidoService } from '../../../core/services/pedido.service';
 import { Router } from '@angular/router'; 
 import { addIcons } from 'ionicons';
-import { addCircle, removeCircle, closeOutline, trashOutline, restaurantOutline } from 'ionicons/icons';
+import { addCircle, removeCircle, closeOutline, trashOutline, restaurantOutline, alertCircleOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-detalle-pedido',
@@ -31,7 +31,7 @@ export class DetallePedidoComponent {
   private router = inject(Router);
 
   constructor() {
-    addIcons({ addCircle, removeCircle, closeOutline, trashOutline, restaurantOutline });
+    addIcons({ addCircle, removeCircle, closeOutline, trashOutline, alertCircleOutline, restaurantOutline });
   }
 
   cerrar() {

@@ -1,8 +1,14 @@
-// Paleta del grupo
 $color-primario: #ffd485;
 $color-secundario: #ffaa55;
 $color-texto-suave: rgba(255, 248, 241, 0.74);
 $borde-oscuro: #802323;
+
+$espaciado-tarjetas: 12px;
+$padding-interno: 16px;
+
+$alto-util-pantalla: calc(100vh - 96px - (#{$padding-interno} * 2));
+$alto-tarjeta-estricto: calc((#{$alto-util-pantalla} - (#{$espaciado-tarjetas} * 2)) / 3);
+$alto-footer-perfecto: calc(#{$alto-tarjeta-estricto} + #{$espaciado-tarjetas});
 
 ion-toolbar {
   --background: radial-gradient(circle at 15% 0%, rgba(246, 193, 133, 0.16), transparent 22%),
@@ -18,12 +24,108 @@ ion-content {
   }
 
   &.home-container {
+    transition: height 0.25s ease-in-out;
+    height: calc(100vh - 96px); 
+
     &::part(scroll) {
-      padding: 16px 16px 32px;
+      padding: $padding-interno;
+      box-sizing: border-box;
       display: flex;
       flex-direction: column;
-      gap: 16px; 
+      scroll-snap-type: y mandatory;
     }
+
+    &.con-footer {
+      height: calc(100vh - 96px - #{$alto-footer-perfecto});
+    }
+  }
+}
+
+.contenedor-snap-lista {
+  background: transparent !important;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $espaciado-tarjetas;
+  width: 100%;
+}
+
+ion-footer.footer-dinamico-tarjeta {
+  display: block;
+  height: $alto-footer-perfecto;
+  box-sizing: border-box;
+  --background: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  padding: 0 !important;
+
+  &::after {
+    background-image: none !important;
+  }
+
+  .contenido-footer-contenedor {
+    background: radial-gradient(circle at 15% 0%, rgba(246, 193, 133, 0.16), transparent 22%),
+                linear-gradient(180deg, #130905 0%, #3a1710 100%) !important;
+    border-top: 2px solid $borde-oscuro;
+    padding: 16px; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; 
+    height: 100%; 
+    box-sizing: border-box;
+    gap: 8px;
+  }
+
+  .footer-fila {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    font-size: 1.05rem; 
+
+    //Texto tiempo estimado y total a pagar
+    span:first-child, .texto-serif {
+      color: #{$color-primario} !important;
+    }
+
+    //Tiempo estimado
+    .resaltado-secundario {
+      color: #{$color-secundario}; 
+      font-weight: bold; 
+      font-size: 1.2rem; 
+    }
+
+    &.fila-total {
+      border-top: 1px solid rgba(255, 212, 133, 0.2);
+      padding-top: 8px;
+    }
+
+    .texto-serif {
+      font-family: Georgia, serif;
+    }
+
+    .monto-total {
+      color: #{$color-secundario}!important; 
+      font-size: 1.7rem; 
+      font-weight: 900;
+    }
+  }
+
+  .boton-enviar-pedido {
+    --background: linear-gradient(160deg, #802323 0%, #4a1111 100%);
+    --color: #ffd485; 
+    --border-radius: 14px;
+    --border-color: #{$color-secundario};
+    --border-style: solid;
+    --border-width: 1px;
+    font-weight: bold;
+    font-size: 1.1rem; 
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+    width: 100%;
+    height: 48px; 
   }
 }
 
@@ -49,7 +151,6 @@ ion-segment-button {
   margin: 0;
   height: 100%; 
   min-height: 40px;
-  transition: all 0.25s ease-in-out;
 
   &::part(indicator-background) {
     background: transparent;
@@ -58,74 +159,5 @@ ion-segment-button {
   ion-icon {
     font-size: 1.45rem;
     margin: 0;
-  }
-}
-
-app-tarjeta-producto {
-  display: block;
-  width: 100%;
-  height: auto; 
-  flex-shrink: 0;
-}
-
-.loader {
-  height: 70vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  color: $color-primario;
-
-  p {
-    margin: 0;
-    color: $color-texto-suave;
-  }
-}
-
-.sin-botones {
-  text-align: center;
-  color: #dfa070;
-  padding: 24px 0;
-}
-
-ion-footer {
-  ion-toolbar {
-    --background: linear-gradient(180deg, #250f0a 0%, #130905 100%) !important;
-    --border-style: none;
-    border-top: 2px solid $borde-oscuro;
-    padding: 12px 16px;
-  }
-
-  p {
-    margin: 4px 0;
-    font-size: 0.95rem;
-    color: #dfa070;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    &:nth-of-type(2) {
-      font-size: 1.3rem;
-      font-weight: bold;
-      color: $color-primario;
-      margin-bottom: 12px;
-      border-top: 1px solid rgba(255, 212, 133, 0.15);
-      padding-top: 8px;
-    }
-  }
-
-  ion-button {
-    --background: linear-gradient(160deg, #802323 0%, #4a1111 100%);
-    --color: #fff8f1;
-    --border-radius: 12px;
-    --border-color: #{$color-secundario};
-    --border-style: solid;
-    --border-width: 1px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin: 0;
-    width: 100%;
   }
 }
