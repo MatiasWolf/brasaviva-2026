@@ -1,0 +1,139 @@
+<ion-content>
+  <div class="juegos-page">
+    <header class="encabezado">
+      <button
+        class="boton-volver"
+        type="button"
+        (click)="volver()"
+        aria-label="Volver"
+      >
+        ←
+      </button>
+      <div class="titulo-container">
+        <h1>Juegos</h1>
+        <p>Divertite mientras esperás</p>
+      </div>
+    </header>
+    @if (cargando()) {
+      <div class="cargando">
+        <div class="spinner"></div>
+        <p>Cargando juegos...</p>
+      </div>
+    } @else {
+      @if (esClienteRegistrado() && oportunidadDisponible()) {
+        <section class="promo-descuento">
+          <div class="promo-icono">
+            🎁
+          </div>
+          <div class="promo-texto">
+            <h2>
+              ¡Tenés una oportunidad especial!
+            </h2>
+            <p>
+              Elegí uno de los juegos y ganá un descuento.
+            </p>
+            <span>
+              La oportunidad se utiliza una sola vez.
+            </span>
+          </div>
+        </section>
+      }
+      <section
+        class="lista-juegos"
+        [class.con-promocion]="
+          esClienteRegistrado() &&
+          oportunidadDisponible()
+        "
+      >
+        @for (juego of juegos(); track juego.juego) {
+          <article class="juego-card">
+            <div
+              class="juego-icono"
+              [class.memoria]="juego.juego === 'memoria'"
+              [class.reflejos]="juego.juego === 'reflejos'"
+              [class.trivia]="juego.juego === 'trivia'"
+            >
+              @if (juego.juego === 'memoria') {
+                🧠
+              }
+              @if (juego.juego === 'reflejos') {
+                ⚡
+              }
+              @if (juego.juego === 'trivia') {
+                ❓
+              }
+            </div>
+            <div class="juego-info">
+              <h2>
+                {{ juego.nombre }}
+              </h2>
+              <p>
+                @switch (juego.juego) {
+                  @case ('memoria') {
+                    Encontrá todas las parejas.
+                  }
+                  @case ('reflejos') {
+                    Poné a prueba tus reflejos.
+                  }
+                  @case ('trivia') {
+                    Demostrá cuánto sabés.
+                  }
+                }
+              </p>
+              @if (esClienteRegistrado() && oportunidadDisponible()) {
+                <div class="descuento">
+                  <span class="descuento-numero">
+                    {{ juego.descuento }}%
+                  </span>
+                  <span class="descuento-texto">
+                    de descuento
+                  </span>
+                </div>
+              }
+            </div>
+            <button
+              class="boton-jugar"
+              type="button"
+              (click)="jugar(juego)"
+            >
+              Jugar
+            </button>
+          </article>
+        }
+      </section>
+    }
+  </div>
+  @if (mostrarModalDescuento()) {
+    <div
+      class="modal-overlay"
+      (click)="cerrarModal()"
+    >
+      <div
+        class="modal-descuento"
+        (click)="$event.stopPropagation()"
+      >
+        <div class="modal-icono">
+          🎁
+        </div>
+        <h2>
+          ¡Tenés una oportunidad!
+        </h2>
+        <p>
+          Elegí un juego y, si ganás,
+          obtené un descuento.
+        </p>
+        <p class="modal-aclaracion">
+          Podés usar esta oportunidad una sola vez
+          durante tu estadía.
+        </p>
+        <button
+          class="boton-entendido"
+          type="button"
+          (click)="cerrarModal()"
+        >
+          ¡Jugar!
+        </button>
+      </div>
+    </div>
+  }
+</ion-content>

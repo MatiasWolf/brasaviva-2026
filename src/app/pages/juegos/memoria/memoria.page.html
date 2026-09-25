@@ -1,0 +1,237 @@
+<ion-content>
+  <div class="juego-memoria">
+    <div class="memoria-header">
+      <button
+        class="boton-volver"
+        (click)="volverAJuegos()"
+        aria-label="Volver a juegos"
+      >
+        ←
+      </button>
+      <div class="titulo-juego">
+        🔥 Memoria
+      </div>
+      <div class="contador">
+        <span>Errores:</span>
+        <strong>
+          {{ errores }} /
+          {{ maximosErrores }}
+        </strong>
+      </div>
+    </div>
+    <div
+      class="tablero"
+      [class.tablero-nivel-2]="nivelActual === 2"
+      [class.tablero-nivel-3]="nivelActual === 3"
+    >
+      @for (
+        carta of cartas;
+        track carta.id
+      ) {
+        <button
+          class="carta"
+          [class.descubierta]="
+            carta.descubierta ||
+            carta.encontrada
+          "
+          [class.encontrada]="
+            carta.encontrada
+          "
+          (click)="seleccionarCarta(carta)"
+        >
+          @if (
+            carta.descubierta ||
+            carta.encontrada
+          ) {
+            <div class="frente">
+              <img
+                [src]="carta.imagen"
+                alt="Carta de memoria"
+              />
+            </div>
+          } @else {
+            <div class="dorso">
+              <img
+                src="assets/icons/icon-512.webp"
+                alt="Brasa Viva"
+              />
+              <span>
+                BRASA<br>
+                VIVA
+              </span>
+            </div>
+          }
+        </button>
+      }
+    </div>
+    <ion-modal
+      [isOpen]="mostrarInicio"
+      cssClass="modal-victoria"
+      [backdropDismiss]="false"
+    >
+      <ng-template>
+        <div class="victoria-modal-container">
+          <div class="victoria">
+            <div class="victoria-icono">
+              🧠
+            </div>
+            <h2>
+              @if (partidaPorDescuento) {
+                ¡Poné a prueba tu memoria!
+              } @else {
+                Nivel {{ nivelActual }}
+              }
+            </h2>
+            <p class="victoria-mensaje">
+              Encontrá todas las parejas
+              antes de alcanzar el límite.
+            </p>
+            <div class="victoria-movimientos">
+              <span>
+                🃏 Cartas
+              </span>
+              <strong>
+                {{ cantidadCartas }}
+              </strong>
+            </div>
+            <div class="victoria-movimientos">
+              <span>
+                🔥 Errores máximos
+              </span>
+              <strong>
+                {{ maximosErrores }}
+              </strong>
+            </div>
+            <ion-button
+              expand="block"
+              (click)="comenzarPartida()"
+            >
+              ▶ Comenzar partida
+            </ion-button>
+          </div>
+        </div>
+      </ng-template>
+    </ion-modal>
+    <ion-modal
+      [isOpen]="mostrarResultado"
+      cssClass="modal-victoria"
+      [backdropDismiss]="false"
+    >
+      <ng-template>
+        <div class="victoria-modal-container">
+          <div class="victoria">
+            <div
+              class="confeti confeti-1"
+              *ngIf="
+                resultadoVictoria &&
+                !errorRegistro
+              "
+            >
+              ✦
+            </div>
+            <div
+              class="confeti confeti-2"
+              *ngIf="
+                resultadoVictoria &&
+                !errorRegistro
+              "
+            >
+              ◆
+            </div>
+            <div
+              class="confeti confeti-3"
+              *ngIf="
+                resultadoVictoria &&
+                !errorRegistro
+              "
+            >
+              ✦
+            </div>
+            <div
+              class="confeti confeti-4"
+              *ngIf="
+                resultadoVictoria &&
+                !errorRegistro
+              "
+            >
+              ◆
+            </div>
+            <div class="victoria-icono">
+              @if (errorRegistro) {
+                !
+              } @else {
+                {{ resultadoVictoria ? '✓' : '!' }}
+              }
+            </div>
+            <h2>
+              @if (errorRegistro) {
+                Ocurrió un problema
+              } @else if (partidaPorDescuento) {
+                @if (resultadoVictoria) {
+                  ¡Felicitaciones!
+                } @else {
+                  ¡Fin de la partida!
+                }
+              } @else {
+                @if (resultadoVictoria) {
+                  ¡Felicitaciones!
+                } @else {
+                  ¡Fin de la partida!
+                }
+              }
+            </h2>
+            <p class="victoria-mensaje">
+              {{ mensajeResultado }}
+            </p>
+            @if (partidaPorDescuento) {
+              <ion-button
+                expand="block"
+                (click)="volverAJuegos()"
+              >
+                🎮 Volver a juegos
+              </ion-button>
+            }
+            @if (!partidaPorDescuento) {
+              @if (
+                resultadoVictoria &&
+                nivelActual < maximoNiveles
+              ) {
+                <ion-button
+                  expand="block"
+                  (click)="continuarNivel()"
+                >
+                  🔥 Siguiente nivel
+                </ion-button>
+              }
+              @if (
+                resultadoVictoria &&
+                nivelActual === maximoNiveles
+              ) {
+                <ion-button
+                  expand="block"
+                  (click)="continuarNivel()"
+                >
+                  🔄 Jugar nivel 3 nuevamente
+                </ion-button>
+                <ion-button
+                  expand="block"
+                  (click)="reiniciarDesdeNivel1()"
+                >
+                  🧠 Empezar desde nivel 1
+                </ion-button>
+              }
+              @if (!resultadoVictoria) {
+                <ion-button
+                  expand="block"
+                  (click)="continuarNivel()"
+                >
+                  🔄 Intentar nuevamente
+                </ion-button>
+              }
+            }
+          </div>
+        </div>
+      </ng-template>
+    </ion-modal>
+  </div>
+</ion-content>

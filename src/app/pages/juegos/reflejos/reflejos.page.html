@@ -1,0 +1,235 @@
+<ion-content>
+  <div class="juego-reflejos">
+    <div class="brasas"></div>
+    <div class="reflejos-header">
+      <button
+        class="boton-volver"
+        routerLink="/juegos"
+        aria-label="Volver a juegos"
+      >
+        ←
+      </button>
+      <div class="titulo-juego">
+        ⚡ Reflejos
+      </div>
+      <div class="subtitulo">
+        Poné a prueba tu velocidad
+      </div>
+      @if (!partidaPorDescuento) {
+        <div class="nivel-indicador">
+          Nivel {{ nivelActual() }}
+        </div>
+      }
+      <div class="toques-indicador">
+        Toques: {{ toques() }} / {{ toquesNecesarios }}
+      </div>
+    </div>
+    <div
+      class="zona-juego"
+      [class.listo]="estado() === 'listo'"
+      [class.resultado]="estado() === 'resultado'"
+    >
+      @if (
+        estado() === 'esperando' &&
+        !mostrarInicio() &&
+        !mostrarResultado()
+      ) {
+        <div class="mensaje-espera">
+          <div class="icono-espera">
+            ⚡
+          </div>
+          <h2>
+            Esperá la señal...
+          </h2>
+          <p>
+            Preparáte para tocar el objetivo
+          </p>
+        </div>
+      }
+      @if (estado() === 'listo') {
+        <button
+          class="objetivo"
+          [style.left.%]="posicionX()"
+          [style.top.%]="posicionY()"
+          (pointerdown)="tocarObjetivo($event)"
+          aria-label="Objetivo"
+        >
+        </button>
+      }
+      @if (
+        estado() === 'resultado' &&
+        tiempo() !== null &&
+        !mostrarResultado()
+      ) {
+        <div class="resultado-rapido">
+          <span>⚡</span>
+          <strong>
+            {{ tiempo() }} ms
+          </strong>
+        </div>
+      }
+    </div>
+    @if (mostrarInicio()) {
+      <div class="modal-overlay">
+        <div class="modal-juego">
+          <div class="modal-icono">
+            ⚡
+          </div>
+          <h2>
+            @if (partidaPorDescuento) {
+              ¡Poné a prueba tus reflejos!
+            } @else {
+              Nivel {{ nivelActual() }}
+            }
+          </h2>
+          <p class="modal-mensaje">
+            Tocá el objetivo lo más rápido posible.
+          </p>
+          <div class="modal-dato">
+            <span>
+              🎯 Toques necesarios
+            </span>
+            <strong>
+              {{ toquesNecesarios }}
+            </strong>
+          </div>
+          <div class="modal-dato">
+            <span>
+              ⚡ Tiempo máximo
+            </span>
+            <strong>
+              {{ tiempoMaximo }} ms
+            </strong>
+          </div>
+          <p class="modal-ayuda">
+            Cada objetivo aparece en una posición diferente.
+            Completá los 3 toques dentro del tiempo límite.
+          </p>
+          <button
+            class="boton-modal"
+            type="button"
+            (click)="comenzarPartida()"
+          >
+            ▶ Comenzar partida
+          </button>
+        </div>
+      </div>
+    }
+    @if (mostrarResultado()) {
+      <div class="modal-overlay">
+        <div class="modal-juego">
+          @if (resultadoVictoria() && !errorRegistro) {
+            <div class="confeti confeti-1">
+              ✦
+            </div>
+            <div class="confeti confeti-2">
+              ◆
+            </div>
+            <div class="confeti confeti-3">
+              ✦
+            </div>
+            <div class="confeti confeti-4">
+              ◆
+            </div>
+          }
+          <div class="modal-icono">
+            @if (errorRegistro) {
+              !
+            } @else {
+              {{ resultadoVictoria() ? '✓' : '!' }}
+            }
+          </div>
+          <h2>
+            @if (errorRegistro) {
+              Ocurrió un problema
+            } @else if (partidaPorDescuento) {
+              @if (resultadoVictoria()) {
+                ¡Felicitaciones!
+              } @else {
+                ¡Fin de la partida!
+              }
+            } @else {
+              @if (resultadoVictoria()) {
+                ¡Felicitaciones!
+              } @else {
+                ¡Fin de la partida!
+              }
+            }
+          </h2>
+          <p class="modal-mensaje">
+            {{ mensajeResultado() }}
+          </p>
+          @if (tiempo() !== null) {
+            <div class="modal-dato">
+              <span>
+                ⚡ Último tiempo
+              </span>
+              <strong>
+                {{ tiempo() }} ms
+              </strong>
+            </div>
+          }
+          <div class="modal-dato">
+            <span>
+              🎯 Toques realizados
+            </span>
+            <strong>
+              {{ toques() }} / {{ toquesNecesarios }}
+            </strong>
+          </div>
+          @if (partidaPorDescuento) {
+            <button
+              class="boton-modal"
+              type="button"
+              (click)="volverAJuegos()"
+            >
+              🎮 Volver a juegos
+            </button>
+          }
+          @if (!partidaPorDescuento) {
+            @if (
+              resultadoVictoria() &&
+              nivelActual() < maximoNiveles
+            ) {
+              <button
+                class="boton-modal"
+                type="button"
+                (click)="continuarNivel()"
+              >
+                ⚡ Siguiente nivel
+              </button>
+            }
+            @if (
+              resultadoVictoria() &&
+              nivelActual() === maximoNiveles
+            ) {
+              <button
+                class="boton-modal"
+                type="button"
+                (click)="continuarNivel()"
+              >
+                🔄 Jugar nivel 3 nuevamente
+              </button>
+              <button
+                class="boton-modal"
+                type="button"
+                (click)="reiniciarDesdeNivel1()"
+              >
+                🧠 Empezar desde nivel 1
+              </button>
+            }
+            @if (!resultadoVictoria()) {
+              <button
+                class="boton-modal"
+                type="button"
+                (click)="continuarNivel()"
+              >
+                🔄 Intentar nuevamente
+              </button>
+            }
+          }
+        </div>
+      </div>
+    }
+  </div>
+</ion-content>
