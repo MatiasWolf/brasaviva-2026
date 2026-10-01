@@ -7,6 +7,39 @@
   </ion-toolbar>
 </ion-header>
 
+@if (pedidoPorConfirmar(); as pedido) {
+  <div class="pantalla-bloqueo-entrega">
+    <div class="contenedor-mensaje-entrega">
+      <ion-icon name="restaurant-outline" class="icono-animado-entrega"></ion-icon>
+      <h1 class="titulo-entrega">¡Tu pedido llegó a la mesa!</h1>
+      <p class="subtitulo-entrega">Por favor, verificá que tus platos y bebidas estén completos antes de confirmar:</p>
+      
+      <div class="caja-revision-productos">
+        <ul class="items">
+          @for (item of pedido.items; track item.id) {
+            <li class="item">
+              <span class="cantidad">{{ item.cantidad }}x</span>
+              <span class="nombre">{{ item.producto_nombre }}</span>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+
+
+    <div class="bloque-boton-fijo">
+      <ion-button 
+        expand="block" 
+        class="boton-confirmar-entrega" 
+        [disabled]="procesandoConfirmacion()"
+        (click)="confirmarPedido()">
+        <ion-icon slot="start" name="checkmark-done-outline"></ion-icon>
+        {{ procesandoConfirmacion() ? 'Procesando...' : 'Confirmar Recepción' }}
+      </ion-button>
+    </div>
+  </div>
+}
+
 <ion-content class="seguimiento-content">
   <div class="seguimiento-container">
 

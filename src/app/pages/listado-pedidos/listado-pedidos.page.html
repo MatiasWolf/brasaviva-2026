@@ -106,6 +106,9 @@
     <!-- PESTAÑA 2: EN COCINA -->
     @if (segmentoActivo() === 'cocina') {
       @for (pedido of pedidoService.pedidosEnPreparacionMozo(); track pedido.id) {
+        <!-- Variable local para controlar el despliegue en cocina -->
+        @let expandido = { activo: false };
+
         <ion-card class="tarjeta-comanda en-preparacion">
           <ion-card-content class="contenido-comanda-reducido">
             <div class="fila-cabecera">
@@ -119,6 +122,29 @@
             <p class="info-adicional">
               Tiempo estimado de demora: <strong>{{ pedido.tiempo_estimado_preparacion }} min</strong>.
             </p>
+
+            <!-- BOTÓN INTERACTIVO PARA DESPLEGAR PRODUCTOS (COCINA) -->
+            <div class="contenedor-link-detalle">
+              <ion-button fill="clear" size="small" class="boton-expandir" (click)="expandido.activo = !expandido.activo">
+                <ion-icon slot="start" [name]="expandido.activo ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+                {{ expandido.activo ? 'Ocultar productos' : 'Ver productos pedidos' }}
+              </ion-button>
+            </div>
+
+            <!-- CONTENEDOR DESPLEGABLE (COCINA) -->
+            @if (expandido.activo) {
+              <div class="bloque-detalle-productos">
+                <h4 class="titulo-detalle">Detalle de la orden:</h4>
+                <ul class="lista-productos-comanda">
+                  @for (item of pedido.items_pedido; track item.producto_id) {
+                    <li>
+                      <span class="cantidad-item">{{ item.cantidad }}x</span> 
+                      <span class="nombre-item">{{ item.productos?.nombre }}</span>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
           </ion-card-content>
         </ion-card>
       } @empty {
@@ -132,20 +158,48 @@
     <!-- PESTAÑA 3: LISTOS  -->
     @if (segmentoActivo() === 'listos') {
       @for (pedido of pedidoService.pedidosListosMozo(); track pedido.id) {
-        <ion-card class="tarjeta-comanda comanda-lista pulse-animation">
+        <!-- Variable local para controlar el despliegue en listos -->
+        @let expandido = { activo: false };
+
+        <ion-card class="tarjeta-comanda comanda-lista">
           <ion-card-content class="contenido-comanda">
             <div class="fila-cabecera">
               <h2 class="numero-mesa">
                 Mesa N° {{ pedido.ocupaciones_mesa?.mesas?.numero || 'S/N' }}
               </h2>
-              <span class="monto-total destacada">${{ pedido.importe_total }}</span>
+              <!--<span class="monto-total destacada">${{ pedido.importe_total }}</span>-->
             </div>
+
+            <!-- BOTÓN INTERACTIVO PARA DESPLEGAR PRODUCTOS (LISTOS) -->
+            <div class="contenedor-link-detalle">
+              <ion-button fill="clear" size="small" class="boton-expandir" (click)="expandido.activo = !expandido.activo">
+                <ion-icon slot="start" [name]="expandido.activo ? 'chevron-up-outline' : 'chevron-down-outline'"></ion-icon>
+                {{ expandido.activo ? 'Ocultar productos' : 'Ver productos pedidos' }}
+              </ion-button>
+            </div>
+
+            <!-- CONTENEDOR DESPLEGABLE (LISTOS) -->
+            @if (expandido.activo) {
+              <div class="bloque-detalle-productos">
+                <h4 class="titulo-detalle">Detalle de la orden:</h4>
+                <ul class="lista-productos-comanda">
+                  @for (item of pedido.items_pedido; track item.producto_id) {
+                    <li>
+                      <span class="cantidad-item">{{ item.cantidad }}x</span> 
+                      <span class="nombre-item">{{ item.productos?.nombre }}</span>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+
             <div class="fila-despacho">
               <span class="badge-alerta-listo">
                 <ion-icon name="restaurant-outline"></ion-icon> Pedido Completo!
               </span>
-              <ion-button size="small" class="boton-servir" (click)="entregar(pedido)">
-                <ion-icon slot="start" name="checkmark-done-circle-outline"></ion-icon> Servir Mesa
+              <!-- Actualizado para llamar al nuevo método servirPedido -->
+              <ion-button size="small" class="boton-servir" (click)="servirPedido(pedido)">
+                <ion-icon slot="start" name="checkmark-done-circle-outline"></ion-icon> Servir
               </ion-button>
             </div>
           </ion-card-content>

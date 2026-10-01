@@ -76,10 +76,10 @@ export class ListadoPedidosPage {
     }
   }
 
-  async entregar(pedido: any) {
-    const exito = await this.pedidoService.mozoEntregaPedidoCompleto(pedido.id, pedido.ocupaciones_mesa);
+  async servirPedido(pedido: any) {
+    const exito = await this.pedidoService.servirPedidoMozo(pedido.id);
     if (exito) {
-      this.mostrarToast(`¡Pedido de la Mesa ${pedido.ocupaciones_mesa?.mesas?.numero} entregado!`, 'toast-exito');
+      this.mostrarToast(`¡Pedido de la Mesa ${pedido.ocupaciones_mesa?.mesas?.numero} servido en mesa!`, 'toast-exito');
     } else {
       this.mostrarToast('Error al procesar la entrega.', 'toast-alerta');
     }

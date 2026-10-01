@@ -1,17 +1,7 @@
 import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RealtimeChannel } from '@supabase/supabase-js';
-import {
-  IonBackButton,
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonIcon,
-  IonTitle,
-  IonToolbar,
-  ViewDidLeave,
-  ViewWillEnter,
-} from '@ionic/angular';
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonIcon, IonTitle, IonToolbar, ViewDidLeave, ViewWillEnter, IonButton } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import {
   beerOutline,
@@ -94,7 +84,8 @@ const RECORRIDO: { estado: EstadoPedido; titulo: string; detalle: string }[] = [
     IonContent,
     IonIcon,
     SpinnerLogoComponent,
-  ],
+    IonButton
+],
 })
 export class SeguimientoPedidoPage implements ViewWillEnter, ViewDidLeave {
   private readonly pedidosService = inject(PedidosSectorService);
@@ -104,13 +95,14 @@ export class SeguimientoPedidoPage implements ViewWillEnter, ViewDidLeave {
   readonly pedidos = signal<PedidoVista[]>([]);
   readonly cargando = signal(true);
   readonly error = signal('');
+  readonly procesandoConfirmacion = signal(false);
 
   private canal: RealtimeChannel | null = null;
   private ocupacionId: number | null = null;
 
   /** Lo que todavía no se entregó es lo que al cliente le interesa mirar. */
   readonly enCurso = computed(() =>
-    this.pedidos().filter((p) => p.estado !== 'entregado' && p.estado !== 'rechazado'),
+    this.pedidos().filter((p) => p.estado !== 'entregado' && p.estado !== 'rechazado' && (p.estado as any) !== 'en_mesa')
   );
 
   readonly entregados = computed(() =>
@@ -122,6 +114,10 @@ export class SeguimientoPedidoPage implements ViewWillEnter, ViewDidLeave {
   );
 
   readonly hayPedidos = computed(() => this.pedidos().length > 0);
+
+  readonly pedidoPorConfirmar = computed(() => 
+    this.pedidos().find((p) => (p.estado as any) === 'en_mesa') || null
+  );
 
   constructor() {
     addIcons({
@@ -167,6 +163,28 @@ export class SeguimientoPedidoPage implements ViewWillEnter, ViewDidLeave {
       this.vibrar();
     } finally {
       this.cargando.set(false);
+    }
+  }
+
+  async confirmarPedido(): Promise<void> {
+    const pedidoActual = this.pedidoPorConfirmar();
+    if (!pedidoActual || !this.ocupacionId) return;
+
+    this.procesandoConfirmacion.set(true);
+    this.error.set('');
+
+    try {
+      const exito = await this.pedidoService.confirmarPedidoCliente(pedidoActual.id, this.ocupacionId);
+      
+      if (exito) {
+        await this.cargar();
+      } else {
+        this.error.set('No se pudo procesar la confirmación. Por favor, reintentá.');
+      }
+    } catch (e) {
+      this.error.set('Ocurrió un error al confirmar la recepción.');
+    } finally {
+      this.procesandoConfirmacion.set(false);
     }
   }
 

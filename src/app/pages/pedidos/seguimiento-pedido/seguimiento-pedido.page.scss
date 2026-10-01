@@ -342,3 +342,80 @@ ion-back-button {
   outline: 3px solid #ffd485;
   outline-offset: 2px;
 }
+
+/* ------------------------------------------------------------------ confirmacion del pedido */
+.pantalla-bloqueo-entrega {
+  position: fixed; /* Asegura cubrir el 100% por sobre la lista */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background: radial-gradient(circle at 15% 0%, rgba(246, 193, 133, 0.22), transparent 30%),
+              linear-gradient(180deg, #180c08 0%, #29100a 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px 16px;
+  box-sizing: border-box;
+}
+
+.contenedor-mensaje-entrega {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  text-align: center;
+  gap: 16px;
+  padding: 0 8px;
+}
+
+.icono-animado-entrega {
+  font-size: 4.5rem;
+  color: #ffb347;
+  filter: drop-shadow(0 4px 10px rgba(233, 130, 14, 0.3));
+}
+
+.titulo-entrega {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #ffd485;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.subtitulo-entrega {
+  margin: 0 0 12px 0;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: rgba(255, 248, 241, 0.8);
+}
+
+.caja-revision-productos {
+  width: 100%;
+  max-height: 40vh;
+  overflow-y: auto;
+  border-radius: 16px;
+  box-sizing: border-box;
+  /* Reutiliza perfectamente las clases nativas de tus compañeros */
+  background: rgba(19, 9, 5, 0.25);
+  padding: 4px 0;
+}
+
+.bloque-boton-fijo {
+  width: 100%;
+  padding-top: 16px;
+
+  ion-button.boton-confirmar-entrega {
+    --background: linear-gradient(135deg, #ffb347 0%, #e9820e 100%);
+    --color: #2a1204;
+    --border-radius: 14px;
+    --box-shadow: 0 6px 20px rgba(233, 130, 14, 0.25);
+    font-size: 1.1rem;
+    font-weight: 800;
+    height: 52px;
+    margin: 0;
+  }
+}

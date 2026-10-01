@@ -518,28 +518,21 @@ export class PedidoService {
     /**
      * El mozo entrega el pedido completo en la mesa
      */
-    async mozoEntregaPedidoCompleto(pedidoId: number, ocupacionData: any): Promise<boolean> {
+    async servirPedidoMozo(pedidoId: number): Promise<boolean> {
         try {
             const { error: errorPedido } = await this.supabaseService.client
                 .from('pedidos')
-                .update({ estado: 'entregado', updated_at: new Date().toISOString() })
+                .update({ 
+                    estado: 'en_mesa', 
+                    updated_at: new Date().toISOString() 
+                })
                 .eq('id', pedidoId);
 
             if (errorPedido) throw errorPedido;
 
-            const clienteId = ocupacionData.usuario_id || ocupacionData.sesion_anonima_id;
-            const tablaDestino = ocupacionData.usuario_id ? 'usuarios' : 'sesiones_anonimas';
-
-            if (clienteId) {
-                const { error: errorEstadia } = await this.supabaseService.client
-                    .from(tablaDestino)
-                    .update({ estado_estadia: 'pedido_entregado' })
-                    .eq('id', clienteId);
-
-                if (errorEstadia) throw errorEstadia;
-            }
             return true;
         } catch (err) {
+            console.error('Error al cambiar el estado del pedido a en_mesa:', err);
             return false;
         }
     }
@@ -588,5 +581,53 @@ export class PedidoService {
         throw new Error(
             'No encontramos una mesa asignada. Pedile al metre que te asigne una.'
         );
+    }
+
+    /**
+     * El cliente confirma la recepción del pedido.
+     * Cambia el estado del pedido a 'entregado' y actualiza la estadía del cliente.
+     */
+    async confirmarPedidoCliente(pedidoId: number, ocupacionId: number): Promise<boolean> {
+        try {
+            // 1. Actualizar el estado del pedido a 'entregado'
+            const { error: errorPedido } = await this.supabaseService.client
+                .from('pedidos')
+                .update({ 
+                    estado: 'entregado', 
+                    updated_at: new Date().toISOString() 
+                })
+                .eq('id', pedidoId);
+
+            if (errorPedido) throw errorPedido;
+
+            // 2. Recuperar la ocupación para saber a qué cliente (registrado o anónimo) actualizar la estadía
+            const { data: ocupacion, error: errorOcupacion } = await this.supabaseService.client
+                .from('ocupaciones_mesa')
+                .select('usuario_id, sesion_anonima_id')
+                .eq('id', ocupacionId)
+                .maybeSingle();
+
+            if (errorOcupacion) throw errorOcupacion;
+
+            if (ocupacion) {
+                const clienteId = ocupacion.usuario_id || ocupacion.sesion_anonima_id;
+                const tablaDestino = ocupacion.usuario_id ? 'usuarios' : 'sesiones_anonimas';
+
+                if (clienteId) {
+                    // 3. Actualizar el estado de la estadía a 'pedido_entregado'
+                    const { error: errorEstadia } = await this.supabaseService.client
+                        .from(tablaDestino)
+                        .update({ estado_estadia: 'pedido_entregado' })
+                        .eq('id', clienteId);
+
+                    if (errorEstadia) throw errorEstadia;
+                }
+            }
+
+            return true;
+        } catch (err) {
+            console.error('Error en el proceso de confirmación de pedido del cliente:', err);
+            return false;
+        }
     }
 }
