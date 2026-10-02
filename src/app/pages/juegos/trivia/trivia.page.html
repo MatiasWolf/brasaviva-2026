@@ -1,0 +1,300 @@
+<ion-content>
+  <div class="juego-trivia">
+    <div class="brasas"></div>
+    <div class="trivia-header">
+      <button
+        class="boton-volver"
+        routerLink="/juegos"
+        aria-label="Volver a juegos"
+      >
+        ←
+      </button>
+      <div class="titulo-juego">
+        🧠 Trivia
+      </div>
+      <div class="subtitulo">
+        Poné a prueba tus conocimientos
+      </div>
+      @if (!partidaPorDescuento) {
+        <div class="nivel-indicador">
+          Nivel {{ nivelActual() }}
+        </div>
+      }
+    </div>
+    @if (
+      pregunta &&
+      !mostrarInicio() &&
+      !mostrarResultado()
+    ) {
+      <div class="carta-trivia">
+        <div class="carta-superior">
+          <span class="etiqueta-trivia">
+            PREGUNTA
+          </span>
+
+          <span
+            class="temporizador"
+            [class.temporizador-urgente]="tiempoRestante() <= 3"
+          >
+            ⏱️ {{ tiempoRestante() }}s
+          </span>
+
+          <span class="numero-pregunta">
+            {{ numeroPregunta }} / {{ cantidadPreguntas }}
+          </span>
+        </div>
+        <div class="pregunta-contenido">
+          <h1>
+            {{ pregunta.pregunta }}
+          </h1>
+        </div>
+        <div class="opciones">
+          @for (
+            opcion of pregunta.opciones;
+            track opcion.letra
+          ) {
+            <button
+              class="opcion"
+              [class.seleccionada]="
+                respuestaSeleccionada() === opcion.letra
+              "
+              [class.correcta]="
+                respuestaSeleccionada() !== null &&
+                !tiempoAgotado &&
+                opcion.letra === pregunta.respuestaCorrecta
+              "
+              [class.incorrecta]="
+                respuestaSeleccionada() === opcion.letra &&
+                !tiempoAgotado &&
+                opcion.letra !== pregunta.respuestaCorrecta
+              "
+              [disabled]="
+                respuestaSeleccionada() !== null
+              "
+              (click)="
+                seleccionarRespuesta(opcion.letra)
+              "
+            >
+              <span class="letra-opcion">
+                {{ opcion.letra }}
+              </span>
+
+              <span class="texto-opcion">
+                {{ opcion.texto }}
+              </span>
+            </button>
+          }
+        </div>
+        @if (respuestaSeleccionada() !== null) {
+        <div class="respuesta-info">
+
+          @if (tiempoAgotado) {
+            <p class="mensaje-tiempo">
+              ⏱️ ¡Se acabó el tiempo!
+            </p>
+
+          } @else if (respuestaCorrecta()) {
+            <p class="mensaje-correcto">
+              ✓ ¡Correcto!
+            </p>
+
+            <p class="explicacion">
+              {{ pregunta.explicacion }}
+            </p>
+          } @else {
+            <p class="mensaje-incorrecto">
+              ✕ Respuesta incorrecta
+            </p>
+
+            <p class="explicacion">
+              {{ pregunta.explicacion }}
+            </p>
+          }
+
+          <button
+            class="boton-continuar"
+            type="button"
+            (click)="continuarPregunta()"
+          >
+            @if (esUltimaPregunta) {
+              Ver resultado
+            } @else {
+              Continuar →
+            }
+          </button>
+
+        </div>
+      }
+      </div>
+    }
+    @if (mostrarInicio()) {
+      <div class="modal-overlay">
+        <div class="modal-juego">
+          <div class="modal-icono">
+            🧠
+          </div>
+          <h2>
+            @if (partidaPorDescuento) {
+              ¡Poné a prueba tus conocimientos!
+            } @else {
+              Nivel {{ nivelActual() }}
+            }
+          </h2>
+          <p class="modal-mensaje">
+            Poné a prueba tus conocimientos.
+          </p>
+          <div class="modal-dato">
+            <span>
+              🧠 Preguntas
+            </span>
+            <strong>
+              {{ cantidadPreguntas }}
+            </strong>
+          </div>
+          <div class="modal-dato">
+            <span>
+              🎯 Respuestas necesarias
+            </span>
+            <strong>
+              {{ respuestasNecesarias }}
+            </strong>
+          </div>
+          <p class="modal-ayuda">
+            Elegí una respuesta entre A, B, C o D.
+            La respuesta seleccionada se marcará
+            según si es correcta o incorrecta.
+          </p>
+          <button
+            class="boton-modal"
+            (click)="comenzarPartida()"
+          >
+            ▶ Comenzar trivia
+          </button>
+        </div>
+      </div>
+    }
+    @if (mostrarResultado()) {
+      <div class="modal-overlay">
+        <div
+          class="modal-juego"
+          [class.modal-victoria]="resultadoVictoria()"
+          [class.modal-derrota]="!resultadoVictoria()"
+        >
+          @if (
+            resultadoVictoria() &&
+            !errorRegistro
+          ) {
+            <div class="confeti confeti-1">
+              ✦
+            </div>
+            <div class="confeti confeti-2">
+              ◆
+            </div>
+            <div class="confeti confeti-3">
+              ✦
+            </div>
+            <div class="confeti confeti-4">
+              ◆
+            </div>
+          }
+          <div class="modal-icono">
+            @if (errorRegistro) {
+              !
+            } @else if (resultadoVictoria()) {
+              ✓
+            } @else {
+              !
+            }
+          </div>
+          <h2>
+            @if (errorRegistro) {
+              No se pudo registrar
+            } @else if (partidaPorDescuento) {
+              @if (resultadoVictoria()) {
+                ¡Ganaste tu descuento!
+              } @else {
+                Fin del intento
+              }
+            } @else {
+              @if (resultadoVictoria()) {
+                @if (nivelActual() === maximoNiveles) {
+                  ¡Trivia completada!
+                } @else {
+                  ¡Nivel superado!
+                }
+              } @else {
+                ¡Fin de la partida!
+              }
+            }
+          </h2>
+          <p class="modal-mensaje">
+            {{ mensajeResultado() }}
+          </p>
+          @if (
+            partidaPorDescuento &&
+            resultadoVictoria() &&
+            !errorRegistro
+          ) {
+            <div class="modal-dato">
+              <span>
+                🎁 Descuento obtenido
+              </span>
+              <strong>
+                {{ descuentoRegistrado }}%
+              </strong>
+            </div>
+          }
+          @if (partidaPorDescuento) {
+            <button
+              class="boton-modal"
+              (click)="volverAJuegos()"
+            >
+              🎮 Volver a juegos
+            </button>
+          }
+          @if (
+            !partidaPorDescuento &&
+            resultadoVictoria() &&
+            nivelActual() < maximoNiveles
+          ) {
+            <button
+              class="boton-modal"
+              (click)="continuarNivel()"
+            >
+              🧠 Siguiente nivel
+            </button>
+          }
+          @if (
+            !partidaPorDescuento &&
+            resultadoVictoria() &&
+            nivelActual() === maximoNiveles
+          ) {
+            <button
+              class="boton-modal"
+              (click)="continuarNivel()"
+            >
+              🔄 Jugar nivel 3 nuevamente
+            </button>
+            <button
+              class="boton-modal"
+              (click)="reiniciarDesdeNivel1()"
+            >
+              🧠 Empezar desde nivel 1
+            </button>
+          }
+          @if (
+            !partidaPorDescuento &&
+            !resultadoVictoria()
+          ) {
+            <button
+              class="boton-modal"
+              (click)="continuarNivel()"
+            >
+              🔄 Intentar nuevamente
+            </button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</ion-content>

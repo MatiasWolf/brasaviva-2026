@@ -1,0 +1,459 @@
+ion-content{--background:#241006}
+.juego-memoria{
+  position:relative;
+  width:100%;
+  min-height:100vh;
+  padding:10px 10px 20px;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 20%,rgba(176,67,12,.45),transparent 35%),
+    radial-gradient(circle at 10% 80%,rgba(255,121,18,.16),transparent 30%),
+    linear-gradient(160deg,#1e0904 0%,#451706 45%,#210a04 100%)
+}
+.juego-memoria::before{
+  content:"";
+  position:absolute;
+  width:7px;
+  height:7px;
+  top:100px;
+  left:12%;
+  border-radius:50%;
+  background:#ff9d24;
+  box-shadow:
+    70px 130px 0 #ff6b12,
+    250px 60px 0 #ff9d24,
+    310px 240px 0 #ff7015,
+    40px 390px 0 #ffb32f,
+    280px 500px 0 #ff7417,
+    100px 570px 0 #ff9d24;
+  opacity:.65;
+  pointer-events:none
+}
+.boton-volver {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  margin: 2px 0 5px 2px;
+  padding: 0;
+  border: 2px solid #d88932;
+  border-radius: 50%;
+  background:
+    linear-gradient(
+      145deg,
+      #8f3b16,
+      #4d1708
+    );
+  color: #ffffff;
+  font-size: 0;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.45),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.boton-volver::before {
+  content: "";
+  width: 13px;
+  height: 13px;
+  border-left: 3px solid #ffffff;
+  border-bottom: 3px solid #ffffff;
+  transform: rotate(45deg);
+  margin-left: 5px;
+}
+.boton-volver:active {
+  transform: scale(0.90);
+}
+.memoria-header {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  margin: 0 auto 35px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 42px;
+}
+.titulo-juego {
+  color: #ffe4b0;
+  font-size: 21px;
+  font-weight: 800;
+  text-align: center;
+  text-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.5);
+}
+.contador {
+  position: static;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  color: #fff0d2;
+  background:
+    linear-gradient(
+      145deg,
+      #7f3515,
+      #511707
+    );
+  border: 1px solid #c87528;
+  box-shadow:
+    0 3px 8px rgba(0, 0, 0, 0.35);
+  font-size: 10px;
+  font-weight: 600;
+}
+.contador strong{
+  color:#ffd15c;
+  font-size:15px
+}
+.tablero{
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+  width:88%;
+  max-width:360px;
+  margin:0 auto;
+}
+.tablero.tablero-nivel-2{
+  width:70%;
+  max-width:300px;
+  gap:7px;
+}
+.tablero.tablero-nivel-3{
+  grid-template-columns:repeat(3,1fr);
+  width:100%;
+  max-width:460px;
+  gap:10px;
+  margin:45px auto 0;
+}
+.carta{
+  position:relative;
+  width:100%;
+  aspect-ratio:1/1;
+  padding:0;
+  border:none;
+  border-radius:13px;
+  overflow:hidden;
+  background:rgba(0,0,0,0);
+  cursor:pointer;
+  box-shadow:0 5px 10px rgba(0,0,0,.45);
+  transition:transform .15s ease,box-shadow .15s ease;
+  -webkit-tap-highlight-color:rgba(0,0,0,0)
+}
+.carta:active{
+  transform:scale(.94)
+}
+.frente{
+  width:100%;
+  height:100%;
+  padding:3px;
+  border-radius:13px;
+  background:linear-gradient(145deg,#ffd85a,#f28a17,#c94b0d);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,247,200,.55),
+    0 0 10px rgba(255,159,35,.25)
+}
+.frente img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:10px
+}
+.dorso{
+  position:relative;
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border-radius:13px;
+  overflow:hidden;
+  background:
+    radial-gradient(
+      circle at 50% 40%,
+      #a94317 0%,
+      #76230c 40%,
+      #3c0d04 100%
+    );
+  border:2px solid #e88a26;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,205,105,.25),
+    inset 0 0 14px rgba(0,0,0,.35)
+}
+.dorso::before{
+  content:"";
+  position:absolute;
+  width:65%;
+  height:65%;
+  border-radius:50%;
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,166,38,.2),
+      transparent 70%
+    )
+}
+.dorso img{
+  position:relative;
+  z-index:2;
+  width:43%;
+  height:43%;
+  object-fit:contain;
+  filter:drop-shadow(0 3px 4px rgba(0,0,0,.55))
+}
+.dorso span{
+  position:relative;
+  z-index:2;
+  margin-top:-2px;
+  color:#ffeac4;
+  font-size:8px;
+  font-weight:900;
+  line-height:.9;
+  letter-spacing:.5px;
+  text-align:center;
+  text-shadow:0 2px 3px rgba(0,0,0,.55)
+}
+.carta.encontrada{
+  transform:scale(.96);
+  box-shadow:
+    0 0 0 2px #ffd34f,
+    0 0 15px rgba(255,188,43,.7),
+    0 5px 10px rgba(0,0,0,.45)
+}
+ion-modal.modal-victoria{
+  --background:transparent;
+  --box-shadow:none
+}
+ion-modal.modal-victoria::part(backdrop){
+  background:rgba(24,7,2,.84)
+}
+.victoria-modal-container{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px
+}
+.victoria{
+  position:relative;
+  width:100%;
+  max-width:330px;
+  padding:30px 20px 20px;
+  text-align:center;
+  border-radius:25px;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 0%,#fff1bd,transparent 45%),
+    linear-gradient(145deg,#fff9e8,#ffe7b1);
+  border:3px solid #eda42b;
+  box-shadow:
+    0 20px 45px rgba(0,0,0,.55),
+    0 0 25px rgba(255,169,38,.25);
+  animation:aparecerVictoria .3s cubic-bezier(.2,.8,.2,1)
+}
+.victoria-icono{
+  width:65px;
+  height:65px;
+  margin:0 auto 13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  color:#fff;
+  background:linear-gradient(145deg,#ffc83d,#e76d0c);
+  border:3px solid #fff0bd;
+  box-shadow:
+    0 0 0 3px #e99a28,
+    0 6px 12px rgba(119,45,6,.35);
+  font-size:35px;
+  font-weight:900
+}
+.victoria h2{
+  margin:0 0 7px;
+  color:#67270d;
+  font-size:26px;
+  font-weight:900
+}
+.victoria-mensaje{
+  margin:0 0 17px;
+  color:#82502d;
+  font-size:14px;
+  font-weight:600;
+  line-height:1.4
+}
+.victoria-movimientos{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:11px 14px;
+  margin-bottom:17px;
+  border-radius:13px;
+  background:linear-gradient(145deg,#f7d895,#efc36a);
+  border:1px solid #dfa543;
+  color:#713510;
+  font-size:13px;
+  font-weight:700
+}
+.victoria-movimientos strong{
+  color:#5e2107;
+  font-size:21px
+}
+.victoria ion-button{
+  margin:0;
+  --border-radius:14px;
+  --background:#a9380d;
+  --background-hover:#c04914;
+  --background-activated:#762408;
+  font-size:14px;
+  font-weight:800;
+  text-transform:none
+}
+.victoria ion-button + ion-button{
+  margin-top:10px;
+}
+.confeti{
+  position:absolute;
+  color:#ed9b1e;
+  font-size:19px;
+  animation:flotarConfeti 2s ease-in-out infinite
+}
+.confeti-1{
+  top:17px;
+  left:20px
+}
+.confeti-2{
+  top:38px;
+  right:20px;
+  color:#cf5418
+}
+.confeti-3{
+  bottom:20px;
+  left:28px;
+  color:#e5b82c
+}
+.confeti-4{
+  bottom:45px;
+  right:28px;
+  color:#c84b14
+}
+@keyframes aparecerVictoria{
+  from{
+    opacity:0;
+    transform:scale(.82) translateY(15px)
+  }
+  to{
+    opacity:1;
+    transform:scale(1) translateY(0)
+  }
+}
+@keyframes flotarConfeti{
+  0%,100%{
+    transform:translateY(0) rotate(0deg)
+  }
+  50%{
+    transform:translateY(-5px) rotate(8deg)
+  }
+}
+@media(max-width:380px){
+  .juego-memoria{
+    padding:8px 8px 15px
+  }
+ .boton-volver {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  margin: 2px 0 5px 2px;
+  padding: 0;
+  border: 2px solid #d88932;
+  border-radius: 50%;
+  background:
+    linear-gradient(
+      145deg,
+      #8f3b16,
+      #4d1708
+    );
+  color: #ffffff;
+  font-size: 0;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.45),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.boton-volver::before {
+  content: "";
+  width: 13px;
+  height: 13px;
+  border-left: 3px solid #ffffff;
+  border-bottom: 3px solid #ffffff;
+  transform: rotate(45deg);
+  margin-left: 5px;
+}
+.boton-volver:active {
+  transform: scale(0.90);
+}
+  .memoria-header{
+    width:94%;
+    margin-bottom:7px
+  }
+  .titulo-juego{
+    font-size:18px
+  }
+  .contador{
+    padding:5px 8px;
+    font-size:9px
+  }
+  .contador strong{
+    font-size:14px
+  }
+  .tablero{
+    width:88%;
+    max-width:330px;
+    gap:7px
+  }
+  .tablero.tablero-nivel-3{
+    grid-template-columns:repeat(3,1fr);
+    width:94%;
+    max-width:350px;
+    gap:7px
+  }
+  .carta{
+    border-radius:11px
+  }
+  .dorso{
+    border-radius:11px
+  }
+  .frente{
+    border-radius:11px
+  }
+  .frente img{
+    border-radius:8px
+  }
+  .dorso img{
+    width:40%;
+    height:40%
+  }
+  .dorso span{
+    font-size:7px
+  }
+  .victoria{
+    max-width:310px;
+    padding:26px 17px 18px
+  }
+}
