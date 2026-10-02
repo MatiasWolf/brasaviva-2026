@@ -281,34 +281,6 @@ ion-content {
 .opcion.correcta:not(.seleccionada) .letra-opcion {
   background: #c47a22;
 }
-.respuesta-info {
-  margin-top: 18px;
-  padding-top: 16px;
-  border-top:
-    1px solid #dfc9b5;
-  text-align: center;
-  animation:
-    aparecerRespuesta .2s ease;
-}
-.mensaje-correcto,
-.mensaje-incorrecto {
-  margin: 0 0 8px;
-  font-size: 17px;
-  font-weight: 900;
-}
-.mensaje-correcto {
-  color: #2f7d45;
-}
-.mensaje-incorrecto {
-  color: #b4382c;
-}
-.explicacion {
-  margin: 8px auto 16px;
-  max-width: 480px;
-  font-size: 13px;
-  line-height: 1.5;
-  color: #745848;
-}
 .boton-continuar {
   width: 100%;
   min-height: 50px;
@@ -365,6 +337,20 @@ ion-content {
   text-align: center;
   box-shadow:
     0 20px 50px rgba(0, 0, 0, .45);
+}
+
+.modal-feedback {
+  animation: aparecerRespuesta .2s ease;
+}
+
+.modal-feedback.modal-feedback-correcta .modal-icono {
+  background: #2f7d45;
+  box-shadow: 0 6px 16px rgba(47, 125, 69, .3);
+}
+
+.modal-feedback.modal-feedback-incorrecta .modal-icono {
+  background: #b4382c;
+  box-shadow: 0 6px 16px rgba(180, 56, 44, .3);
 }
 
 .modal-icono {
@@ -594,20 +580,6 @@ ion-content {
 
   .texto-opcion {
     font-size: 13px;
-  }
-
-  .respuesta-info {
-    margin-top: 13px;
-  }
-
-  .mensaje-correcto,
-  .mensaje-incorrecto {
-    font-size: 15px;
-  }
-
-  .explicacion {
-    margin: 6px auto 12px;
-    font-size: 11px;
   }
 
   .boton-continuar {

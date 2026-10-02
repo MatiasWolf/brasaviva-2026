@@ -7,911 +7,322 @@ export interface PreguntaTrivia {
   respuestaCorrecta: string;
   explicacion: string;
 }
- export const BANCO_PREGUNTAS: Record<1 | 2 | 3, PreguntaTrivia[]> = {
-    1: [
-      {
-        pregunta:
-          '¿Cuál es la capital de Australia?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Sídney'
-          },
-          {
-            letra: 'B',
-            texto: 'Melbourne'
-          },
-          {
-            letra: 'C',
-            texto: 'Canberra'
-          },
-          {
-            letra: 'D',
-            texto: 'Brisbane'
-          }
-        ],
-        respuestaCorrecta: 'C',
-        explicacion:
-          'Canberra es la capital de Australia. Sídney y Melbourne son ciudades más grandes y conocidas.'
-      },
-      {
-        pregunta:
-          '¿Quién dirigió la película Titanic estrenada en 1997?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Steven Spielberg'
-          },
-          {
-            letra: 'B',
-            texto: 'James Cameron'
-          },
-          {
-            letra: 'C',
-            texto: 'Christopher Nolan'
-          },
-          {
-            letra: 'D',
-            texto: 'George Lucas'
-          }
-        ],
-        respuestaCorrecta: 'B',
-        explicacion:
-          'James Cameron dirigió Titanic, protagonizada por Leonardo DiCaprio y Kate Winslet.'
-      },
-      {
-        pregunta:
-          '¿Qué instrumento musical tiene normalmente 88 teclas?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Violín'
-          },
-          {
-            letra: 'B',
-            texto: 'Piano'
-          },
-          {
-            letra: 'C',
-            texto: 'Saxofón'
-          },
-          {
-            letra: 'D',
-            texto: 'Acordeón'
-          }
-        ],
-        respuestaCorrecta: 'B',
-        explicacion:
-          'El piano estándar moderno tiene 88 teclas.'
-      },
-      {
-        pregunta:
-          '¿En qué país se encuentra la ciudad de Kioto?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'China'
-          },
-          {
-            letra: 'B',
-            texto: 'Corea del Sur'
-          },
-          {
-            letra: 'C',
-            texto: 'Japón'
-          },
-          {
-            letra: 'D',
-            texto: 'Tailandia'
-          }
-        ],
-        respuestaCorrecta: 'C',
-        explicacion:
-          'Kioto es una ciudad japonesa conocida por sus templos y su importancia histórica.'
-      },
-      {
-        pregunta:
-          '¿Cuál de estos animales es un mamífero?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Delfín'
-          },
-          {
-            letra: 'B',
-            texto: 'Tiburón'
-          },
-          {
-            letra: 'C',
-            texto: 'Pingüino'
-          },
-          {
-            letra: 'D',
-            texto: 'Cocodrilo'
-          }
-        ],
-        respuestaCorrecta: 'A',
-        explicacion:
-          'El delfín es un mamífero marino, aunque viva en el agua.'
-      },
-      {
-        pregunta:
-          '¿Qué escritor argentino creó al personaje de ficción conocido como el detective Isidro Parodi?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Jorge Luis Borges'
-          },
-          {
-            letra: 'B',
-            texto: 'Ernesto Sabato'
-          },
-          {
-            letra: 'C',
-            texto: 'Julio Cortázar'
-          },
-          {
-            letra: 'D',
-            texto: 'Adolfo Bioy Casares'
-          }
-        ],
-        respuestaCorrecta: 'A',
-        explicacion:
-          'Isidro Parodi fue creado por Jorge Luis Borges y Adolfo Bioy Casares bajo el seudónimo H. Bustos Domecq.'
-      },
-      {
-        pregunta:
-          '¿Qué planeta es conocido como el planeta rojo?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Venus'
-          },
-          {
-            letra: 'B',
-            texto: 'Marte'
-          },
-          {
-            letra: 'C',
-            texto: 'Mercurio'
-          },
-          {
-            letra: 'D',
-            texto: 'Saturno'
-          }
-        ],
-        respuestaCorrecta: 'B',
-        explicacion:
-          'Marte recibe el nombre de planeta rojo por el aspecto rojizo de su superficie.'
-      },
-      {
-        pregunta:
-          '¿En qué deporte se utiliza una pelota ovalada?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Básquet'
-          },
-          {
-            letra: 'B',
-            texto: 'Vóley'
-          },
-          {
-            letra: 'C',
-            texto: 'Rugby'
-          },
-          {
-            letra: 'D',
-            texto: 'Béisbol'
-          }
-        ],
-        respuestaCorrecta: 'C',
-        explicacion:
-          'El rugby utiliza una pelota ovalada, característica de este deporte.'
-      }
-    ],
+export const BANCO_PREGUNTAS: Record<1 | 2 | 3, PreguntaTrivia[]> = {
+  1: [
+        {
+          pregunta: '¿De qué país es originaria la famosa pizza?',
+          opciones: [
+            { letra: 'A', texto: 'México' },
+            { letra: 'B', texto: 'Italia' },
+            { letra: 'C', texto: 'Japón' },
+            { letra: 'D', texto: 'Francia' }
+          ],
+          respuestaCorrecta: 'B',
+          explicacion: 'La pizza nació en la ciudad de Nápoles, Italia, y se convirtió en uno de los platos más populares del mundo.'
+        },
+        {
+          pregunta: '¿Qué tipo de animal es el famoso Mickey Mouse?',
+          opciones: [
+            { letra: 'A', texto: 'Un perro' },
+            { letra: 'B', texto: 'Un gato' },
+            { letra: 'C', texto: 'Un ratón' },
+            { letra: 'D', texto: 'Un conejo' }
+          ],
+          respuestaCorrecta: 'C',
+          explicacion: 'Mickey Mouse es el ratón animado más famoso de la historia, creado por Walt Disney en 1928.'
+        },
+        {
+          pregunta: '¿Cómo se le llama al sonido característico que hacen los gatos?',
+          opciones: [
+            { letra: 'A', texto: 'Ladrido' },
+            { letra: 'B', texto: 'Maullido' },
+            { letra: 'C', texto: 'Relincho' },
+            { letra: 'D', texto: 'Rugido' }
+          ],
+          respuestaCorrecta: 'B',
+          explicacion: 'El maullido es el sonido que usan los gatos domésticos principalmente para comunicarse con los humanos.'
+        },
+        {
+          pregunta: '¿Dónde vive el alegre personaje animado Bob Esponja?',
+          opciones: [
+            { letra: 'A', texto: 'En un castillo de arena' },
+            { letra: 'B', texto: 'En una torre de cristal' },
+            { letra: 'C', texto: 'En una piña bajo el mar' },
+            { letra: 'D', texto: 'En un barco pirata' }
+          ],
+          respuestaCorrecta: 'C',
+          explicacion: 'Como dice su famosa canción de inicio, Bob Esponja vive en una piña debajo del mar en Fondo de Bikini.'
+        },
+        {
+          pregunta: '¿Qué fruta se necesita principalmente para preparar una clásica limonada?',
+          opciones: [
+            { letra: 'A', texto: 'Naranja' },
+            { letra: 'B', texto: 'Manzana' },
+            { letra: 'C', texto: 'Banana' },
+            { letra: 'D', texto: 'Limón' }
+          ],
+          respuestaCorrecta: 'D',
+          explicacion: 'El limón es el ingrediente estrella y el que le da el toque ácido y refrescante a la limonada.'
+        },
+        {
+          pregunta: '¿Cuál de estos animales es famoso por tener una trompa muy larga y orejas grandes?',
+          opciones: [
+            { letra: 'A', texto: 'El león' },
+            { letra: 'B', texto: 'El elefante' },
+            { letra: 'C', texto: 'El cocodrilo' },
+            { letra: 'D', texto: 'El pingüino' }
+          ],
+          respuestaCorrecta: 'B',
+          explicacion: 'Los elefantes usan su larga trompa para oler, respirar, emitir sonidos y agarrar comida o agua.'
+        },
+        {
+          pregunta: '¿A qué se dedica Super Mario, el famoso personaje de los videojuegos?',
+          opciones: [
+            { letra: 'A', texto: 'Plomero / Fontanero' },
+            { letra: 'B', texto: 'Bombero' },
+            { letra: 'C', texto: 'Astronauta' },
+            { letra: 'D', texto: 'Jardinero' }
+          ],
+          respuestaCorrecta: 'A',
+          explicacion: 'Mario es el plomero más famoso del mundo, conocido por viajar a través de tuberías para rescatar a la Princesa Peach.'
+        },
+        {
+          pregunta: '¿Qué superhéroe trepa por las paredes y lanza telarañas?',
+          opciones: [
+            { letra: 'A', texto: 'Batman' },
+            { letra: 'B', texto: 'Superman' },
+            { letra: 'C', texto: 'Iron Man' },
+            { letra: 'D', texto: 'Spider-Man' }
+          ],
+          respuestaCorrecta: 'D',
+          explicacion: 'Spider-Man (el Hombre Araña) obtuvo sus poderes tras ser mordido por una araña radiactiva.'
+        }
+      ],
+
     2: [
-      {
-        pregunta:
-          '¿Cuál de estos países NO pertenece a América del Sur?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Ecuador'
-          },
-          {
-            letra: 'B',
-            texto: 'Surinam'
-          },
-          {
-            letra: 'C',
-            texto: 'Panamá'
-          },
-          {
-            letra: 'D',
-            texto: 'Paraguay'
-          }
-        ],
-        respuestaCorrecta: 'C',
-        explicacion:
-          'Panamá se encuentra en América Central. Ecuador, Surinam y Paraguay pertenecen a América del Sur.'
-      },
-      {
-        pregunta:
-          '¿Qué acontecimiento ocurrió primero?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Llegada del hombre a la Luna'
-          },
-          {
-            letra: 'B',
-            texto: 'Caída del Muro de Berlín'
-          },
-          {
-            letra: 'C',
-            texto: 'Descubrimiento de América por Colón'
-          },
-          {
-            letra: 'D',
-            texto: 'Revolución Francesa'
-          }
-        ],
-        respuestaCorrecta: 'C',
-        explicacion:
-          'El viaje de Cristóbal Colón que llegó a América ocurrió en 1492, antes que los otros acontecimientos.'
-      },
-      {
-        pregunta:
-          '¿Cuál de estas películas ganó el Óscar a Mejor Película?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Avatar'
-          },
-          {
-            letra: 'B',
-            texto: 'Gladiador'
-          },
-          {
-            letra: 'C',
-            texto: 'Piratas del Caribe'
-          },
-          {
-            letra: 'D',
-            texto: 'Harry Potter y la piedra filosofal'
-          }
-        ],
-        respuestaCorrecta: 'B',
-        explicacion:
-          'Gladiador ganó el Óscar a Mejor Película en la ceremonia de 2001.'
-      },
-      {
-        pregunta:
-          '¿Qué país es conocido por haber construido la antigua ciudad de Petra?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Jordania'
-          },
-          {
-            letra: 'B',
-            texto: 'Egipto'
-          },
-          {
-            letra: 'C',
-            texto: 'Grecia'
-          },
-          {
-            letra: 'D',
-            texto: 'India'
-          }
-        ],
-        respuestaCorrecta: 'A',
-        explicacion:
-          'Petra se encuentra en la actual Jordania y fue desarrollada por los nabateos.'
-      },
-      {
-        pregunta:
-          '¿Qué grupo musical publicó el álbum "Abbey Road"?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Queen'
-          },
-          {
-            letra: 'B',
-            texto: 'The Beatles'
-          },
-          {
-            letra: 'C',
-            texto: 'The Rolling Stones'
-          },
-          {
-            letra: 'D',
-            texto: 'Pink Floyd'
-          }
-        ],
-        respuestaCorrecta: 'B',
-        explicacion:
-          'Abbey Road fue el undécimo álbum de estudio de The Beatles y se publicó en 1969.'
-      },
-      {
-        pregunta:
-          '¿Cuál es el río más largo de Sudamérica?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Río Paraná'
-          },
-          {
-            letra: 'B',
-            texto: 'Río Orinoco'
-          },
-          {
-            letra: 'C',
-            texto: 'Río Amazonas'
-          },
-          {
-            letra: 'D',
-            texto: 'Río Uruguay'
-          }
-        ],
-        respuestaCorrecta: 'C',
-        explicacion:
-          'El Amazonas es el principal río de Sudamérica y uno de los ríos más largos y caudalosos del mundo.'
-      },
-      {
-        pregunta:
-          '¿Qué empresa desarrolló originalmente el sistema operativo Android?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Microsoft'
-          },
-          {
-            letra: 'B',
-            texto: 'Apple'
-          },
-          {
-            letra: 'C',
-            texto: 'Google'
-          },
-          {
-            letra: 'D',
-            texto: 'Samsung'
-          }
-        ],
-        respuestaCorrecta: 'C',
-        explicacion:
-          'Google adquirió Android Inc. en 2005 y posteriormente desarrolló el sistema operativo Android.'
-      },
-      {
-        pregunta:
-          '¿Cuál de estas obras pertenece a William Shakespeare?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Hamlet'
-          },
-          {
-            letra: 'B',
-            texto: 'Don Quijote de la Mancha'
-          },
-          {
-            letra: 'C',
-            texto: 'La Divina Comedia'
-          },
-          {
-            letra: 'D',
-            texto: 'Los miserables'
-          }
-        ],
-        respuestaCorrecta: 'A',
-        explicacion:
-          'Hamlet es una de las tragedias más conocidas de William Shakespeare.'
-      }
-    ],
+        {
+          pregunta: '¿Cuál de estos alimentos NO es una fruta?',
+          opciones: [
+            { letra: 'A', texto: 'Manzana' },
+            { letra: 'B', texto: 'Lechuga' },
+            { letra: 'C', texto: 'Banana' },
+            { letra: 'D', texto: 'Frutilla' }
+          ],
+          respuestaCorrecta: 'B',
+          explicacion: 'La lechuga es una verdura de hoja verde, mientras que las otras opciones son deliciosas frutas.'
+        },
+        {
+          pregunta: '¿Cuál es el color de las famosas golosinas conocidas como "Ositos de Oro" de Haribo?',
+          opciones: [
+            { letra: 'A', texto: 'Vienen de muchos colores' },
+            { letra: 'B', texto: 'Solo son negros' },
+            { letra: 'C', texto: 'Solo son blancos' },
+            { letra: 'D', texto: 'Solo son azules' }
+          ],
+          respuestaCorrecta: 'A',
+          explicacion: 'Las gomitas de ositos vienen en una mezcla divertida de colores y sabores frutales como frutilla, limón y naranja.'
+        },
+        {
+          pregunta: '¿Qué ingrediente frío y dulce se derrite si lo dejas al sol?',
+          opciones: [
+            { letra: 'A', texto: 'Un helado' },
+            { letra: 'B', texto: 'Una galletita' },
+            { letra: 'C', texto: 'Un alfajor' },
+            { letra: 'D', texto: 'Un pedazo de pan' }
+          ],
+          respuestaCorrecta: 'A',
+          explicacion: 'El helado está hecho a base de crema o agua congelada, por lo que necesita mantenerse frío para no derretirse.'
+        },
+        {
+          pregunta: '¿Qué animal es famoso por ser el rey de la selva y tener una gran melena?',
+          opciones: [
+            { letra: 'A', texto: 'El oso' },
+            { letra: 'B', texto: 'El león' },
+            { letra: 'C', texto: 'El mono' },
+            { letra: 'D', texto: 'La jirafa' }
+          ],
+          respuestaCorrecta: 'B',
+          explicacion: 'El león es conocido tradicionalmente como el rey de la selva gracias a su imponente rugido y su gran melena.'
+        },
+        {
+          pregunta: '¿Cuántos días tiene normalmente una semana?',
+          opciones: [
+            { letra: 'A', texto: '5 días' },
+            { letra: 'B', texto: '10 días' },
+            { letra: 'C', texto: '7 días' },
+            { letra: 'D', texto: '12 días' }
+          ],
+          respuestaCorrecta: 'C',
+          explicacion: 'Una semana completa tiene 7 días, comenzando el lunes y terminando el domingo.'
+        },
+        {
+          pregunta: '¿Qué personaje de Disney pierde uno de sus zapatos de cristal en el baile real?',
+          opciones: [
+            { letra: 'A', texto: 'Cenicienta' },
+            { letra: 'B', texto: 'Blancanieves' },
+            { letra: 'C', texto: 'Rapunzel' },
+            { letra: 'D', texto: 'La Sirenita' }
+          ],
+          respuestaCorrecta: 'A',
+          explicacion: 'Cenicienta pierde su zapato de cristal al salir corriendo del castillo justo antes de la medianoche.'
+        },
+        {
+          pregunta: '¿Qué bebida caliente se prepara tradicionalmente usando hojas metidas en una taza con agua hirviendo?',
+          opciones: [
+            { letra: 'A', texto: 'Gaseosa' },
+            { letra: 'B', texto: 'Té' },
+            { letra: 'C', texto: 'Jugo de naranja' },
+            { letra: 'D', texto: 'Leche fría' }
+          ],
+          respuestaCorrecta: 'B',
+          explicacion: 'El té se elabora mediante la infusión de hojas de la planta de té en agua muy caliente.'
+        },
+        {
+          pregunta: '¿Qué objeto redondo usan los jugadores de fútbol para hacer un gol?',
+          opciones: [
+            { letra: 'A', texto: 'Un bate' },
+            { letra: 'B', texto: 'Una raqueta' },
+            { letra: 'C', texto: 'Una pelota' },
+            { letra: 'D', texto: 'Un patín' }
+          ],
+          respuestaCorrecta: 'C',
+          explicacion: 'En el fútbol el objetivo principal es patear la pelota para meterla dentro del arco contrario.'
+        }
+      ],
+
     3: [
-      {
-        pregunta:
-          '¿Cuál de estos países tiene más de una capital oficial o administrativa?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Sudáfrica'
-          },
-          {
-            letra: 'B',
-            texto: 'España'
-          },
-          {
-            letra: 'C',
-            texto: 'Argentina'
-          },
-          {
-            letra: 'D',
-            texto: 'México'
-          }
-        ],
-        respuestaCorrecta: 'A',
-        explicacion:
-          'Sudáfrica tiene tres capitales con distintas funciones: Pretoria, Ciudad del Cabo y Bloemfontein.'
-      },
-      {
-        pregunta:
-          '¿Qué pintor es conocido por haber realizado "La noche estrellada"?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Claude Monet'
-          },
-          {
-            letra: 'B',
-            texto: 'Vincent van Gogh'
-          },
-          {
-            letra: 'C',
-            texto: 'Pablo Picasso'
-          },
-          {
-            letra: 'D',
-            texto: 'Salvador Dalí'
-          }
-        ],
-        respuestaCorrecta: 'B',
-        explicacion:
-          'La noche estrellada fue pintada por Vincent van Gogh en 1889.'
-      },
-      {
-        pregunta:
-          '¿Cuál de estos países fue sede de los Juegos Olímpicos de 2016?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Brasil'
-          },
-          {
-            letra: 'B',
-            texto: 'China'
-          },
-          {
-            letra: 'C',
-            texto: 'Reino Unido'
-          },
-          {
-            letra: 'D',
-            texto: 'Grecia'
-          }
-        ],
-        respuestaCorrecta: 'A',
-        explicacion:
-          'Los Juegos Olímpicos de 2016 se realizaron en Río de Janeiro, Brasil.'
-      },
-      {
-        pregunta:
-          '¿Qué invento se asocia principalmente con Johannes Gutenberg?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'El telescopio'
-          },
-          {
-            letra: 'B',
-            texto: 'La imprenta de tipos móviles'
-          },
-          {
-            letra: 'C',
-            texto: 'La máquina de vapor'
-          },
-          {
-            letra: 'D',
-            texto: 'El teléfono'
-          }
-        ],
-        respuestaCorrecta: 'B',
-        explicacion:
-          'Gutenberg desarrolló en Europa una imprenta basada en tipos móviles que revolucionó la producción de libros.'
-      },
-      {
-        pregunta:
-          '¿Cuál de estas ciudades NO fue sede de una edición de los Juegos Olímpicos de verano?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Barcelona'
-          },
-          {
-            letra: 'B',
-            texto: 'Atenas'
-          },
-          {
-            letra: 'C',
-            texto: 'Río de Janeiro'
-          },
-          {
-            letra: 'D',
-            texto: 'Buenos Aires'
-          }
-        ],
-        respuestaCorrecta: 'D',
-        explicacion:
-          'Buenos Aires fue sede de los Juegos Olímpicos de la Juventud en 2018, pero no de los Juegos Olímpicos de verano para adultos.'
-      },
-      {
-        pregunta:
-          '¿Qué país fue conocido históricamente como Persia?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Irak'
-          },
-          {
-            letra: 'B',
-            texto: 'Irán'
-          },
-          {
-            letra: 'C',
-            texto: 'Siria'
-          },
-          {
-            letra: 'D',
-            texto: 'Afganistán'
-          }
-        ],
-        respuestaCorrecta: 'B',
-        explicacion:
-          'Persia fue el nombre histórico utilizado durante siglos para referirse a gran parte del territorio del actual Irán.'
-      },
-      {
-        pregunta:
-          '¿Cuál de estas bandas fue liderada por Freddie Mercury?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Queen'
-          },
-          {
-            letra: 'B',
-            texto: 'U2'
-          },
-          {
-            letra: 'C',
-            texto: 'Nirvana'
-          },
-          {
-            letra: 'D',
-            texto: 'Oasis'
-          }
-        ],
-        respuestaCorrecta: 'A',
-        explicacion:
-          'Freddie Mercury fue el cantante principal y una de las figuras centrales de Queen.'
-      },
-      {
-        pregunta:
-          '¿Qué país ganó la Copa Mundial de Fútbol de 2010?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Alemania'
-          },
-          {
-            letra: 'B',
-            texto: 'Brasil'
-          },
-          {
-            letra: 'C',
-            texto: 'España'
-          },
-          {
-            letra: 'D',
-            texto: 'Argentina'
-          }
-        ],
-        respuestaCorrecta: 'C',
-        explicacion:
-          'España ganó el Mundial de 2010 disputado en Sudáfrica, derrotando a Países Bajos en la final.'
-      },
-      {
-        pregunta:
-          '¿Cuál de estas novelas fue escrita por George Orwell?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: '1984'
-          },
-          {
-            letra: 'B',
-            texto: 'Fahrenheit 451'
-          },
-          {
-            letra: 'C',
-            texto: 'El nombre de la rosa'
-          },
-          {
-            letra: 'D',
-            texto: 'Crónica de una muerte anunciada'
-          }
-        ],
-        respuestaCorrecta: 'A',
-        explicacion:
-          '1984 fue publicada por George Orwell en 1949 y es una de las novelas distópicas más conocidas.'
-      },
-      {
-        pregunta:
-          '¿Qué país tiene como capital a Budapest?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Rumania'
-          },
-          {
-            letra: 'B',
-            texto: 'Hungría'
-          },
-          {
-            letra: 'C',
-            texto: 'Bulgaria'
-          },
-          {
-            letra: 'D',
-            texto: 'Croacia'
-          }
-        ],
-        respuestaCorrecta: 'B',
-        explicacion:
-          'Budapest es la capital de Hungría.'
-      },
-      {
-        pregunta:
-          '¿Cuál de estas películas fue dirigida por Christopher Nolan?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Interestelar'
-          },
-          {
-            letra: 'B',
-            texto: 'Avatar'
-          },
-          {
-            letra: 'C',
-            texto: 'Gladiador'
-          },
-          {
-            letra: 'D',
-            texto: 'El señor de los anillos'
-          }
-        ],
-        respuestaCorrecta: 'A',
-        explicacion:
-          'Interestelar fue dirigida por Christopher Nolan y estrenada en 2014.'
-      },
-      {
-        pregunta:
-          '¿Qué civilización construyó la ciudad de Chichén Itzá?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Los incas'
-          },
-          {
-            letra: 'B',
-            texto: 'Los mayas'
-          },
-          {
-            letra: 'C',
-            texto: 'Los romanos'
-          },
-          {
-            letra: 'D',
-            texto: 'Los persas'
-          }
-        ],
-        respuestaCorrecta: 'B',
-        explicacion:
-          'Chichén Itzá fue una importante ciudad de la civilización maya en la península de Yucatán.'
-      },
-      {
-        pregunta:
-          '¿Cuál de estos países NO utiliza el euro como moneda oficial?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Portugal'
-          },
-          {
-            letra: 'B',
-            texto: 'Italia'
-          },
-          {
-            letra: 'C',
-            texto: 'Suecia'
-          },
-          {
-            letra: 'D',
-            texto: 'España'
-          }
-        ],
-        respuestaCorrecta: 'C',
-        explicacion:
-          'Suecia pertenece a la Unión Europea, pero mantiene la corona sueca como moneda.'
-      },
-      {
-        pregunta:
-          '¿Quién escribió "El principito"?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Julio Verne'
-          },
-          {
-            letra: 'B',
-            texto: 'Antoine de Saint-Exupéry'
-          },
-          {
-            letra: 'C',
-            texto: 'Victor Hugo'
-          },
-          {
-            letra: 'D',
-            texto: 'Albert Camus'
-          }
-        ],
-        respuestaCorrecta: 'B',
-        explicacion:
-          'El principito fue escrito y publicado por el escritor y aviador francés Antoine de Saint-Exupéry.'
-      },
-      {
-        pregunta:
-          '¿Qué selección ganó la Copa Mundial de Fútbol de 1998?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Brasil'
-          },
-          {
-            letra: 'B',
-            texto: 'Italia'
-          },
-          {
-            letra: 'C',
-            texto: 'Francia'
-          },
-          {
-            letra: 'D',
-            texto: 'Alemania'
-          }
-        ],
-        respuestaCorrecta: 'C',
-        explicacion:
-          'Francia ganó el Mundial de 1998 como local, derrotando a Brasil en la final.'
-      },
-      {
-        pregunta:
-          '¿Cuál de estas ciudades es conocida como "La Gran Manzana"?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Los Ángeles'
-          },
-          {
-            letra: 'B',
-            texto: 'Chicago'
-          },
-          {
-            letra: 'C',
-            texto: 'Nueva York'
-          },
-          {
-            letra: 'D',
-            texto: 'Boston'
-          }
-        ],
-        respuestaCorrecta: 'C',
-        explicacion:
-          'La Gran Manzana es uno de los apodos más conocidos de Nueva York.'
-      },
-      {
-        pregunta:
-          '¿Qué empresa creó originalmente el sistema operativo Windows?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'IBM'
-          },
-          {
-            letra: 'B',
-            texto: 'Apple'
-          },
-          {
-            letra: 'C',
-            texto: 'Microsoft'
-          },
-          {
-            letra: 'D',
-            texto: 'Intel'
-          }
-        ],
-        respuestaCorrecta: 'C',
-        explicacion:
-          'Windows es una familia de sistemas operativos desarrollada por Microsoft.'
-      },
-      {
-        pregunta:
-          '¿Cuál de estas obras pertenece a Miguel de Cervantes?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'La Odisea'
-          },
-          {
-            letra: 'B',
-            texto: 'Don Quijote de la Mancha'
-          },
-          {
-            letra: 'C',
-            texto: 'La Divina Comedia'
-          },
-          {
-            letra: 'D',
-            texto: 'Hamlet'
-          }
-        ],
-        respuestaCorrecta: 'B',
-        explicacion:
-          'Don Quijote de la Mancha fue escrito por Miguel de Cervantes y publicado en dos partes.'
-      },
-      {
-        pregunta:
-          '¿Cuál de estos países tiene como capital a Wellington?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'Australia'
-          },
-          {
-            letra: 'B',
-            texto: 'Nueva Zelanda'
-          },
-          {
-            letra: 'C',
-            texto: 'Canadá'
-          },
-          {
-            letra: 'D',
-            texto: 'Irlanda'
-          }
-        ],
-        respuestaCorrecta: 'B',
-        explicacion:
-          'Wellington es la capital de Nueva Zelanda.'
-      },
-      {
-        pregunta:
-          '¿Qué videojuego popularizó mundialmente al personaje Mario?',
-        opciones: [
-          {
-            letra: 'A',
-            texto: 'The Legend of Zelda'
-          },
-          {
-            letra: 'B',
-            texto: 'Super Mario Bros.'
-          },
-          {
-            letra: 'C',
-            texto: 'Donkey Kong Country'
-          },
-          {
-            letra: 'D',
-            texto: 'Sonic the Hedgehog'
-          }
-        ],
-        respuestaCorrecta: 'B',
-        explicacion:
-          'Super Mario Bros., lanzado en 1985 para Nintendo Entertainment System, convirtió a Mario en uno de los personajes más reconocidos de los videojuegos.'
-      }
-    ]
+        {
+          pregunta: '¿Cuál de estos ingredientes es el principal para hacer una tortilla tradicional argentina?',
+          opciones: [
+            { letra: 'A', texto: 'Arroz' },
+            { letra: 'B', texto: 'Papa' },
+            { letra: 'C', texto: 'Fideos' },
+            { letra: 'D', texto: 'Calabaza' }
+          ],
+          respuestaCorrecta: 'B',
+          explicacion: 'La tortilla clásica de los bodegones y restaurantes se hace a base de papas y huevos (¡y a veces con cebolla!).'
+        },
+        {
+          pregunta: '¿Cuál es el océano más grande del planeta Tierra?',
+          opciones: [
+            { letra: 'A', texto: 'Océano Atlántico' },
+            { letra: 'B', texto: 'Océano Índico' },
+            { letra: 'C', texto: 'Océano Pacífico' },
+            { letra: 'D', texto: 'Océano Ártico' }
+          ],
+          respuestaCorrecta: 'C',
+          explicacion: 'El Océano Pacífico es el más grande del mundo y cubre más de la tercera parte de la superficie de la Tierra.'
+        },
+        {
+          pregunta: '¿Cómo se llama el villano de color morado que busca las Gemas del Infinito en las películas de Marvel?',
+          opciones: [
+            { letra: 'A', texto: 'Thanos' },
+            { letra: 'B', texto: 'Loki' },
+            { letra: 'C', texto: 'Ultron' },
+            { letra: 'D', texto: 'Duende Verde' }
+          ],
+          respuestaCorrecta: 'A',
+          explicacion: 'Thanos es el famoso titán que busca recolectar todas las gemas en su guantelete para las películas de Avengers.'
+        },
+        {
+          pregunta: '¿Qué fruta se usa tradicionalmente para hacer el vino?',
+          opciones: [
+            { letra: 'A', texto: 'Manzana' },
+            { letra: 'B', texto: 'Uva' },
+            { letra: 'C', texto: 'Pera' },
+            { letra: 'D', texto: 'Durazno' }
+          ],
+          respuestaCorrecta: 'B',
+          explicacion: 'El vino se obtiene a través de la fermentación del jugo de las uvas.'
+        },
+        {
+          pregunta: '¿En qué continente se encuentra la famosa Torre Eiffel?',
+          opciones: [
+            { letra: 'A', texto: 'América' },
+            { letra: 'B', texto: 'Asia' },
+            { letra: 'C', texto: 'Europa' },
+            { letra: 'D', texto: 'África' }
+          ],
+          respuestaCorrecta: 'C',
+          explicacion: 'La Torre Eiffel está ubicada en París, Francia, que es un país del continente europeo.'
+        },
+        {
+          pregunta: '¿Cuántos meses tienen 28 días en un año común?',
+          opciones: [
+            { letra: 'A', texto: 'Solo 1 (Febrero)' },
+            { letra: 'B', texto: 'Ninguno' },
+            { letra: 'C', texto: 'Todos los 12 meses' },
+            { letra: 'D', texto: '6 meses' }
+          ],
+          respuestaCorrecta: 'C',
+          explicacion: '¡Es una pregunta con trampa! Todos los meses del año tienen al menos 28 días.'
+        },
+        {
+          pregunta: '¿Qué famosa banda británica de rock era liderada por el cantante Freddie Mercury?',
+          opciones: [
+            { letra: 'A', texto: 'Queen' },
+            { letra: 'B', texto: 'The Beatles' },
+            { letra: 'C', texto: 'Pink Floyd' },
+            { letra: 'D', texto: 'Coldplay' }
+          ],
+          respuestaCorrecta: 'A',
+          explicacion: 'Freddie Mercury fue el legendario vocalista y pianista de la banda de rock Queen.'
+        },
+        {
+          pregunta: '¿Cuál es el país más grande del mundo por su territorio?',
+          opciones: [
+            { letra: 'A', texto: 'Rusia' },
+            { letra: 'B', texto: 'China' },
+            { letra: 'C', texto: 'Estados Unidos' },
+            { letra: 'D', texto: 'Brasil' }
+          ],
+          respuestaCorrecta: 'A',
+          explicacion: 'Rusia es el país con mayor extensión territorial del planeta, abarcando parte de Europa y de Asia.'
+        },
+        {
+          pregunta: '¿Qué tipo de animal es el icónico personaje de la televisión "Winnie the Pooh"?',
+          opciones: [
+            { letra: 'A', texto: 'Un oso' },
+            { letra: 'B', texto: 'Un tigre' },
+            { letra: 'C', texto: 'Un conejo' },
+            { letra: 'D', texto: 'Un cerdito' }
+          ],
+          respuestaCorrecta: 'A',
+          explicacion: 'Winnie the Pooh es un simpático oso de peluche que tiene una gran debilidad por la miel.'
+        },
+        {
+          pregunta: '¿Qué gas necesitamos respirar los seres humanos para poder vivir?',
+          opciones: [
+            { letra: 'A', texto: 'Dióxido de carbono' },
+            { letra: 'B', texto: 'Oxígeno' },
+            { letra: 'C', texto: 'Nitrógeno' },
+            { letra: 'D', texto: 'Helio' }
+          ],
+          respuestaCorrecta: 'B',
+          explicacion: 'El oxígeno es el gas fundamental que absorben nuestros pulmones para mantenernos con vida.'
+        },
+        {
+          pregunta: '¿Cuál es la capital de Italia, famosa por su Coliseo y sus fuentes?',
+          opciones: [
+            { letra: 'A', texto: 'Milán' },
+            { letra: 'B', texto: 'Venecia' },
+            { letra: 'C', texto: 'Roma' },
+            { letra: 'D', texto: 'Florencia' }
+          ],
+          respuestaCorrecta: 'C',
+          explicacion: 'Roma es la capital histórica de Italia y alberga monumentos antiguos increíbles como el Coliseo Romano.'
+        },
+        {
+          pregunta: '¿A qué color le corresponde la tarjeta que usa un árbitro de fútbol para expulsar definitivamente a un jugador?',
+          opciones: [
+            { letra: 'A', texto: 'Amarilla' },
+            { letra: 'B', texto: 'Verde' },
+            { letra: 'C', texto: 'Azul' },
+            { letra: 'D', texto: 'Roja' }
+          ],
+          respuestaCorrecta: 'D',
+          explicacion: 'La tarjeta roja significa la expulsión inmediata y directa del jugador del campo de juego.'
+        }
+      ]
+
   };
