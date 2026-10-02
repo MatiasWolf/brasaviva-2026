@@ -46,7 +46,7 @@ export class DetallePedidoComponent {
       this.modalController.dismiss({ verificado: true });
       
       // 2. NAVIGACIÓN: Redirigir a la pantalla de seguimiento del cliente
-      this.router.navigate(['/seguimiento-pedido']); 
+      this.router.navigate(['/seguir-pedido']); 
       
     } else if (resultado && resultado.productosAgotados && resultado.productosAgotados.length > 0) {
       // 3. ERROR DE DISPONIBILIDAD: Listar los platos que se quitaron automáticamente

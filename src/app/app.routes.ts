@@ -189,7 +189,7 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'seguimiento-pedido',
+    path: 'seguir-pedido',
     loadComponent: () => import('./pages/seguimiento-pedido/seguimiento-pedido.page').then( m => m.SeguimientoPedidoPage)
   },
   {
