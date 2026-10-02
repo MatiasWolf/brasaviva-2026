@@ -85,32 +85,45 @@
             </button>
           }
         </div>
-        @if (respuestaSeleccionada() !== null) {
-        <div class="respuesta-info">
-
-          @if (tiempoAgotado) {
-            <p class="mensaje-tiempo">
-              ⏱️ ¡Se acabó el tiempo!
-            </p>
-
-          } @else if (respuestaCorrecta()) {
-            <p class="mensaje-correcto">
-              ✓ ¡Correcto!
-            </p>
-
-            <p class="explicacion">
-              {{ pregunta.explicacion }}
-            </p>
-          } @else {
-            <p class="mensaje-incorrecto">
-              ✕ Respuesta incorrecta
-            </p>
-
-            <p class="explicacion">
+      </div>
+    }
+    @if (
+      pregunta &&
+      respuestaSeleccionada() !== null &&
+      !mostrarResultado()
+    ) {
+      <div class="modal-overlay">
+        <div
+          class="modal-juego modal-feedback"
+          [class.modal-feedback-correcta]="respuestaCorrecta()"
+          [class.modal-feedback-incorrecta]="!respuestaCorrecta()"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="titulo-feedback"
+        >
+          <div class="modal-icono">
+            @if (tiempoAgotado) {
+              ⏱
+            } @else if (respuestaCorrecta()) {
+              ✓
+            } @else {
+              ✕
+            }
+          </div>
+          <h2 id="titulo-feedback">
+            @if (tiempoAgotado) {
+              ¡Se acabó el tiempo!
+            } @else if (respuestaCorrecta()) {
+              ¡Correcto!
+            } @else {
+              Respuesta incorrecta
+            }
+          </h2>
+          @if (!tiempoAgotado) {
+            <p class="modal-mensaje">
               {{ pregunta.explicacion }}
             </p>
           }
-
           <button
             class="boton-continuar"
             type="button"
@@ -122,9 +135,7 @@
               Continuar →
             }
           </button>
-
         </div>
-      }
       </div>
     }
     @if (mostrarInicio()) {

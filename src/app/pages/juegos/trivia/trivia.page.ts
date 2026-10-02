@@ -44,7 +44,7 @@ export class TriviaPage implements OnInit, OnDestroy {
     2: 4,
     3: 5
   };
-  tiempoRestante = signal(10);
+  tiempoRestante = signal(20);
   preguntas = signal<PreguntaTrivia[]>([]);
   preguntaActual = signal(0);
   respuestaSeleccionada =
@@ -342,7 +342,7 @@ export class TriviaPage implements OnInit, OnDestroy {
   iniciarTimer(): void {
     this.detenerTimer();
 
-    this.tiempoRestante.set(10);
+    this.tiempoRestante.set(20);
     this.tiempoAgotado = false;
 
     this.timer = setInterval(() => {
