@@ -49,7 +49,6 @@ import { SonidoService } from '../../core/services/sonido.service';
     IonIcon,
     IonRange,
     SpinnerLogoComponent,
-    BrandLogoComponent,
   ],
 })
 export class LoginPage implements OnInit {
