@@ -24,6 +24,7 @@ import {
 } from '../../../core/models/pedido.models';
 import { SpinnerLogoComponent } from '../../../shared/components/spinner-logo/spinner-logo.component';
 import { traducirErrorSupabase } from '../../../core/utils/traducir-error.util';
+import { SonidoService } from '../../../core/services/sonido.service';
 
 /** Un paso del recorrido del pedido, tal como lo ve el cliente. */
 interface PasoSeguimiento {
@@ -91,6 +92,7 @@ export class SeguimientoPedidoPage implements ViewWillEnter, ViewDidLeave {
   private readonly pedidosService = inject(PedidosSectorService);
   private readonly pedidoService = inject(PedidoService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly sonido = inject(SonidoService);
 
   readonly pedidos = signal<PedidoVista[]>([]);
   readonly cargando = signal(true);
@@ -160,7 +162,7 @@ export class SeguimientoPedidoPage implements ViewWillEnter, ViewDidLeave {
           'No pudimos traer el estado de tu pedido. Revisá la conexión.',
         ),
       );
-      this.vibrar();
+      this.sonido.vibrarError();
     } finally {
       this.cargando.set(false);
     }
@@ -227,11 +229,4 @@ export class SeguimientoPedidoPage implements ViewWillEnter, ViewDidLeave {
     this.canal = null;
   }
 
-  private vibrar(): void {
-    try {
-      navigator.vibrate?.([180, 80, 180]);
-    } catch {
-      // Si el dispositivo no vibra, el mensaje en pantalla igual avisa.
-    }
-  }
 }

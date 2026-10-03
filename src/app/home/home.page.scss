@@ -77,33 +77,11 @@
   }
 }
 
-.estadia-demo {
-  background: rgba(19, 9, 5, 0.5);
-  border: 1px dashed rgba(255, 170, 85, 0.45);
-  border-radius: 14px;
-  padding: 10px 10px 6px;
-
-  .demo-tag {
-    margin: 0 0 6px;
-    font-size: 0.68rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #dfa070;
-  }
-
-  ion-segment {
-    --background: transparent;
-  }
-
-  ion-segment-button {
-    --background-checked: rgba(232, 106, 40, 0.9);
-    --color: #dfa070;
-    --color-checked: #fff8f1;
-    --indicator-color: transparent;
-    min-width: 118px;
-    font-size: 0.72rem;
-    text-transform: none;
-  }
+.home-encuestas {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  overflow-y: auto;
 }
 
 /* Botones grandes, a todo el ancho, que se reparten el alto disponible
@@ -138,6 +116,27 @@
   &:active {
     transform: scale(0.98);
     border-color: #ffaa55;
+  }
+
+  .menu-grid--compacta & {
+    max-height: none;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .menu-grid--compacta &__icon {
+    width: 76px;
+    height: 76px;
+  }
+
+  .menu-grid--compacta &__icon ion-icon {
+    font-size: 2.6rem;
+  }
+
+  .menu-grid--compacta &__title {
+    text-align: center;
+    font-size: 1.4rem;
   }
 
   &__icon {

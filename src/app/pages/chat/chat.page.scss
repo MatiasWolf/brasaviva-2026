@@ -145,6 +145,10 @@ ion-back-button {
   justify-content: flex-end;
 }
 
+.mensaje-cliente:not(.mensaje-propio) {
+  justify-content: flex-start;
+}
+
 .mensaje-mozo {
   justify-content: flex-start;
 }
@@ -187,6 +191,29 @@ ion-back-button {
   border: 1px solid #c0784d;
 
   border-bottom-left-radius: 5px;
+}
+
+/* Otra mesa que no es la propia: se distingue de "mi" mensaje y del mozo. */
+.mensaje-cliente:not(.mensaje-propio) .mensaje-burbuja {
+  background:
+    linear-gradient(
+      160deg,
+      #4a2a1d 0%,
+      #341c13 100%
+    );
+
+  border: 1px solid rgba(255, 170, 85, 0.3);
+
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 17px;
+}
+
+.mensaje-cliente:not(.mensaje-propio) .mensaje-emisor {
+  color: #ffaa55;
+}
+
+.mensaje-cliente:not(.mensaje-propio) .mensaje-texto {
+  color: #fff3df;
 }
 
 .mensaje-cabecera {

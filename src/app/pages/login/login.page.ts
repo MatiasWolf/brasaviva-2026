@@ -32,6 +32,7 @@ import { PerfilRapido } from '../../core/models/perfil-rapido.model';
 import { SpinnerLogoComponent } from '../../shared/components/spinner-logo/spinner-logo.component';
 import { BrandLogoComponent } from '../../shared/components/brand-logo/brand-logo.component';
 import { MensajeModalService } from '../../core/services/mensaje-modal.service';
+import { SonidoService } from '../../core/services/sonido.service';
 
 @Component({
   selector: 'app-login',
@@ -74,6 +75,7 @@ export class LoginPage implements OnInit {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   private readonly mensajeModal = inject(MensajeModalService);
+  private readonly sonido = inject(SonidoService);
 
   constructor() {
     addIcons({
@@ -133,7 +135,6 @@ export class LoginPage implements OnInit {
 
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
-      this.vibrarError();
       await this.mostrarError('Por favor verificá el correo y la contraseña.');
       return;
     }
@@ -143,9 +144,9 @@ export class LoginPage implements OnInit {
 
     try {
       await this.auth.login(email, password);
+      this.sonido.reproducir('correcta');
       await this.router.navigate(['/home'], { replaceUrl: true });
     } catch (error) {
-      this.vibrarError();
       const mensaje = error instanceof AuthError ? error.message : this.traducirError(error);
       await this.mostrarError(mensaje);
     } finally {
@@ -162,12 +163,6 @@ export class LoginPage implements OnInit {
     this.router.navigate(['/registro/cliente-anonimo']);
   }
 
-
-  private vibrarError(): void {
-    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
-      navigator.vibrate([180, 80, 180]);
-    }
-  }
 
   private async mostrarError(mensaje: string): Promise<void> {
     this.mensajeModal.error(mensaje);

@@ -112,7 +112,13 @@ src/
 | Mail de aceptación | <img src="docs/capturas/mail_aceptacion.png" width="500" alt="Mail de aceptación"> | `docs/capturas/mail_aceptacion.png` |
 | Mail de rechazo | <img src="docs/capturas/mail_rechazo.png" width="500" alt="Mail de rechazo"> | `docs/capturas/mail_rechazo.png` |
 | Lista de espera | <img src="docs/capturas/lista_espera.png" width="240" alt="Lista de espera"> | `docs/capturas/lista_espera.png` |
-
+| Solicitud de mesa | <img src="docs/capturas/solicitud_mesa.png" width="240" alt="Solicitud de mesa"> | `docs/capturas/solicitud_mesa.png` |
+| Chat | <img src="docs/capturas/chat.png" width="240" alt="Chat"> | `docs/capturas/chat.png` |
+| Lista de productos para el pedido | <img src="docs/capturas/pedido-1.png" width="240" alt="Listado productos"> | `docs/capturas/pedido-1.png` |
+| Mi pedido | <img src="docs/capturas/pedido-2.png" width="240" alt="Mi pedido"> | `docs/capturas/pedido-2.png` |
+| Pedidos | <img src="docs/capturas/pedidos.png" width="240" alt="Pedidos"> | `docs/capturas/pedidos.png` |
+| Estado del pedido | <img src="docs/capturas/estado-pedido.png" width="240" alt="Estado del pedido"> | `docs/capturas/estado-pedido.png` |
+| Pedidos en cocina y bar | <img src="docs/capturas/pedidos-cocina.png" width="240" alt="Pedidos cocina bar"> | `docs/capturas/pedidos-cocina.png` |
 ---
 
 ## ✅ Estado de avance — Puntos funcionales
@@ -131,15 +137,15 @@ src/
 | 8 | Aceptar cliente | Wolf, Matías | 1 | 11-09 | 11-09 | ✅ Completo |
 | 9 | Ingreso cliente anónimo | Miguel, Luján | 1 | 02-09 | 03-09 | ✅ Completo |
 | 10 | Metre asigna mesa | Miguel, Luján | 2 | 16-09 | 18-09 | ✅ Completo |
-| 11 | Ver menú + consulta al mozo | Torrez, Maximiliano | 3 | 08-09 | 11-09 | 🟨 En progreso |
-| 12 | Cliente realiza pedido | Torrez, Maximiliano | 3 | aprox. 08-09 | 11-09 | 🟨 En progreso |
-| 13 | Mozo rechaza pedido | Torrez, Maximiliano | 1 | 12-09 | 13-09 | ⬜ Pendiente |
-| 14 | Mozo confirma pedido | Torrez, Maximiliano | 1,5 | 14-09 | 15-09 | ⬜ Pendiente |
-| 15 | Juegos con descuento | Miguel, Luján | 4 | 12-09 | 16-09 | ⬜ Pendiente |
+| 11 | Ver menú + consulta al mozo | Torrez, Maximiliano | 3 | 08-09 | 11-09 | ✅ Completo |
+| 12 | Cliente realiza pedido | Torrez, Maximiliano | 3 | aprox. 08-09 | 11-09 | ✅ Completo |
+| 13 | Mozo rechaza pedido | Torrez, Maximiliano | 1 | 12-09 | 13-09 | ✅ Completo
+| 14 | Mozo confirma pedido | Torrez, Maximiliano | 1,5 | 14-09 | 15-09 | ✅ Completo
+| 15 | Juegos con descuento | Miguel, Luján | 4 | 28-09 | 02-10 | ✅ Completo |
 | 16 | Cocina recibe pedidos | Moyano, Martín | 1,5 | 10-09 | 12-09 | ✅ Completo |
 | 17 | Bar recibe pedidos | Moyano, Martín | 1 | 12-09 | 12-09 | ✅ Completo |
 | 18 | Aviso de pedido completo | Moyano, Martín | 1 | 12-09 | 12-09 | ✅ Completo |
-| 19 | Mozo entrega pedido | Torrez, Maximiliano | 1 | 16-09 | 17-09 | ⬜ Pendiente |
+| 19 | Mozo entrega pedido | Torrez, Maximiliano | 1 | 16-09 | 17-09 | ✅ Completo |
 | 20 | Encuesta de satisfacción | Torrez, Maximiliano | 2,5 | 18-09 | 20-09 | ⬜ Pendiente |
 | 21 | Cliente pide la cuenta | Torrez, Maximiliano | 2 | 21-09 | 23-09 | ⬜ Pendiente |
 | 22 | Confirmar pago y liberar mesa | Torrez, Maximiliano | 1,5 | 24-09 | 25-09 | ⬜ Pendiente |
@@ -159,58 +165,14 @@ src/
 | 7 | Rechazar cliente | `feature/clientes-pendientes-push-mail` |
 | 8 | Aceptar cliente | `feature/clientes-pendientes-push-mail` |
 | 9 | Ingreso como cliente anónimo | `feature/registro-cliente-anonimo` |
+| 10 | Metre asigna mesa | `feature/flujo-qr-mesa` |
+| 11-12 | Flujo de pedido desde cliente | `feature/menu-pedido` |
+| 13-14 y 19 | Flujo de pedido desde mozo | `feature/menu-pedido` |
+| 15 | Juegos para descuentos | `feature/juegos` |
 | 16-18 | Pedidos de cocina, bar y aviso de pedido completo | `feature/pedidos-cocina-bar` |
-
+| - | Integracion de ramas hasta la fecha | `integracion/cuarta-fecha` |
 ---
 
-## 🧑‍💻 Notas para el equipo
-
-### Pedidos — puntos 16, 17 y 18 (Moyano, Martín)
-
-Rutas nuevas:
-
-| Ruta | Punto | Perfil |
-|---|---|---|
-| `/pedidos/cocina` | 16 — Cocina recibe pedidos | cocinero |
-| `/pedidos/bar` | 17 — Bar recibe pedidos | cantinero |
-| `/pedidos/listos` | 18 — Aviso de pedido completo | mozo |
-| `/seguimiento-pedido` | Estado del pedido | cliente |
-
-Antes de levantar la app hay que correr una vez
-[`supabase/sql/pedidos.sql`](supabase/sql/pedidos.sql) en el SQL Editor de
-Supabase (ya está corrido en el proyecto actual). Agrega los triggers, las
-políticas y las rutas de los botones del menú. Es idempotente.
-
-Las tablas `pedidos` e `items_pedido` ya existían del punto 12. Ojo con los
-nombres: la tabla de ítems es `items_pedido` y su columna de estado es
-`estado_item`. El pedido no guarda la mesa, se llega por `ocupaciones_mesa`.
-Al insertar hay que mandar `estado` y `estado_item` explícitos, y para borrar un
-pedido hay que borrar antes sus ítems.
-
-Se tocaron dos cosas de otros puntos:
-
-- `PedidoService.enviarPedidoAConfirmar()` (punto 12) era un `console.log`;
-  ahora guarda el pedido. Sin eso los puntos 16 a 18 no tienen qué leer.
-- `PushNotificationsService` (punto 6) ahora resuelve la ruta según el tipo de
-  notificación, para entender también `pedido_listo`.
-
-Para el aviso push del punto 18 hay que desplegar la edge function
-`notificar-pedido-listo` y crear un Database Webhook sobre UPDATE en `pedidos`.
-Sin eso el aviso igual llega por realtime con la app abierta.
-
-### Convenciones a respetar
-
-- **No hay modo oscuro:** el enunciado no lo admite, no importar paletas `dark`.
-- Toda espera se muestra con `<app-spinner-logo>`.
-- Los errores se informan con mensaje en pantalla + toast + vibración, nunca
-  con `alert()`.
-- El proyecto es **zoneless**: usar signals, o llamar a
-  `ChangeDetectorRef.detectChanges()` después de un `await`.
-- Inyección de dependencias con `inject()`, no por constructor (lo exige el lint).
-- `src/app/app.routes.ts` da conflicto siempre: se resuelve conservando los
-  bloques de los dos lados.
-
----
 ## 🔑 Perfiles de usuario
 
 - Dueño
@@ -219,14 +181,16 @@ Sin eso el aviso igual llega por realtime con la app abierta.
 - Cliente registrado
 - Cliente anónimo
 
----
-
 ## 📲 Códigos QR utilizados
 
 | QR | Función |
 |---|---|
-| Ingreso al local | Anunciarse en lista de espera / ver encuestas previas |
-| Mesa | Ver info de mesa (staff) o acceder a menú, pedido, encuesta, juegos y pago (cliente) |
+| <img src="docs/capturas/qr_ingreso.png" width="240" alt="QR Ingreso"> | Anunciarse en lista de espera / ver encuestas previas |
+| <img src="docs/capturas/qr_mesa_1.png" width="240" alt="QR Mesa 1"> | Ver mesa 1 para acceder a menú, pedido, encuesta, juegos y pago (cliente) |
+| <img src="docs/capturas/qr_mesa_2.png" width="240" alt="QR Mesa 2"> | Ver mesa 2 para acceder a menú, pedido, encuesta, juegos y pago (cliente) |
+| <img src="docs/capturas/qr_mesa_3.png" width="240" alt="QR Mesa 3"> | Ver mesa 3 para acceder a menú, pedido, encuesta, juegos y pago (cliente) |
+| <img src="docs/capturas/qr_mesa_4.png" width="240" alt="QR Mesa 4"> | Ver mesa 4 para acceder a menú, pedido, encuesta, juegos y pago (cliente) |
+| <img src="docs/capturas/qr_mesa_6.png" width="240" alt="QR Mesa 6"> | Ver mesa 6 para acceder a menú, pedido, encuesta, juegos y pago (cliente) |
 | Propina (x5) | Excelente 20% · Muy Bueno 15% · Bueno 10% · Regular 5% · Malo 0% |
 
 ---

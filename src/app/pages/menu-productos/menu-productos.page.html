@@ -21,21 +21,18 @@
   </ion-toolbar>
 </ion-header>
 
-<!-- Contenedor con la clase dinámica basada en el estado del carrito -->
-<ion-content 
-  class="home-bg home-container" 
-  [class.con-footer]="pedidoService.cantidadTotalItems() > 0">
-  
+<ion-content class="home-bg home-container" [scrollY]="false">
+
   @if (pedidoService.cargandoProductos()) {
     <div class="loader">
       <ion-spinner name="crescent" color="primary"></ion-spinner>
     </div>
   } @else {
-    
-    <!-- Listado de productos limpio -->
-    <ion-list lines="none" class="contenedor-snap-lista">
-      @for (prod of productosFiltrados(); track prod.id) {
-        <app-tarjeta-producto 
+
+    <!-- Listado de productos, paginado para que cada tarjeta entre completa -->
+    <ion-list lines="none" class="contenedor-lista">
+      @for (prod of paginaItems(); track prod.id) {
+        <app-tarjeta-producto
           [producto]="prod"
           [cantidadEnCarrito]="obtenerCantidad(prod.id)"
           (alAgregar)="pedidoService.agregarAlPedido($event)"
@@ -47,15 +44,38 @@
         </div>
       }
     </ion-list>
-    
+
   }
 
 </ion-content>
 
-@if (pedidoService.cantidadTotalItems() > 0) {
-  <ion-footer class="home-bg footer-dinamico-tarjeta">
+<ion-footer class="home-bg footer-menu-productos">
+
+  @if (totalPaginas() > 1) {
+    <div class="paginador">
+      <ion-button
+        fill="clear"
+        [disabled]="pagina() === 1"
+        (click)="paginaAnterior()"
+        aria-label="Página anterior">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+
+      <span>Página {{ pagina() }} de {{ totalPaginas() }}</span>
+
+      <ion-button
+        fill="clear"
+        [disabled]="pagina() === totalPaginas()"
+        (click)="paginaSiguiente()"
+        aria-label="Página siguiente">
+        <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+  }
+
+  @if (pedidoService.cantidadTotalItems() > 0) {
     <div class="contenido-footer-contenedor">
-      
+
       <div class="footer-fila">
         <span>Tiempo estimado:</span>
         <span class="resaltado-secundario">{{ pedidoService.tiempoEstimadoTotal() }} min</span>
@@ -69,7 +89,7 @@
       <ion-button expand="block" class="boton-enviar-pedido" (click)="abrirDetallePedido()">
         Ver Pedido
       </ion-button>
-      
+
     </div>
-  </ion-footer>
-}
+  }
+</ion-footer>

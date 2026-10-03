@@ -134,6 +134,35 @@ export class ChatService {
     return data;
   }
 
+  /** Mensaje de un mozo en la sala general: no está atado a ninguna mesa. */
+  async enviarMensajeGeneralMozo(
+    mozoId: string,
+    nombreMozo: string,
+    mensaje: string
+  ): Promise<MensajeChat> {
+    const texto = mensaje.trim();
+    if (!texto) {
+      throw new Error('El mensaje no puede estar vacío.');
+    }
+    const { data, error } = await this.supabase.client
+      .from('mensajes_chat')
+      .insert({
+        mesa_id: null,
+        ocupacion_id: null,
+        emisor_tipo: 'mozo',
+        emisor_id: mozoId,
+        nombre_mozo: nombreMozo,
+        mensaje: texto
+      })
+      .select()
+      .single();
+    if (error) {
+      console.error('Error al enviar mensaje general del mozo:', error);
+      throw error;
+    }
+    return data;
+  }
+
   async obtenerTodosLosMensajes(): Promise<MensajeChat[]> {
     const {
       data,

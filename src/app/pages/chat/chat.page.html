@@ -3,7 +3,7 @@
       <ion-buttons slot="start">
         <ion-back-button defaultHref="/home"></ion-back-button>
       </ion-buttons>
-  <ion-title>Consulta al mozo</ion-title>
+  <ion-title>Sala de consultas</ion-title>
     </ion-toolbar>
 </ion-header>
 <ion-content class="chat-content" #chatContent>
@@ -39,9 +39,9 @@
       <ion-icon name="restaurant-outline"></ion-icon>
     </div>
     <div class="chat-info-text">
-      <h2>Atención al cliente</h2>
+      <h2>Sala de consultas</h2>
       <p>
-        Tu mesa está siendo atendida
+        Acá hablan todas las mesas con los mozos
       </p>
     </div>
   </div>
@@ -67,6 +67,7 @@
           class="mensaje-wrapper"
           [class.mensaje-cliente]="mensaje.emisor_tipo === 'mesa'"
           [class.mensaje-mozo]="mensaje.emisor_tipo === 'mozo'"
+          [class.mensaje-propio]="mensaje.emisor_tipo === 'mesa' && mensaje.mesa_id === mesaId()"
         >
           <div class="mensaje-burbuja">
             <!-- Cabecera: emisor + fecha/hora -->
@@ -74,8 +75,10 @@
               <span class="mensaje-emisor">
                 @if (mensaje.emisor_tipo === 'mozo') {
                   Mozo {{ mensaje.nombre_mozo ?? 'Mozo' }}
+                } @else if (numeroDeMesa(mensaje)) {
+                  Mesa {{ numeroDeMesa(mensaje) }}
                 } @else {
-                  Mesa {{ numeroMesa() }}
+                  Mesa
                 }
               </span>
               <span class="mensaje-hora">

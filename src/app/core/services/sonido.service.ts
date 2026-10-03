@@ -15,18 +15,39 @@ export class SonidoService {
   reproducir(
     sonido: keyof typeof this.sonidos
   ): void {
-    const audio = new Audio(
-      this.sonidos[sonido]
-    );
+    try {
+      const audio = new Audio(
+        this.sonidos[sonido]
+      );
 
-    audio.volume = 0.7;
+      audio.volume = 0.7;
 
-    audio.play().catch(error => {
+      audio.play()?.catch(error => {
+        console.warn(
+          'No se pudo reproducir el sonido:',
+          error
+        );
+      });
+    } catch (error) {
       console.warn(
         'No se pudo reproducir el sonido:',
         error
       );
-    });
+    }
+  }
+
+  /** Vibra con el patrón dado. No hace nada si el dispositivo no soporta vibrar. */
+  vibrar(patron: number[] = [180, 80, 180]): void {
+    try {
+      navigator.vibrate?.(patron);
+    } catch {
+      // Sin vibración el resto del feedback (sonido/modal) igual avisa.
+    }
+  }
+
+  /** Vibración corta para avisar un error. */
+  vibrarError(): void {
+    this.vibrar([180, 80, 180]);
   }
 }
 

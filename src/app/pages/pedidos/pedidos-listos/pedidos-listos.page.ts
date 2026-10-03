@@ -32,6 +32,7 @@ import {
 } from '../../../core/models/pedido.models';
 import { SpinnerLogoComponent } from '../../../shared/components/spinner-logo/spinner-logo.component';
 import { traducirErrorSupabase } from '../../../core/utils/traducir-error.util';
+import { SonidoService } from '../../../core/services/sonido.service';
 
 /** Como viene cada parte del pedido: la de cocina y la de bar. */
 interface ParteSector {
@@ -69,6 +70,7 @@ export class PedidosListosPage implements ViewWillEnter, ViewDidLeave {
   private readonly pedidosService = inject(PedidosSectorService);
   private readonly toastCtrl = inject(ToastController);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly sonido = inject(SonidoService);
 
   readonly pedidos = signal<PedidoVista[]>([]);
   readonly cargando = signal(true);
@@ -128,7 +130,7 @@ export class PedidosListosPage implements ViewWillEnter, ViewDidLeave {
       this.error.set(
         traducirErrorSupabase(e, 'No se pudieron cargar los pedidos.'),
       );
-      this.vibrar();
+      this.sonido.vibrarError();
     } finally {
       this.cargando.set(false);
     }
@@ -212,7 +214,7 @@ export class PedidosListosPage implements ViewWillEnter, ViewDidLeave {
         traducirErrorSupabase(e, 'No se pudo registrar la entrega.'),
         'danger',
       );
-      this.vibrar();
+      this.sonido.vibrarError();
     } finally {
       this.entregando.set(null);
     }
@@ -255,7 +257,7 @@ export class PedidosListosPage implements ViewWillEnter, ViewDidLeave {
     }
 
     const mesas = nuevos.map((p) => p.mesa_numero).join(', ');
-    this.vibrar();
+    this.sonido.vibrar([200, 80, 200]);
     void this.mostrarToast(
       nuevos.length === 1
         ? 'Pedido completo de la mesa ' + mesas + '. Listo para entregar.'
@@ -265,14 +267,6 @@ export class PedidosListosPage implements ViewWillEnter, ViewDidLeave {
   }
 
   // ------------------------------------------------------------------ avisos
-
-  private vibrar(): void {
-    try {
-      navigator.vibrate?.([200, 80, 200]);
-    } catch {
-      // Sin vibración el toast igual avisa.
-    }
-  }
 
   private async mostrarToast(
     message: string,

@@ -48,7 +48,8 @@ import {
   addOutline,
   closeOutline,
   gridOutline,
- 
+  chevronBackOutline,
+  chevronForwardOutline,
 } from 'ionicons/icons';
 
 import { AuthService } from '../../../core/services/auth.service';
@@ -139,6 +140,8 @@ export class ListaEsperaPage implements OnInit, OnDestroy {
       addOutline,
       closeOutline,
       gridOutline,
+      chevronBackOutline,
+      chevronForwardOutline,
     });
 
     // Actualiza el contador de tiempo de espera cada segundo

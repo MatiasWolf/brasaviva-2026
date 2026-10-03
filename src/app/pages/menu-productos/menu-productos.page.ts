@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonSpinner, IonIcon, IonFooter, IonList, IonSegment, IonSegmentButton, ModalController, IonButtons } from '@ionic/angular';
 import { PedidoService } from '../../core/services/pedido.service';
 import { addIcons } from 'ionicons'; 
-import { addCircle, arrowBackOutline, arrowForwardOutline, removeCircle, restaurantOutline, wineOutline } from 'ionicons/icons'; // <-- Importar íconos específicos
+import { addCircle, arrowBackOutline, chevronBackOutline, chevronForwardOutline, removeCircle, restaurantOutline, wineOutline } from 'ionicons/icons'; // <-- Importar íconos específicos
 import { TarjetaProductoComponent } from '../../shared/components/tarjeta-producto/tarjeta-producto.component';
 import { DetallePedidoComponent } from '../../shared/components/detalle-pedido/detalle-pedido.component';
 import { RouterLink } from '@angular/router';
@@ -22,7 +22,7 @@ export class MenuProductosPage implements OnInit {
   public pedidoService = inject(PedidoService);
   private modalController = inject(ModalController);
 
-  // CONTROL DE PESTAÑAS: 1 para Platos, 2 para Bebidas 
+  // CONTROL DE PESTAÑAS: 1 para Platos, 2 para Bebidas
   public categoriaActiva = signal<number>(1);
 
   // Filtrado de productos por categoría
@@ -30,8 +30,22 @@ export class MenuProductosPage implements OnInit {
     return this.pedidoService.productos().filter(p => p.categoria_id === this.categoriaActiva());
   });
 
+  // PAGINADO: 2 tarjetas por página, para que entren completas sin recortarse
+  public readonly porPagina = 2;
+  public pagina = signal<number>(1);
+
+  public totalPaginas = computed(() =>
+    Math.max(1, Math.ceil(this.productosFiltrados().length / this.porPagina))
+  );
+
+  public paginaItems = computed(() => {
+    const desde = (this.pagina() - 1) * this.porPagina;
+    return this.productosFiltrados().slice(desde, desde + this.porPagina);
+  });
+
   constructor() {
-    addIcons({ addCircle, removeCircle, arrowBackOutline, arrowForwardOutline, 
+    addIcons({ addCircle, removeCircle, arrowBackOutline,
+              chevronBackOutline, chevronForwardOutline,
               restaurantOutline, wineOutline });
   }
 
@@ -47,6 +61,15 @@ export class MenuProductosPage implements OnInit {
 
   cambiarCategoria(event: any) {
     this.categoriaActiva.set(Number(event.detail.value));
+    this.pagina.set(1);
+  }
+
+  paginaAnterior(): void {
+    this.pagina.update(p => Math.max(1, p - 1));
+  }
+
+  paginaSiguiente(): void {
+    this.pagina.update(p => Math.min(this.totalPaginas(), p + 1));
   }
 
   async abrirDetallePedido() {

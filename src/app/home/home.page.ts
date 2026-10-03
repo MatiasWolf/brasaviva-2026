@@ -10,10 +10,6 @@ import {
   IonButton,
   IonContent,
   IonIcon,
-  IonLabel,
-  IonSegment,
-  IonSegmentButton,
-  
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import {
@@ -55,6 +51,8 @@ import {
 } from '../core/models/boton-menu.model';
 import { SpinnerLogoComponent } from '../shared/components/spinner-logo/spinner-logo.component';
 import { EstadiaRealtimeService } from '../core/services/estadia-realtime.service';
+import { SonidoService } from '../core/services/sonido.service';
+import { TarjetaUsuarioHomeComponent } from '../shared/components/tarjeta-usuario-home/tarjeta-usuario-home.component';
 
 @Component({
   selector: 'app-home',
@@ -65,12 +63,10 @@ import { EstadiaRealtimeService } from '../core/services/estadia-realtime.servic
     IonContent,
     IonIcon,
     IonButton,
-    IonSegment,
-    IonSegmentButton,
-    IonLabel,
     SpinnerLogoComponent,
     QrScannerComponent,
     ResultadoQrModalComponent,
+    TarjetaUsuarioHomeComponent,
   ],
 })
 export class HomePage implements OnInit {
@@ -81,6 +77,7 @@ export class HomePage implements OnInit {
   private readonly ocupacionesMesa = inject(OcupacionesMesaService);
   private readonly pushNotifications = inject(PushNotificationsService);
   private readonly estadiaRealtime =inject(EstadiaRealtimeService);
+  private readonly sonido = inject(SonidoService);
 
   readonly usuario = signal<Usuario | null>(null);
   readonly sesionAnonima = signal<SesionAnonima | null>(null);
@@ -122,6 +119,16 @@ export class HomePage implements OnInit {
     return ROLES_CLIENTE.includes(rol);
   });
 
+  readonly nombreCliente = computed(() => this.usuario()?.nombre ?? this.sesionAnonima()?.nombre ?? '');
+  readonly apellidoCliente = computed(() => this.usuario()?.apellido ?? this.sesionAnonima()?.apellido ?? '');
+  readonly fotoCliente = computed(() => this.usuario()?.foto_url ?? this.sesionAnonima()?.foto_url ?? null);
+  readonly dniCliente = computed(() => this.usuario()?.dni ?? null);
+
+  readonly estadiaEtiqueta = computed(() => {
+    const estado = this.estadiaEstado();
+    return this.estadiaEstados.find((e) => e.valor === estado)?.etiqueta ?? '';
+  });
+
   readonly saludo = computed(() => {
     const nombre =
       this.usuario()?.nombre
@@ -136,10 +143,12 @@ export class HomePage implements OnInit {
     }
 
     const estado = this.estadiaEstado();
-   
-    return this.botones().filter(
-      (boton) => boton.contexto === 'siempre' || boton.contexto === estado,
-    );
+
+    return this.botones()
+      .filter((boton) => boton.contexto === 'siempre' || boton.contexto === estado)
+      // Una vez anotado en la lista de espera ya no tiene sentido volver a mostrar
+      // el botón para anotarse: solo sirve antes de tener alguna estadía en curso.
+      .filter((boton) => !(estado !== 'sin_estadia' && boton.ruta === '/ingreso-lista-espera'));
   });
 
   constructor() {
@@ -280,10 +289,6 @@ export class HomePage implements OnInit {
     }
   }
 
-  cambiarEstadia(event: CustomEvent): void {
-    this.estadiaEstado.set((event.detail as { value: EstadiaEstado }).value);
-  }
-
   async ejecutar(boton: BotonMenu): Promise<void> {
     if (boton.clave === 'escanear-qr-ingreso') {
       this.qrModo = 'ingreso';
@@ -392,6 +397,7 @@ export class HomePage implements OnInit {
     } else {
       await this.auth.logout();
     }
+    this.sonido.reproducir('correcta');
     await this.router.navigate(['/login'], {
       replaceUrl: true
     });

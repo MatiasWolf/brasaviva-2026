@@ -43,6 +43,7 @@ import {
 } from '../../../core/models/pedido.models';
 import { SpinnerLogoComponent } from '../../../shared/components/spinner-logo/spinner-logo.component';
 import { traducirErrorSupabase } from '../../../core/utils/traducir-error.util';
+import { SonidoService } from '../../../core/services/sonido.service';
 
 /** Las comandas van agrupadas por mesa, como pide el enunciado. */
 interface GrupoMesa {
@@ -77,6 +78,7 @@ export class SectorPedidosPage implements ViewWillEnter, ViewDidLeave {
   private readonly ruta = inject(ActivatedRoute);
   private readonly toastCtrl = inject(ToastController);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly sonido = inject(SonidoService);
 
   readonly sector: SectorPedido =
     (this.ruta.snapshot.data['sector'] as SectorPedido) ?? 'cocina';
@@ -174,7 +176,7 @@ export class SectorPedidosPage implements ViewWillEnter, ViewDidLeave {
       this.error.set(
         traducirErrorSupabase(e, 'No se pudieron cargar los pedidos. Revisá la conexión.'),
       );
-      this.vibrar();
+      this.sonido.vibrarError();
     } finally {
       this.cargando.set(false);
     }
@@ -227,7 +229,7 @@ export class SectorPedidosPage implements ViewWillEnter, ViewDidLeave {
         traducirErrorSupabase(e, 'No se pudo marcar la comanda como lista.'),
         'danger',
       );
-      this.vibrar();
+      this.sonido.vibrarError();
     } finally {
       this.guardando.set(null);
     }
@@ -247,7 +249,7 @@ export class SectorPedidosPage implements ViewWillEnter, ViewDidLeave {
         traducirErrorSupabase(e, 'No se pudo actualizar el producto.'),
         'danger',
       );
-      this.vibrar();
+      this.sonido.vibrarError();
     } finally {
       this.guardando.set(null);
     }
@@ -290,7 +292,7 @@ export class SectorPedidosPage implements ViewWillEnter, ViewDidLeave {
     }
 
     const mesas = nuevos.map((p) => p.mesa_numero).join(', ');
-    this.vibrar();
+    this.sonido.vibrar([120, 60, 120]);
     void this.mostrarToast(
       nuevos.length === 1
         ? 'Nueva comanda de la mesa ' + mesas + '.'
@@ -300,14 +302,6 @@ export class SectorPedidosPage implements ViewWillEnter, ViewDidLeave {
   }
 
   // ------------------------------------------------------------------ avisos
-
-  private vibrar(): void {
-    try {
-      navigator.vibrate?.([120, 60, 120]);
-    } catch {
-      // Si el dispositivo no vibra no pasa nada: el toast ya avisó.
-    }
-  }
 
   private async mostrarToast(
     message: string,

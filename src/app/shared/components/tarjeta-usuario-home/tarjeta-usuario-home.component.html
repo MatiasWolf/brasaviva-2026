@@ -1,0 +1,26 @@
+<article class="tarjeta-usuario">
+  <div class="tarjeta-usuario__foto">
+    @if (fotoUrl) {
+      <img [src]="fotoUrl" [alt]="nombre" />
+    } @else {
+      <ion-icon name="person-circle-outline"></ion-icon>
+    }
+  </div>
+
+  <h2 class="tarjeta-usuario__nombre">{{ nombre }} {{ apellido }}</h2>
+
+  <div class="tarjeta-usuario__datos">
+    @if (dni) {
+      <div class="tarjeta-usuario__dato">
+        <ion-icon name="card-outline"></ion-icon>
+        <span class="tarjeta-usuario__dato-etiqueta">DNI</span>
+        <span class="tarjeta-usuario__dato-valor">{{ dni }}</span>
+      </div>
+    }
+    <div class="tarjeta-usuario__dato">
+      <ion-icon name="time-outline"></ion-icon>
+      <span class="tarjeta-usuario__dato-etiqueta">Estado</span>
+      <span class="tarjeta-usuario__dato-valor">{{ estadoEtiqueta }}</span>
+    </div>
+  </div>
+</article>

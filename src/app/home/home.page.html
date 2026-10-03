@@ -27,26 +27,16 @@
       </header>
 
       @if (esCliente()) {
-        <div class="estadia-demo">
-          <p class="demo-tag">Modo demo · estado de la estadía</p>
-          <ion-segment
-            scrollable
-            [value]="estadiaEstado()"
-            (ionChange)="cambiarEstadia($event)"
-          >
-            @for (estado of estadiaEstados; track estado.valor) {
-              <ion-segment-button [value]="estado.valor">
-                <ion-label>{{ estado.etiqueta }}</ion-label>
-              </ion-segment-button>
-            }
-          </ion-segment>
-          <p>
-            Estado actual: <strong>{{ estadiaEstado() }}</strong>
-          </p>
-        </div>
+        <app-tarjeta-usuario-home
+          [nombre]="nombreCliente()"
+          [apellido]="apellidoCliente()"
+          [fotoUrl]="fotoCliente()"
+          [dni]="dniCliente()"
+          [estadoEtiqueta]="estadiaEtiqueta()"
+        ></app-tarjeta-usuario-home>
       }
 
-      <section class="menu-grid">
+      <section class="menu-grid" [class.menu-grid--compacta]="botonesVisibles().length <= 3">
         @for (boton of botonesVisibles(); track boton.id) {
           <button type="button" class="menu-card" (click)="ejecutar(boton)">
             <span class="menu-card__icon">

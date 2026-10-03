@@ -53,10 +53,14 @@ export class ChatPage implements OnInit, OnDestroy {
 
   private chatService = inject(ChatService);
 
+  /** Todos los mensajes de la sala general: todas las mesas, todos los mozos. */
   mensajes = signal<MensajeChat[]>([]);
 
+  /** Números de mesa resueltos, para mostrar "Mesa X" en cada mensaje de cliente. */
+  numerosMesa = signal<Record<string, number>>({});
+
+  /** La mesa propia: hace falta para poder enviar mensajes identificados. */
   mesaId = signal<string | null>(null);
-  numeroMesa = signal<number | null>(null);
   ocupacionId = signal<number | null>(null);
 
   nuevoMensaje = signal('');
@@ -82,34 +86,25 @@ export class ChatPage implements OnInit, OnDestroy {
         await this.chatService.obtenerOcupacionActual();
       if (!ocupacion) {
         console.warn(
-          'CHAT 3 - no hay ocupación activa'
+          'CHAT - no hay ocupación activa'
         );
-        this.mensajes.set([]);
         this.mesaId.set(null);
         this.ocupacionId.set(null);
-        this.numeroMesa.set(null);
         return;
       }
       this.mesaId.set(ocupacion.mesa_id);
       this.ocupacionId.set(ocupacion.id);
 
-      const numero =
-        await this.chatService.obtenerNumeroMesa(
-          ocupacion.mesa_id
-        );
-      this.numeroMesa.set(numero);
-      
       const mensajes =
-        await this.chatService.obtenerMensajesOcupacion(
-          ocupacion.id
-        );
+        await this.chatService.obtenerTodosLosMensajes();
       this.mensajes.set(mensajes);
+      await this.resolverNumerosMesaFaltantes(mensajes);
+
       setTimeout(() => {
         this.scrollAlFinal();
       }, 100);
 
-      this.chatService.escucharChatOcupacion(
-        ocupacion.id,
+      this.chatService.escucharChatGeneral(
         (mensajeNuevo) => {
           const yaExiste =
             this.mensajes().some(
@@ -117,9 +112,6 @@ export class ChatPage implements OnInit, OnDestroy {
                 mensaje.id === mensajeNuevo.id
             );
           if (yaExiste) {
-            console.log(
-              'CHAT REALTIME - mensaje ya existente, se ignora'
-            );
             return;
           }
           this.mensajes.update(
@@ -128,12 +120,10 @@ export class ChatPage implements OnInit, OnDestroy {
               mensajeNuevo
             ]
           );
+          void this.resolverNumerosMesaFaltantes([mensajeNuevo]);
           setTimeout(() => {
             this.scrollAlFinal();
           }, 100);
-          console.log(
-            'CHAT REALTIME - mensaje agregado al chat'
-          );
         }
       );
     } catch (error) {
@@ -142,11 +132,42 @@ export class ChatPage implements OnInit, OnDestroy {
         error
       );
     } finally {
-      console.log(
-        'CHAT 9 - finalizando'
-      );
       this.cargando.set(false);
     }
+  }
+
+  /** Busca el número de las mesas que todavía no tenemos resuelto. */
+  private async resolverNumerosMesaFaltantes(mensajes: MensajeChat[]): Promise<void> {
+    const faltantes = new Set(
+      mensajes
+        .map(m => m.mesa_id)
+        .filter((id): id is string => !!id && this.numerosMesa()[id] === undefined)
+    );
+
+    if (faltantes.size === 0) {
+      return;
+    }
+
+    const resueltos = await Promise.all(
+      [...faltantes].map(async (mesaId) => ({
+        mesaId,
+        numero: await this.chatService.obtenerNumeroMesa(mesaId),
+      }))
+    );
+
+    this.numerosMesa.update(actual => {
+      const copia = { ...actual };
+      for (const { mesaId, numero } of resueltos) {
+        if (numero !== null) {
+          copia[mesaId] = numero;
+        }
+      }
+      return copia;
+    });
+  }
+
+  numeroDeMesa(mensaje: MensajeChat): number | null {
+    return mensaje.mesa_id ? this.numerosMesa()[mensaje.mesa_id] ?? null : null;
   }
 
 
@@ -179,16 +200,13 @@ export class ChatPage implements OnInit, OnDestroy {
       );
 
     } finally {
-      console.log(
-        'PAGINA 4 - liberando botón'
-      );
       this.enviando.set(false);
     }
   }
 
 
   ngOnDestroy(): void {
-    this.chatService.cerrarEscuchaChatMesa();
+    this.chatService.cerrarEscuchaChatGeneral();
   }
 
   async scrollAlFinal(): Promise<void> {

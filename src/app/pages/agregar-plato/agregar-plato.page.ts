@@ -241,20 +241,13 @@ export class AgregarPlatoPage {
     }
   }
 
-  /** Muestra el error en pantalla, con vibración. */
+  /** Muestra el error en pantalla. El modal ya se encarga del sonido y la vibración. */
   private async mostrarError(mensaje: string): Promise<void> {
 
     this.mensajeError = mensaje;
-    this.vibrar();
     this.cdr.detectChanges();
 
     this.mensajeModal.error(mensaje);
-  }
-
-  private vibrar(): void {
-    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
-      navigator.vibrate([180, 80, 180]);
-    }
   }
 
   private traducirError(error: any): string {

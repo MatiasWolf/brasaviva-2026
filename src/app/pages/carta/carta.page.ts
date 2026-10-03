@@ -15,6 +15,7 @@ import {
   ViewWillEnter
 } from '@ionic/angular';
 import { PlatoService } from '../../core/services/plato.service';
+import { SonidoService } from '../../core/services/sonido.service';
 import { Plato } from '../../core/models/plato.model';
 import { SpinnerLogoComponent } from '../../shared/components/spinner-logo/spinner-logo.component';
 import { addIcons } from 'ionicons';
@@ -62,6 +63,7 @@ export class CartaPage implements ViewWillEnter {
   private readonly platoService = inject(PlatoService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly router = inject(Router);
+  private readonly sonido = inject(SonidoService);
 
   constructor() {
     addIcons({
@@ -94,7 +96,7 @@ export class CartaPage implements ViewWillEnter {
 
       console.error('CARTA ERROR:', error);
       this.mensajeError = 'No se pudo cargar la carta. Intentá nuevamente.';
-      this.vibrar();
+      this.sonido.vibrarError();
 
     } finally {
 
@@ -168,12 +170,6 @@ export class CartaPage implements ViewWillEnter {
 
     const actual = this.indiceDe(plato);
     this.fotoActual[plato.id ?? ''] = (actual + 1) % fotos.length;
-  }
-
-  private vibrar(): void {
-    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
-      navigator.vibrate([180, 80, 180]);
-    }
   }
 
 }
