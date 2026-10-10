@@ -5,7 +5,9 @@ export interface Encuesta {
   sesion_anonima_id: string | null;
   puntaje_comida: number;
   puntaje_atencion: number;
-  puntaje_general: number;
+  tiempo_espera: 'corto' | 'adecuado' | 'excesivo';
+  recomienda: boolean;
+  aspecto_destacado: 'ambiente' | 'limpieza' | 'precios' | 'comida' | 'atencion' | 'ninguno';
   comentario: string | null;
   created_at: string;
 }
@@ -20,6 +22,8 @@ export interface EncuestaPendiente {
 export interface RespuestaEncuesta {
   puntaje_comida: number;
   puntaje_atencion: number;
-  puntaje_general: number;
+  tiempo_espera: 'corto' | 'adecuado' | 'excesivo';
+  recomienda: boolean;
+  aspecto_destacado: 'ambiente' | 'limpieza' | 'precios' | 'comida' | 'atencion' | 'ninguno';
   comentario: string | null;
 }
