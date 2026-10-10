@@ -28,7 +28,7 @@ $borde-ocre: #c0784d;
     font-weight: 600;
     }
 
-    // 1. Pantalla de espera obligatoria
+    // 1. Pantalla de espera 
     .pantalla-carga {
     display: flex;
     flex-direction: column;
@@ -80,7 +80,7 @@ $borde-ocre: #c0784d;
     }
     }
 
-    // 3. Estructura de las tarjetas de control (Variedad de controles)
+    // 3. Estructura de las tarjetas de control 
     .tarjeta-control {
     width: 100%;
     padding: 16px;
@@ -113,7 +113,7 @@ $borde-ocre: #c0784d;
     }
     }
 
-    // Control de Comida (ion-range personalizado)
+    // Control de Comida 
     .cuerpo-control-range {
     padding: 0 8px;
 
@@ -133,7 +133,7 @@ $borde-ocre: #c0784d;
     }
     }
 
-    // Control de Atención (Estrellas interactivas en fila simétrica)
+    // Control de Atención 
     .cuerpo-control-estrellas {
     display: flex;
     justify-content: center;
@@ -169,7 +169,7 @@ $borde-ocre: #c0784d;
     }
     }
 
-    // Control de Tiempo (ion-radio-group integrado)
+    // Control de Tiempo 
     .grupo-radios {
     display: flex;
     flex-direction: column;
@@ -194,7 +194,7 @@ $borde-ocre: #c0784d;
     }
     }
 
-    // Selector Desplegable Personalizado
+    // Selector Desplegable 
     .item-select-personalizado {
     --background: #{$crema-claro};
     --border-radius: 12px;
@@ -222,7 +222,7 @@ $borde-ocre: #c0784d;
     }
     }
 
-    // Control de Recomendación (Fila Toggle unificada)
+    // Control de Recomendación
     .item-toggle-contenedor {
     flex-direction: row;
     justify-content: space-between;
@@ -243,7 +243,7 @@ $borde-ocre: #c0784d;
     }
     }
 
-    // Entrada de Texto Libre con Contadores de Caracteres
+    // Entrada de Texto Contadores de Caracteres
     .item-textarea-personalizado {
     --background: #{$crema-claro};
     --border-radius: 12px;
@@ -259,7 +259,7 @@ $borde-ocre: #c0784d;
     }
     }
 
-    // Botón de Envío Adaptivo e Inclusivo
+    // Botón de Envío 
     .contenedor-boton-envio {
     margin-top: 10px;
     width: 100%;

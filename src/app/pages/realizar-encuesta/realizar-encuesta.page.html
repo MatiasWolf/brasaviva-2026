@@ -10,14 +10,14 @@
 </ion-header>
 
 <ion-content class="contenedor-principal">
-  <!-- 1. PANTALLA DE ESPERA OBLIGATORIA (Mientras carga la estadía) -->
+  <!-- 1. PANTALLA DE ESPERA -->
   @if (cargando()) {
     <div class="pantalla-carga animate__animated animate__fadeIn">
       <app-spinner-logo [size]="80" />
       <p class="texto-carga">Verificando datos de tu estadía...</p>
     </div>
   } @else {
-    <!-- 2. FORMULARIO COMPLETO SIN ESPACIOS NEUTROS -->
+    <!-- 2. FORMULARIO COMPLETO -->
     <form [formGroup]="encuestaForm" (ngSubmit)="enviarEncuesta()" class="formulario-encuesta animate__animated animate__fadeIn">
       
       <div class="encabezado-formulario">
@@ -65,7 +65,7 @@
         </div>
       </div>
 
-      <!-- CONTROL 3: Tiempo de espera (ion-radio-group estilizado) -->
+      <!-- CONTROL 3: Tiempo de espera (ion-radio-group) -->
       <div class="tarjeta-control">
         <div class="titulo-control">
           <ion-label>¿Cómo considerás que fue el tiempo de espera?</ion-label>
@@ -83,7 +83,7 @@
         </ion-radio-group>
       </div>
 
-      <!-- CONTROL 4: Aspecto destacado (ion-select desplegable limpio) -->
+      <!-- CONTROL 4: Aspecto destacado (ion-select desplegable) -->
       <div class="tarjeta-control">
         <div class="titulo-control">
           <ion-label>¿Qué fue lo que más se destacó en tu visita?</ion-label>
@@ -100,7 +100,7 @@
         </ion-item>
       </div>
 
-      <!-- CONTROL 5: Recomendación (ion-toggle / interruptor) -->
+      <!-- CONTROL 5: Recomendación (ion-toggle) -->
       <div class="tarjeta-control item-toggle-contenedor">
         <ion-label class="titulo-toggle">¿Recomendarías Brasa Viva a tus amigos?</ion-label>
         <ion-toggle formControlName="recomienda" justify="end"></ion-toggle>
@@ -123,7 +123,7 @@
         </ion-item>
       </div>
 
-      <!-- BOTÓN DE ENVÍO ACCESIBLE -->
+      <!-- BOTÓN DE ENVÍO -->
       <div class="contenedor-boton-envio">
         <ion-button 
           type="submit" 
@@ -142,6 +142,6 @@
     </form>
   }
 
-  <!-- COMPONENTE MODAL DE MENSAJES (Maneja el estado global del servicio) -->
+  <!-- COMPONENTE MODAL DE MENSAJES -->
   <app-mensaje-modal />
 </ion-content>

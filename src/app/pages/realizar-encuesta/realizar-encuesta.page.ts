@@ -93,7 +93,7 @@ export class RealizarEncuestaPage implements OnInit {
         .select('id')
         .eq('estado', 'activa')
         .order('created_at', { ascending: false }) // Trae las más nuevas primero
-        .limit(1); // Nos quedamos solo con la última de la lista
+        .limit(1); // Se queda solo con la última de la lista
 
       if (usuario) {
         consulta = consulta.eq('usuario_id', usuario.id);
@@ -108,7 +108,7 @@ export class RealizarEncuestaPage implements OnInit {
 
       if (errorOcupacion) throw errorOcupacion;
 
-      // Al usar .select() común, data es un arreglo. Tomamos el primer elemento si existe.
+      // Al usar .select() común, data es un arreglo. Toma el primer elemento si existe.
       const ocupacion = (ocupaciones && ocupaciones.length > 0) ? ocupaciones[0] : null;
 
       if (!ocupacion) {
