@@ -1,0 +1,152 @@
+$fondo-oscuro-puro: #130905;
+$marron-medio: #4d200f;
+$dorado-brillante: #ffd485;
+$dorado-glow: #ffaa55;
+$crema-claro: #fff3df;
+$crema-texto: #fff1dc;
+
+.contenedor-principal {
+    --background: radial-gradient(circle at 20% 20%, rgba(246, 193, 133, 0.2), transparent 18%),
+                    linear-gradient(180deg, #130905 0%, #4d200f 54%, #f5dcc0 100%);
+    --color: #{$crema-texto};
+    }
+
+    ion-header {
+    background: $fondo-oscuro-puro;
+    }
+
+    .toolbar-corporativa {
+    --background: #130905 !important;
+    --color: #{$dorado-brillante} !important;
+    border-bottom: 1px solid rgba(255, 212, 133, 0.1);
+    }
+
+    ion-back-button {
+    --color: #{$dorado-brillante} !important;
+    }
+
+    // Estilos del menú superior de solapas deslizables
+    .toolbar-segmentos {
+    --background: #130905 !important;
+    --border-color: transparent;
+    padding: 0 4px;
+
+    ion-segment {
+        background: transparent;
+        --background: transparent;
+
+        ion-segment-button {
+        --color: rgba(255, 241, 220, 0.5) !important;
+        --color-checked: #{$dorado-brillante} !important;
+        --indicator-color: #{$dorado-brillante} !important;
+        font-weight: 600;
+        font-size: 14px;
+        letter-spacing: 0.2px;
+        text-transform: none;
+        min-height: 44px;
+        }
+    }
+    }
+
+    // Pantalla de carga unificada
+    .pantalla-carga {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 70vh;
+    gap: 16px;
+    text-align: center;
+    padding: 20px;
+
+    .texto-carga {
+        color: $dorado-brillante;
+        font-size: 16px;
+        font-weight: 600;
+    }
+    }
+
+    // Contenedor principal de pantallas de reportes
+    .contenedor-grafico {
+    width: 100%;
+    max-width: 480px;
+    min-height: 100%;
+    margin: 0 auto;
+    padding: 16px 20px calc(24px + var(--ion-safe-area-bottom, 0px));
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    }
+
+    .vista-grafico {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    animation: fadeIn 0.4s ease-in-out;
+    }
+
+    .info-reporte {
+    text-align: center;
+
+    h2 {
+        margin: 0 0 6px;
+        color: $dorado-brillante;
+        font-size: 22px;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(19, 9, 5, 0.6);
+    }
+
+    p {
+        margin: 0 auto;
+        max-width: 340px;
+        color: #f9e6ce;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    }
+
+    // wrappers individuales para forzar las dimensiones correctas de Chart.js
+    .canvas-wrapper {
+    position: relative;
+    width: 100%;
+    height: 48vh; // Ocupa casi la mitad de la pantalla vertical de forma responsiva
+    background: rgba(255, 248, 241, 0.05);
+    border: 1px solid rgba(255, 248, 241, 0.12);
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    padding: 16px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 15px rgba(19, 9, 5, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+
+    // Ajuste de altura específico para el gráfico Polar y evitar solapamientos
+    .canvas-wrapper-polar {
+    @extend .canvas-wrapper;
+    height: 44vh;
+    padding: 20px;
+    }
+
+    // Ajuste para el medidor semicircular de recomendación
+    .canvas-wrapper-medidor {
+    @extend .canvas-wrapper;
+    height: 38vh;
+    padding: 16px 16px 0;
+    align-items: flex-end; // Empuja el semicírculo hacia abajo para centrar la visualización
+    }
+
+    // Animación de transición fluida
+    @keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
