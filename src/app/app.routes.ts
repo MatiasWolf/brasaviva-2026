@@ -411,5 +411,9 @@ export const routes: Routes = [
   {
     path: 'listado-pedidos',
     loadComponent: () => import('./pages/listado-pedidos/listado-pedidos.page').then( m => m.ListadoPedidosPage)
+  },  {
+    path: 'solicitar-cuenta',
+    loadComponent: () => import('./pages/solicitar-cuenta/solicitar-cuenta.page').then( m => m.SolicitarCuentaPage)
   },
+
 ];

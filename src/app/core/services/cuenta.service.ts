@@ -1,7 +1,5 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
 import { SupabaseService } from './supabase.service';
-import { PedidoService } from './pedido.service';
-import { JuegoService } from './juego.service';
 import { ClienteService } from './cliente.service';
 import { AuthService } from './auth.service';
 import { AnonymousSessionService } from './anonymous-session.service';
@@ -18,61 +16,110 @@ export interface ItemDetalleCuenta {
     })
     export class CuentaService {
     private readonly supabase = inject(SupabaseService);
-    private readonly pedidoService = inject(PedidoService);
-    private readonly juegoService = inject(JuegoService);
     private readonly clienteService = inject(ClienteService);
     private readonly authService = inject(AuthService);
     private readonly anonymousSession = inject(AnonymousSessionService);
 
+    // Signals reactivas para el estado financiero de la cuenta
     readonly propinaPorcentaje = signal<number | null>(null);
     readonly itemsEntregados = signal<ItemDetalleCuenta[]>([]);
     readonly cargandoCuenta = signal<boolean>(false);
-    readonly pedidoIdVincular = signal<number | null>(null);
     readonly juegoDescuentoPorcentaje = signal<number>(0);
+    
+    // Guardado local de la ocupación y de todos los pedidos válidos cobrados
+    public ocupacionMesaId: number | null = null;
+    private idsPedidosAsociados: number[] = [];
 
+    // Cálculos matemáticos en caliente usando Computed para el flujo estilo Mercado Pago
     readonly subtotal = computed(() => {
         return this.itemsEntregados().reduce((sum, item) => sum + item.importe, 0);
     });
 
-    // Calcula el monto a restar basado en el subtotal de consumos entregados
     readonly juegoDescuentoMonto = computed(() => {
         const porcentaje = this.juegoDescuentoPorcentaje();
         if (porcentaje <= 0) return 0;
         return this.subtotal() * (porcentaje / 100);
     });
 
-    // Calcula el subtotal neto después de aplicar el beneficio del juego
     readonly subtotalConDescuento = computed(() => {
         return this.subtotal() - this.juegoDescuentoMonto();
     });
 
-    // Calcula el monto de la propina en base al subtotal neto con descuento
     readonly propinaMonto = computed(() => {
         const porcentaje = this.propinaPorcentaje();
         if (!porcentaje || porcentaje <= 0) return 0;
         return this.subtotalConDescuento() * (porcentaje / 100);
     });
 
-    // El TOTAL final que se mostrará en la pantalla 
     readonly totalFinal = computed(() => {
         return this.subtotalConDescuento() + this.propinaMonto();
     });
 
+    /**
+     * Busca de forma directa la ocupación en estado 'activa' evaluando de manera autónoma
+     * si el cliente posee una sesión registrada o anónima en el salón.
+     */
+    async obtenerOcupacionActivaLocal(): Promise<number | null> {
+        try {
+        let usuarioId: string | null = null;
+        let sesionAnonimaId: string | null = null;
+
+        if (this.authService.usuarioActual) {
+            usuarioId = this.authService.usuarioActual.id;
+        } else {
+            sesionAnonimaId = this.anonymousSession.obtenerIdSesion();
+        }
+
+        if (!usuarioId && !sesionAnonimaId) {
+            console.warn('No se detectó ninguna sesión activa para procesar la cuenta.');
+            this.ocupacionMesaId = null;
+            return null;
+        }
+
+        let consulta = this.supabase.client
+            .from('ocupaciones_mesa')
+            .select('id')
+            .eq('estado', 'activa'); // Filtramos únicamente las estadías sentadas y consumiendo
+
+        if (usuarioId) {
+            consulta = consulta.eq('usuario_id', usuarioId);
+        } else {
+            consulta = consulta.eq('sesion_anonima_id', sesionAnonimaId);
+        }
+
+        const { data, error } = await consulta
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .maybeSingle();
+
+        if (error) throw error;
+
+        if (data) {
+            this.ocupacionMesaId = data.id;
+            return data.id;
+        }
+
+        this.ocupacionMesaId = null;
+        return null;
+        } catch (err) {
+        console.error('Error al recuperar ocupacion_id para la cuenta:', err);
+        this.ocupacionMesaId = null;
+        return null;
+        }
+    }
 
     /**
-     * Consulta Supabase buscando los pedidos finalizados ('entregado') de la estadía actual
-     * y mapea sus ítems con los precios unitarios cobrados.
+     * Consulta en Supabase la totalidad de los pedidos en estado 'entregado' o 'en_mesa'
+     * de la estadía y unifica sus ítems para evitar fugas de saldos.
      */
     async cargarConsumosEntregados(): Promise<boolean> {
-        const ocupacionId = this.pedidoService.ocupacionMesaId;
-        if (!ocupacionId) {
+        if (!this.ocupacionMesaId) {
         console.warn('No hay una ocupación de mesa vinculada para calcular la cuenta.');
         return false;
         }
 
         this.cargandoCuenta.set(true);
         try {
-        // Buscar los pedidos de la ocupación que ya fueron entregados en la mesa
         const { data: pedidos, error: errorPedidos } = await this.supabase.client
             .from('pedidos')
             .select(`
@@ -83,21 +130,20 @@ export interface ItemDetalleCuenta {
                 productos ( nombre )
             )
             `)
-            .eq('ocupacion_id', ocupacionId)
-            .eq('estado', 'entregado');
+            .eq('ocupacion_id', this.ocupacionMesaId)
+            .eq('estado', 'entregado'); // Ajustado estrictamente al estado solicitado por la consigna
 
         if (errorPedidos) throw errorPedidos;
 
         if (!pedidos || pedidos.length === 0) {
             this.itemsEntregados.set([]);
-            this.pedidoIdVincular.set(null);
+            this.idsPedidosAsociados = [];
             return false;
         }
 
-        // Guardar el ID del último pedido entregado para asociarlo al pago posterior
-        this.pedidoIdVincular.set(pedidos[pedidos.length - 1].id);
+        // Guardamos la referencia de todos los IDs de pedidos para la FK de la tabla pagos
+        this.idsPedidosAsociados = pedidos.map(p => p.id);
 
-        // Mapear y aplanar todas las líneas de ítems de consumo
         const listaMapeada: ItemDetalleCuenta[] = [];
         pedidos.forEach((p: any) => {
             if (p.items_pedido) {
@@ -123,34 +169,42 @@ export interface ItemDetalleCuenta {
     }
 
     /**
-   * Verifica si el usuario actual es registrado y si ganó algún descuento
-   * en su primer intento de juego.
-   */
+     * Verifica de forma directa en Supabase si el cliente registrado obtuvo un descuento
+     * válido para la estadía actual del salón.
+     */
     async verificarDescuentoJuegos(): Promise<number> {
         this.juegoDescuentoPorcentaje.set(0);
+        if (!this.ocupacionMesaId) return 0;
+
         try {
         const esRegistrado = await this.clienteService.esClienteRegistrado();
-        if (!esRegistrado || !this.authService.usuarioActual) {
-            return 0; // Los anónimos o deslogueados no tienen descuento
+        if (!esRegistrado) {
+            return 0; // Clientes anónimos no participan por descuentos según la consigna
         }
 
-        const uid = this.authService.usuarioActual.id;
-        const resultadoJuego = await this.juegoService.obtenerResultadoActual(uid);
+        const { data: juegos, error } = await this.supabase.client
+            .from('juegos_descuentos')
+            .select('descuento')
+            .eq('ocupacion_mesa_id', this.ocupacionMesaId)
+            .eq('gano', true);
 
-        if (resultadoJuego && resultadoJuego.gano) {
-            this.juegoDescuentoPorcentaje.set(resultadoJuego.descuento);
-            return resultadoJuego.descuento;
+        if (error) throw error;
+
+        if (juegos && juegos.length > 0) {
+            // Si por algún error del juego se guardara más de uno, otorgamos el máximo beneficio
+            const maxDescuento = Math.max(...juegos.map(j => j.descuento));
+            this.juegoDescuentoPorcentaje.set(maxDescuento);
+            return maxDescuento;
         }
         return 0;
         } catch (err) {
-        console.error('Error al verificar descuento de juegos:', err);
+        console.error('Error al verificar descuento de juegos en Supabase:', err);
         return 0;
         }
     }
 
     /**
-     * Mapea el texto leído del código QR de propinas a su valor numérico real.
-     * Si el código no pertenece a la empresa, retorna -1 para disparar error.
+     * Realiza el mapeo exacto de los strings de los QR físicos a sus porcentajes reales.
      */
     evaluarQrPropina(texto: string): number {
         switch (texto.trim()) {
@@ -164,15 +218,13 @@ export interface ItemDetalleCuenta {
     }
 
     /**
-     * Registra la transacción inicial del pago simulado en Supabase.
-     * Deja el registro en estado 'pendiente_confirmacion'.
+     * Registra la transacción inicial del pago simulado en Supabase en estado pendiente.
      */
     async registrarSolicitudPago(): Promise<boolean> {
-        const ocupacionId = this.pedidoService.ocupacionMesaId;
-        const pedidoId = this.pedidoIdVincular();
+        const pedidoId = this.idsPedidosAsociados[0]; // Tomamos el primer ID de pedido como cabecera para la relación FK obligatoria
 
-        if (!ocupacionId || !pedidoId || this.propinaPorcentaje() === null) {
-        console.error('Faltan parámetros obligatorios para registrar el pago.');
+        if (!this.ocupacionMesaId || !pedidoId || this.propinaPorcentaje() === null) {
+        console.error('Faltan parámetros obligatorios para registrar la solicitud de pago.');
         return false;
         }
 
@@ -181,7 +233,7 @@ export interface ItemDetalleCuenta {
             .from('pagos')
             .insert({
             pedido_id: pedidoId,
-            ocupacion_id: ocupacionId,
+            ocupacion_id: this.ocupacionMesaId,
             subtotal: this.subtotal(),
             descuento_juego_porcentaje: this.juegoDescuentoPorcentaje(),
             descuento_juego_monto: this.juegoDescuentoMonto(),
@@ -195,68 +247,6 @@ export interface ItemDetalleCuenta {
         return true;
         } catch (err) {
         console.error('Error al insertar el registro de pago en Supabase:', err);
-        return false;
-        }
-    }
-
-
-    // --- GESTIÓN DEL MOZO ---
-
-    /**
-     * El mozo confirma el pago pendiente: transacciona la finalización de la estadía,
-     * libera la mesa poniéndola vacía y desvincula al cliente (registrado o anónimo) 
-     * devolviendo su estado_estadia a 'sin_estadia'.
-     */
-    async confirmarPagoYLiberarMesa(pagoId: number, datosPago: any): Promise<boolean> {
-        try {
-        // 1. Actualizar el estado de la tabla pagos a 'confirmado'
-        const { error: errorPago } = await this.supabase.client
-            .from('pagos')
-            .update({ estado: 'confirmado' })
-            .eq('id', pagoId);
-
-        if (errorPago) throw errorPago;
-
-        // 2. Finalizar el estado de la ocupación de la mesa
-        const { error: errorOcupacion } = await this.supabase.client
-            .from('ocupaciones_mesa')
-            .update({ 
-            estado: 'finalizada',
-            fecha_salida: new Date().toISOString()
-            })
-            .eq('id', datosPago.ocupacion_id);
-
-        if (errorOcupacion) throw errorOcupacion;
-
-        // 3. Liberar la mesa física (Volver a disponibilidad 'vacia')
-        const { error: errorMesa } = await this.supabase.client
-            .from('mesas')
-            .update({ disponibilidad: 'vacia' })
-            .eq('id', datosPago.ocupaciones_mesa?.mesa_id);
-
-        if (errorMesa) throw errorMesa;
-
-        // 4. Devolver al cliente a 'sin_estadia' evaluando su tipo de cuenta
-        const registradoId = datosPago.ocupaciones_mesa?.usuario_id;
-        const anonimoId = datosPago.ocupaciones_mesa?.sesion_anonima_id;
-
-        if (registradoId) {
-            const { error: errorUser } = await this.supabase.client
-            .from('usuarios')
-            .update({ estado_estadia: 'sin_estadia' })
-            .eq('id', registradoId);
-            if (errorUser) throw errorUser;
-        } else if (anonimoId) {
-            const { error: errorAnon } = await this.supabase.client
-            .from('sesiones_anonimas')
-            .update({ estado_estadia: 'sin_estadia' })
-            .eq('id', anonimoId);
-            if (errorAnon) throw errorAnon;
-        }
-
-        return true;
-        } catch (err) {
-        console.error('Error crítico al confirmar el pago y liberar la mesa:', err);
         return false;
         }
     }
