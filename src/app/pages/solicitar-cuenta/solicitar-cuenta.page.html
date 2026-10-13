@@ -15,7 +15,7 @@
         </div>
         <div class="rol-chip">
           <ion-icon name="receipt-outline"></ion-icon>
-          <span>Mesa {{ cuentaService.ocupacionMesaId }}</span>
+          <!--<span>Mesa {{ cuentaService.ocupacionMesaId }}</span>-->
         </div>
       </header>
 
@@ -83,7 +83,7 @@
             <!-- Desglose de Deducciones y Adiciones Financieras -->
             <div class="factura-seccion desglose-box">
               <div class="desglose-row">
-                <span>Subtotal Base</span>
+                <span>Subtotal</span>
                 <span>{{ cuentaService.subtotal() | currency:'ARS':'symbol':'1.0-0' }}</span>
               </div>
               

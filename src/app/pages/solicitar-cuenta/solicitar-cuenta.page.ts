@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, OnDestroy } from '@angular/core';
 import { CommonModule, TitleCasePipe, CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { CuentaService } from '../../core/services/cuenta.service';
@@ -22,6 +22,10 @@ import {
   checkmarkCircleOutline, 
   receiptOutline 
 } from 'ionicons/icons';
+import { EstadiaRealtimeService } from '../../core/services/estadia-realtime.service';
+import { ClienteService } from '../../core/services/cliente.service';
+import { AuthService } from '../../core/services/auth.service';
+import { SupabaseService } from '../../core/services/supabase.service';
 
 @Component({
   selector: 'app-solicitar-cuenta',
@@ -30,28 +34,31 @@ import {
   standalone: true,
   imports: [
     CommonModule,
-    TitleCasePipe,
-    CurrencyPipe,
     IonContent,
     IonButton,
     IonIcon,
     IonList,
     IonItem,
     IonLabel,
-    IonFooter,
     QrScannerComponent,
     SpinnerLogoComponent
   ]
 })
-export class SolicitarCuentaPage implements OnInit {
+export class SolicitarCuentaPage implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   public readonly cuentaService = inject(CuentaService);
   private readonly modalService = inject(MensajeModalService);
+  private readonly estadiaRealtime = inject(EstadiaRealtimeService);
+  private readonly clienteService = inject(ClienteService);
+  private readonly authService = inject(AuthService);
+  private readonly supabaseService = inject(SupabaseService);
 
   // Control de fase operativa en caliente mediante Signals
   public readonly faseActual = signal<'confirmacion_inicial' | 'bloqueo_propina' | 'detalle_factura' | 'espera_mozo'>('confirmacion_inicial');
   public readonly mostrandoScanner = signal<boolean>(false);
   public readonly procesandoTransaccion = signal<boolean>(false);
+
+  private canalPagosRealtime: ReturnType<typeof this.supabaseService.client.channel> | null = null;
 
   constructor() {
     addIcons({
@@ -143,15 +150,71 @@ export class SolicitarCuentaPage implements OnInit {
 
     if (exito) {
       this.faseActual.set('espera_mozo');
+      // Invocar el método de escucha reactiva
+      this.iniciarEscuchaConfirmacionPago();
     } else {
       this.modalService.error('Hubo un problema al registrar tu solicitud de pago. Por favor, intenta de nuevo.', 'Error de red');
     }
   }
 
   /**
-   * Redirección segura hacia la pantalla principal de la aplicación.
+   * Redirección hacia la pantalla principal de la aplicación.
    */
   async volverAlHome(): Promise<void> {
     await this.router.navigate(['/home'], { replaceUrl: true });
+  }
+
+    /**
+   * Inicializa la escucha en segundo plano sobre la transacción de cobro.
+   */
+  private iniciarEscuchaConfirmacionPago(): void {
+    const mesaOcupacionId = this.cuentaService.ocupacionMesaId;
+    if (!mesaOcupacionId) return;
+
+    // Guardr la referencia en la propiedad de la clase
+    this.canalPagosRealtime = this.supabaseService.client
+      .channel(`espera-pago-${mesaOcupacionId}`)
+      .on(
+        'postgres_changes',
+        { 
+          event: 'UPDATE', 
+          schema: 'public', 
+          table: 'pagos', 
+          filter: `ocupacion_id=eq.${mesaOcupacionId}` 
+        },
+        async (payload: any) => {
+          if (payload.new.estado === 'confirmado') {
+            await this.detenerSuscripcionYRedirigir();
+          }
+        }
+      )
+      .subscribe();
+  }
+
+  /**
+   * Apaga el canal activo de Supabase.
+   */
+  private desuscribirCanalPago(): void {
+    if (this.canalPagosRealtime) {
+      this.supabaseService.client.removeChannel(this.canalPagosRealtime);
+      this.canalPagosRealtime = null;
+    }
+  }
+
+  /**
+   * Cierra el canal, dispara el feedback de éxito y redirige al cliente al Home.
+   */
+  private async detenerSuscripcionYRedirigir(): Promise<void> {
+    this.desuscribirCanalPago();
+    
+    this.modalService.exito(
+      '¡Muchas gracias por visitarnos en Brasa Viva! Tu pago fue confirmado con éxito.',
+      '¡Gracias por venir!'
+    );
+    await this.volverAlHome();
+  }
+
+  ngOnDestroy(): void {
+    this.desuscribirCanalPago();
   }
 }

@@ -250,4 +250,105 @@ export interface ItemDetalleCuenta {
         return false;
         }
     }
+
+    /**
+     * Consulta en Supabase todos los pagos que se encuentran en estado pendiente de confirmación,
+     */
+    async obtenerPagosPendientesMozo(): Promise<any[]> {
+        try {
+        const { data, error } = await this.supabase.client
+            .from('pagos')
+            .select(`
+            id,
+            pedido_id,
+            ocupacion_id,
+            subtotal,
+            descuento_juego_porcentaje,
+            descuento_juego_monto,
+            propina_porcentaje,
+            propina_monto,
+            total_final,
+            estado,
+            created_at,
+            ocupaciones_mesa (
+                mesa_id,
+                usuario_id,
+                sesion_anonima_id,
+                mesas ( numero )
+            )
+            `)
+            .eq('estado', 'pendiente_confirmacion')
+            .order('created_at', { ascending: true });
+
+        if (error) throw error;
+        return data || [];
+        } catch (err) {
+        console.error('Error al recuperar listado de pagos pendientes para el mozo:', err);
+        return [];
+        }
+    }
+
+    /**
+     * Transacción para la liberación de la mesa y el cliente.
+     * Modifica el estado del pago, cierra la ocupación de la mesa, vuelve la mesa física a 'vacia'
+     * y reestablece el estado de estadía del cliente (registrado o anónimo) a 'sin_estadia'.
+     */
+    async confirmarPagoYLiberarMesa(params: {
+        pagoId: number;
+        ocupacionId: number;
+        mesaId: string;
+        usuarioId: string | null;
+        sesionAnonimaId: string | null;
+    }): Promise<boolean> {
+        try {
+        // 1. Confirmar el registro de cobro
+        const { error: errorPago } = await this.supabase.client
+            .from('pagos')
+            .update({ estado: 'confirmado' })
+            .eq('id', params.pagoId);
+
+        if (errorPago) throw errorPago;
+
+        // 2. Finalizar la ocupación activa de la mesa asignando la fecha de salida
+        const { error: errorOcupacion } = await this.supabase.client
+            .from('ocupaciones_mesa')
+            .update({ 
+            estado: 'finalizada',
+            fecha_salida: new Date().toISOString()
+            })
+            .eq('id', params.ocupacionId);
+
+        if (errorOcupacion) throw errorOcupacion;
+
+        // 3. Modificar la disponibilidad de la mesa a 'vacia'
+        const { error: errorMesa } = await this.supabase.client
+            .from('mesas')
+            .update({ disponibilidad: 'vacia' })
+            .eq('id', params.mesaId);
+
+        if (errorMesa) throw errorMesa;
+
+        // 4. Devolver al cliente correspondiente al estado inicial de 'sin_estadia'
+        if (params.usuarioId) {
+            const { error: errorUser } = await this.supabase.client
+            .from('usuarios')
+            .update({ estado_estadia: 'sin_estadia' })
+            .eq('id', params.usuarioId);
+            
+            if (errorUser) throw errorUser;
+        } else if (params.sesionAnonimaId) {
+            const { error: errorAnon } = await this.supabase.client
+            .from('sesiones_anonimas')
+            .update({ estado_estadia: 'sin_estadia' })
+            .eq('id', params.sesionAnonimaId);
+            
+            if (errorAnon) throw errorAnon;
+        }
+
+        return true;
+        } catch (err) {
+        console.error('Error crítico en la transacción de liberación de mesa:', err);
+        return false;
+        }
+    }
 }
