@@ -1,16 +1,14 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
+  private supabaseService = inject(SupabaseService);
+
 
   private readonly bucket = 'fotos-perfiles';
-
-  constructor(
-    private supabaseService: SupabaseService
-  ) {}
 
   async subirFoto(
     id: string,

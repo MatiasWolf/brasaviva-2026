@@ -1,5 +1,5 @@
 import { Component, ChangeDetectorRef, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   FormBuilder,
   FormGroup,
@@ -26,7 +26,6 @@ import { MensajeModalService } from '../../../core/services/mensaje-modal.servic
   styleUrls: ['./registro-cliente.page.scss'],
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     IonHeader,
     IonToolbar,
@@ -42,6 +41,12 @@ import { MensajeModalService } from '../../../core/services/mensaje-modal.servic
 ]
 })
 export class RegistroClientePage {
+  private fb = inject(FormBuilder);
+  private auth = inject(AuthService);
+  private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
+  private cameraService = inject(CameraService);
+
 
   registroForm: FormGroup;
 
@@ -55,13 +60,7 @@ export class RegistroClientePage {
 
   private readonly mensajeModal = inject(MensajeModalService);
 
-  constructor(
-    private fb: FormBuilder,
-    private auth: AuthService,
-    private router: Router,
-    private cdr: ChangeDetectorRef,
-    private cameraService: CameraService
-  ) {
+  constructor() {
     addIcons({
       'checkmark-circle': checkmarkCircle,
       'person-add-outline': personAddOutline,

@@ -14,3 +14,12 @@ if (!window.matchMedia) {
       dispatchEvent: () => false,
     }) as MediaQueryList;
 }
+
+// ion-segment (y otros componentes de Ionic) llaman a scrollTo/scrollIntoView
+// para centrar el botón activo; jsdom no los implementa.
+if (!Element.prototype.scrollTo) {
+  Element.prototype.scrollTo = () => undefined;
+}
+if (!Element.prototype.scrollIntoView) {
+  Element.prototype.scrollIntoView = () => undefined;
+}

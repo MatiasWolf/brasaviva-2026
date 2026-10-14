@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal, inject } from '@angular/core';
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { IonContent } from '@ionic/angular';
 import { AuthService } from '../../../core/services/auth.service';
@@ -15,13 +15,12 @@ import { SonidoService } from '../../../core/services/sonido.service';
   styleUrl: './reflejos.page.scss'
 })
 export class ReflejosPage implements OnInit, OnDestroy {
-  constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private authService: AuthService,
-    private juegoService: JuegoService,
-    private sonidoService: SonidoService
-  ) {}
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private authService = inject(AuthService);
+  private juegoService = inject(JuegoService);
+  private sonidoService = inject(SonidoService);
+
   nivelActual = signal(1);
   readonly maximoNiveles = 3;
   readonly toquesNecesarios = 4;

@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   FormBuilder,
   FormGroup,
@@ -37,7 +37,6 @@ import { traducirErrorSupabase } from '../../../core/utils/traducir-error.util';
   styleUrls: ['./agregar-mesa.page.scss'],
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     IonHeader,
     IonToolbar,
@@ -51,8 +50,8 @@ import { traducirErrorSupabase } from '../../../core/utils/traducir-error.util';
     IonSelectOption,
     IonButton,
     IonModal,
-    IonIcon,
-  ],
+    IonIcon
+],
 })
 export class AgregarMesaPage {
   private readonly fb = inject(FormBuilder);

@@ -1,5 +1,5 @@
 import { Component, ChangeDetectorRef, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { Router } from '@angular/router';
 import {
   IonBackButton,
@@ -27,7 +27,6 @@ import { addOutline, chevronBackOutline, chevronForwardOutline, wineOutline } fr
   styleUrls: ['./carta-bebidas.page.scss'],
   standalone: true,
   imports: [
-    CommonModule,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -39,7 +38,7 @@ import { addOutline, chevronBackOutline, chevronForwardOutline, wineOutline } fr
     IonIcon,
     IonSearchbar,
     SpinnerLogoComponent
-  ]
+]
 })
 export class CartaBebidasPage implements ViewWillEnter {
 

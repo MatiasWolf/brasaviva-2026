@@ -11,6 +11,8 @@ import { MensajeChat } from '../models/mensaje-chat.model';
   providedIn: 'root'
 })
 export class ChatService {
+  private supabase = inject(SupabaseService);
+
 
   private authService =
     inject(AuthService);
@@ -21,10 +23,6 @@ export class ChatService {
   private canalChatGeneral: any = null;
 
   private canalChatMesa: any = null;
-
-  constructor(
-    private supabase: SupabaseService
-  ) {}
 
   async obtenerMensajesOcupacion(
     ocupacionId: number

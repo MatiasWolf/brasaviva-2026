@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, output, signal } from '@angular/core';
+
+import { Component, Input, output, signal } from '@angular/core';
 import { IonButton, IonCard, IonCardContent, IonIcon } from '@ionic/angular';
 import { Producto } from '../../../core/models/pedido.models';
 import { addIcons } from 'ionicons';
@@ -9,9 +9,9 @@ import { addCircle, arrowBackOutline, arrowForwardOutline, cartOutline, removeCi
   selector: 'app-tarjeta-producto',
   templateUrl: './tarjeta-producto.component.html',
   styleUrls: ['./tarjeta-producto.component.scss'],
-  imports: [CommonModule, IonCard, IonCardContent, IonButton, IonIcon],
+  imports: [IonCard, IonCardContent, IonButton, IonIcon],
 })
-export class TarjetaProductoComponent  implements OnInit {
+export class TarjetaProductoComponent {
 
   // Inputs para recibir el producto y su cantidad actual
   @Input({ required: true }) producto!: Producto;
@@ -30,8 +30,6 @@ export class TarjetaProductoComponent  implements OnInit {
   constructor() {
     addIcons({ addCircle, removeCircle, arrowBackOutline, arrowForwardOutline, timeOutline, cartOutline  });
   }
-
-  ngOnInit() {}
 
   /**
    * Retorna la URL de la imagen que corresponde según el índice activo.

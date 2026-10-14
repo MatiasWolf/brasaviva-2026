@@ -1,5 +1,5 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonSpinner, IonIcon, IonFooter, IonList, IonSegment, IonSegmentButton, ModalController, IonButtons } from '@ionic/angular';
 import { PedidoService } from '../../core/services/pedido.service';
@@ -13,9 +13,7 @@ import { RouterLink } from '@angular/router';
   selector: 'app-menu-productos',
   templateUrl: './menu-productos.page.html',
   styleUrls: ['./menu-productos.page.scss'],
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule,
-    FormsModule, IonButton, IonSpinner, IonFooter, IonList, TarjetaProductoComponent,
-    IonSegment, IonSegmentButton, IonIcon, IonButtons, RouterLink]
+  imports: [IonContent, IonHeader, IonTitle, IonToolbar, FormsModule, IonButton, IonSpinner, IonFooter, IonList, TarjetaProductoComponent, IonSegment, IonSegmentButton, IonIcon, IonButtons, RouterLink]
 })
 export class MenuProductosPage implements OnInit {
 

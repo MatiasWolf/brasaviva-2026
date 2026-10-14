@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent, IonList, IonItem, IonLabel, IonIcon, IonFooter, ModalController, IonSpinner, ToastController } from '@ionic/angular';
 import { PedidoService } from '../../../core/services/pedido.service';
 import { Router } from '@angular/router'; 
@@ -12,17 +12,16 @@ import { addCircle, removeCircle, closeOutline, trashOutline, restaurantOutline,
   styleUrls: ['./detalle-pedido.component.scss'],
   standalone: true,
   imports: [
-    CommonModule, 
-    IonHeader, 
-    IonToolbar, 
-    IonTitle, 
-    IonButtons, 
-    IonButton, 
-    IonContent, 
-    IonList,  
-    IonIcon, 
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonButtons,
+    IonButton,
+    IonContent,
+    IonList,
+    IonIcon,
     IonFooter
-  ]
+]
 })
 export class DetallePedidoComponent {
   public pedidoService = inject(PedidoService);

@@ -9,7 +9,7 @@ import {
   viewChild
 } from '@angular/core';
 
-import { CommonModule } from '@angular/common';
+
 
 import {
   IonIcon,
@@ -30,10 +30,9 @@ import {
   templateUrl: './qr-scanner.component.html',
   styleUrls: ['./qr-scanner.component.scss'],
   imports: [
-    CommonModule,
     IonModal,
     IonIcon
-  ]
+]
 })
 export class QrScannerComponent implements OnDestroy {
 
