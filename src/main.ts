@@ -4,6 +4,7 @@ import { RouteReuseStrategy, provideRouter, withComponentInputBinding, withPrelo
 import { IonicRouteStrategy, provideIonicAngular } from '@ionic/angular';
 
 import { defineCustomElements } from '@ionic/pwa-elements/loader';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
@@ -16,5 +17,6 @@ bootstrapApplication(AppComponent, {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules), withComponentInputBinding()),
+    provideCharts(withDefaultRegisterables()),
   ],
 });

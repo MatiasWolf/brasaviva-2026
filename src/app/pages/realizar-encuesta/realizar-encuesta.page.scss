@@ -1,0 +1,291 @@
+$fondo-oscuro-puro: #130905;
+$marron-medio: #4d200f;
+$dorado-brillante: #ffd485;
+$dorado-glow: #ffaa55;
+$crema-claro: #fff3df;
+$crema-texto: #fff1dc;
+$marron-texto-oscuro: #35170b;
+$borde-ocre: #c0784d;
+
+.contenedor-principal {
+    --background: radial-gradient(circle at 20% 20%, rgba(246, 193, 133, 0.2), transparent 18%),
+                    linear-gradient(180deg, #130905 0%, #4d200f 54%, #f5dcc0 100%);
+    --color: #{$crema-texto};
+    }
+
+    ion-header {
+    background: $fondo-oscuro-puro;
+    }
+
+    ion-toolbar {
+    --background: #{$fondo-oscuro-puro};
+    --color: #{$dorado-brillante};
+    --border-color: transparent;
+    }
+
+    ion-title {
+    color: $dorado-brillante;
+    font-weight: 600;
+    }
+
+    // 1. Pantalla de espera 
+    .pantalla-carga {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 80vh;
+    gap: 16px;
+    text-align: center;
+    padding: 20px;
+
+    .texto-carga {
+        color: $dorado-brillante;
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+    }
+    }
+
+    // 2. Contenedor de formulario
+    .formulario-encuesta {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 16px 20px calc(30px + var(--ion-safe-area-bottom, 0px));
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-sizing: border-box;
+    }
+
+    .encabezado-formulario {
+    text-align: center;
+    margin-bottom: 8px;
+
+    h2 {
+        margin: 0 0 6px;
+        color: $dorado-brillante;
+        font-size: 24px;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(74, 26, 26, 0.6);
+    }
+
+    p {
+        margin: 0;
+        color: #f9e6ce;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    }
+
+    // 3. Estructura de las tarjetas de control 
+    .tarjeta-control {
+    width: 100%;
+    padding: 16px;
+    background: rgba(255, 248, 241, 0.07);
+    border: 1px solid rgba(255, 248, 241, 0.16);
+    backdrop-filter: blur(8px);
+    border-radius: 16px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 12px rgba(19, 9, 5, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .titulo-control {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        
+        ion-icon {
+        font-size: 1.35rem;
+        color: $dorado-brillante;
+        }
+
+        ion-label {
+        color: #fff8f1;
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1.4;
+        }
+    }
+    }
+
+    // Control de Comida 
+    .cuerpo-control-range {
+    padding: 0 8px;
+
+    ion-range {
+        --bar-background: rgba(255, 243, 223, 0.2);
+        --bar-background-active: #{$dorado-glow};
+        --knob-background: #{$dorado-brillante};
+        --pin-background: #{$marron-medio};
+        --pin-color: #{$dorado-brillante};
+        padding: 8px 0;
+
+        .leyenda-range {
+        font-size: 12px;
+        font-weight: 600;
+        color: #f9e6ce;
+        }
+    }
+    }
+
+    // Control de Atención 
+    .cuerpo-control-estrellas {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0;
+
+    .boton-estrella {
+        background: transparent;
+        border: none;
+        padding: 4px;
+        margin: 0;
+        cursor: pointer;
+        outline: none;
+        transition: transform 0.2s ease;
+
+        ion-icon {
+        font-size: 2.3rem;
+        color: rgba(255, 248, 241, 0.25);
+        transition: color 0.2s ease, text-shadow 0.2s ease;
+        }
+
+        &:active {
+        transform: scale(0.9);
+        }
+
+        &.seleccionada {
+        ion-icon {
+            color: $dorado-brillante;
+            filter: drop-shadow(0 0 4px rgba(255, 212, 133, 0.5));
+        }
+        }
+    }
+    }
+
+    // Control de Tiempo 
+    .grupo-radios {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    .item-radio {
+        --background: #{$crema-claro};
+        --border-radius: 10px;
+        --min-height: 46px;
+        //border: 1px solid $borde-ocre;
+        //box-shadow: 0 2px 6px rgba(19, 9, 5, 0.15);
+
+        ion-radio {
+        --color: #{$marron-medio};
+        --color-checked: #{$marron-medio};
+        font-size: 15px;
+        font-weight: 600;
+        color: $marron-texto-oscuro;
+        width: 100%;
+        padding: 0 4px;
+        }
+    }
+    }
+
+    // Selector Desplegable 
+    .item-select-personalizado {
+    --background: #{$crema-claro};
+    --border-radius: 12px;
+    --min-height: 52px;
+    //border: 2px solid $borde-ocre;
+    //box-shadow: 0 3px 8px rgba(19, 9, 5, 0.2);
+    padding: 2px 8px;
+
+    ion-select {
+        width: 100%;
+        font-size: 15px;
+        font-weight: 600;
+        color: $marron-texto-oscuro;
+
+        &::part(text) {
+        color: $marron-texto-oscuro;
+        }
+        &::part(placeholder) {
+        color: #805238;
+        opacity: 0.85;
+        }
+        &::part(icon) {
+        color: #805238;
+        }
+    }
+    }
+
+    // Control de Recomendación
+    .item-toggle-contenedor {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+
+    .titulo-toggle {
+        color: #fff8f1;
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1.4;
+    }
+
+    ion-toggle {
+        --handle-background: #fff8f1;
+        --handle-background-checked: #fff8f1;
+        --track-background-checked: #{$dorado-brillante};
+    }
+    }
+
+    // Entrada de Texto Contadores de Caracteres
+    .item-textarea-personalizado {
+    --background: #{$crema-claro};
+    --border-radius: 12px;
+    //border: 2px solid $borde-ocre;
+    //box-shadow: 0 3px 8px rgba(19, 9, 5, 0.2);
+    padding: 6px 12px;
+
+    ion-textarea {
+        --color: #{$marron-texto-oscuro};
+        --placeholder-color: #805238;
+        font-size: 15px;
+        font-weight: 500;
+    }
+    }
+
+    // Botón de Envío 
+    .contenedor-boton-envio {
+    margin-top: 10px;
+    width: 100%;
+
+    .boton-enviar {
+        margin: 0;
+        --background: #{$dorado-brillante};
+        --background-hover: #ffe0a3;
+        --background-activated: #e9b95e;
+        --color: #{$marron-medio};
+        --border-radius: 12px;
+        height: 52px;
+        font-size: 16px;
+        font-weight: 700;
+        text-transform: none;
+        box-shadow: 0 5px 15px rgba(19, 9, 5, 0.35);
+
+        .espacio-izquierdo {
+        margin-left: 8px;
+        }
+
+        &::part(native) {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        }
+    }
+}
