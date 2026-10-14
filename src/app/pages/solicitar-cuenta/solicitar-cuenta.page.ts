@@ -103,6 +103,10 @@ export class SolicitarCuentaPage implements OnInit, OnDestroy {
    */
   public avanzarABloqueoPropina(): void {
     this.faseActual.set('bloqueo_propina');
+
+    this.supabaseService.client.functions.invoke('notificar-cuenta-solicitada', {
+                body: { ocupacion_id: this.cuentaService.ocupacionMesaId },
+            });
   }
 
   /**

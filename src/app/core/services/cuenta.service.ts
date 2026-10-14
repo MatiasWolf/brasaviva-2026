@@ -221,7 +221,7 @@ export interface ItemDetalleCuenta {
      * Registra la transacción inicial del pago simulado en Supabase en estado pendiente.
      */
     async registrarSolicitudPago(): Promise<boolean> {
-        const pedidoId = this.idsPedidosAsociados[0]; // Tomamos el primer ID de pedido como cabecera para la relación FK obligatoria
+        const pedidoId = this.idsPedidosAsociados[0]; 
 
         if (!this.ocupacionMesaId || !pedidoId || this.propinaPorcentaje() === null) {
         console.error('Faltan parámetros obligatorios para registrar la solicitud de pago.');
@@ -229,22 +229,24 @@ export interface ItemDetalleCuenta {
         }
 
         try {
-        const { error } = await this.supabase.client
-            .from('pagos')
-            .insert({
-            pedido_id: pedidoId,
-            ocupacion_id: this.ocupacionMesaId,
-            subtotal: this.subtotal(),
-            descuento_juego_porcentaje: this.juegoDescuentoPorcentaje(),
-            descuento_juego_monto: this.juegoDescuentoMonto(),
-            propina_porcentaje: this.propinaPorcentaje(),
-            propina_monto: this.propinaMonto(),
-            total_final: this.totalFinal(),
-            estado: 'pendiente_confirmacion'
-            });
 
-        if (error) throw error;
-        return true;
+            const { error } = await this.supabase.client
+                .from('pagos')
+                .insert({
+                pedido_id: pedidoId,
+                ocupacion_id: this.ocupacionMesaId,
+                subtotal: this.subtotal(),
+                descuento_juego_porcentaje: this.juegoDescuentoPorcentaje(),
+                descuento_juego_monto: this.juegoDescuentoMonto(),
+                propina_porcentaje: this.propinaPorcentaje(),
+                propina_monto: this.propinaMonto(),
+                total_final: this.totalFinal(),
+                estado: 'pendiente_confirmacion'
+                });
+
+            if (error) throw error;
+            return true;
+            
         } catch (err) {
         console.error('Error al insertar el registro de pago en Supabase:', err);
         return false;
