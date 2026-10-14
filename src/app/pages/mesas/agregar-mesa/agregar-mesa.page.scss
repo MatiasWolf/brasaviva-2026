@@ -7,13 +7,6 @@
   --color: #fff1dc;
 }
 
-/* Scroll-snap: cada campo "encaja" al scrollear, ninguno queda cortado. */
-.mesa-content::part(scroll) {
-  scroll-snap-type: y proximity;
-  scroll-padding-top: 12px;
-  scroll-padding-bottom: 12px;
-}
-
 ion-header {
   background: #130905;
 }
@@ -36,9 +29,13 @@ ion-back-button {
 .mesa-container {
   width: 100%;
   max-width: 480px;
+  min-height: 100%;
   margin: 0 auto;
-  padding: 24px 24px 24px;
+  padding: 14px 20px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 /* FOTO: contenedor individual, grande y centrado (no es un avatar circular). */
@@ -46,13 +43,14 @@ ion-back-button {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 4px 0 24px;
+  flex-shrink: 0;
 }
 
 .foto-button {
   position: relative;
   width: 100%;
-  max-width: 280px;
+  max-width: 340px;
+  max-height: 42vh;
   aspect-ratio: 4 / 3;
   display: flex;
   flex-direction: column;
@@ -123,29 +121,38 @@ ion-back-button {
   }
 }
 
-.foto-hint {
-  margin: 10px 0 0;
-  text-align: center;
-  font-size: 0.78rem;
-  color: #fff1dc;
-}
-
 /* FORMULARIO */
 .mesa-form {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 0;
+  justify-content: center;
 }
 
+/* Número y comensales: contenido corto, uno al lado del otro. */
+.fila {
+  display: flex;
+  gap: 14px;
+
+  .campo {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* Sin foto+DNI arriba (esta alta no escanea DNI), el formulario tiene
+   menos filas que el de empleados — campos más altos y más separados
+   para que ocupen el espacio libre en vez de quedar apretados y centrados
+   con un hueco grande alrededor. */
 .campo {
-  scroll-snap-align: start;
   width: 100%;
-  min-height: 68px;
+  min-height: 72px;
   background: #fff3df;
   border: 2px solid #c0784d;
   border-radius: 12px;
-  padding: 6px 14px;
-  margin-bottom: 14px;
+  padding: 8px 14px;
+  margin-bottom: 18px;
   box-sizing: border-box;
   box-shadow: 0 3px 8px rgba(19, 9, 5, 0.25);
   transition:
@@ -164,7 +171,7 @@ ion-back-button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 56px;
+  min-height: 72px;
 }
 
 .campo-label {
@@ -181,13 +188,6 @@ ion-back-button {
   background: rgba(72, 160, 90, 0.18);
   border: 1px solid rgba(72, 160, 90, 0.5);
   color: #2f6b40;
-}
-
-.ayuda-campo {
-  margin: -6px 2px 14px;
-  font-size: 12px;
-  line-height: 1.4;
-  color: #fff1dc;
 }
 
 ion-input,

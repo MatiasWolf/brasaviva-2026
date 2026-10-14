@@ -1,0 +1,389 @@
+/* Aviso de pedido completo — vista del mozo (punto 18). */
+
+.listos-content {
+  --background:
+    radial-gradient(circle at 15% 0%, rgba(246, 193, 133, 0.16), transparent 22%),
+    linear-gradient(180deg, #130905 0%, #3a1710 100%);
+  --color: #ffd485;
+}
+
+ion-header {
+  background: #130905;
+}
+
+ion-toolbar {
+  --background: #130905;
+  --color: #ffd485;
+  --border-color: transparent;
+}
+
+ion-title {
+  color: #ffd485;
+  font-weight: 600;
+}
+
+ion-back-button {
+  --color: #ffd485;
+}
+
+.listos-container {
+  min-height: 100%;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.loader {
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  color: #ffd485;
+
+  p {
+    margin: 0;
+    color: rgba(255, 248, 241, 0.74);
+  }
+}
+
+.mensaje-error {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(180, 55, 40, 0.18);
+  border: 1px solid rgba(180, 55, 40, 0.35);
+  color: #ffe0d8;
+  font-size: 14px;
+  text-align: center;
+
+  button {
+    margin-top: 8px;
+    background: transparent;
+    border: 1px solid rgba(255, 224, 216, 0.6);
+    border-radius: 8px;
+    color: #ffe0d8;
+    padding: 4px 12px;
+    font-weight: 600;
+  }
+}
+
+.vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px 16px;
+  text-align: center;
+  color: #dfa070;
+
+  ion-icon {
+    font-size: 3.2rem;
+    opacity: 0.7;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #ffd485;
+  }
+
+  span {
+    font-size: 0.88rem;
+    color: rgba(255, 248, 241, 0.6);
+  }
+}
+
+/* ---------------------------------------------------------------- pedido */
+
+.pedido {
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: rgba(143, 211, 154, 0.1);
+  border: 1px solid rgba(143, 211, 154, 0.4);
+  box-shadow: 0 6px 16px rgba(19, 9, 5, 0.35);
+
+  &--urgente {
+    background: rgba(226, 86, 62, 0.12);
+    border-color: rgba(226, 86, 62, 0.6);
+    box-shadow: 0 6px 18px rgba(226, 86, 62, 0.25);
+  }
+}
+
+.pedido-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mesa {
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #6fc07d 0%, #3f9b52 100%);
+  color: #0f2a15;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.pedido--urgente .mesa {
+  background: linear-gradient(135deg, #ff8f6b 0%, #d8452a 100%);
+  color: #2a0d06;
+}
+
+.mesa-numero {
+  font-size: 1.65rem;
+  font-weight: 800;
+}
+
+.mesa-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.datos {
+  flex: 1;
+  min-width: 0;
+
+  p {
+    margin: 0;
+  }
+}
+
+.titulo {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff8f1;
+}
+
+.espera {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #8fd39a;
+
+  ion-icon {
+    font-size: 1rem;
+  }
+}
+
+.pedido--urgente .espera {
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #e2563e;
+  color: #2a0d07;
+  font-weight: 800;
+}
+
+/* ----------------------------------------------------------------- ítems */
+
+.items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(19, 9, 5, 0.45);
+
+  ion-icon {
+    font-size: 1.15rem;
+    color: #f6c185;
+    flex-shrink: 0;
+  }
+}
+
+.cantidad {
+  flex-shrink: 0;
+  min-width: 30px;
+  font-weight: 800;
+  color: #ffb347;
+}
+
+.nombre {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff8f1;
+}
+
+/* ---------------------------------------------------------------- footer */
+
+.pedido-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.total {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffd485;
+}
+
+.btn-entregar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6fc07d 0%, #3f9b52 100%);
+  color: #0f2a15;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 800;
+  box-shadow: 0 5px 14px rgba(63, 155, 82, 0.3);
+  cursor: pointer;
+
+  ion-icon {
+    font-size: 1.25rem;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+
+/* ------------------------------------------------------------- secciones */
+
+.seccion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #f6c185;
+
+  ion-icon {
+    font-size: 1.2rem;
+  }
+
+  &--ok {
+    color: #8fd39a;
+  }
+}
+
+.fecha {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #fff8f1;
+
+  ion-icon {
+    font-size: 1rem;
+    color: #f6c185;
+  }
+}
+
+/* ------------------------------------------------- partes por sector */
+
+.partes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.parte {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+
+  ion-icon {
+    font-size: 1.05rem;
+  }
+
+  &[data-estado='pendiente'] {
+    background: rgba(246, 193, 133, 0.12);
+    border-color: rgba(246, 193, 133, 0.4);
+    color: #f6c185;
+  }
+
+  &[data-estado='en_preparacion'] {
+    background: rgba(255, 179, 71, 0.18);
+    border-color: rgba(255, 179, 71, 0.55);
+    color: #ffb347;
+  }
+
+  &[data-estado='listo'] {
+    background: rgba(143, 211, 154, 0.18);
+    border-color: rgba(143, 211, 154, 0.5);
+    color: #8fd39a;
+  }
+}
+
+.parte-estado {
+  opacity: 0.85;
+  font-weight: 600;
+}
+
+.pedido--en-curso {
+  border-color: rgba(246, 193, 133, 0.18);
+  box-shadow: none;
+
+  .mesa {
+    background: linear-gradient(135deg, #c0784d 0%, #8c4f2c 100%);
+  }
+}
+
+.esperando {
+  font-size: 0.82rem;
+  color: rgba(255, 248, 241, 0.62);
+}
+
+/* ------------------------------------------------------------------ foco */
+.btn-entregar:focus-visible,
+.mensaje-error button:focus-visible {
+  outline: 3px solid #ffd485;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-entregar:active {
+    transform: none;
+  }
+}

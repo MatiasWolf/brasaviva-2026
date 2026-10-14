@@ -18,14 +18,13 @@ import {
   IonHeader,
   IonIcon,
   IonInput,
-  IonModal,
   IonSelect,
   IonSelectOption,
   IonTitle,
   IonToolbar,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { cameraOutline, checkmarkCircle, personAddOutline, scanOutline } from 'ionicons/icons';
+import { cameraOutline, personAddOutline, scanOutline } from 'ionicons/icons';
 
 import { EmpleadosService } from '../../../core/services/empleados.service';
 import { CameraService } from '../../../core/services/camera.service';
@@ -33,6 +32,8 @@ import { Rol } from '../../../core/models/rol.model';
 import { cuilCoherenteConDni } from '../../../core/validators/cuil.validator';
 import { DniScannerComponent } from '../../../shared/components/dni-scanner/dni-scanner.component';
 import { DatosDni } from '../../../core/models/dni.model';
+import { MensajeModalService } from '../../../core/services/mensaje-modal.service';
+import { traducirErrorSupabase } from '../../../core/utils/traducir-error.util';
 
 @Component({
   selector: 'app-alta-empleado',
@@ -53,7 +54,6 @@ import { DatosDni } from '../../../core/models/dni.model';
     IonSelect,
     IonSelectOption,
     IonButton,
-    IonModal,
     IonIcon,
     DniScannerComponent,
   ],
@@ -63,6 +63,7 @@ export class AltaEmpleadoPage implements OnInit {
   private readonly empleados = inject(EmpleadosService);
   private readonly cameraService = inject(CameraService);
   private readonly router = inject(Router);
+  private readonly mensajeModal = inject(MensajeModalService);
 
   readonly altaForm: FormGroup;
 
@@ -70,14 +71,12 @@ export class AltaEmpleadoPage implements OnInit {
   readonly fotoPreview = signal<string | null>(null);
   readonly enviando = signal(false);
   readonly mensajeError = signal('');
-  readonly modalExito = signal(false);
   readonly mostrandoScanner = signal(false);
 
   constructor() {
     addIcons({
       'person-add-outline': personAddOutline,
       'camera-outline': cameraOutline,
-      'checkmark-circle': checkmarkCircle,
       'scan-outline': scanOutline,
     });
 
@@ -163,7 +162,7 @@ export class AltaEmpleadoPage implements OnInit {
       this.fotoPreview.set(await this.aDataUrl(foto.webPath));
     } catch (error) {
       console.error('Error al tomar la foto:', error);
-      this.mensajeError.set('No se pudo obtener la foto. Intentá nuevamente.');
+      this.mostrarError('No se pudo obtener la foto. Intentá nuevamente.');
     }
   }
 
@@ -172,11 +171,11 @@ export class AltaEmpleadoPage implements OnInit {
 
     if (this.altaForm.invalid) {
       this.altaForm.markAllAsTouched();
-      this.mensajeError.set('Completá correctamente todos los campos.');
+      this.mostrarError('Completá correctamente todos los campos.');
       return;
     }
     if (!this.fotoPreview()) {
-      this.mensajeError.set('La foto de perfil es obligatoria.');
+      this.mostrarError('La foto de perfil es obligatoria.');
       return;
     }
 
@@ -195,21 +194,24 @@ export class AltaEmpleadoPage implements OnInit {
         password,
         fotoBase64: this.fotoPreview()!,
       });
-      this.modalExito.set(true);
+      this.mensajeModal.exito(
+        'La cuenta quedó activa. Compartile al empleado su correo y la contraseña para que pueda ingresar.',
+        '¡Empleado creado!',
+      );
+      await this.router.navigate(['/empleados'], { replaceUrl: true });
     } catch (error) {
       console.error('ALTA EMPLEADO ERROR:', error);
-      this.mensajeError.set(
-        (error as Error)?.message ??
-          'No se pudo dar de alta al empleado. Intentá nuevamente.',
+      this.mostrarError(
+        traducirErrorSupabase(error, 'No se pudo dar de alta al empleado. Intentá nuevamente.'),
       );
     } finally {
       this.enviando.set(false);
     }
   }
 
-  irAlListado(): void {
-    this.modalExito.set(false);
-    this.router.navigate(['/empleados'], { replaceUrl: true });
+  private mostrarError(mensaje: string): void {
+    this.mensajeError.set(mensaje);
+    this.mensajeModal.error(mensaje);
   }
 
   private passwordsIguales(

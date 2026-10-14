@@ -27,23 +27,16 @@
       </header>
 
       @if (esCliente()) {
-        <div class="estadia-demo">
-          <p class="demo-tag">Modo demo · estado de la estadía</p>
-          <ion-segment
-            scrollable
-            [value]="estadiaEstado()"
-            (ionChange)="cambiarEstadia($event)"
-          >
-            @for (estado of estadiaEstados; track estado.valor) {
-              <ion-segment-button [value]="estado.valor">
-                <ion-label>{{ estado.etiqueta }}</ion-label>
-              </ion-segment-button>
-            }
-          </ion-segment>
-        </div>
+        <app-tarjeta-usuario-home
+          [nombre]="nombreCliente()"
+          [apellido]="apellidoCliente()"
+          [fotoUrl]="fotoCliente()"
+          [dni]="dniCliente()"
+          [estadoEtiqueta]="estadiaEtiqueta()"
+        ></app-tarjeta-usuario-home>
       }
 
-      <section class="menu-grid">
+      <section class="menu-grid" [class.menu-grid--compacta]="botonesVisibles().length <= 3">
         @for (boton of botonesVisibles(); track boton.id) {
           <button type="button" class="menu-card" (click)="ejecutar(boton)">
             <span class="menu-card__icon">
@@ -58,4 +51,26 @@
 
     </div>
   }
+
 </ion-content>
+
+
+@if (procesandoQr()) {
+  <div class="qr-transition">
+    <app-spinner-logo [size]="48"></app-spinner-logo>
+    <p>Ingresando...</p>
+  </div>
+}
+<app-qr-scanner
+  [abierto]="mostrandoQrScanner()"
+  (escaneado)="onQrEscaneado($event)"
+  (cerrado)="cerrarQrScanner()">
+</app-qr-scanner>
+
+<app-resultado-qr-modal
+  [abierto]="mostrandoResultadoQr()"
+  [tipo]="resultadoQrTipo()"
+  [titulo]="resultadoQrTitulo()"
+  [mensaje]="resultadoQrMensaje()"
+  (cerrado)="cerrarResultadoQr()">
+</app-resultado-qr-modal>

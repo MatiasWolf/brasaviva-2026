@@ -1,0 +1,170 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text="Volver"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Pedidos pendientes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="listos-content">
+  <div class="listos-container">
+
+    @if (cargando()) {
+      <div class="loader">
+        <app-spinner-logo [size]="48"></app-spinner-logo>
+        <p>Buscando pedidos...</p>
+      </div>
+    } @else {
+
+      @if (error()) {
+        <div class="mensaje-error">
+          {{ error() }}
+          <button type="button" (click)="cargar()">Reintentar</button>
+        </div>
+      }
+
+      @if (!error() && !hayPedidos()) {
+        <div class="vacio">
+          <ion-icon name="notifications-outline"></ion-icon>
+          <p>No hay pedidos en curso.</p>
+          <span>Cuando confirmes un pedido, vas a seguir acá cómo lo prepara cada sector.</span>
+        </div>
+      }
+
+      <!-- ------------------------------------------- LISTOS PARA ENTREGAR -->
+      @if (listos().length > 0) {
+        <h2 class="seccion seccion--ok">
+          <ion-icon name="checkmark-done-outline"></ion-icon>
+          Listos para entregar ({{ listos().length }})
+        </h2>
+      }
+
+      @for (pedido of listos(); track pedido.id) {
+        <article class="pedido" [class.pedido--urgente]="esUrgente(pedido)">
+
+          <header class="pedido-top">
+            <div class="mesa">
+              <span class="mesa-numero">{{ pedido.mesa_numero }}</span>
+              <span class="mesa-label">Mesa</span>
+            </div>
+
+            <div class="datos">
+              <p class="titulo">Pedido completo</p>
+
+              <p class="fecha">
+                <ion-icon name="calendar-outline"></ion-icon>
+                {{ pedido.created_at | date: 'dd/MM/yyyy' }} a las
+                {{ pedido.created_at | date: 'HH:mm' }} horas
+              </p>
+
+              <p class="espera">
+                <ion-icon name="time-outline"></ion-icon>
+                @if (minutosListo(pedido) === 0) {
+                  Recién salió
+                } @else if (minutosListo(pedido) === 1) {
+                  Listo hace 1 minuto
+                } @else {
+                  Listo hace {{ minutosListo(pedido) }} minutos
+                }
+              </p>
+            </div>
+          </header>
+
+          <ul class="partes">
+            @for (parte of partes(pedido); track parte.sector) {
+              <li class="parte" [attr.data-estado]="parte.estado">
+                <ion-icon [name]="iconoSector(parte.sector)"></ion-icon>
+                <span class="parte-nombre">{{ nombreSector(parte.sector) }}</span>
+                <span class="parte-estado">{{ estadoParteLegible(parte.estado) }}</span>
+              </li>
+            }
+          </ul>
+
+          <ul class="items">
+            @for (item of pedido.items; track item.id) {
+              <li class="item">
+                <ion-icon [name]="iconoSector(item.sector)"></ion-icon>
+                <span class="cantidad">{{ item.cantidad }}×</span>
+                <span class="nombre">{{ item.producto_nombre }}</span>
+              </li>
+            }
+          </ul>
+
+          <footer class="pedido-footer">
+            <span class="total">Total: $ {{ pedido.importe_total | number: '1.2-2' }}</span>
+
+            <button
+              type="button"
+              class="btn-entregar"
+              [disabled]="entregando() === pedido.id"
+              (click)="entregar(pedido)"
+            >
+              <ion-icon name="checkmark-done-outline"></ion-icon>
+              {{ entregando() === pedido.id ? 'Guardando...' : 'Entregado' }}
+            </button>
+          </footer>
+
+        </article>
+      }
+
+      <!-- ---------------------------------------------------- EN PREPARACIÓN -->
+      @if (enPreparacion().length > 0) {
+        <h2 class="seccion">
+          <ion-icon name="hourglass-outline"></ion-icon>
+          Todavía en los sectores ({{ enPreparacion().length }})
+        </h2>
+
+        @for (pedido of enPreparacion(); track pedido.id) {
+          <article class="pedido pedido--en-curso">
+
+            <header class="pedido-top">
+              <div class="mesa">
+                <span class="mesa-numero">{{ pedido.mesa_numero }}</span>
+                <span class="mesa-label">Mesa</span>
+              </div>
+
+              <div class="datos">
+                <p class="titulo">Todavía no está completo</p>
+
+                <p class="fecha">
+                  <ion-icon name="calendar-outline"></ion-icon>
+                  {{ pedido.created_at | date: 'dd/MM/yyyy' }} a las
+                  {{ pedido.created_at | date: 'HH:mm' }} horas
+                </p>
+              </div>
+            </header>
+
+            <ul class="partes">
+              @for (parte of partes(pedido); track parte.sector) {
+                <li class="parte" [attr.data-estado]="parte.estado">
+                  <ion-icon [name]="iconoSector(parte.sector)"></ion-icon>
+                  <span class="parte-nombre">{{ nombreSector(parte.sector) }}</span>
+                  <span class="parte-estado">{{ estadoParteLegible(parte.estado) }}</span>
+                </li>
+              }
+            </ul>
+
+            <ul class="items">
+              @for (item of pedido.items; track item.id) {
+                <li class="item">
+                  <ion-icon [name]="iconoSector(item.sector)"></ion-icon>
+                  <span class="cantidad">{{ item.cantidad }}×</span>
+                  <span class="nombre">{{ item.producto_nombre }}</span>
+                </li>
+              }
+            </ul>
+
+            <footer class="pedido-footer">
+              <span class="total">Total: $ {{ pedido.importe_total | number: '1.2-2' }}</span>
+              <span class="esperando">Te avisamos cuando los dos sectores terminen.</span>
+            </footer>
+
+          </article>
+        }
+      }
+
+    }
+
+  </div>
+</ion-content>

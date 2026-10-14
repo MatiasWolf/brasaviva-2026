@@ -1,0 +1,95 @@
+<ion-header>
+  <ion-toolbar class="home-bg">
+    <ion-buttons slot="start">
+      <ion-button routerLink="/home">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>Menú de Productos</ion-title>
+  </ion-toolbar>
+  
+  <ion-toolbar class="home-bg" style="--padding-top: 0; --padding-bottom: 0;">
+    <ion-segment [value]="categoriaActiva()" (ionChange)="cambiarCategoria($event)" mode="md">
+      <ion-segment-button [value]="1">
+        <ion-icon name="restaurant-outline"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button [value]="2">
+        <ion-icon name="wine-outline"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="home-bg home-container" [scrollY]="false">
+
+  @if (pedidoService.cargandoProductos()) {
+    <div class="loader">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+    </div>
+  } @else {
+
+    <!-- Listado de productos, paginado para que cada tarjeta entre completa -->
+    <ion-list lines="none" class="contenedor-lista">
+      @for (prod of paginaItems(); track prod.id) {
+        <app-tarjeta-producto
+          [producto]="prod"
+          [cantidadEnCarrito]="obtenerCantidad(prod.id)"
+          (alAgregar)="pedidoService.agregarAlPedido($event)"
+          (alRestar)="pedidoService.restarDelPedido($event)">
+        </app-tarjeta-producto>
+      } @empty {
+        <div class="sin-botones">
+          <p>No hay productos en esta categoría por el momento.</p>
+        </div>
+      }
+    </ion-list>
+
+  }
+
+</ion-content>
+
+<ion-footer class="home-bg footer-menu-productos">
+
+  @if (totalPaginas() > 1) {
+    <div class="paginador">
+      <ion-button
+        fill="clear"
+        [disabled]="pagina() === 1"
+        (click)="paginaAnterior()"
+        aria-label="Página anterior">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+
+      <span>Página {{ pagina() }} de {{ totalPaginas() }}</span>
+
+      <ion-button
+        fill="clear"
+        [disabled]="pagina() === totalPaginas()"
+        (click)="paginaSiguiente()"
+        aria-label="Página siguiente">
+        <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+  }
+
+  @if (pedidoService.cantidadTotalItems() > 0) {
+    <div class="contenido-footer-contenedor">
+
+      <div class="footer-fila">
+        <span>Tiempo estimado:</span>
+        <span class="resaltado-secundario">{{ pedidoService.tiempoEstimadoTotal() }} min</span>
+      </div>
+
+      <div class="footer-fila fila-total">
+        <span class="texto-serif">Total a pagar:</span>
+        <span class="texto-serif monto-total">${{ pedidoService.importeTotal() }}</span>
+      </div>
+
+      <ion-button expand="block" class="boton-enviar-pedido" (click)="abrirDetallePedido()">
+        Ver Pedido
+      </ion-button>
+
+    </div>
+  }
+</ion-footer>

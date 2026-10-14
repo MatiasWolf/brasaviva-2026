@@ -21,23 +21,20 @@ export class AnonymousSessionService {
     apellido: string,
     fotoUrl: string | null = null
   ): Promise<SesionAnonima> {
-
     const { data, error } = await this.supabase.client
       .from('sesiones_anonimas')
       .insert({
         nombre,
         apellido,
-        foto_url: fotoUrl
+        foto_url: fotoUrl,
+        estado_estadia: 'sin_estadia'
       })
       .select()
       .single();
-
     if (error) {
       throw error;
     }
-
     localStorage.setItem(this.STORAGE_KEY, data.id);
-
     return data as SesionAnonima;
   }
 
@@ -46,64 +43,58 @@ export class AnonymousSessionService {
   }
 
   async obtenerSesion(): Promise<SesionAnonima | null> {
-
     const id = this.obtenerIdSesion();
-
     if (!id) {
       return null;
     }
-
     const { data, error } = await this.supabase.client
       .from('sesiones_anonimas')
       .select('*')
       .eq('id', id)
       .single();
-
     if (error) {
       return null;
     }
-
     return data as SesionAnonima;
   }
 
-  async actualizarFoto(fotoUrl: string): Promise<void> {
+  async actualizarFoto(fotoUrl: string): Promise<SesionAnonima> {
     const id = this.obtenerIdSesion();
-
     if (!id) {
-      throw new Error('No existe una sesión anónima activa');
+      throw new Error(
+        'No existe una sesión anónima activa'
+      );
     }
-
-    const { error } = await this.supabase.client
-      .from('sesiones_anonimas')
-      .update({
-        foto_url: fotoUrl,
-        updated_at: new Date().toISOString()
-      })
-      .eq('id', id);
-
+    const { data, error } =
+      await this.supabase.client
+        .from('sesiones_anonimas')
+        .update({
+          foto_url: fotoUrl,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id)
+        .select()
+        .single();
     if (error) {
       throw error;
     }
+    return data as SesionAnonima;
   }
 
   async actualizarEstado(
     estado: EstadiaEstado
   ): Promise<void> {
-
     const id = this.obtenerIdSesion();
-
     if (!id) {
       throw new Error('No existe una sesión anónima activa');
     }
-
     const { error } = await this.supabase.client
       .from('sesiones_anonimas')
       .update({
-        estado,
+        estado_estadia: estado,
         updated_at: new Date().toISOString()
       })
       .eq('id', id);
-
     if (error) {
       throw error;
     }
@@ -111,24 +102,41 @@ export class AnonymousSessionService {
 
   async cerrarSesion(): Promise<void> {
     const id = this.obtenerIdSesion();
-
-    if (id) {
-      try {
-        await this.storageService.eliminarFoto(id);
-
-        const { error } = await this.supabase.client
+    if (!id) {
+      return;
+    }
+    try {
+      const { data, error: errorLista } =
+        await this.supabase.client
+          .from('lista_espera')
+          .select('id')
+          .eq('sesion_anonima_id', id)
+          .eq('estado', 'esperando')
+          .maybeSingle();
+      if (errorLista) {
+        throw errorLista;
+      }
+      if (data) {
+        localStorage.removeItem(this.STORAGE_KEY);
+        return;
+      }
+      await this.storageService.eliminarFoto(id);
+      const { error } =
+        await this.supabase.client
           .from('sesiones_anonimas')
           .delete()
           .eq('id', id);
-
-        if (error) {
-          throw error;
-        }
-      } catch (error) {
-        console.error('Error al cerrar sesión anónima:', error);
+      if (error) {
+        throw error;
       }
-    }
+    } catch (error) {
+      console.error(
+        'Error al cerrar sesión anónima:',
+        error
+      );
 
-    localStorage.removeItem(this.STORAGE_KEY);
+    } finally {
+      localStorage.removeItem(this.STORAGE_KEY);
+    }
   }
 }

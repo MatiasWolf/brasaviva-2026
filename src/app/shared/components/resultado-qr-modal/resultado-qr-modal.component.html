@@ -1,0 +1,32 @@
+@if (abierto) {
+  <div class="modal-backdrop" (click)="cerrar()">
+
+    <div
+      class="modal"
+      (click)="$event.stopPropagation()"
+      role="dialog"
+      aria-modal="true"
+    >
+
+      <div class="modal-icono">
+        @if (tipo === 'exito') {
+          ✓
+        } @else if (tipo === 'error') {
+          !
+        } @else {
+          ?
+        }
+      </div>
+
+      <h2>{{ titulo }}</h2>
+
+      <p>{{ mensaje }}</p>
+
+      <button type="button" (click)="cerrar()">
+        Aceptar
+      </button>
+
+    </div>
+
+  </div>
+}

@@ -1,0 +1,791 @@
+
+.lista-espera-bg {
+  --background:
+    radial-gradient(
+      circle at 15% 0%,
+      rgba(246, 193, 133, 0.16),
+      transparent 22%
+    ),
+    linear-gradient(
+      180deg,
+      #130905 0%,
+      #3a1710 100%
+    );
+  --color: #ffd485;
+}
+
+ion-header,
+ion-footer {
+  background: #130905;
+}
+
+ion-toolbar {
+  --background: #130905;
+  --color: #ffd485;
+  --border-color: transparent;
+}
+
+ion-title {
+  color: #ffd485;
+  font-weight: 600;
+}
+
+ion-back-button {
+  --color: #ffd485;
+}
+
+.lista-espera-container {
+  min-height: 100%;
+  height: 100%;
+  padding: 14px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-sizing: border-box;
+}
+
+.buscador {
+  --background: #fff3df;
+  --color: #35170b;
+  --placeholder-color: #805238;
+  --icon-color: #805238;
+  --border-radius: 12px;
+  padding: 0;
+  box-shadow: 0 3px 8px rgba(19, 9, 5, 0.25);
+  flex-shrink: 0;
+}
+
+.welcome-section {
+  flex-shrink: 0;
+  h1 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #ffe9cf;
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+  .cantidad {
+    color: #ffd485;
+  }
+}
+
+.lista-clientes {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.cliente-card {
+  flex: 1 1 0;
+  min-height: 150px;
+  margin: 0;
+  border: 2px solid #802323;
+  border-radius: 18px;
+  background: linear-gradient(
+    160deg,
+    #5e1f1f 0%,
+    #431717 100%
+  ) !important;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 0;
+
+  ion-card-content {
+    --background: transparent;
+    background: transparent;
+
+    padding: 10px 12px 8px;
+
+    flex: 1;
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+  }
+}
+
+.cliente-layout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.foto-container {
+  flex-shrink: 0;
+  ion-avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 20px;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 248, 241, 0.1);
+    border: 1px solid rgba(255, 248, 241, 0.2);
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    ion-icon {
+      font-size: 2.6rem;
+      color: #fff8f1;
+    }
+  }
+}
+
+.datos-cliente {
+  flex: 1;
+  min-width: 0;
+  h2 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffe9cf;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  p {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 2px 0 0;
+    font-size: 0.85rem;
+    color: rgba(255, 248, 241, 0.66);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    ion-icon {
+      flex-shrink: 0;
+    }
+  }
+  .tiempo-espera {
+    color: #ffd0a0;
+  }
+}
+.acciones {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  width: 100%;
+  margin-top: 6px;
+  ion-button {
+    flex: 1;
+    height: 40px;
+    margin: 0;
+    --border-radius: 12px;
+    --padding-start: 8px;
+    --padding-end: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: none;
+    --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    ion-icon {
+      font-size: 1rem;
+    }
+  }
+  ion-button:first-child {
+    --background: #802323;
+    --background-activated: #6b1d1d;
+    --color: #fff8f1;
+  }
+  ion-button:last-child {
+    --background: #ffd485;
+    --background-activated: #e9b95e;
+    --color: #4d200f;
+  }
+}
+
+.chip {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+.sin-clientes {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px 16px;
+  text-align: center;
+  color: #dfa070;
+  ion-icon {
+    font-size: 2.6rem;
+  }
+  h2 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+  p {
+    margin: 0;
+  }
+}
+
+.lista-espera-footer {
+  &::before {
+    display: none;
+  }
+}
+.paginador {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding:
+    8px
+    12px
+    calc(8px + var(--ion-safe-area-bottom, 0px));
+  color: #ffd0a0;
+
+  font-size: 0.9rem;
+  font-weight: 700;
+
+  ion-button {
+    --color: #ffd485;
+
+    --padding-start: 10px;
+    --padding-end: 10px;
+
+    margin: 0;
+
+    font-size: 1.4rem;
+  }
+}
+
+
+/* =========================================
+   MODAL ASIGNAR MESA
+   ========================================= */
+
+.asignar-mesa-content {
+  --background:
+    radial-gradient(
+      circle at 15% 0%,
+      rgba(246, 193, 133, 0.16),
+      transparent 22%
+    ),
+    linear-gradient(
+      180deg,
+      #130905 0%,
+      #3a1710 100%
+    );
+
+  --color: #ffd485;
+}
+
+
+.asignar-mesa-container {
+  padding: 14px;
+
+  box-sizing: border-box;
+}
+
+
+/* Cliente seleccionado */
+
+.cliente-asignacion {
+  padding: 16px;
+
+  border-radius: 18px;
+
+  border: 2px solid #802323;
+
+  background: linear-gradient(
+    160deg,
+    #5e1f1f 0%,
+    #431717 100%
+  );
+
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+}
+
+.cliente-asignacion-info {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+}
+
+.cliente-asignacion-avatar {
+  flex-shrink: 0;
+
+  width: 96px;
+  height: 96px;
+
+  border-radius: 20px;
+
+  overflow: hidden;
+
+  display: grid;
+  place-items: center;
+
+  background: rgba(255, 248, 241, 0.1);
+
+  border: 1px solid rgba(255, 248, 241, 0.2);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  ion-icon {
+    font-size: 2.6rem;
+    color: #fff8f1;
+  }
+}
+
+.cliente-asignacion-datos {
+  flex: 1;
+  min-width: 0;
+
+  h2 {
+    margin: 0;
+
+    font-size: 1.15rem;
+    font-weight: 700;
+
+    color: #ffe9cf;
+  }
+
+  p {
+    margin: 5px 0 8px;
+
+    color: rgba(255, 248, 241, 0.66);
+
+    font-size: 0.85rem;
+  }
+}
+
+
+/* =========================================
+   MESAS DISPONIBLES
+   ========================================= */
+
+.titulo-mesas {
+  margin: 18px 0 12px;
+
+  color: #ffd485;
+
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.lista-mesas-asignacion {
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+.mesa-card {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  padding: 16px;
+
+  border-radius: 18px;
+
+  border: 2px solid #802323;
+
+  background: linear-gradient(
+    160deg,
+    #5e1f1f 0%,
+    #431717 100%
+  );
+
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+
+  cursor: pointer;
+
+  .avatar {
+    flex-shrink: 0;
+
+    width: 96px;
+    height: 96px;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+
+    display: grid;
+    place-items: center;
+
+    background: rgba(255, 248, 241, 0.1);
+
+    border: 1px solid rgba(255, 248, 241, 0.2);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    ion-icon {
+      font-size: 2.6rem;
+      color: #fff8f1;
+    }
+  }
+
+  .datos {
+    flex: 1;
+    min-width: 0;
+
+    h2 {
+      margin: 0;
+
+      color: #ffe9cf;
+
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .comensales {
+      margin: 3px 0 8px;
+
+      color: rgba(255, 248, 241, 0.66);
+
+      font-size: 0.85rem;
+    }
+  }
+
+  .seleccion {
+    flex-shrink: 0;
+
+    color: #ffd485;
+
+    font-size: 1.5rem;
+  }
+}
+
+.mesa-card--seleccionada {
+  border-color: #ffd485;
+
+  box-shadow:
+    0 0 0 1px #ffd485,
+    0 6px 14px rgba(0, 0, 0, 0.35);
+}
+/* =========================================
+   BOTÓN CONFIRMAR ASIGNACIÓN
+   ========================================= */
+
+.confirmar-asignacion {
+  width: 100%;
+  margin-top: 14px;
+}
+
+.confirmar-asignacion ion-button {
+  width: 100%;
+  height: 52px;
+
+  margin: 0;
+
+  --background: #fff3df;
+  --background-hover: #fff8ed;
+  --background-activated: #ffe9cf;
+
+  --color: #802323;
+
+  --border-radius: 14px;
+
+  --padding-start: 16px;
+  --padding-end: 16px;
+
+  --box-shadow:
+    0 5px 14px rgba(0, 0, 0, 0.3);
+
+  font-size: 1rem;
+  font-weight: 800;
+
+  text-transform: none;
+
+  ion-icon {
+    font-size: 1.4rem;
+    margin-right: 5px;
+  }
+}
+
+
+
+/* =========================================
+   MODAL ASIGNACIÓN EXITOSA
+   ========================================= */
+
+.modal-asignacion-exitosa {
+  --background: transparent;
+  --width: min(94%, 460px);
+  --height: auto;
+  --border-radius: 20px;
+  --box-shadow: 0 15px 40px rgba(19, 9, 5, 0.35);
+}
+
+/* =========================================
+   CONTENEDOR
+   ========================================= */
+
+.exito-container {
+  width: 100%;
+  padding: 32px 36px 36px;
+
+  box-sizing: border-box;
+
+  background: linear-gradient(
+    180deg,
+    #fff8ed 0%,
+    #fff3df 100%
+  );
+
+  border: 2px solid #c0784d;
+  border-radius: 20px;
+
+  box-shadow: 0 15px 40px rgba(19, 9, 5, 0.35);
+
+  color: #4d200f;
+}
+
+/* =========================================
+   ICONO
+   ========================================= */
+
+.exito-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 18px;
+
+  ion-icon {
+    display: block;
+
+    font-size: 4.2rem;
+
+    color: #e9820e;
+  }
+}
+
+/* =========================================
+   TÍTULO
+   ========================================= */
+
+.exito-titulo {
+  text-align: center;
+
+  h2 {
+    margin: 0 0 26px;
+
+    color: #4d200f;
+
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+}
+
+/* =========================================
+   INFORMACIÓN
+   ========================================= */
+
+.exito-info {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+
+  align-items: start;
+
+  width: 100%;
+
+  padding: 18px 0 20px;
+
+  border-top: 1px solid rgba(77, 32, 15, 0.16);
+  border-bottom: 1px solid rgba(77, 32, 15, 0.16);
+}
+
+.exito-dato {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+
+  min-width: 0;
+}
+
+/* Cliente */
+.exito-dato:first-child {
+  align-items: flex-start;
+}
+
+/* Mesa */
+.exito-dato:last-child {
+  align-items: flex-end;
+  padding-left: 32px;
+}
+
+/* Etiquetas */
+.dato-label {
+  color: #805238;
+
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* Valor del cliente */
+.dato-valor {
+  max-width: 100%;
+
+  color: #4d200f;
+
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.25;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Número de mesa */
+.dato-mesa {
+  color: #e9820e;
+
+  font-size: 1.65rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+/* =========================================
+   BOTÓN
+   ========================================= */
+
+.exito-acciones {
+  width: 100%;
+
+  margin-top: 26px;
+}
+
+.btn-aceptar-exito {
+  width: 100%;
+  height: 48px;
+
+  margin: 0;
+
+  --background: #ffd485;
+  --background-hover: #ffe0a3;
+  --background-activated: #e9b95e;
+
+  --color: #4d200f;
+
+  --border-radius: 12px;
+
+  --padding-start: 16px;
+  --padding-end: 16px;
+
+  --box-shadow: 0 5px 12px rgba(19, 9, 5, 0.2);
+
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+
+  text-transform: none;
+
+  ion-icon {
+    font-size: 1.3rem;
+    margin-right: 6px;
+  }
+}
+
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 480px) {
+
+  .lista-espera-container {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .lista-clientes {
+    gap: 10px;
+  }
+
+  /*
+   * Mantenemos la misma altura mínima de Empleados.
+   * Solamente reducimos un poco el contenido interno
+   * para que las 3 cards puedan entrar en pantallas chicas.
+   */
+  .cliente-card {
+    min-height: 138px;
+
+    ion-card-content {
+      padding: 12px;
+    }
+  }
+
+  .cliente-layout {
+    gap: 12px;
+  }
+
+  .foto-container ion-avatar {
+    width: 72px;
+    height: 72px;
+
+    ion-icon {
+      font-size: 2.2rem;
+    }
+  }
+
+  .datos-cliente {
+
+    h2 {
+      font-size: 1rem;
+    }
+
+    p {
+      font-size: 0.78rem;
+    }
+  }
+
+  .acciones {
+    gap: 8px;
+
+    ion-button {
+      height: 40px;
+
+      font-size: 0.78rem;
+
+      ion-icon {
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .paginador {
+    gap: 12px;
+
+    font-size: 0.85rem;
+  }
+}
+

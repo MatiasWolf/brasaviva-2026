@@ -42,15 +42,26 @@
             </div>
           }
 
-          <label class="btn-foto">
-            <ion-icon name="camera-outline"></ion-icon>
-            <span>{{ fotos[fotoActiva].previewUrl ? 'Cambiar' : 'Elegir foto' }}</span>
-            <input
-              type="file"
-              accept="image/*"
-              (change)="seleccionarFoto(fotoActiva, $event)"
-            />
-          </label>
+          <div class="acciones-foto">
+            <label class="btn-foto-mini" aria-label="Tomar foto">
+              <ion-icon name="camera-outline"></ion-icon>
+              <input
+                type="file"
+                accept="image/*"
+                capture="environment"
+                (change)="seleccionarFoto(fotoActiva, $event)"
+              />
+            </label>
+
+            <label class="btn-foto-mini" aria-label="Elegir de la galería">
+              <ion-icon name="images-outline"></ion-icon>
+              <input
+                type="file"
+                accept="image/*"
+                (change)="seleccionarFoto(fotoActiva, $event)"
+              />
+            </label>
+          </div>
         </div>
 
         <button
@@ -241,10 +252,6 @@
 </ion-content>
 
 <ion-footer class="bebida-footer">
-  @if (mensajeError) {
-    <div class="mensaje-error">{{ mensajeError }}</div>
-  }
-
   <ion-button
     expand="block"
     type="button"
@@ -255,39 +262,3 @@
     {{ enviando ? 'Guardando la bebida...' : 'Agregar a la carta' }}
   </ion-button>
 </ion-footer>
-
-<!-- MODAL BEBIDA AGREGADA -->
-
-<ion-modal
-  [isOpen]="isModalOpen"
-  backdropDismiss="false"
-  class="success-modal"
->
-
-  <ng-template>
-
-    <div class="modal-wrapper">
-
-      <div class="icon-container">
-        <ion-icon name="checkmark-circle"></ion-icon>
-      </div>
-
-      <h2>¡Bebida agregada!</h2>
-
-      <p>
-        La bebida fue guardada correctamente y ya
-        <strong>forma parte de la carta</strong>.
-      </p>
-
-      <ion-button
-        expand="block"
-        shape="round"
-        (click)="irALaCarta()"
-      >
-        Ver la carta
-      </ion-button>
-
-    </div>
-
-  </ng-template>
-</ion-modal>

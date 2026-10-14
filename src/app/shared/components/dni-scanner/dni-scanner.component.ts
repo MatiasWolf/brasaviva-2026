@@ -32,6 +32,13 @@ export class DniScannerComponent implements OnDestroy {
   private readonly video = viewChild<HTMLVideoElement>('video');
   private readonly dniScanner = inject(DniScannerService);
 
+  /** Id único por instancia: Ionic mantiene páginas anteriores vivas en el
+   *  DOM (para la navegación "atrás"), así que puede haber más de un
+   *  <app-dni-scanner> montado a la vez. Con un id fijo, la librería
+   *  buscaba por document.getElementById y podía encontrar el <video> de
+   *  una instancia vieja y oculta en vez del que está abierto en pantalla. */
+  readonly videoElementId = `dni-scanner-video-${crypto.randomUUID()}`;
+
   readonly mensajeError = signal('');
 
   private lector: BrowserPDF417Reader | null = null;
@@ -51,6 +58,11 @@ export class DniScannerComponent implements OnDestroy {
 
   async iniciar(): Promise<void> {
     this.mensajeError.set('');
+
+    // Por si quedó una cámara abierta de un intento anterior (ej. tocaste
+    // "Reintentar" sin que se haya liberado del todo): sin esto, el segundo
+    // getUserMedia puede fallar con "cámara en uso" y no abrir nunca.
+    this.detener();
 
     const videoEl = this.video();
     if (!videoEl) {
@@ -73,10 +85,40 @@ export class DniScannerComponent implements OnDestroy {
 
     this.lector = new BrowserPDF417Reader();
 
+    // Constraints explícitas (en vez de decodeFromVideoDevice con
+    // deviceId indefinido): pedimos la cámara trasera con la mayor
+    // resolución posible. El código PDF417 del dorso del DNI es muy denso
+    // — con la resolución "por defecto" que elige el navegador (a veces
+    // 640x480) la imagen no tiene detalle suficiente y el lector nunca
+    // encuentra el código, aunque la cámara se vea abierta y funcionando.
+    //
+    // OJO: no agregar constraints "advanced" tipo focusMode/exposureMode
+    // acá. Se probó con `advanced: [{ focusMode: 'continuous' }]` y en
+    // varios celulares Android el WebView tira "UnknownError:
+    // setPhotoOptions failed" al aplicarlas, y la cámara queda colgada
+    // sin mostrar ningún frame (no es un error de permisos ni de la app,
+    // es un bug conocido de Chromium/WebView con esa API).
+    const constraints: MediaStreamConstraints = {
+      video: {
+        facingMode: { ideal: 'environment' },
+        width: { ideal: 1920 },
+        height: { ideal: 1080 },
+      },
+    };
+
     try {
-      this.controles = await this.lector.decodeFromVideoDevice(
-        undefined,
-        videoEl,
+      // Le pasamos el id del <video> (string) en vez de la referencia del
+      // elemento: la librería hace un chequeo interno "instanceof
+      // HTMLVideoElement" sobre lo que recibe, y ese chequeo falla contra
+      // el elemento que Angular resuelve dentro del <ion-modal> (tira
+      // "Couldn't get videoElement from videoSource!"). Buscándolo por id
+      // con document.getElementById (que es lo que hace la librería
+      // cuando le pasás un string) se evita ese problema. El id es único
+      // por instancia (ver videoElementId) para no toparse con el <video>
+      // de una página anterior cacheada por Ionic.
+      this.controles = await this.lector.decodeFromConstraints(
+        constraints,
+        this.videoElementId,
         (resultado) => {
           if (!resultado) {
             return;

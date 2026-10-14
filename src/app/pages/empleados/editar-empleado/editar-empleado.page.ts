@@ -20,7 +20,6 @@ import {
   IonSelectOption,
   IonTitle,
   IonToolbar,
-  ToastController,
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { createOutline } from 'ionicons/icons';
@@ -30,6 +29,8 @@ import { Rol } from '../../../core/models/rol.model';
 import { EstadoUsuario, Usuario } from '../../../core/models/usuario.model';
 import { SpinnerLogoComponent } from '../../../shared/components/spinner-logo/spinner-logo.component';
 import { cuilCoherenteConDni } from '../../../core/validators/cuil.validator';
+import { MensajeModalService } from '../../../core/services/mensaje-modal.service';
+import { traducirErrorSupabase } from '../../../core/utils/traducir-error.util';
 
 const ESTADOS: EstadoUsuario[] = ['pendiente', 'aprobado', 'rechazado'];
 
@@ -61,7 +62,7 @@ export class EditarEmpleadoPage implements OnInit {
   private readonly empleados = inject(EmpleadosService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly toastCtrl = inject(ToastController);
+  private readonly mensajeModal = inject(MensajeModalService);
 
   readonly estados = ESTADOS;
   readonly roles = signal<Rol[]>([]);
@@ -148,17 +149,11 @@ export class EditarEmpleadoPage implements OnInit {
     this.guardando.set(true);
     try {
       await this.empleados.actualizarEmpleado(empleado.id, this.editarForm.value);
-      const toast = await this.toastCtrl.create({
-        message: 'Cambios guardados.',
-        duration: 2500,
-        position: 'top',
-        color: 'success',
-      });
-      await toast.present();
+      this.mensajeModal.exito('Los cambios se guardaron correctamente.', 'Cambios guardados');
       await this.router.navigate(['/empleados'], { replaceUrl: true });
     } catch (error) {
-      this.mensajeError.set(
-        (error as Error)?.message ?? 'No se pudieron guardar los cambios.',
+      this.mensajeModal.error(
+        traducirErrorSupabase(error, 'No se pudieron guardar los cambios.'),
       );
     } finally {
       this.guardando.set(false);

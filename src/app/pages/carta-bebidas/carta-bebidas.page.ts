@@ -15,6 +15,7 @@ import {
   ViewWillEnter
 } from '@ionic/angular';
 import { BebidaService } from '../../core/services/bebida.service';
+import { SonidoService } from '../../core/services/sonido.service';
 import { Bebida } from '../../core/models/bebida.model';
 import { SpinnerLogoComponent } from '../../shared/components/spinner-logo/spinner-logo.component';
 import { addIcons } from 'ionicons';
@@ -51,8 +52,9 @@ export class CartaBebidasPage implements ViewWillEnter {
   /** Índice de la fotografía visible para cada bebida. */
   fotoActual: Record<string, number> = {};
 
-  /** Registros por página. Fijo y bajo para que nunca se corte una tarjeta. */
-  readonly porPagina = 3;
+  /** Registros por página. Con 2, la tarjeta (foto + info) entra completa
+   *  y simétrica sin necesitar scroll. */
+  readonly porPagina = 2;
 
   pagina = 1;
 
@@ -61,6 +63,7 @@ export class CartaBebidasPage implements ViewWillEnter {
   private readonly bebidaService = inject(BebidaService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly router = inject(Router);
+  private readonly sonido = inject(SonidoService);
 
   constructor() {
     addIcons({
@@ -93,7 +96,7 @@ export class CartaBebidasPage implements ViewWillEnter {
 
       console.error('CARTA BEBIDAS ERROR:', error);
       this.mensajeError = 'No se pudo cargar la carta. Intentá nuevamente.';
-      this.vibrar();
+      this.sonido.vibrarError();
 
     } finally {
 
@@ -169,10 +172,5 @@ export class CartaBebidasPage implements ViewWillEnter {
     this.fotoActual[bebida.id ?? ''] = (actual + 1) % fotos.length;
   }
 
-  private vibrar(): void {
-    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
-      navigator.vibrate([180, 80, 180]);
-    }
-  }
 
 }

@@ -1,0 +1,492 @@
+
+.lista-espera-bg {
+  --background:
+    radial-gradient(
+      circle at 15% 0%,
+      rgba(246, 193, 133, 0.16),
+      transparent 22%
+    ),
+    linear-gradient(180deg, #130905 0%, #3a1710 100%);
+
+  --color: #ffd485;
+}
+
+/* =========================
+   CONTENEDOR PRINCIPAL
+   ========================= */
+
+.lista-espera-container {
+  height: 100%;
+  width: 100%;
+  padding: 10px 16px calc(10px + var(--ion-safe-area-bottom, 0px));
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 8px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* =========================
+   ENCABEZADO
+   ========================= */
+
+ion-header {
+  background: #130905;
+
+  ion-toolbar {
+    --background: #130905;
+    --color: #ffd485;
+
+    min-height: 56px;
+
+    ion-title {
+      margin: 0;
+      font-size: 1.8rem;
+      font-family: Georgia, 'Times New Roman', serif;
+      color: #ffd485;
+      font-weight: 600;
+    }
+
+    .logout-btn {
+      --color: #ffd485;
+      --padding-start: 10px;
+      --padding-end: 10px;
+
+      margin-right: 8px;
+
+      ion-icon {
+        font-size: 1.8rem;
+      }
+    }
+  }
+}
+
+/* =========================
+   SECCIONES
+   ========================= */
+
+.section {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  h1 {
+    width: 100%;
+    margin: 0;
+    flex-shrink: 0;
+
+    color: #ffd485;
+    font-size: clamp(1rem, 4.2vh, 1.4rem);
+    font-weight: 600;
+    text-align: center;
+  }
+}
+
+
+/* =========================
+   OPCIONES DE MESA
+   ========================= */
+
+.table-options {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+}
+
+.table-option {
+  width: 72%;
+  flex: 1 1 0;
+  min-height: 0;
+  max-height: 110px;
+
+  appearance: none;
+  box-sizing: border-box;
+
+  position: relative;
+
+  padding: 6px 52px 6px 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  overflow: hidden;
+
+  border: 2px solid #802323;
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      160deg,
+      #5e1f1f 0%,
+      #431717 100%
+    );
+
+  color: #ffd485;
+
+  box-shadow:
+    0 6px 14px rgba(0, 0, 0, 0.35);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.12s ease,
+    border-color 0.12s ease,
+    background 0.12s ease;
+
+  &:active {
+    transform: scale(0.97);
+    border-color: #ffaa55;
+  }
+
+  &.selected {
+    border-color: #ffaa55;
+
+    background:
+      linear-gradient(
+        160deg,
+        #6b2921 0%,
+        #4d1a17 100%
+      );
+
+    box-shadow:
+      0 0 0 1px rgba(255, 170, 85, 0.2),
+      0 6px 14px rgba(0, 0, 0, 0.35);
+
+    .option-icon {
+      background: rgba(255, 170, 85, 0.12);
+      border-color: rgba(255, 170, 85, 0.45);
+    }
+
+    .check-icon {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+    }
+  }
+}
+
+
+/* =========================
+   ICONO
+   ========================= */
+
+.option-icon {
+  width: clamp(36px, 8vh, 52px);
+  height: clamp(36px, 8vh, 52px);
+
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 16px;
+
+  background: rgba(255, 248, 241, 0.1);
+  border: 1px solid rgba(255, 248, 241, 0.2);
+
+  ion-icon {
+    font-size: clamp(1.1rem, 3.2vh, 1.7rem);
+    color: #fff8f1;
+  }
+}
+
+/* =========================
+   TEXTO
+   ========================= */
+
+.option-info {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  margin-left: 14px;
+
+  text-align: left;
+
+  strong {
+    color: #ffd485;
+
+    font-size: 0.98rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  span {
+    margin-top: 4px;
+
+    color: #dfa070;
+    font-size: 0.75rem;
+  }
+}
+
+/* =========================
+   CHECK
+   ========================= */
+
+.check-icon {
+  position: absolute;
+
+  right: 18px;
+  top: 50%;
+
+  color: #ffaa55;
+
+  font-size: 1.55rem;
+
+  opacity: 0;
+
+  transform:
+    translateY(-50%)
+    scale(0.7);
+
+  transition:
+    opacity 0.12s ease,
+    transform 0.12s ease;
+}
+
+
+/* =========================
+   CANTIDAD DE COMENSALES
+   ========================= */
+
+.people-selector {
+  width: 42%;
+  flex: 0 1 120px;
+  min-height: 0;
+  max-height: 120px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  background:
+    linear-gradient(
+      160deg,
+      #5e1f1f 0%,
+      #431717 100%
+    );
+
+  border: 2px solid #802323;
+  border-radius: 18px;
+
+  box-shadow:
+    0 6px 14px rgba(0, 0, 0, 0.35);
+}
+
+/* =========================
+   BOTONES + / -
+   ========================= */
+
+.counter-button {
+  --color: #ffd485;
+
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --padding-top: 0;
+  --padding-bottom: 0;
+
+  width: 46px;
+  height: clamp(44px, 9vh, 70px);
+
+  margin: 0;
+
+  ion-icon {
+    font-size: 1.55rem;
+  }
+
+  &:disabled {
+    opacity: 0.35;
+  }
+}
+
+/* =========================
+   NÚMERO
+   ========================= */
+
+.people-count {
+  
+  min-width: 80px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  span {
+    color: #ffd485;
+
+    font-size: clamp(1.5rem, 4.5vh, 2.1rem);
+    font-weight: 700;
+  }
+}
+
+/* =========================
+   MENSAJE DE MÁXIMO
+   ========================= */
+
+.max-comensales {
+  margin: -2px 0 0;
+
+  color: #dfa070;
+
+  font-size: 0.75rem;
+
+  text-align: center;
+}
+
+
+/* =========================
+   BOTÓN CONFIRMAR
+   ========================= */
+
+.confirm-button {
+  width: 72%;
+  flex-shrink: 0;
+
+  --background: #e86a28;
+  --background-activated: #d95d20;
+  --color: #fff8f1;
+
+  --border-radius: 16px;
+
+  --box-shadow:
+    0 6px 14px rgba(0, 0, 0, 0.35);
+
+  height: 56px;
+
+  font-size: 0.92rem;
+  font-weight: 700;
+
+  text-transform: none;
+
+  ion-icon {
+    font-size: 1.35rem;
+  }
+
+  &:disabled {
+    --background: rgba(128, 35, 35, 0.55);
+    --color: rgba(255, 248, 241, 0.4);
+
+    opacity: 1;
+  }
+}
+
+ion-modal.modal-ingreso-exitoso {
+  --width: min(90%, 420px);
+  --height: auto;
+  --border-radius: 20px;
+  --background: #fff8ef;
+}
+
+ion-modal.modal-ingreso-exitoso::part(content) {
+  background: #fff8ef;
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.ingreso-exito-container {
+  padding: 28px 24px 24px;
+  text-align: center;
+  background: #fff8ef;
+  border-radius: 20px;
+}
+
+/* Ícono */
+.ingreso-exito-icono {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.ingreso-exito-icono ion-icon {
+  font-size: 64px;
+  color:#d49a5d;
+}
+
+/* Título */
+.ingreso-exito-titulo h2 {
+  margin: 0;
+  color: #4d200f;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* Información */
+.ingreso-exito-info {
+  margin: 14px auto 24px;
+  max-width: 330px;
+}
+
+.ingreso-exito-info p {
+  margin: 0;
+  color:  #805238;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* Botón */
+.ingreso-exito-acciones {
+  width: 100%;
+}
+
+.btn-ingreso-exito {
+  --background: #ffd485;
+  --background-hover: #ffe0a3;
+  --background-activated: #e9b95e;
+  --color: #4d200f;
+  --border-radius: 12px;
+
+  --box-shadow:
+    0 5px 12px rgba(19, 9, 5, 0.20);
+
+  margin-top: 6px;
+
+  height: 48px;
+
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: none;
+}
+
+/* =========================
+   TELÉFONOS ANGOSTOS
+   ========================= */
+
+@media (max-width: 400px) {
+
+  .table-option {
+    width: 88%;
+  }
+
+  .people-selector {
+    width: 55%;
+  }
+
+  .confirm-button {
+    width: 88%;
+  }
+}
+

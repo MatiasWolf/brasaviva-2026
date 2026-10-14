@@ -52,8 +52,6 @@ export class MesaService {
       await this.webPathABlob(datos.fotoWebPath),
     );
 
-    // El QR codifica el id de la mesa; quien construya el punto 17
-    // (escanear QR de mesa) lo usa para buscarla.
     const qrUrl = await this.generarYSubirQr(id);
 
     const { data, error } = await this.supabaseService.client
@@ -89,6 +87,30 @@ export class MesaService {
     if (error) {
       throw error;
     }
+  }
+
+  async eliminarMesa(id: string): Promise<void> {
+    const { error } = await this.supabaseService.client
+      .from(TABLA)
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      // 23503 = viola una FK (ej. la mesa tiene ocupaciones registradas).
+      if (error.code === '23503') {
+        throw new Error(
+          'No se puede eliminar: esta mesa tiene ocupaciones registradas.',
+        );
+      }
+      throw error;
+    }
+
+    // Limpieza best-effort del storage: si falla, la mesa ya se borró de
+    // todas formas, así que no lo tratamos como un error para el usuario.
+    await this.supabaseService.client.storage
+      .from(BUCKET)
+      .remove([`${id}.jpg`, `qr-${id}.png`])
+      .catch((err) => console.error('No se pudo limpiar el storage de la mesa:', err));
   }
 
   private async webPathABlob(webPath: string): Promise<Blob> {

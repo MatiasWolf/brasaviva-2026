@@ -19,27 +19,43 @@
   <div class="anonimo-container">
 
     <!-- ==============================
-         ENCABEZADO
+         FOTO: grande, ocupa buena parte de la pantalla
          ============================== -->
 
-    <div class="header-section">
+    <div class="foto-section">
 
-      <div class="icon-stage">
+      <button
+        type="button"
+        class="foto-button"
+        (click)="tomarFoto()"
+      >
 
-        <div class="glow-core"></div>
+        @if (fotoPreview) {
 
-        <div class="icon-badge">
-          <ion-icon name="camera-outline"></ion-icon>
-        </div>
+          <img
+            [src]="fotoPreview"
+            alt="Foto de perfil"
+            class="foto-preview"
+          />
 
-      </div>
+          <div class="foto-check">
+            <ion-icon
+              name="checkmark-circle"
+            ></ion-icon>
+          </div>
 
-      <h1>¡Bienvenido!</h1>
+        } @else {
 
-      <p>
-        Para ingresar como invitado necesitamos
-        algunos datos.
-      </p>
+          <ion-icon
+            name="camera-outline"
+            class="camera-icon"
+          ></ion-icon>
+
+          <span>Tomar foto de perfil</span>
+
+        }
+
+      </button>
 
     </div>
 
@@ -54,186 +70,120 @@
     >
 
       <!-- ==============================
-           FOTO
-           ============================== -->
-
-      <div class="foto-section">
-
-        <button
-          type="button"
-          class="foto-button"
-          (click)="tomarFoto()"
-        >
-
-          @if (fotoPreview) {
-
-            <img
-              [src]="fotoPreview"
-              alt="Foto de perfil"
-              class="foto-preview"
-            />
-
-            <div class="foto-check">
-              <ion-icon
-                name="checkmark-circle"
-              ></ion-icon>
-            </div>
-
-          } @else {
-
-            <ion-icon
-              name="camera-outline"
-              class="camera-icon"
-            ></ion-icon>
-
-            <span>Tomar foto</span>
-
-          }
-
-        </button>
-
-        <p class="foto-hint">
-          Esta foto será utilizada para tu perfil.
-        </p>
-
-      </div>
-
-
-      <!-- ==============================
            NOMBRE
            ============================== -->
 
-      <div class="campo">
+        <div class="campo">
 
-        <ion-input
-          formControlName="nombre"
-          type="text"
-          label="Nombre"
-          labelPlacement="stacked"
-          placeholder="Ingresá tu nombre"
-        ></ion-input>
+          <ion-input
+            formControlName="nombre"
+            type="text"
+            label="Nombre"
+            labelPlacement="stacked"
+            placeholder="Nombre"
+          ></ion-input>
 
-        @if (
-          registroForm.get('nombre')?.touched &&
-          registroForm.get('nombre')?.invalid
-        ) {
+          @if (
+            registroForm.get('nombre')?.touched &&
+            registroForm.get('nombre')?.invalid
+          ) {
 
-          <div class="mensaje-error-campo">
+            <div class="mensaje-error-campo">
 
-            @if (
-              registroForm.get('nombre')?.hasError('required')
-            ) {
-              <span>
-                El nombre es obligatorio.
-              </span>
-            }
+              @if (
+                registroForm.get('nombre')?.hasError('required')
+              ) {
+                <span>Obligatorio.</span>
+              }
 
-            @if (
-              registroForm.get('nombre')?.hasError('minlength')
-            ) {
-              <span>
-                El nombre debe tener al menos 2 caracteres.
-              </span>
-            }
+              @if (
+                registroForm.get('nombre')?.hasError('minlength')
+              ) {
+                <span>Mínimo 2 caracteres.</span>
+              }
 
-            @if (
-              registroForm.get('nombre')?.hasError('maxlength')
-            ) {
-              <span>
-                El nombre no puede superar los 50 caracteres.
-              </span>
-            }
+              @if (
+                registroForm.get('nombre')?.hasError('maxlength')
+              ) {
+                <span>Máximo 50 caracteres.</span>
+              }
 
-            @if (
-              registroForm.get('nombre')?.hasError('pattern')
-            ) {
-              <span>
-                El nombre solo puede contener letras y espacios.
-              </span>
-            }
+              @if (
+                registroForm.get('nombre')?.hasError('pattern')
+              ) {
+                <span>Solo letras y espacios.</span>
+              }
 
-          </div>
+            </div>
 
-        }
+          }
 
-      </div>
-
+        </div>
 
       <!-- ==============================
            APELLIDO
            ============================== -->
 
-      <div class="campo">
+        <div class="campo">
 
-        <ion-input
-          formControlName="apellido"
-          type="text"
-          label="Apellido"
-          labelPlacement="stacked"
-          placeholder="Ingresá tu apellido"
-        ></ion-input>
+          <ion-input
+            formControlName="apellido"
+            type="text"
+            label="Apellido"
+            labelPlacement="stacked"
+            placeholder="Apellido"
+          ></ion-input>
 
-        @if (
-          registroForm.get('apellido')?.touched &&
-          registroForm.get('apellido')?.invalid
-        ) {
+          @if (
+            registroForm.get('apellido')?.touched &&
+            registroForm.get('apellido')?.invalid
+          ) {
 
-          <div class="mensaje-error-campo">
+            <div class="mensaje-error-campo">
 
-            @if (
-              registroForm.get('apellido')?.hasError('required')
-            ) {
-              <span>
-                El apellido es obligatorio.
-              </span>
-            }
+              @if (
+                registroForm.get('apellido')?.hasError('required')
+              ) {
+                <span>Obligatorio.</span>
+              }
 
-            @if (
-              registroForm.get('apellido')?.hasError('minlength')
-            ) {
-              <span>
-                El apellido debe tener al menos 2 caracteres.
-              </span>
-            }
+              @if (
+                registroForm.get('apellido')?.hasError('minlength')
+              ) {
+                <span>Mínimo 2 caracteres.</span>
+              }
 
-            @if (
-              registroForm.get('apellido')?.hasError('maxlength')
-            ) {
-              <span>
-                El apellido no puede superar los 50 caracteres.
-              </span>
-            }
+              @if (
+                registroForm.get('apellido')?.hasError('maxlength')
+              ) {
+                <span>Máximo 50 caracteres.</span>
+              }
 
-            @if (
-              registroForm.get('apellido')?.hasError('pattern')
-            ) {
-              <span>
-                El apellido solo puede contener letras y espacios.
-              </span>
-            }
+              @if (
+                registroForm.get('apellido')?.hasError('pattern')
+              ) {
+                <span>Solo letras y espacios.</span>
+              }
 
-          </div>
+            </div>
 
-        }
+          }
 
-      </div>
-
-
-      <!-- ==============================
-           CONTINUAR
-           ============================== -->
-
-      <ion-button
-        expand="block"
-        class="btn-continuar"
-        type="button"
-        (click)="continuar()"
-      >
-        Continuar
-      </ion-button>
+        </div>
 
     </form>
 
   </div>
 
 </ion-content>
+
+<ion-footer class="anonimo-footer">
+  <ion-button
+    expand="block"
+    class="btn-continuar"
+    type="button"
+    (click)="continuar()"
+  >
+    Continuar
+  </ion-button>
+</ion-footer>
