@@ -1,0 +1,137 @@
+<ion-content class="home-bg" [fullscreen]="true">
+  <!-- Spinner -->
+  @if (procesandoTransaccion()) {
+    <div class="loader">
+      <app-spinner-logo [size]="64" />
+      <p>Procesando información de tu cuenta...</p>
+    </div>
+  } @else {
+    <div class="home-container">
+      
+      <header class="home-header">
+        <div>
+          <p class="eyebrow">Brasa Viva Restaurante</p>
+          <h1>Solicitud de Cuenta</h1>
+        </div>
+        <div class="rol-chip">
+          <ion-icon name="receipt-outline"></ion-icon>
+          <!--<span>Mesa {{ cuentaService.ocupacionMesaId }}</span>-->
+        </div>
+      </header>
+
+      <!-- Orquestación del Flujo según la Fase Activa -->
+      @switch (faseActual()) {
+        
+        <!-- FASE 0: Confirmación Inicial Preventiva de UX -->
+        @case ('confirmacion_inicial') {
+          <div class="fase-card confirmacion-box">
+            <div class="icon-header bg-alerta">
+              <ion-icon name="card-outline"></ion-icon>
+            </div>
+            <h2>¿Deseas pedir la cuenta?</h2>
+            <p>Al confirmar, ya no podrás acceder al menú y se procederá al cálculo final de los consumos entregados en tu mesa.</p>
+            
+            <div class="btn-group-vertical">
+              <ion-button class="btn-principal" expand="block" (click)="avanzarABloqueoPropina()">
+                Sí, solicitar cuenta
+              </ion-button>
+              <ion-button class="btn-secundario" expand="block" fill="clear" (click)="volverAlHome()">
+                No, volver al menú
+              </ion-button>
+            </div>
+          </div>
+        }
+
+        <!-- FASE 1: Bloqueo de Interfaz Obligatorio por Propina -->
+        @case ('bloqueo_propina') {
+          <div class="fase-card bloqueo-box">
+            <div class="icon-header bg-propina">
+              <ion-icon name="qr-code-outline"></ion-icon>
+            </div>
+            <h2>Especificar porcentaje de propina</h2>
+            <p>Para generar el detalle final de la facturación, indica primero el porcentaje de propina que dejarás escaneando el codigo QR correspondiente de los disponibles en tu mesa.</p>
+            
+            <ion-button class="btn-principal text-wrap" expand="block" (click)="abrirLectorPropina()">
+              <ion-icon name="qr-code-outline" slot="start"></ion-icon>
+              Escanear QR de Propina
+            </ion-button>
+          </div>
+        }
+
+        <!-- FASE 2: Detalle de Cuenta -->
+        @case ('detalle_factura') {
+          <div class="factura-container">
+            
+            <!-- Listado Detallado de Consumos (Precios Unitarios e Importes) -->
+            <div class="factura-seccion">
+              <h3>Consumos de la Estadía</h3>
+              <ion-list lines="none" class="items-list">
+                @for (item of cuentaService.itemsEntregados(); track item.producto_nombre) {
+                  <ion-item class="item-factura">
+                    <ion-label>
+                      <div class="item-header-row">
+                        <span class="item-name">{{ item.producto_nombre | titlecase }}</span>
+                        <span class="item-subtotal">{{ item.importe | currency:'ARS':'symbol':'1.0-0' }}</span>
+                      </div>
+                      <p class="item-meta">{{ item.cantidad }} u. x {{ item.precio_unitario | currency:'ARS':'symbol':'1.0-0' }}</p>
+                    </ion-label>
+                  </ion-item>
+                }
+              </ion-list>
+            </div>
+
+            <!-- Desglose de Deducciones y Adiciones Financieras -->
+            <div class="factura-seccion desglose-box">
+              <div class="desglose-row">
+                <span>Subtotal</span>
+                <span>{{ cuentaService.subtotal() | currency:'ARS':'symbol':'1.0-0' }}</span>
+              </div>
+              
+              @if (cuentaService.juegoDescuentoPorcentaje() > 0) {
+                <div class="desglose-row texto-descuento">
+                  <span>Descuento por Juego (-{{ cuentaService.juegoDescuentoPorcentaje() }}%)</span>
+                  <span>- {{ cuentaService.juegoDescuentoMonto() | currency:'ARS':'symbol':'1.0-0' }}</span>
+                </div>
+              }
+
+              <div class="desglose-row texto-propina">
+                <span>Propina de Mesa (+{{ cuentaService.propinaPorcentaje() }}%)</span>
+                <span>+ {{ cuentaService.propinaMonto() | currency:'ARS':'symbol':'1.0-0' }}</span>
+              </div>
+            </div>
+
+            <!-- Total y Botón de Pago -->
+            <div class="factura-total-box">
+              <p>Total a abonar</p>
+              <div class="monto-grande">
+                {{ cuentaService.totalFinal() | currency:'ARS':'symbol':'1.0-0' }}
+              </div>
+            </div>
+
+            <ion-button class="btn-pagar" expand="block" (click)="ejecutarPago()">
+              <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+              Confirmar y Pagar Cuenta
+            </ion-button>
+          </div>
+        }
+
+        <!-- FASE 3: Bloqueo de Pantalla por Espera de Confirmación del Mozo -->
+        @case ('espera_mozo') {
+          <div class="fase-card espera-box">
+            <app-spinner-logo [size]="80" />
+            <h2>Pago enviado con éxito</h2>
+            <p>Tu solicitud de pago ha sido registrada. Por favor, aguardá a que el mozo confirme la transacción y libere la mesa.</p>
+          </div>
+        }
+      }
+
+    </div>
+  }
+
+  <!-- Componente para Escaneo de QR -->
+  <app-qr-scanner
+    [abierto]="mostrandoScanner()"
+    (escaneado)="onPropinaEscaneada($event)"
+    (cerrado)="cerrarLectorPropina()">
+  </app-qr-scanner>
+</ion-content>

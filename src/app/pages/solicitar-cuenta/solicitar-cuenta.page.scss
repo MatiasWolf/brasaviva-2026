@@ -1,0 +1,292 @@
+.home-bg {
+    --background:
+        radial-gradient(circle at 15% 0%, rgba(246, 193, 133, 0.16), transparent 22%),
+        linear-gradient(180deg, #130905 0%, #3a1710 100%); // Gradiente de marca
+    --color: #ffd485; // Tipografía principal dorada
+    }
+
+    .loader {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: #ffd485; 
+
+    p {
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 500;
+        color: rgba(255, 248, 241, 0.74); 
+        text-align: center;
+    }
+    }
+
+    .home-container {
+    min-height: 100%;
+    height: 100%;
+    padding: 20px 16px calc(20px + var(--ion-safe-area-bottom, 0px)); //
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box; 
+    }
+
+    .home-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px; 
+
+    .eyebrow {
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-size: 0.7rem;
+        color: #ffaa55; 
+    }
+
+    h1 {
+        margin: 4px 0 0;
+        font-size: 1.8rem;
+        font-family: Georgia, 'Times New Roman', serif; 
+        color: #ffd485; 
+        line-height: 1.2;
+    }
+
+    .rol-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: rgba(255, 170, 85, 0.16); 
+        border: 1px solid rgba(255, 170, 85, 0.4);
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #ffd0a0; 
+
+        ion-icon {
+        font-size: 1.1rem;
+        }
+    }
+    }
+
+    // Estructuración de Contenedores Individuales para las Fases 
+    .fase-card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+    border-radius: 24px;
+    border: 2px solid #802323; 
+    background: linear-gradient(160deg, #5e1f1f 0%, #431717 100%); 
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    color: #ffd485; 
+
+    h2 {
+        margin: 20px 0 10px;
+        font-size: 1.6rem;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-weight: 700;
+        color: #ffd485; 
+    }
+
+    p {
+        margin: 0 0 24px;
+        font-size: 1rem;
+        line-height: 1.5;
+        color: rgba(255, 248, 241, 0.85);
+    }
+    }
+
+    // Iconos circulares superiores para jerarquía de UX
+    .icon-header {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+    ion-icon {
+        font-size: 2.2rem;
+    }
+
+    &.bg-alerta {
+        background: rgba(255, 170, 85, 0.2);
+        border: 1px solid #ffaa55;
+        ion-icon { color: #ffaa55; }
+    }
+
+    &.bg-propina {
+        background: rgba(255, 212, 133, 0.2);
+        border: 1px solid #ffd485;
+        ion-icon { color: #ffd485; }
+    }
+    }
+
+    // Grupos de Botonera Vertical
+    .btn-group-vertical {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    }
+
+    // Estilos de botones 
+    .btn-principal {
+    --background: #802323; 
+    --background-activated: #ffaa55;
+    --color: #fff8f1;
+    --border-radius: 14px;
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-secundario {
+    --color: #ffaa55; 
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin: 0;
+    }
+
+    .factura-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    overflow-y: auto;
+    }
+
+    .factura-seccion {
+    border-radius: 18px;
+    border: 1px solid rgba(255, 212, 133, 0.2);
+    background: rgba(255, 248, 241, 0.05); 
+    padding: 16px;
+
+    h3 {
+        margin: 0 0 12px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #ffaa55; 
+        letter-spacing: 0.05em;
+    }
+    }
+
+    .items-list {
+    background: transparent !important;
+    padding: 0;
+    margin: 0;
+    }
+
+    .item-factura {
+    --background: transparent !important;
+    --padding-start: 0px;
+    --padding-end: 0px;
+    --inner-padding-end: 0px;
+    margin-bottom: 10px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    .item-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: #fff8f1;
+    }
+
+    .item-name {
+        text-align: left;
+        white-space: normal; // Evita que textos largos queden cortados 
+        word-break: break-word;
+        padding-right: 12px;
+    }
+
+    .item-subtotal {
+        flex-shrink: 0;
+        color: #ffd485; 
+    }
+
+    .item-meta {
+        margin: 4px 0 0;
+        font-size: 0.85rem;
+        color: rgba(255, 248, 241, 0.6);
+        text-align: left;
+    }
+    }
+
+    .desglose-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .desglose-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 1rem;
+        color: rgba(255, 248, 241, 0.85);
+
+        &.texto-descuento {
+        color: #ff8888;
+        font-weight: 600;
+        }
+
+        &.texto-propina {
+        color: #a0ffa0;
+        font-weight: 600;
+        }
+    }
+    }
+
+    // Contenedor del Total 
+    .factura-total-box {
+    text-align: center;
+    padding: 20px 10px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #431717 0%, #290e0e 100%);
+    border: 2px solid #802323; //
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+
+    p {
+        margin: 0 0 6px;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(255, 248, 241, 0.6);
+    }
+
+    .monto-grande {
+        font-size: 2.6rem;
+        font-weight: 800;
+        color: #ffd485; 
+        letter-spacing: -0.02em;
+        font-family: system-ui, -apple-system, sans-serif;
+    }
+    }
+
+    // Botón de confirmación 
+    .btn-pagar {
+    --background: linear-gradient(100deg, #802323 0%, #a03030 100%);
+    --background-activated: #ffaa55;
+    --color: #fff8f1;
+    --border-radius: 16px;
+    font-weight: 700;
+    font-size: 1.15rem;
+    height: 56px;
+    margin: 10px 0 0;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}

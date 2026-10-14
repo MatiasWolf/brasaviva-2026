@@ -411,13 +411,22 @@ export const routes: Routes = [
   {
     path: 'listado-pedidos',
     loadComponent: () => import('./pages/listado-pedidos/listado-pedidos.page').then( m => m.ListadoPedidosPage)
-  },  {
+  },
+  {
     path: 'realizar-encuesta',
     loadComponent: () => import('./pages/realizar-encuesta/realizar-encuesta.page').then( m => m.RealizarEncuestaPage)
   },
   {
     path: 'resultados-encuesta',
     loadComponent: () => import('./pages/resultados-encuesta/resultados-encuesta.page').then( m => m.ResultadosEncuestaPage)
+  },
+  {
+    path: 'solicitar-cuenta',
+    loadComponent: () => import('./pages/solicitar-cuenta/solicitar-cuenta.page').then( m => m.SolicitarCuentaPage)
+  },
+  {
+    path: 'listado-pagos',
+    loadComponent: () => import('./pages/listado-pagos/listado-pagos.page').then( m => m.ListadoPagosPage)
   },
 
 ];
