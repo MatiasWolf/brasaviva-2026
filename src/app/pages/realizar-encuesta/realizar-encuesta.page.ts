@@ -55,9 +55,34 @@ export class RealizarEncuestaPage implements OnInit {
   readonly cargando = signal(true);
   readonly guardando = signal(false);
   readonly puntajeAtencion = signal(0);
-  
+
+  readonly paso = signal(1);
+  readonly totalPasos = 3;
+
   encuestaForm!: FormGroup;
   private ocupacionId: number | null = null;
+
+  /**
+   * No es un computed() a propósito: la validez de un FormGroup no es una
+   * signal, así que se re-evalúa en cada ciclo de detección de cambios
+   * (se dispara solo con cada interacción del usuario en el formulario).
+   */
+  pasoEsValido(): boolean {
+    switch (this.paso()) {
+      case 1:
+        return (
+          this.encuestaForm.get('puntaje_comida')?.valid === true &&
+          this.puntajeAtencion() > 0
+        );
+      case 2:
+        return (
+          this.encuestaForm.get('tiempo_espera')?.valid === true &&
+          this.encuestaForm.get('aspecto_destacado')?.valid === true
+        );
+      default:
+        return true;
+    }
+  }
 
   constructor() {
     addIcons({ star, starOutline, fastFoodOutline, peopleOutline });
@@ -80,6 +105,18 @@ export class RealizarEncuestaPage implements OnInit {
 
   setRatingAtencion(valor: number): void {
     this.puntajeAtencion.set(valor);
+  }
+
+  pasoSiguiente(): void {
+    if (!this.pasoEsValido()) {
+      this.mensajeModal.error('Completá esta sección antes de continuar.', 'Faltan datos');
+      return;
+    }
+    this.paso.update((p) => Math.min(this.totalPasos, p + 1));
+  }
+
+  pasoAnterior(): void {
+    this.paso.update((p) => Math.max(1, p - 1));
   }
 
   private async validarYObtenerEstadia(): Promise<void> {

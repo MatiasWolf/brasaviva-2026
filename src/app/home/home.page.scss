@@ -1,5 +1,6 @@
 .home-bg {
   --background:
+    var(--patron-brasas),
     radial-gradient(circle at 15% 0%, rgba(246, 193, 133, 0.16), transparent 22%),
     linear-gradient(180deg, #130905 0%, #3a1710 100%);
   --color: #ffd485;

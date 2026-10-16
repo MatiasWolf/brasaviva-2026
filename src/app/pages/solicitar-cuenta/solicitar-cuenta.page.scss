@@ -160,6 +160,7 @@
 
     .factura-container {
     flex: 1;
+    min-height: 0;
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -167,21 +168,32 @@
     }
 
     .factura-seccion {
+    flex: 1 1 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
     border-radius: 18px;
     border: 1px solid rgba(255, 212, 133, 0.2);
-    background: rgba(255, 248, 241, 0.05); 
+    background: rgba(255, 248, 241, 0.05);
     padding: 16px;
 
     h3 {
+        flex-shrink: 0;
         margin: 0 0 12px;
         font-size: 1.1rem;
         font-weight: 700;
-        color: #ffaa55; 
+        color: #ffaa55;
         letter-spacing: 0.05em;
     }
     }
 
     .items-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     background: transparent !important;
     padding: 0;
     margin: 0;
@@ -231,7 +243,8 @@
     .desglose-box {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    justify-content: center;
+    gap: 14px;
 
     .desglose-row {
         display: flex;
@@ -252,8 +265,14 @@
     }
     }
 
-    // Contenedor del Total 
+    // Contenedor del Total
     .factura-total-box {
+    flex: 1 1 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     padding: 20px 10px;
     border-radius: 18px;
@@ -262,7 +281,7 @@
     box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
 
     p {
-        margin: 0 0 6px;
+        margin: 0 0 8px;
         font-size: 0.9rem;
         text-transform: uppercase;
         letter-spacing: 0.1em;
@@ -270,16 +289,17 @@
     }
 
     .monto-grande {
-        font-size: 2.6rem;
+        font-size: clamp(2.6rem, 7vh, 3.4rem);
         font-weight: 800;
-        color: #ffd485; 
+        color: #ffd485;
         letter-spacing: -0.02em;
         font-family: system-ui, -apple-system, sans-serif;
     }
     }
 
-    // Botón de confirmación 
+    // Botón de confirmación
     .btn-pagar {
+    flex-shrink: 0;
     --background: linear-gradient(100deg, #802323 0%, #a03030 100%);
     --background-activated: #ffaa55;
     --color: #fff8f1;
