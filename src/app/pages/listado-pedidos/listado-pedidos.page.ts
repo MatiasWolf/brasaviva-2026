@@ -1,5 +1,5 @@
 import { Component, inject, signal, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { 
   IonContent, IonHeader, IonTitle, IonToolbar, IonButton, IonIcon, 
@@ -21,10 +21,20 @@ import {
   styleUrls: ['./listado-pedidos.page.scss'],
   standalone: true,
   imports: [
-    CommonModule, FormsModule, IonContent, IonHeader, IonTitle, 
-    IonToolbar, IonButton, IonIcon, IonCard, IonCardContent, 
-    IonSegment, IonSegmentButton, IonButtons, RouterLink
-  ]
+    FormsModule,
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonButton,
+    IonIcon,
+    IonCard,
+    IonCardContent,
+    IonSegment,
+    IonSegmentButton,
+    IonButtons,
+    RouterLink
+]
 })
 export class ListadoPedidosPage {
   public pedidoService = inject(PedidoService);

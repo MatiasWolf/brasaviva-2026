@@ -1,7 +1,6 @@
 export interface MensajeChat {
   id: number;
-  /** null cuando lo escribe un mozo en la sala general, sin mesa asociada. */
-  mesa_id: string | null;
+  mesa_id: string;
   ocupacion_id: number | null;
   emisor_tipo: string;
   emisor_id: string | null;

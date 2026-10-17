@@ -1,5 +1,5 @@
 import { Component, ChangeDetectorRef, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { ClienteService } from '../../../core/services/cliente.service';
 import { Router } from '@angular/router';
 import {
@@ -38,7 +38,6 @@ import { traducirErrorSupabase } from '../../../core/utils/traducir-error.util';
   styleUrls: ['./registro.page.scss'],
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     IonHeader,
     IonToolbar,
@@ -50,9 +49,15 @@ import { traducirErrorSupabase } from '../../../core/utils/traducir-error.util';
     IonInput,
     IonButton,
     IonIcon
-  ]
+]
 })
 export class RegistroPage {
+  private fb = inject(FormBuilder);
+  private router = inject(Router);
+  private cameraService = inject(CameraService);
+  private cdr = inject(ChangeDetectorRef);
+  private clienteService = inject(ClienteService);
+
 
   registroForm: FormGroup;
 
@@ -60,13 +65,7 @@ export class RegistroPage {
 
   private readonly mensajeModal = inject(MensajeModalService);
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private cameraService: CameraService,
-    private cdr: ChangeDetectorRef,
-    private clienteService: ClienteService
-  ) {
+  constructor() {
 
     addIcons({
       'camera-outline': cameraOutline,

@@ -1,0 +1,211 @@
+.home-bg {
+    --background:
+        radial-gradient(circle at 15% 0%, rgba(246, 193, 133, 0.16), transparent 22%),
+        linear-gradient(180deg, #130905 0%, #3a1710 100%);
+    --color: #ffd485;
+    }
+
+    .loader {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    color: #ffd485;
+
+    p {
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 500;
+        color: rgba(255, 248, 241, 0.74);
+        text-align: center;
+    }
+    }
+
+    .home-container {
+    min-height: 100%;
+    height: 100%;
+    padding: 20px 16px calc(20px + var(--ion-safe-area-bottom, 0px)); // Padding inferior limpio sin footer
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+    }
+
+    // Nueva Cabecera Horizontal Compacta Alineada
+    .home-header-inline {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: -8px; // Compensa el padding interno del botón de Ionic para alinear el icono al borde
+
+    h1 {
+        margin: 0;
+        font-size: 1.75rem;
+        font-family: Georgia, 'Times New Roman', serif;
+        color: #ffd485;
+        line-height: 1;
+    }
+    }
+
+    .btn-back-header {
+    --color: #ffd485;
+    --padding-start: 8px;
+    --padding-end: 8px;
+    margin: 0;
+    font-size: 1.4rem;
+    }
+
+    // Grilla Contenedora de Tarjetas de Pago
+    .pagos-grid {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+    padding-bottom: 10px;
+    }
+
+    // Tarjeta Individual Íntegramente Renderizada (Sin cortes por la mitad) [source: 0.1.6]
+    .pago-card {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    border-radius: 20px;
+    border: 2px solid #802323;
+    background: linear-gradient(160deg, #5e1f1f 0%, #431717 100%);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+    color: #ffd485;
+    }
+
+    // Cabecera Interna de la Tarjeta
+    .pago-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+
+    .mesa-badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        ion-icon {
+        font-size: 1.5rem;
+        color: #ffaa55;
+        }
+
+        h2 {
+        margin: 0;
+        font-size: 1.35rem;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-weight: 700;
+        color: #fff8f1;
+        }
+    }
+
+    .pago-hora {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: rgba(255, 248, 241, 0.6);
+        background: rgba(0, 0, 0, 0.2);
+        padding: 4px 8px;
+        border-radius: 8px;
+    }
+    }
+
+    // Cuerpo con Datos Financieros
+    .pago-card-body {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 14px;
+
+    .detalle-fila {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 0.95rem;
+        color: rgba(255, 248, 241, 0.85);
+
+        &.descuento-texto {
+        color: #ff8888;
+        font-weight: 600;
+        }
+
+        &.propina-texto {
+        color: #a0ffa0;
+        font-weight: 600;
+        }
+    }
+    }
+
+    .divisor-pago {
+    height: 1px;
+    background: rgba(255, 212, 133, 0.15);
+    margin: 4px 0;
+    }
+
+    // Fila Destacada de Total Final Cobro
+    .total-fila {
+    font-weight: 700;
+    color: #fff8f1 !important;
+    margin-top: 2px;
+
+    .total-monto {
+        font-size: 1.4rem;
+        color: #ffd485;
+        font-family: system-ui, -apple-system, sans-serif;
+    }
+    }
+
+    // Botonera de Acción Directa por Tarjeta
+    .btn-confirmar-pago {
+    --background: #802323;
+    --background-activated: #ffaa55;
+    --color: #fff8f1;
+    --border-radius: 12px;
+    font-weight: 700;
+    font-size: 1rem;
+    height: 46px;
+    margin: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    // --- ESTADO VACÍO (Evita espacios neutros huérfanos) [source: 0.1.3] ---
+    .sin-pagos-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+    color: #dfa070;
+
+    .icon-vacio {
+        font-size: 4.5rem;
+        color: rgba(255, 170, 85, 0.25);
+        margin-bottom: 16px;
+    }
+
+    h2 {
+        margin: 0 0 8px;
+        font-size: 1.5rem;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-weight: 600;
+        color: #ffd485;
+    }
+
+    p {
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.4;
+        color: rgba(255, 248, 241, 0.6);
+        max-width: 280px;
+    }
+}

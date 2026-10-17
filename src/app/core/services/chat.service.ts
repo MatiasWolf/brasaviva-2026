@@ -11,6 +11,8 @@ import { MensajeChat } from '../models/mensaje-chat.model';
   providedIn: 'root'
 })
 export class ChatService {
+  private supabase = inject(SupabaseService);
+
 
   private authService =
     inject(AuthService);
@@ -21,10 +23,6 @@ export class ChatService {
   private canalChatGeneral: any = null;
 
   private canalChatMesa: any = null;
-
-  constructor(
-    private supabase: SupabaseService
-  ) {}
 
   async obtenerMensajesOcupacion(
     ocupacionId: number
@@ -129,35 +127,6 @@ export class ChatService {
         'Error al responder mensaje:',
         error
       );
-      throw error;
-    }
-    return data;
-  }
-
-  /** Mensaje de un mozo en la sala general: no está atado a ninguna mesa. */
-  async enviarMensajeGeneralMozo(
-    mozoId: string,
-    nombreMozo: string,
-    mensaje: string
-  ): Promise<MensajeChat> {
-    const texto = mensaje.trim();
-    if (!texto) {
-      throw new Error('El mensaje no puede estar vacío.');
-    }
-    const { data, error } = await this.supabase.client
-      .from('mensajes_chat')
-      .insert({
-        mesa_id: null,
-        ocupacion_id: null,
-        emisor_tipo: 'mozo',
-        emisor_id: mozoId,
-        nombre_mozo: nombreMozo,
-        mensaje: texto
-      })
-      .select()
-      .single();
-    if (error) {
-      console.error('Error al enviar mensaje general del mozo:', error);
       throw error;
     }
     return data;

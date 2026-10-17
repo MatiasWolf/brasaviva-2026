@@ -1,9 +1,5 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectorRef
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
+
 import {
   ActivatedRoute,
   Router
@@ -37,7 +33,6 @@ interface CartaMemoria {
   styleUrls: ['./memoria.page.scss'],
   standalone: true,
   imports: [
-    CommonModule,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -46,17 +41,16 @@ interface CartaMemoria {
     IonButtons,
     IonBackButton,
     IonModal
-  ]
+]
 })
 export class MemoriaPage implements OnInit {
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef,
-    private authService: AuthService,
-    private juegoService: JuegoService,
-    private sonidoService: SonidoService
-  ) {}
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private cdr = inject(ChangeDetectorRef);
+  private authService = inject(AuthService);
+  private juegoService = inject(JuegoService);
+  private sonidoService = inject(SonidoService);
+
   cartas: CartaMemoria[] = [];
   cartasSeleccionadas: CartaMemoria[] = [];
   errores = 0;

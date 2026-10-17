@@ -3,6 +3,7 @@
    que no combinaba con el resto de los elementos de la pantalla. */
 .login-bg {
   --background:
+    var(--patron-brasas),
     radial-gradient(circle at 20% 20%, rgba(246, 193, 133, 0.2), transparent 18%),
     linear-gradient(
       180deg,

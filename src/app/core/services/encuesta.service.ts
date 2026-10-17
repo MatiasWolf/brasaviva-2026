@@ -90,4 +90,22 @@ export class EncuestaService {
       throw error;
     }
   }
+
+  /**
+   * Verifica de manera rápida si una ocupación específica ya tiene
+   * una encuesta registrada en el sistema.
+   */
+  async verificarEncuestaRespondida(ocupacionId: number): Promise<boolean> {
+    const { data, error } = await this.supabaseService.client
+      .from('encuestas')
+      .select('id')
+      .eq('ocupacion_id', ocupacionId)
+      .maybeSingle();
+
+    if (error) {
+      throw error;
+    }
+
+    return !!data;
+  }
 }

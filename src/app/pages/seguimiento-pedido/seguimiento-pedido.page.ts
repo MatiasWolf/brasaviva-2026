@@ -1,5 +1,5 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+
 import { 
   IonHeader, 
   IonToolbar, 
@@ -27,7 +27,6 @@ import {
   styleUrls: ['./seguimiento-pedido.page.scss'],
   standalone: true,
   imports: [
-    CommonModule,
     IonHeader,
     IonToolbar,
     IonTitle,
@@ -37,9 +36,9 @@ import {
     IonIcon,
     IonSpinner,
     RouterLink
-  ]
+]
 })
-export class SeguimientoPedidoPage implements OnInit {
+export class SeguimientoPedidoPage {
 
   public pedidoService = inject(PedidoService);
   private router = inject(Router);
@@ -54,8 +53,6 @@ export class SeguimientoPedidoPage implements OnInit {
       checkmarkCircleOutline 
     });
   }
-
-  ngOnInit() {}
 
   ionViewWillEnter() {
     // Prender el canal de escucha en tiempo real en Supabase

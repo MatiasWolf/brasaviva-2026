@@ -1,0 +1,137 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="toolbar-corporativa">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text=""></ion-back-button>
+    </ion-buttons>
+    <ion-title>Estadísticas del Local</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-content class="contenedor-principal">
+  <!-- PANTALLA DE ESPERA OBLIGATORIA (Mientras procesa datos de Supabase) -->
+  @if (cargando()) {
+    <div class="pantalla-carga animate__animated animate__fadeIn">
+      <app-spinner-logo [size]="80" />
+      <p class="texto-carga">Procesando métricas generales...</p>
+    </div>
+  } @else {
+    <!-- LIENZO DE REPORTES: Se expande a pantalla completa sin espacios vacíos -->
+    <div class="contenedor-grafico animate__animated animate__fadeIn">
+      
+      <!-- PANTALLA 1: CALIDAD DE LA COMIDA (Barras) -->
+      @if (segmentoActual() === 'comida') {
+        <div class="vista-grafico">
+          <div class="info-reporte">
+            <h2>Calificación de la Cocina</h2>
+            <p>Frecuencia de votos sobre un total de {{ totalEncuestas() }} experiencias.</p>
+          </div>
+          <div class="canvas-wrapper">
+            <canvas baseChart
+              [data]="chartComidaData"
+              [options]="chartComidaOptions"
+              [type]="'bar'">
+            </canvas>
+          </div>
+        </div>
+      }
+
+      <!-- PANTALLA 2: ATENCIÓN DEL PERSONAL (Línea) -->
+      @if (segmentoActual() === 'atencion') {
+        <div class="vista-grafico">
+          <div class="info-reporte">
+            <h2>Desempeño de Mozos y Personal</h2>
+            <p>Tendencia de satisfacción sobre un total de {{ totalEncuestas() }} experiencias.</p>
+          </div>
+          <div class="canvas-wrapper">
+            <canvas baseChart
+              [data]="chartAtencionData"
+              [options]="chartAtencionOptions"
+              [type]="'line'">
+            </canvas>
+          </div>
+        </div>
+      }
+
+      <!-- PANTALLA 3: TIEMPO DE ESPERA (Dona Completa) -->
+      @if (segmentoActual() === 'espera') {
+        <div class="vista-grafico">
+          <div class="info-reporte">
+            <h2>Tiempos de Espera del Local</h2>
+            <p>Percepción de los comensales sobre la agilidad de los sectores.</p>
+          </div>
+          <div class="canvas-wrapper">
+            <!-- CAMBIADO: [type]="'pie'" -->
+            <canvas baseChart
+              [data]="chartEsperaData"
+              [options]="chartEsperaOptions"
+              [type]="'pie'">
+            </canvas>
+          </div>
+        </div>
+      }
+
+      <!-- PANTALLA 4: ASPECTO DESTACADO (Área Polar) -->
+      @if (segmentoActual() === 'destacado') {
+        <div class="vista-grafico">
+          <div class="info-reporte">
+            <h2>Fortalezas Destacadas</h2>
+            <p>Distribución de los pilares que más valoraron las visitas.</p>
+          </div>
+          <div class="canvas-wrapper-polar">
+            <canvas baseChart
+              [data]="chartDestacadoData"
+              [options]="chartDestacadoOptions"
+              [type]="'polarArea'">
+            </canvas>
+          </div>
+        </div>
+      }
+
+      <!-- PANTALLA 5: RECOMENDACIÓN (Dona Semicircular) -->
+      @if (segmentoActual() === 'recomienda') {
+        <div class="vista-grafico">
+          <div class="info-reporte">
+            <h2>Índice de Recomendación</h2>
+            <p>Porcentaje de clientes dispuestos a recomendar Brasa Viva.</p>
+          </div>
+          <div class="canvas-wrapper-medidor">
+            <canvas baseChart
+              [data]="chartRecomiendaData"
+              [options]="chartRecomiendaOptions"
+              [type]="'doughnut'">
+            </canvas>
+          </div>
+        </div>
+      }
+
+    </div>
+  }
+
+  <!-- MODAL CENTRALIZADO PARA ERRORES O AVISOS -->
+  <app-mensaje-modal />
+</ion-content>
+
+@if (!cargando()) {
+  <ion-footer class="footer-paginador">
+    <div class="paginador">
+      <ion-button
+        fill="clear"
+        [disabled]="indiceSegmento() === 1"
+        (click)="graficoAnterior()"
+        aria-label="Gráfico anterior">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+
+      <span>Gráfico {{ indiceSegmento() }} de {{ totalSegmentos }}</span>
+
+      <ion-button
+        fill="clear"
+        [disabled]="indiceSegmento() === totalSegmentos"
+        (click)="graficoSiguiente()"
+        aria-label="Gráfico siguiente">
+        <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-footer>
+}

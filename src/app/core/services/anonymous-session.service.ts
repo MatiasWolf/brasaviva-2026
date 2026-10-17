@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
 import { SesionAnonima } from '../models/sesion-anonima.model';
 import { EstadiaEstado } from '../models/boton-menu.model';
@@ -8,13 +8,11 @@ import { StorageService } from './storage.service';
   providedIn: 'root'
 })
 export class AnonymousSessionService {
+  private supabase = inject(SupabaseService);
+  private storageService = inject(StorageService);
+
 
   private readonly STORAGE_KEY = 'sesion_anonima_id';
-
-  constructor(
-    private supabase: SupabaseService,
-    private storageService: StorageService
-  ) {}
 
   async crearSesion(
     nombre: string,

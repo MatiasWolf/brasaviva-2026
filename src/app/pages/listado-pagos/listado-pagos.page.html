@@ -1,0 +1,89 @@
+<ion-content class="home-bg" [fullscreen]="true">
+  <!-- Estado de Carga Inicial (Spinner obligatorio con logo de la empresa) -->
+  @if (cargandoInicial() || procesandoLiberacion()) {
+    <div class="loader">
+      <app-spinner-logo [size]="64" />
+      <p>Sincronizando transacciones del salón...</p>
+    </div>
+  } @else {
+    <div class="home-container">
+      
+      <!-- Cabecera Compacta Refactorizada con Flecha a la Izquierda -->
+      <header class="home-header-inline">
+        <ion-button fill="clear" class="btn-back-header" (click)="volverAlHome()">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+        </ion-button>
+        <h1>Cobros Pendientes</h1>
+      </header>
+
+      <!-- Listado Reactivo de Cuentas Solicitadas -->
+      @if (pagosPendientes() && pagosPendientes().length > 0) {
+        <div class="pagos-grid">
+          @for (pago of pagosPendientes(); track pago.id) {
+            <div class="pago-card">
+              
+              <!-- Cabecera de la Tarjeta: Identificación Física de la Mesa -->
+              <div class="pago-card-header">
+                <div class="mesa-badge">
+                  <ion-icon name="receipt-outline"></ion-icon>
+                  <h2>Mesa {{ pago.ocupaciones_mesa?.mesas?.numero || 'S/N' }}</h2>
+                </div>
+                <span class="pago-hora">
+                  {{ pago.created_at | date:'HH:mm' }} hs
+                </span>
+              </div>
+
+              <!-- Cuerpo de la Tarjeta: Desglose Financiero -->
+              <div class="pago-card-body">
+                <div class="detalle-fila">
+                  <span>Subtotal Consumos</span>
+                  <span>{{ pago.subtotal | currency:'ARS':'symbol':'1.0-0' }}</span>
+                </div>
+
+                @if (pago.descuento_juego_porcentaje > 0) {
+                  <div class="detalle-fila descuento-texto">
+                    <span>Descuento Juego (-{{ pago.descuento_juego_porcentaje }}%)</span>
+                    <span>-{{ pago.descuento_juego_monto | currency:'ARS':'symbol':'1.0-0' }}</span>
+                  </div>
+                }
+
+                <div class="detalle-fila propina-texto">
+                  <span>Propina (+{{ pago.propina_porcentaje }}%)</span>
+                  <span>+{{ pago.propina_monto | currency:'ARS':'symbol':'1.0-0' }}</span>
+                </div>
+
+                <div class="divisor-pago"></div>
+
+                <!-- Monto Neto Destacado Estilo Mercado Pago -->
+                <div class="detalle-fila total-fila">
+                  <span>Total a Cobrar</span>
+                  <span class="total-monto">
+                    {{ pago.total_final | currency:'ARS':'symbol':'1.0-0' }}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Botón Operativo de Confirmación y Liberación Transaccional -->
+              <ion-button 
+                class="btn-confirmar-pago" 
+                expand="block" 
+                (click)="confirmarPagoMesa(pago)">
+                <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+                Confirmar Pago y Liberar Mesa
+              </ion-button>
+
+            </div>
+          }
+        </div>
+      } @else {
+        <!-- Estado Alternativo Vacío Obligatorio (Evita Espacios Neutros Vacíos) -->
+        <div class="sin-pagos-box">
+          <ion-icon name="cash-outline" class="icon-vacio"></ion-icon>
+          <h2>Salón al día</h2>
+          <p>No se registran pagos pendientes de confirmación en este momento.</p>
+        </div>
+      }
+
+    </div>
+  }
+</ion-content>

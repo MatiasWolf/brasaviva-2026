@@ -1,5 +1,5 @@
 import { Component, ChangeDetectorRef, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   FormBuilder,
   FormGroup,
@@ -45,7 +45,6 @@ interface FotoSlot {
   styleUrls: ['./agregar-plato.page.scss'],
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     IonHeader,
     IonToolbar,
@@ -59,7 +58,7 @@ interface FotoSlot {
     IonButton,
     IonIcon,
     SpinnerLogoComponent
-  ]
+]
 })
 export class AgregarPlatoPage {
 

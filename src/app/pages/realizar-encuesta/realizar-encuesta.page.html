@@ -1,0 +1,189 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <!-- Botón de regreso al home -->
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home" text=""></ion-back-button>
+    </ion-buttons>
+    
+    <ion-title>Encuesta de Satisfacción</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="contenedor-principal" [scrollY]="false">
+  <!-- 1. PANTALLA DE ESPERA -->
+  @if (cargando()) {
+    <div class="pantalla-carga animate__animated animate__fadeIn">
+      <app-spinner-logo [size]="80" />
+      <p class="texto-carga">Verificando datos de tu estadía...</p>
+    </div>
+  } @else {
+    <!-- 2. FORMULARIO EN PASOS -->
+    <form [formGroup]="encuestaForm" (ngSubmit)="enviarEncuesta()" class="formulario-encuesta animate__animated animate__fadeIn">
+
+      <div class="encabezado-formulario">
+        <h2>¡Queremos escucharte!</h2>
+        <p>Tu opinión nos ayuda a brindarte la mejor experiencia en Brasa Viva.</p>
+      </div>
+
+      <!-- INDICADOR DE PROGRESO -->
+      <div class="indicador-pasos">
+        @for (p of [1, 2, 3]; track p) {
+          <span class="punto-paso" [class.punto-paso-activo]="p === paso()" [class.punto-paso-hecho]="p < paso()"></span>
+        }
+      </div>
+
+      <div class="pasos-contenedor">
+
+        <!-- PASO 1: Comida y atención -->
+        @if (paso() === 1) {
+          <div class="paso animate__animated animate__fadeIn">
+
+            <!-- CONTROL 1: Calificación de la Comida (ion-range con pin e ícono) -->
+            <div class="tarjeta-control">
+              <div class="titulo-control">
+                <ion-icon name="fast-food-outline"></ion-icon>
+                <ion-label>¿Qué tal te pareció la comida?</ion-label>
+              </div>
+              <div class="cuerpo-control-range">
+                <ion-range
+                  formControlName="puntaje_comida"
+                  min="1"
+                  max="5"
+                  step="1"
+                  snaps="true"
+                  ticks="true"
+                  pin="true">
+                  <ion-label slot="start" class="leyenda-range">Mala</ion-label>
+                  <ion-label slot="end" class="leyenda-range">Excelente</ion-label>
+                </ion-range>
+              </div>
+            </div>
+
+            <!-- CONTROL 2: Calificación de la Atención (Estrellas interactivas personalizadas) -->
+            <div class="tarjeta-control">
+              <div class="titulo-control">
+                <ion-icon name="people-outline"></ion-icon>
+                <ion-label>¿Cómo calificarías la atención de nuestro personal?</ion-label>
+              </div>
+              <div class="cuerpo-control-estrellas">
+                @for (estrella of [1,2,3,4,5]; track estrella) {
+                  <button
+                    type="button"
+                    class="boton-estrella"
+                    (click)="setRatingAtencion(estrella)"
+                    [class.seleccionada]="estrella <= puntajeAtencion()">
+                    <ion-icon [name]="estrella <= puntajeAtencion() ? 'star' : 'star-outline'"></ion-icon>
+                  </button>
+                }
+              </div>
+            </div>
+
+          </div>
+        }
+
+        <!-- PASO 2: Tiempo de espera y aspecto destacado -->
+        @if (paso() === 2) {
+          <div class="paso animate__animated animate__fadeIn">
+
+            <!-- CONTROL 3: Tiempo de espera (ion-radio-group) -->
+            <div class="tarjeta-control">
+              <div class="titulo-control">
+                <ion-label>¿Cómo considerás que fue el tiempo de espera?</ion-label>
+              </div>
+              <ion-radio-group formControlName="tiempo_espera" class="grupo-radios">
+                <ion-item lines="none" class="item-radio">
+                  <ion-radio value="corto" justify="space-between" labelPlacement="start">Corto</ion-radio>
+                </ion-item>
+                <ion-item lines="none" class="item-radio">
+                  <ion-radio value="adecuado" justify="space-between" labelPlacement="start">Adecuado</ion-radio>
+                </ion-item>
+                <ion-item lines="none" class="item-radio">
+                  <ion-radio value="excesivo" justify="space-between" labelPlacement="start">Excesivo</ion-radio>
+                </ion-item>
+              </ion-radio-group>
+            </div>
+
+            <!-- CONTROL 4: Aspecto destacado (ion-select desplegable) -->
+            <div class="tarjeta-control">
+              <div class="titulo-control">
+                <ion-label>¿Qué fue lo que más se destacó en tu visita?</ion-label>
+              </div>
+              <ion-item lines="none" class="item-select-personalizado">
+                <ion-select formControlName="aspecto_destacado" interface="action-sheet" placeholder="Seleccioná una opción">
+                  <ion-select-option value="ambiente">El ambiente</ion-select-option>
+                  <ion-select-option value="limpieza">La limpieza</ion-select-option>
+                  <ion-select-option value="precios">Los precios</ion-select-option>
+                  <ion-select-option value="comida">La calidad de la comida</ion-select-option>
+                  <ion-select-option value="atencion">La atención del personal</ion-select-option>
+                  <ion-select-option value="ninguno">Nada en particular</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </div>
+
+          </div>
+        }
+
+        <!-- PASO 3: Recomendación y comentario -->
+        @if (paso() === 3) {
+          <div class="paso animate__animated animate__fadeIn">
+
+            <!-- CONTROL 5: Recomendación (ion-toggle) -->
+            <div class="tarjeta-control item-toggle-contenedor">
+              <ion-label class="titulo-toggle">¿Recomendarías Brasa Viva a tus amigos?</ion-label>
+              <ion-toggle formControlName="recomienda" justify="end"></ion-toggle>
+            </div>
+
+            <!-- CONTROL 6: Comentario abierto (ion-textarea con contador) -->
+            <div class="tarjeta-control tarjeta-comentario">
+              <div class="titulo-control">
+                <ion-label>Dejanos tu comentario o sugerencia (Opcional)</ion-label>
+              </div>
+              <ion-item lines="none" class="item-textarea-personalizado">
+                <ion-textarea
+                  formControlName="comentario"
+                  placeholder="Escribí aquí tus sugerencias..."
+                  [counter]="true"
+                  maxlength="300"
+                  helperText="Máximo 300 caracteres">
+                </ion-textarea>
+              </ion-item>
+            </div>
+
+          </div>
+        }
+
+      </div>
+
+      <!-- NAVEGACIÓN ENTRE PASOS -->
+      <div class="contenedor-navegacion">
+        @if (paso() > 1) {
+          <ion-button fill="outline" class="boton-anterior" (click)="pasoAnterior()">
+            Anterior
+          </ion-button>
+        }
+
+        @if (paso() < totalPasos) {
+          <ion-button class="boton-siguiente" [disabled]="!pasoEsValido()" (click)="pasoSiguiente()">
+            Siguiente
+          </ion-button>
+        } @else {
+          <ion-button
+            type="submit"
+            class="boton-enviar"
+            [disabled]="guardando() || encuestaForm.invalid || puntajeAtencion() === 0">
+            @if (guardando()) {
+              <app-spinner-logo [size]="20" />
+              <span class="espacio-izquierdo">Guardando respuestas...</span>
+            } @else {
+              <span>Enviar Encuesta</span>
+            }
+          </ion-button>
+        }
+      </div>
+
+    </form>
+  }
+
+  <!-- COMPONENTE MODAL DE MENSAJES -->
+  <app-mensaje-modal />
+</ion-content>

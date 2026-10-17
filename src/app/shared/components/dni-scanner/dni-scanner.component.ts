@@ -1,5 +1,5 @@
 import { Component, OnDestroy, inject, input, output, signal, viewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { IonIcon, IonModal } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { closeOutline } from 'ionicons/icons';
@@ -22,7 +22,7 @@ import { DniScannerService } from '../../../core/services/dni-scanner.service';
   standalone: true,
   templateUrl: './dni-scanner.component.html',
   styleUrls: ['./dni-scanner.component.scss'],
-  imports: [CommonModule, IonModal, IonIcon],
+  imports: [IonModal, IonIcon],
 })
 export class DniScannerComponent implements OnDestroy {
   readonly abierto = input(false);

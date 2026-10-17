@@ -1,12 +1,42 @@
-# 🔥 Brasa Viva
+<p align="center">
+  <img src="src/assets/brand/logo.svg" width="140" alt="Logo de Brasa Viva">
+</p>
 
-Aplicación móvil para la gestión integral de un restaurante — Trabajo Final Integrador, Tecnicatura Universitaria en Programación (UTN Avellaneda), 2026.
+<h1 align="center">Brasa Viva</h1>
+
+<p align="center">
+  Aplicación móvil para la gestión integral de un restaurante<br>
+  Trabajo Final Integrador — Tecnicatura Universitaria en Programación (UTN Avellaneda), 2026
+</p>
+
+<p align="center">
+  <img alt="Ionic" src="https://img.shields.io/badge/Ionic-9-3880FF?logo=ionic&logoColor=white">
+  <img alt="Angular" src="https://img.shields.io/badge/Angular-22-DD0031?logo=angular&logoColor=white">
+  <img alt="Capacitor" src="https://img.shields.io/badge/Capacitor-Android-119EFF?logo=capacitor&logoColor=white">
+  <img alt="Supabase" src="https://img.shields.io/badge/Supabase-Backend-3FCF8E?logo=supabase&logoColor=white">
+</p>
 
 Repositorio: `brasaviva-2026`
 
 ---
 
-## 👥 Integrantes del equipo 
+## 📑 Tabla de contenidos
+
+- [👥 Integrantes del equipo](#integrantes-del-equipo)
+- [🛠️ Stack tecnológico](#stack-tecnologico)
+- [🚀 Puesta en marcha](#puesta-en-marcha)
+  - [Scripts disponibles](#scripts-disponibles)
+- [📁 Estructura del proyecto](#estructura-del-proyecto)
+- [🗂️ Índice de imágenes del proyecto](#indice-de-imagenes-del-proyecto)
+  - [Capturas de pantalla](#capturas-de-pantalla)
+- [✅ Estado de avance — Puntos funcionales](#estado-de-avance--puntos-funcionales)
+- [🔑 Perfiles de usuario](#perfiles-de-usuario)
+- [📲 Códigos QR utilizados](#codigos-qr-utilizados)
+- [🧩 Integración y coordinación técnica](#integracion-y-coordinacion-tecnica)
+
+---
+
+## <a id="integrantes-del-equipo"></a>👥 Integrantes del equipo 
 
 | Apellido y Nombre | Usuario GitHub | 
 |---|---|
@@ -19,15 +49,17 @@ Repositorio: `brasaviva-2026`
 
 ---
 
-## 🛠️ Stack tecnológico
+## <a id="stack-tecnologico"></a>🛠️ Stack tecnológico
 
-- **Framework:** Ionic + Angular
-- **Base de datos / Backend:** Supabase
+- **Framework:** Ionic 9 + Angular 22 (standalone components, signals)
+- **App nativa:** Capacitor 8 (Android)
+- **Base de datos / Backend:** Supabase (Postgres, Auth, Storage, Realtime, Edge Functions)
 - **Control de versiones:** Git / GitHub
+
 
 ---
 
-## 🚀 Puesta en marcha
+## <a id="puesta-en-marcha"></a>🚀 Puesta en marcha
 
 > **Requisito:** Node.js **22.22.3+** o **24.15.0+** (Angular CLI 22 no arranca con
 > versiones anteriores). Verificar con `node -v` antes de instalar.
@@ -50,13 +82,18 @@ npx cap open android
 ionic serve
 ```
 
-Las credenciales de Supabase ya están versionadas en `src/environments/environment.ts`
-(desarrollo) y `src/environments/environment.prod.ts` (producción), así que no hay que
-crear ningún archivo extra.
+### <a id="scripts-disponibles"></a>Scripts disponibles
+
+| Comando | Qué hace |
+|---|---|
+| `ionic serve` / `ng serve` | Levanta la app en el navegador en modo desarrollo |
+| `ng build` | Compila el build de producción |
+| `ng lint` | Corre ESLint sobre todo el proyecto |
+| `ng test` | Corre los tests unitarios (Vitest) |
 
 ---
 
-## 📁 Estructura del proyecto
+## <a id="estructura-del-proyecto"></a>📁 Estructura del proyecto
 
 ```
 src/
@@ -65,7 +102,7 @@ src/
 │   │   ├── models/       # interfaces de dominio (Plato, Bebida, ...)
 │   │   └── services/     # acceso a Supabase (auth, tablas, storage)
 │   ├── shared/
-│   │   └── components/   # componentes reutilizables (spinner-logo, ...)
+│   │   └── components/   # componentes reutilizables (spinner-logo, mensaje-modal, ...)
 │   ├── home/             # menú principal según el rol
 │   ├── pages/            # una carpeta por punto funcional
 │   ├── app.routes.ts     # cada punto agrega acá su ruta
@@ -73,6 +110,10 @@ src/
 ├── assets/               # íconos, splash e imágenes
 ├── environments/         # environment.ts (dev) y environment.prod.ts
 └── global.scss           # estilos globales
+
+supabase/
+├── functions/            # Edge Functions (Deno): altas de empleados, notificaciones por push/mail
+└── sql/                  # scripts SQL puntuales (RLS, triggers, parches)
 ```
 
 > Cada punto funcional se desarrolla en su propia rama y crea su carpeta dentro
@@ -80,7 +121,7 @@ src/
 
 ---
 
-## 🗂️ Índice de imágenes del proyecto
+## <a id="indice-de-imagenes-del-proyecto"></a>🗂️ Índice de imágenes del proyecto
 
 | Imagen | Descripción | Ruta |
 |---|---|---|
@@ -91,7 +132,7 @@ src/
 | <img src="resources/icon_foreground.png" width="60" alt="Ícono adaptativo Android – primer plano"> | Capa de primer plano del ícono adaptativo de Android | `resources/icon_foreground.png` |
 | <img src="resources/icon_background.png" width="60" alt="Ícono adaptativo Android – fondo"> | Capa de fondo del ícono adaptativo de Android | `resources/icon_background.png` |
 
-### Capturas de pantalla
+### <a id="capturas-de-pantalla"></a>Capturas de pantalla
 
 
 | Pantalla | Imagen | Ruta |
@@ -112,6 +153,7 @@ src/
 | Mail de aceptación | <img src="docs/capturas/mail_aceptacion.png" width="500" alt="Mail de aceptación"> | `docs/capturas/mail_aceptacion.png` |
 | Mail de rechazo | <img src="docs/capturas/mail_rechazo.png" width="500" alt="Mail de rechazo"> | `docs/capturas/mail_rechazo.png` |
 | Lista de espera | <img src="docs/capturas/lista_espera.png" width="240" alt="Lista de espera"> | `docs/capturas/lista_espera.png` |
+| Estadisticas | <img src="docs/capturas/estadisticas.png" width="240" alt="estadisticas"> | `docs/capturas/estadisticas.png` |
 | Solicitud de mesa | <img src="docs/capturas/solicitud_mesa.png" width="240" alt="Solicitud de mesa"> | `docs/capturas/solicitud_mesa.png` |
 | Chat | <img src="docs/capturas/chat.png" width="240" alt="Chat"> | `docs/capturas/chat.png` |
 | Lista de productos para el pedido | <img src="docs/capturas/pedido-1.png" width="240" alt="Listado productos"> | `docs/capturas/pedido-1.png` |
@@ -119,61 +161,50 @@ src/
 | Pedidos | <img src="docs/capturas/pedidos.png" width="240" alt="Pedidos"> | `docs/capturas/pedidos.png` |
 | Estado del pedido | <img src="docs/capturas/estado-pedido.png" width="240" alt="Estado del pedido"> | `docs/capturas/estado-pedido.png` |
 | Pedidos en cocina y bar | <img src="docs/capturas/pedidos-cocina.png" width="240" alt="Pedidos cocina bar"> | `docs/capturas/pedidos-cocina.png` |
+| Juegos | <img src="docs/capturas/juegos.png" width="240" alt="Juegos"> | `docs/capturas/juegos.png` |
+| Juego Memoria | <img src="docs/capturas/juego_1.png" width="240" alt="Juego memoria"> | `docs/capturas/juego_1.png` |
+| Juego Reflejos | <img src="docs/capturas/juego_2.png" width="240" alt="Juego reflejos"> | `docs/capturas/juego_2.png` |
+| Juego Trivia | <img src="docs/capturas/juego_3.png" width="240" alt="Juego trivia"> | `docs/capturas/juego_3.png` |
+| Realizar encuestas | <img src="docs/capturas/realizar_encuesta.png" width="240" alt="Realizar encuestas"> | `docs/capturas/realizar_encuesta.png` |
+| Solicitar Cuenta | <img src="docs/capturas/solicitar_cuenta.png" width="240" alt="Solicitar cuenta"> | `docs/capturas/solicitar_cuenta.png` |
+| Solicitar Cuenta Confirmación | <img src="docs/capturas/solicitar_cuenta_final.png" width="240" alt="Solicitud de cuenta confirmación"> | `docs/capturas/confirmar_cuenta_final.png` |
+| Confirmación de pago | <img src="docs/capturas/confirmacion_pago.png" width="240" alt="confirmación de pago"> | `docs/capturas/confirmar_pago.png` |
 ---
 
-## ✅ Estado de avance — Puntos funcionales
+## <a id="estado-de-avance--puntos-funcionales"></a>✅ Estado de avance — Puntos funcionales
 
 ### Primera fecha (puntos 1 al 22)
 
 | # | Funcionalidad | Responsable | Est. (días) | Inicio | Fin | Estado |
 |---|---|---|---|---|---|---|
-| 1 | Agregar empleado | Wolf, Matías | 2 | 01-09 | 03-09 | ✅ Completo |
-| 2 | Agregar nuevo plato | Moyano, Martín | 2 | 01-09 | 03-09 | ✅ Completo |
+| 1 | Agregar empleado | Wolf, Matías | 2 | 03-09 | 04-09 | ✅ Completo |
+| 2 | Agregar nuevo plato | Moyano, Martín | 1 | 03-09 | 03-09 | ✅ Completo |
 | 3 | Agregar nueva bebida | Moyano, Martín | 1 | 03-09 | 03-09 | ✅ Completo |
-| 4 | Agregar nueva mesa | Wolf, Matías | 2 | 04-09 | 06-09 | ✅ Completo |
-| 5 | Crear cliente registrado | Miguel, Luján | 2 | 01-09 | 03-09 | ✅ Completo |
-| 6 | Verificar ingreso de cliente | Wolf, Matías | 1,5 | 08-09 | 09-09 | ✅ Completo |
-| 7 | Rechazar cliente | Wolf, Matías | 2 | 09-09 | 11-09 | ✅ Completo |
-| 8 | Aceptar cliente | Wolf, Matías | 1 | 11-09 | 11-09 | ✅ Completo |
-| 9 | Ingreso cliente anónimo | Miguel, Luján | 1 | 02-09 | 03-09 | ✅ Completo |
-| 10 | Metre asigna mesa | Miguel, Luján | 2 | 16-09 | 18-09 | ✅ Completo |
-| 11 | Ver menú + consulta al mozo | Torrez, Maximiliano | 3 | 08-09 | 11-09 | ✅ Completo |
-| 12 | Cliente realiza pedido | Torrez, Maximiliano | 3 | aprox. 08-09 | 11-09 | ✅ Completo |
-| 13 | Mozo rechaza pedido | Torrez, Maximiliano | 1 | 12-09 | 13-09 | ✅ Completo
-| 14 | Mozo confirma pedido | Torrez, Maximiliano | 1,5 | 14-09 | 15-09 | ✅ Completo
-| 15 | Juegos con descuento | Miguel, Luján | 4 | 28-09 | 02-10 | ✅ Completo |
-| 16 | Cocina recibe pedidos | Moyano, Martín | 1,5 | 10-09 | 12-09 | ✅ Completo |
-| 17 | Bar recibe pedidos | Moyano, Martín | 1 | 12-09 | 12-09 | ✅ Completo |
-| 18 | Aviso de pedido completo | Moyano, Martín | 1 | 12-09 | 12-09 | ✅ Completo |
-| 19 | Mozo entrega pedido | Torrez, Maximiliano | 1 | 16-09 | 17-09 | ✅ Completo |
-| 20 | Encuesta de satisfacción | Torrez, Maximiliano | 2,5 | 18-09 | 20-09 | ⬜ Pendiente |
-| 21 | Cliente pide la cuenta | Torrez, Maximiliano | 2 | 21-09 | 23-09 | ⬜ Pendiente |
-| 22 | Confirmar pago y liberar mesa | Torrez, Maximiliano | 1,5 | 24-09 | 25-09 | ⬜ Pendiente |
+| 4 | Agregar nueva mesa | Wolf, Matías | 2 | 04-09 | 04-09 | ✅ Completo |
+| 5 | Crear cliente registrado | Miguel, Luján | 2 | 01-09 | 09-09 | ✅ Completo |
+| 6 | Verificar ingreso de cliente | Wolf, Matías | 2 | 09-09 | 11-09 | ✅ Completo |
+| 7 | Rechazar cliente | Wolf, Matías | 1 | 09-09 | 11-09 | ✅ Completo |
+| 8 | Aceptar cliente | Wolf, Matías | 1 | 09-09 | 11-09 | ✅ Completo |
+| 9 | Ingreso cliente anónimo | Miguel, Luján | 1 | 31-08 | 01-09 | ✅ Completo |
+| 10 | Metre asigna mesa | Miguel, Luján | 2 | 17-09 | 18-09 | ✅ Completo |
+| 11 | Ver menú + consulta al mozo | Torrez, Maximiliano | 2 | 06-09 | 11-09 | ✅ Completo |
+| 12 | Cliente realiza pedido | Torrez, Maximiliano | 4 | 15-09 | 17-09 | ✅ Completo
+| 13 | Mozo rechaza pedido | Torrez, Maximiliano | 1 | 18-09 | 19-09 | ✅ Completo
+| 14 | Mozo confirma pedido | Torrez, Maximiliano | 1 | 18-09 | 19-09 | ✅ Completo
+| 15 | Juegos con descuento | Miguel, Luján | 6 | 20-09 | 02-10 | ✅ Completo |
+| 16 | Cocina recibe pedidos | Moyano, Martín | 2 | 16-09 | 18-09 | ✅ Completo |
+| 17 | Bar recibe pedidos | Moyano, Martín | 3 | 16-09 | 18-09 | ✅ Completo |
+| 18 | Aviso de pedido completo | Moyano, Martín | 3 | 16-09 | 18-09 | ✅ Completo |
+| 19 | Mozo entrega pedido | Torrez, Maximiliano | 1 | 18-09 | 19-09 | ✅ Completo |
+| 20 | Encuesta de satisfacción | Torrez, Maximiliano | 3 | 08-10 | 10-10 | ✅ Completo |
+| 21 | Cliente pide la cuenta | Torrez, Maximiliano | 2 | 11-10 | 12-10 | ✅ Completo |
+| 22 | Confirmar pago y liberar mesa | Torrez, Maximiliano | 1 | 13-10 | 13-10 | ✅ Completo |
 
 **Leyenda:** ⬜ Pendiente · 🟨 En progreso · ✅ Completo
 
-### Ramas en curso
-
-| # | Punto | Rama |
-|---|---|---|
-| 1 | Agregar empleado | `feature/agregar-empleado` |
-| 2 | Agregar nuevo plato | `feature/agregar-plato` |
-| 3 | Agregar nueva bebida | `feature/agregar-bebida` |
-| 4 | Agregar nueva mesa | `integracion/primera-fecha` |
-| 5 | Crear cliente registrado | `feature/registro-cliente` |
-| 6 | Verificar ingreso de cliente | `feature/clientes-pendientes-push-mail` |
-| 7 | Rechazar cliente | `feature/clientes-pendientes-push-mail` |
-| 8 | Aceptar cliente | `feature/clientes-pendientes-push-mail` |
-| 9 | Ingreso como cliente anónimo | `feature/registro-cliente-anonimo` |
-| 10 | Metre asigna mesa | `feature/flujo-qr-mesa` |
-| 11-12 | Flujo de pedido desde cliente | `feature/menu-pedido` |
-| 13-14 y 19 | Flujo de pedido desde mozo | `feature/menu-pedido` |
-| 15 | Juegos para descuentos | `feature/juegos` |
-| 16-18 | Pedidos de cocina, bar y aviso de pedido completo | `feature/pedidos-cocina-bar` |
-| - | Integracion de ramas hasta la fecha | `integracion/cuarta-fecha` |
 ---
 
-## 🔑 Perfiles de usuario
+## <a id="perfiles-de-usuario"></a>🔑 Perfiles de usuario
 
 - Dueño
 - Supervisor
@@ -181,7 +212,7 @@ src/
 - Cliente registrado
 - Cliente anónimo
 
-## 📲 Códigos QR utilizados
+## <a id="codigos-qr-utilizados"></a>📲 Códigos QR utilizados
 
 | QR | Función |
 |---|---|
@@ -191,6 +222,20 @@ src/
 | <img src="docs/capturas/qr_mesa_3.png" width="240" alt="QR Mesa 3"> | Ver mesa 3 para acceder a menú, pedido, encuesta, juegos y pago (cliente) |
 | <img src="docs/capturas/qr_mesa_4.png" width="240" alt="QR Mesa 4"> | Ver mesa 4 para acceder a menú, pedido, encuesta, juegos y pago (cliente) |
 | <img src="docs/capturas/qr_mesa_6.png" width="240" alt="QR Mesa 6"> | Ver mesa 6 para acceder a menú, pedido, encuesta, juegos y pago (cliente) |
-| Propina (x5) | Excelente 20% · Muy Bueno 15% · Bueno 10% · Regular 5% · Malo 0% |
+| <img src="docs/capturas/qr_propina_malo.png" width="240" alt="QR Propina Malo (0%)"> | Qr de propina 0% (malo) |
+| <img src="docs/capturas/qr_propina_regular.png" width="240" alt="QR Propina Regular (5%)"> | Qr de propina 5% (regular) |
+| <img src="docs/capturas/qr_propina_bueno.png" width="240" alt="QR Propina Bueno (10%)"> | Qr de propina 10% (bueno) |
+| <img src="docs/capturas/qr_propina_muy_bueno.png" width="240" alt="QR Propina Muy Bueno (15%)"> | Qr de propina 15% (muy bueno) |
+| <img src="docs/capturas/qr_propina_excelente.png" width="240" alt="QR Propina Excelente (20%)"> | Qr de propina 20% (excelente) |
+
+---
+
+## <a id="integracion-y-coordinacion-tecnica"></a>🧩 Integración y coordinación técnica
+
+Además del desarrollo de los puntos funcionales que figuran en la tabla de arriba, **Wolf, Matías**, como líder del equipo, estuvo a cargo de:
+
+- Integrar las ramas `feature/*` de cada punto en las sucesivas ramas `integracion/*-fecha`, resolviendo los conflictos que fueron surgiendo.
+- Mergear cada ronda de integración a `main`.
+- Revisar y pulir detalles transversales a toda la app (consistencia visual entre pantallas, manejo de errores, performance, limpieza de código, etc.) que no quedan reflejados como un punto funcional propio pero sí como trabajo necesario para que el conjunto funcione de forma coherente.
 
 ---
