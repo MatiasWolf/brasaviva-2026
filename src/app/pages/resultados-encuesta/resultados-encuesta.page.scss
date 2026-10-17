@@ -25,26 +25,29 @@ $crema-texto: #fff1dc;
     --color: #{$dorado-brillante} !important;
     }
 
-    // Estilos del menú superior de solapas deslizables
-    .toolbar-segmentos {
-    --background: #130905 !important;
-    --border-color: transparent;
-    padding: 0 4px;
+    // Navegación entre gráficos (footer con flechas)
+    .footer-paginador {
+    --background: #130905;
+    background: #130905;
+    border-top: 1px solid rgba(255, 212, 133, 0.15);
+    }
 
-    ion-segment {
-        background: transparent;
-        --background: transparent;
+    .paginador {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 8px 12px calc(8px + var(--ion-safe-area-bottom, 0px));
+    color: #ffd0a0;
+    font-size: 0.9rem;
+    font-weight: 700;
 
-        ion-segment-button {
-        --color: rgba(255, 241, 220, 0.5) !important;
-        --color-checked: #{$dorado-brillante} !important;
-        --indicator-color: #{$dorado-brillante} !important;
-        font-weight: 600;
-        font-size: 14px;
-        letter-spacing: 0.2px;
-        text-transform: none;
-        min-height: 44px;
-        }
+    ion-button {
+        --color: #{$dorado-brillante};
+        --padding-start: 10px;
+        --padding-end: 10px;
+        margin: 0;
+        font-size: 1.4rem;
     }
     }
 

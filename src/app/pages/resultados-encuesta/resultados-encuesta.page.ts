@@ -1,16 +1,18 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { 
-  IonContent, 
-  IonHeader, 
-  IonTitle, 
-  IonToolbar, 
-  IonButtons, 
-  IonBackButton, 
-  IonSegment, 
-  IonSegmentButton, 
-  IonLabel 
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonButtons,
+  IonBackButton,
+  IonButton,
+  IonIcon,
+  IonFooter
 } from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { chevronBackOutline, chevronForwardOutline } from 'ionicons/icons';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration } from 'chart.js';
 
@@ -22,6 +24,8 @@ import { traducirErrorSupabase } from '../../core/utils/traducir-error.util';
 import { Encuesta } from '../../core/models/encuesta.model';
 
 type SegmentoMétrica = 'comida' | 'atencion' | 'espera' | 'destacado' | 'recomienda';
+
+const ORDEN_SEGMENTOS: SegmentoMétrica[] = ['comida', 'atencion', 'espera', 'destacado', 'recomienda'];
 
 @Component({
   selector: 'app-resultados-encuesta',
@@ -35,9 +39,9 @@ type SegmentoMétrica = 'comida' | 'atencion' | 'espera' | 'destacado' | 'recomi
     IonToolbar,
     IonButtons,
     IonBackButton,
-    IonSegment,
-    IonSegmentButton,
-    IonLabel,
+    IonButton,
+    IonIcon,
+    IonFooter,
     BaseChartDirective,
     SpinnerLogoComponent,
     MensajeModalComponent
@@ -51,6 +55,9 @@ export class ResultadosEncuestaPage implements OnInit {
   readonly cargando = signal(true);
   readonly segmentoActual = signal<SegmentoMétrica>('comida');
   readonly totalEncuestas = signal<number>(0);
+
+  readonly indiceSegmento = computed(() => ORDEN_SEGMENTOS.indexOf(this.segmentoActual()) + 1);
+  readonly totalSegmentos = ORDEN_SEGMENTOS.length;
 
   // Paleta de colores unificada con la marca Brasa Viva
   private readonly colorDorado = '#ffd485';
@@ -171,13 +178,22 @@ export class ResultadosEncuestaPage implements OnInit {
     }
   };
 
+  constructor() {
+    addIcons({ 'chevron-back-outline': chevronBackOutline, 'chevron-forward-outline': chevronForwardOutline });
+  }
+
   async ngOnInit(): Promise<void> {
     await this.cargarYProcesarEstadísticas();
   }
 
-  cambiarSegmento(event: any): void {
-    const valor = event.detail.value as SegmentoMétrica;
-    this.segmentoActual.set(valor);
+  graficoAnterior(): void {
+    const indice = ORDEN_SEGMENTOS.indexOf(this.segmentoActual());
+    this.segmentoActual.set(ORDEN_SEGMENTOS[Math.max(0, indice - 1)]);
+  }
+
+  graficoSiguiente(): void {
+    const indice = ORDEN_SEGMENTOS.indexOf(this.segmentoActual());
+    this.segmentoActual.set(ORDEN_SEGMENTOS[Math.min(ORDEN_SEGMENTOS.length - 1, indice + 1)]);
   }
 
   private async cargarYProcesarEstadísticas(): Promise<void> {

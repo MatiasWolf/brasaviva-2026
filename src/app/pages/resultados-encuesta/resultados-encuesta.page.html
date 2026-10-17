@@ -6,26 +6,6 @@
     <ion-title>Estadísticas del Local</ion-title>
   </ion-toolbar>
 
-  <!-- CONTROL DE NAVEGACIÓN: Un gráfico por pantalla -->
-  <ion-toolbar class="toolbar-segmentos">
-    <ion-segment [value]="segmentoActual()" (ionChange)="cambiarSegmento($event)" scrollable="true" mode="md">
-      <ion-segment-button value="comida">
-        <ion-label>Comida</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="atencion">
-        <ion-label>Atención</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="espera">
-        <ion-label>Espera</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="destacado">
-        <ion-label>Destacado</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="recomienda">
-        <ion-label>Recomendación</ion-label>
-      </ion-segment-button>
-    </ion-segment>
-  </ion-toolbar>
 </ion-header>
 
 <ion-content class="contenedor-principal">
@@ -131,3 +111,27 @@
   <!-- MODAL CENTRALIZADO PARA ERRORES O AVISOS -->
   <app-mensaje-modal />
 </ion-content>
+
+@if (!cargando()) {
+  <ion-footer class="footer-paginador">
+    <div class="paginador">
+      <ion-button
+        fill="clear"
+        [disabled]="indiceSegmento() === 1"
+        (click)="graficoAnterior()"
+        aria-label="Gráfico anterior">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+
+      <span>Gráfico {{ indiceSegmento() }} de {{ totalSegmentos }}</span>
+
+      <ion-button
+        fill="clear"
+        [disabled]="indiceSegmento() === totalSegmentos"
+        (click)="graficoSiguiente()"
+        aria-label="Gráfico siguiente">
+        <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-footer>
+}
