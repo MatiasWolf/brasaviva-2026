@@ -29,7 +29,7 @@
                   <h2>Mesa {{ pago.ocupaciones_mesa?.mesas?.numero || 'S/N' }}</h2>
                 </div>
                 <span class="pago-hora">
-                  {{ pago.created_at | date:'HH:mm' }} hs
+                  {{ pago.created_at | date:'HH:mm' }}
                 </span>
               </div>
 
@@ -37,19 +37,19 @@
               <div class="pago-card-body">
                 <div class="detalle-fila">
                   <span>Subtotal Consumos</span>
-                  <span>{{ pago.subtotal | currency:'ARS':'symbol':'1.0-0' }}</span>
+                  <span>{{ pago.subtotal | currency:'ARS':'symbol-narrow':'1.0-0' }}</span>
                 </div>
 
                 @if (pago.descuento_juego_porcentaje > 0) {
                   <div class="detalle-fila descuento-texto">
                     <span>Descuento Juego (-{{ pago.descuento_juego_porcentaje }}%)</span>
-                    <span>-{{ pago.descuento_juego_monto | currency:'ARS':'symbol':'1.0-0' }}</span>
+                    <span>-{{ pago.descuento_juego_monto | currency:'ARS':'symbol-narrow':'1.0-0' }}</span>
                   </div>
                 }
 
                 <div class="detalle-fila propina-texto">
                   <span>Propina (+{{ pago.propina_porcentaje }}%)</span>
-                  <span>+{{ pago.propina_monto | currency:'ARS':'symbol':'1.0-0' }}</span>
+                  <span>+{{ pago.propina_monto | currency:'ARS':'symbol-narrow':'1.0-0' }}</span>
                 </div>
 
                 <div class="divisor-pago"></div>
@@ -58,7 +58,7 @@
                 <div class="detalle-fila total-fila">
                   <span>Total a Cobrar</span>
                   <span class="total-monto">
-                    {{ pago.total_final | currency:'ARS':'symbol':'1.0-0' }}
+                    {{ pago.total_final | currency:'ARS':'symbol-narrow':'1.0-0' }}
                   </span>
                 </div>
               </div>
