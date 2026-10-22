@@ -48,7 +48,8 @@ export interface ItemDetalleCuenta {
     readonly propinaMonto = computed(() => {
         const porcentaje = this.propinaPorcentaje();
         if (!porcentaje || porcentaje <= 0) return 0;
-        return this.subtotalConDescuento() * (porcentaje / 100);
+        // la propina va sobre el total sin el descuento del juego
+        return this.subtotal() * (porcentaje / 100);
     });
 
     readonly totalFinal = computed(() => {
