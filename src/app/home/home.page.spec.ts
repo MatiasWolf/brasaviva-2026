@@ -31,4 +31,33 @@ describe('HomePage', () => {
     expect(component.procesandoQr()).toBe(true);
   });
 
+  describe('encuestas previas', () => {
+    const botonesCliente = [
+      { clave: 'escanear-qr-ingreso', ruta: '/ingreso-lista-espera', contexto: 'sin_estadia' },
+      { clave: 'encuestas-previas', ruta: '/resultados-encuesta', contexto: 'en_espera' },
+      { clave: 'encuesta', ruta: '/realizar-encuesta', contexto: 'pedido_entregado' },
+    ];
+
+    const clavesVisibles = () => component.botonesVisibles().map((b) => b.clave);
+
+    beforeEach(() => {
+      component.sesionAnonima.set({ id: 'x', nombre: 'Ana' } as any);
+      (component as any).botones.set(botonesCliente);
+    });
+
+    it('se ven antes de anotarse en la lista de espera', () => {
+      component.estadiaEstado.set('sin_estadia');
+      expect(clavesVisibles()).toEqual(['escanear-qr-ingreso', 'encuestas-previas']);
+    });
+
+    it('se siguen viendo en la lista de espera', () => {
+      component.estadiaEstado.set('en_espera');
+      expect(clavesVisibles()).toEqual(['encuestas-previas']);
+    });
+
+    it('no aparecen con el pedido entregado', () => {
+      component.estadiaEstado.set('pedido_entregado');
+      expect(clavesVisibles()).toEqual(['encuesta']);
+    });
+  });
 });

@@ -201,7 +201,8 @@ export class RealizarEncuestaPage implements OnInit {
       await this.encuestaService.responder(this.ocupacionId, respuesta);
 
       this.mensajeModal.exito('¡Gracias por tus comentarios! Nos ayudan a mejorar.', '¡Encuesta guardada!');
-      void this.router.navigate(['/home'], { replaceUrl: true });
+      // al terminar se muestran los resultados con el voto recién cargado
+      void this.router.navigate(['/resultados-encuesta'], { replaceUrl: true });
     } catch (error) {
       console.error('Error al guardar la encuesta:', error);
       const msg = traducirErrorSupabase(error);

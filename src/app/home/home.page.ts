@@ -145,7 +145,11 @@ export class HomePage implements OnInit {
     const estado = this.estadiaEstado();
 
     return this.botones()
-      .filter((boton) => boton.contexto === 'siempre' || boton.contexto === estado)
+      .filter((boton) =>
+        boton.contexto === 'siempre'
+        || boton.contexto === estado
+        // las encuestas previas también se ven antes de anotarse en la lista de espera
+        || (boton.clave === 'encuestas-previas' && estado === 'sin_estadia'))
       // Una vez anotado en la lista de espera ya no tiene sentido volver a mostrar
       // el botón para anotarse: solo sirve antes de tener alguna estadía en curso.
       .filter((boton) => !(estado !== 'sin_estadia' && boton.ruta === '/ingreso-lista-espera'));
