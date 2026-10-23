@@ -316,6 +316,13 @@ export class HomePage implements OnInit {
       if (texto === 'BRASA_VIVA_INGRESO') {
         this.rutaPendienteQr = '/ingreso-lista-espera';
         this.procesandoQr.set(true);
+      } else {
+        this.resultadoQrTipo.set('error');
+        this.resultadoQrTitulo.set('QR inválido');
+        this.resultadoQrMensaje.set(
+          'Este código no es el de ingreso. Primero tenés que anotarte en la lista de espera escaneando el QR de la entrada.'
+        );
+        this.mostrandoResultadoQr.set(true);
       }
       this.qrModo = null;
       return;
