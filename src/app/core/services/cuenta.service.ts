@@ -11,6 +11,20 @@ export interface ItemDetalleCuenta {
     importe: number;
     }
 
+export interface NivelPropina {
+    qr: string;
+    porcentaje: number;
+    }
+
+// Textos de los QR de propina que hay en las mesas
+export const NIVELES_PROPINA: NivelPropina[] = [
+    { qr: 'Excelente', porcentaje: 20 },
+    { qr: 'Muy Bueno', porcentaje: 15 },
+    { qr: 'Bueno', porcentaje: 10 },
+    { qr: 'Regular', porcentaje: 5 },
+    { qr: 'Malo', porcentaje: 0 },
+    ];
+
     @Injectable({
     providedIn: 'root'
     })
@@ -50,6 +64,11 @@ export interface ItemDetalleCuenta {
         if (!porcentaje || porcentaje <= 0) return 0;
         // la propina va sobre el total sin el descuento del juego
         return this.subtotal() * (porcentaje / 100);
+    });
+
+    readonly propinaNivel = computed(() => {
+        const porcentaje = this.propinaPorcentaje();
+        return NIVELES_PROPINA.find(n => n.porcentaje === porcentaje)?.qr ?? '';
     });
 
     readonly totalFinal = computed(() => {
@@ -208,14 +227,8 @@ export interface ItemDetalleCuenta {
      * Realiza el mapeo exacto de los strings de los QR físicos a sus porcentajes reales.
      */
     evaluarQrPropina(texto: string): number {
-        switch (texto.trim()) {
-        case 'Excelente': return 20;
-        case 'Muy Bueno': return 15;
-        case 'Bueno':     return 10;
-        case 'Regular':   return 5;
-        case 'Malo':      return 0;
-        default:          return -1; // Código inválido o ajeno al restaurante
-        }
+        const nivel = NIVELES_PROPINA.find(n => n.qr === texto.trim());
+        return nivel ? nivel.porcentaje : -1; // -1: código inválido o ajeno al restaurante
     }
 
     /**

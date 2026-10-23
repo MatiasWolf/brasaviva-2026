@@ -131,6 +131,49 @@
     }
     }
 
+    // Niveles de propina (los QR que hay en la mesa)
+    .niveles-propina {
+    width: 100%;
+    list-style: none;
+    margin: 0 0 16px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    }
+
+    .nivel-propina {
+    display: grid;
+    grid-template-columns: 5.2rem 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 212, 133, 0.25);
+    background: rgba(19, 9, 5, 0.25);
+    text-align: left;
+
+    .nivel-estrellas {
+        display: flex;
+        gap: 2px;
+        color: #ffd485;
+        font-size: 0.8rem;
+    }
+
+    .nivel-nombre {
+        color: #fff8f1;
+        font-size: 1.05rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .nivel-porcentaje {
+        color: #a0ffa0;
+        font-size: 1.15rem;
+        font-weight: 700;
+    }
+    }
+
     // Grupos de Botonera Vertical
     .btn-group-vertical {
     width: 100%;

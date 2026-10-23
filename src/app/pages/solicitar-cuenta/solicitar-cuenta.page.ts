@@ -1,11 +1,12 @@
 import { Component, OnInit, inject, signal, OnDestroy } from '@angular/core';
 import { CommonModule, TitleCasePipe, CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
-import { CuentaService } from '../../core/services/cuenta.service';
+import { CuentaService, NIVELES_PROPINA } from '../../core/services/cuenta.service';
 import { MensajeModalService } from '../../core/services/mensaje-modal.service';
 import { QrScannerComponent } from '../../shared/components/qr-scanner/qr-scanner.component';
 import { SpinnerLogoComponent } from '../../shared/components/spinner-logo/spinner-logo.component';
 import {
+  AlertController,
   IonContent,
   IonButton,
   IonIcon,
@@ -19,8 +20,9 @@ import {
   cardOutline, 
   qrCodeOutline, 
   arrowBackOutline, 
-  checkmarkCircleOutline, 
-  receiptOutline 
+  checkmarkCircleOutline,
+  receiptOutline,
+  star
 } from 'ionicons/icons';
 import { EstadiaRealtimeService } from '../../core/services/estadia-realtime.service';
 import { ClienteService } from '../../core/services/cliente.service';
@@ -52,6 +54,13 @@ export class SolicitarCuentaPage implements OnInit, OnDestroy {
   private readonly clienteService = inject(ClienteService);
   private readonly authService = inject(AuthService);
   private readonly supabaseService = inject(SupabaseService);
+  private readonly alertCtrl = inject(AlertController);
+
+  // Excelente lleva 5 estrellas y Malo 1
+  readonly nivelesPropina = NIVELES_PROPINA.map((nivel, i) => ({
+    ...nivel,
+    estrellas: Array(NIVELES_PROPINA.length - i).fill(0),
+  }));
 
   // Control de fase operativa en caliente mediante Signals
   public readonly faseActual = signal<'confirmacion_inicial' | 'bloqueo_propina' | 'detalle_factura' | 'espera_mozo'>('confirmacion_inicial');
@@ -66,7 +75,8 @@ export class SolicitarCuentaPage implements OnInit, OnDestroy {
       qrCodeOutline,
       arrowBackOutline,
       checkmarkCircleOutline,
-      receiptOutline
+      receiptOutline,
+      star
     });
   }
 
@@ -126,9 +136,9 @@ export class SolicitarCuentaPage implements OnInit, OnDestroy {
   /**
    * Recibe el string del escáner y procesa el porcentaje correspondiente.
    */
-  public onPropinaEscaneada(texto: string): void {
+  public async onPropinaEscaneada(texto: string): Promise<void> {
     this.mostrandoScanner.set(false);
-    
+
     const porcentaje = this.cuentaService.evaluarQrPropina(texto);
 
     if (porcentaje === -1) {
@@ -137,9 +147,25 @@ export class SolicitarCuentaPage implements OnInit, OnDestroy {
       return;
     }
 
-    // Asignar el porcentaje validado y transicionar a la pantalla estilo Mercado Pago
-    this.cuentaService.propinaPorcentaje.set(porcentaje);
-    this.faseActual.set('detalle_factura');
+    // Se confirma antes de pasar a la factura por si el QR se leyó mal
+    const nivel = NIVELES_PROPINA.find(n => n.porcentaje === porcentaje)?.qr;
+    const alert = await this.alertCtrl.create({
+      header: 'Confirmar propina',
+      message: `Ingresaste ${porcentaje}% de propina (${nivel}). ¿Es correcto?`,
+      cssClass: 'alert-confirmar-propina',
+      backdropDismiss: false,
+      buttons: [
+        { text: 'Volver a escanear', role: 'cancel' },
+        {
+          text: 'Sí, continuar',
+          handler: () => {
+            this.cuentaService.propinaPorcentaje.set(porcentaje);
+            this.faseActual.set('detalle_factura');
+          },
+        },
+      ],
+    });
+    await alert.present();
   }
 
   /**

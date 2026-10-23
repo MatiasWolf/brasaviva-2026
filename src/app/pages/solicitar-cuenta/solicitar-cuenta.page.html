@@ -49,8 +49,22 @@
               <ion-icon name="qr-code-outline"></ion-icon>
             </div>
             <h2>Especificar porcentaje de propina</h2>
-            <p>Para generar el detalle final de la facturación, indica primero el porcentaje de propina que dejarás escaneando el codigo QR correspondiente de los disponibles en tu mesa.</p>
-            
+            <p>Escaneá el QR de tu mesa que corresponda a cómo te atendieron.</p>
+
+            <ul class="niveles-propina">
+              @for (nivel of nivelesPropina; track nivel.qr) {
+                <li class="nivel-propina">
+                  <span class="nivel-estrellas">
+                    @for (e of nivel.estrellas; track $index) {
+                      <ion-icon name="star"></ion-icon>
+                    }
+                  </span>
+                  <span class="nivel-nombre">{{ nivel.qr }}</span>
+                  <span class="nivel-porcentaje">{{ nivel.porcentaje }}%</span>
+                </li>
+              }
+            </ul>
+
             <ion-button class="btn-principal text-wrap" expand="block" (click)="abrirLectorPropina()">
               <ion-icon name="qr-code-outline" slot="start"></ion-icon>
               Escanear QR de Propina
@@ -95,7 +109,7 @@
               }
 
               <div class="desglose-row texto-propina">
-                <span>Propina de Mesa (+{{ cuentaService.propinaPorcentaje() }}%)</span>
+                <span>Propina {{ cuentaService.propinaNivel() }} ({{ cuentaService.propinaPorcentaje() }}%)</span>
                 <span>+ {{ cuentaService.propinaMonto() | currency:'ARS':'symbol-narrow':'1.0-0' }}</span>
               </div>
             </div>
