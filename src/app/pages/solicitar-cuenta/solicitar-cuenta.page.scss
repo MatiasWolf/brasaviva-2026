@@ -3,6 +3,10 @@
         radial-gradient(circle at 15% 0%, rgba(246, 193, 133, 0.16), transparent 22%),
         linear-gradient(180deg, #130905 0%, #3a1710 100%); // Gradiente de marca
     --color: #ffd485; // Tipografía principal dorada
+
+    &::part(scroll) {
+        height: 100%;
+    }
     }
 
     .loader {
@@ -207,7 +211,7 @@
     display: flex;
     flex-direction: column;
     gap: 14px;
-    overflow-y: auto;
+    overflow-y: hidden; // el scroll, si hace falta, queda contenido dentro de la lista de consumos
     }
 
     .factura-seccion {
@@ -231,9 +235,9 @@
     }
 
     .items-list {
-    flex: 0 0 auto;
-    height: 142px; // alto fijo de 2 productos (66px c/u + 10px de margen); si hay más, scrollea
-    overflow-y: auto;
+    flex: 1 1 0; // ocupa el espacio que le sobra al resto de la factura
+    min-height: 66px; // nunca baja de 1 producto visible
+    overflow-y: auto; // si hay muchos productos, scrollea en vez de desbordar la pantalla
     display: flex;
     flex-direction: column;
     background: transparent !important;
@@ -299,7 +303,8 @@
     }
 
     .consumos-box {
-    flex: 0 0 auto; // mismo alto siempre, sin importar cuántos productos haya
+    flex: 1 1 0; // se estira o achica según el espacio disponible en pantalla
+    min-height: 0;
 
     h3 {
         margin-bottom: 6px; // así la factura entra sin scroll en un celular de 740px
@@ -360,7 +365,7 @@
     }
 
     .monto-grande {
-        font-size: clamp(2.6rem, 7vh, 3.4rem);
+        font-size: clamp(2.8rem, 8vh, 3.8rem);
         font-weight: 800;
         color: #ffd485;
         letter-spacing: -0.02em;

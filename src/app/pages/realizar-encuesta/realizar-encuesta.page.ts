@@ -154,9 +154,13 @@ export class RealizarEncuestaPage implements OnInit {
       }
 
       const yaRespondida = await this.encuestaService.verificarEncuestaRespondida(ocupacion.id);
-      
+
       if (yaRespondida) {
-        this.desviarAlHome('Ya completaste la encuesta de satisfacción correspondiente a esta estadía.');
+        this.mensajeModal.exito(
+          'Ya completaste la encuesta de satisfacción correspondiente a esta estadía. Te mostramos los resultados.',
+          'Encuesta ya realizada'
+        );
+        void this.router.navigate(['/resultados-encuesta'], { replaceUrl: true });
         return;
       }
 

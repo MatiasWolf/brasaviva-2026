@@ -153,7 +153,11 @@ supabase/
 | Mail de aceptación | <img src="docs/capturas/mail_aceptacion.png" width="500" alt="Mail de aceptación"> | `docs/capturas/mail_aceptacion.png` |
 | Mail de rechazo | <img src="docs/capturas/mail_rechazo.png" width="500" alt="Mail de rechazo"> | `docs/capturas/mail_rechazo.png` |
 | Lista de espera | <img src="docs/capturas/lista_espera.png" width="240" alt="Lista de espera"> | `docs/capturas/lista_espera.png` |
-| Estadisticas | <img src="docs/capturas/estadisticas.png" width="240" alt="estadisticas"> | `docs/capturas/estadisticas.png` |
+| Calificación cocina | <img src="docs/capturas/estadisticas_1.png" width="240" alt="estadistica calif cocina"> | `docs/capturas/estadisticas_1.png` |
+| Desempeño de personal | <img src="docs/capturas/estadisticas_2.png" width="240" alt="estadistica desemp personal"> | `docs/capturas/estadisticas_2.png` |
+| Tiempo de espera | <img src="docs/capturas/estadisticas_3.png" width="240" alt="estadistica tiempo de espera"> | `docs/capturas/estadisticas_3.png` |
+| Calificación de fortalezas | <img src="docs/capturas/estadisticas_4.png" width="240" alt="estadistica fortalezas"> | `docs/capturas/estadisticas_4.png` |
+| Indice de recomendación | <img src="docs/capturas/estadisticas_5.png" width="240" alt="estadistica indice recomendación"> | `docs/capturas/estadisticas_5.png` |
 | Solicitud de mesa | <img src="docs/capturas/solicitud_mesa.png" width="240" alt="Solicitud de mesa"> | `docs/capturas/solicitud_mesa.png` |
 | Chat | <img src="docs/capturas/chat.png" width="240" alt="Chat"> | `docs/capturas/chat.png` |
 | Lista de productos para el pedido | <img src="docs/capturas/pedido-1.png" width="240" alt="Listado productos"> | `docs/capturas/pedido-1.png` |
@@ -167,8 +171,21 @@ supabase/
 | Juego Trivia | <img src="docs/capturas/juego_3.png" width="240" alt="Juego trivia"> | `docs/capturas/juego_3.png` |
 | Realizar encuestas | <img src="docs/capturas/realizar_encuesta.png" width="240" alt="Realizar encuestas"> | `docs/capturas/realizar_encuesta.png` |
 | Solicitar Cuenta | <img src="docs/capturas/solicitar_cuenta.png" width="240" alt="Solicitar cuenta"> | `docs/capturas/solicitar_cuenta.png` |
+| Porcentaje propina | <img src="docs/capturas/porcentaje_propina.png" width="240" alt="Porcentaje propina"> | `docs/capturas/porcentaje_propina.png` |
+| Confirmación propina | <img src="docs/capturas/confirmacion_propina.png" width="240" alt="Confirmación propina"> | `docs/capturas/confirmacion_propina.png` |
 | Solicitar Cuenta Confirmación | <img src="docs/capturas/solicitar_cuenta_final.png" width="240" alt="Solicitud de cuenta confirmación"> | `docs/capturas/confirmar_cuenta_final.png` |
 | Confirmación de pago | <img src="docs/capturas/confirmacion_pago.png" width="240" alt="confirmación de pago"> | `docs/capturas/confirmar_pago.png` |
+| Push Notification: cliente esperando aceptación | <img src="docs/capturas/push_cliente_esperando_aceptacion.jpg" width="240" alt="push cliente esperando aceptacion"> | `docs/capturas/push_cliente_esperando_aceptacion.jpg` |
+| Push Notification: cliente en lista de espera | <img src="docs/capturas/push_cliente_lista_espera.jpg" width="240" alt="push cliente en lista de espera"> | `docs/capturas/push_cliente_lista_espera.jpg` |
+| Push Notification: mesa asignada | <img src="docs/capturas/push_mesa_asignada.jpg" width="240" alt="push mesa asignada"> | `docs/capturas/push_mesa_asignada.jpg` |
+| Push Notification: consulta de cliente | <img src="docs/capturas/push_consulta_cliente.jpg" width="240" alt="push consulta de cliente"> | `docs/capturas/push_consulta_cliente.jpg` |
+| Push Notification: Respuesta de mozo a consulta | <img src="docs/capturas/push_respuesta_mozo.jpg" width="240" alt="push respuesta de mozo a consulta"> | `docs/capturas/push_respuesta_mozo.jpg` |
+| Push Notification: pedido a mozo | <img src="docs/capturas/push_pedido_mozo.jpg" width="240" alt="push pedido a mozo"> | `docs/capturas/push_pedido_mozo.jpg` |
+| Push Notification: pedido rechazado | <img src="docs/capturas/push_pedido_rechazado.jpg" width="240" alt="push pedido rechazado"> | `docs/capturas/push_pedido_rechazado.jpg` |
+| Push Notification: comanda asignada | <img src="docs/capturas/push_comanda_asignada.jpg" width="240" alt="push comanda asignada"> | `docs/capturas/push_comanda_asignada.jpg` |
+| Push Notification: cuenta solicitada | <img src="docs/capturas/push_cuenta_solicitada.jpg" width="240" alt="push cuenta solicitada"> | `docs/capturas/push_cuenta_solicitada.jpg` |
+| Push Notification: pago pendiente de confirmación | <img src="docs/capturas/push_pago_pendiente.jpg" width="240" alt="push pago pendiente de confirmación"> | `docs/capturas/push_pago_pendiente.jpg` |
+| Push Notification: confirmación de pago | <img src="docs/capturas/push_confirmacion_pago.jpg" width="240" alt="push confirmación de pago"> | `docs/capturas/push_confirmacion_pago.jpg` |
 ---
 
 ## <a id="estado-de-avance--puntos-funcionales"></a>✅ Estado de avance — Puntos funcionales
@@ -222,6 +239,7 @@ supabase/
 | <img src="docs/capturas/qr_mesa_3.png" width="240" alt="QR Mesa 3"> | Ver mesa 3 para acceder a menú, pedido, encuesta, juegos y pago (cliente) |
 | <img src="docs/capturas/qr_mesa_4.png" width="240" alt="QR Mesa 4"> | Ver mesa 4 para acceder a menú, pedido, encuesta, juegos y pago (cliente) |
 | <img src="docs/capturas/qr_mesa_6.png" width="240" alt="QR Mesa 6"> | Ver mesa 6 para acceder a menú, pedido, encuesta, juegos y pago (cliente) |
+| <img src="docs/capturas/qr_mesa_8.png" width="240" alt="QR Mesa 8"> | Ver mesa 8 para acceder a menú, pedido, encuesta, juegos y pago (cliente) |
 | <img src="docs/capturas/qr_propina_malo.png" width="240" alt="QR Propina Malo (0%)"> | Qr de propina 0% (malo) |
 | <img src="docs/capturas/qr_propina_regular.png" width="240" alt="QR Propina Regular (5%)"> | Qr de propina 5% (regular) |
 | <img src="docs/capturas/qr_propina_bueno.png" width="240" alt="QR Propina Bueno (10%)"> | Qr de propina 10% (bueno) |
